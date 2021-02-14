@@ -51,43 +51,17 @@ elrond also provides features includng image and file hashing, metadata extracti
 <!-- Prerequisites -->
 ## Prerequisites
 
-There are several software package required for using elrond but almost all of them are contained within the SANS SIFT Worksation virtual machine OVA. You can download the SIFT OVA where I have included all of the software which might be used by elrond (volatility3, apfs-fuse etc.).
-* [elrond-SIFT Workstation](https://github.com/ezaspy/elrond/tools/SIFT-elrond.ova)
-
-Alternatviely, if you prefer to install the packages yourself...
-
+There are several software package required for using elrond but almost all of them are contained within the SANS SIFT Worksation virtual machine OVA. However, for the software which is not included, I have provided a script which installs and configures the additional software which might be required during running elrond (volatility3, apfs-fuse etc.).<br>
 * [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (18.04)
+* See the [software file](https://github.com/ezaspy/elrond/SOFTWARE.md) to install and configure the additional software.<br><br>
+
+Alternatviely, if you prefer to install the packages yourself...<br>
 * [apfs-fuse](https://github.com/ezaspy/apfs-fuse) - macOS disk analysis
-* [Volatility3](https://github.com/volatilityfoundation/volatility3/) - optional
+* [Volatility3](https://github.com/volatilityfoundation/volatility3/) (optional)
   * [Python 3.5.3+](https://www.python.org/downloads/release/python-353/) - required if installing volatility3
 * [dwarfdump](https://manpages.ubuntu.com/manpages/trusty/man1/dwarfdump.1.html) - creating own memory profiles for volatility2.6
-* [exiftool](https://exiftool.org) - obtain metadata information from image files (.jpg, .png etc.)
+* [exiftool](https://exiftool.org) - to obtain metadata information from image files (.jpg, .png etc.)
 <br><br>
-
-### Condensed Version
-`sudo add-apt-repository ppa:deadsnakes/ppa && sudo apt-get update && sudo apt-get install python3.7 && git clone https://github.com/volatilityfoundation/volatility3 && sudo mv volatility3/ /usr/lib/python3.7/ && sudo chmod -R 755 /usr/lib/python3.7/volatility3/ && sudo chown -R root:root /usr/lib/python3.7/volatility3/ && sudo apt-get install -y dwarfdump && sudo apt install libimage-exiftool-perl && sudo apt install libbz2-dev libattr1-dev cmake cmake-curses-gui && cd /usr/local/bin && sudo git clone https://github.com/ezaspy/apfs-fuse.git && cd apfs-fuse && sudo git submodule init && sudo git submodule update && sudo mkdir build && cd build && sudo cmake .. && sudo ccmake .`<br>
-Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
-`sudo make`<br><br>
-
-### Long Version
-#### Installing python3.7
-`sudo add-apt-repository ppa:deadsnakes/ppa && sudo apt-get update && sudo apt-get install python3.7`
-#### Configuring python3.7 (optional)
-`sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 1`
-#### Installing Volatility3
-`git clone https://github.com/volatilityfoundation/volatility3 && sudo mv volatility3/ /usr/lib/python3.7/`
-#### Configuring Volatility3
-`sudo chmod -R 755 /usr/lib/python3.7/volatility3/ && sudo chown -R root:root /usr/lib/python3.7/volatility3/`
-#### Installing dwarfdump
-`sudo apt-get install -y dwarfdump`
-#### Installing exilftool
-`sudo apt install libimage-exiftool-perl`
-#### Installing apfs-fuse
-`sudo apt install libbz2-dev libattr1-dev cmake cmake-curses-gui && cd /usr/local/bin && sudo git clone https://github.com/ezaspy/apfs-fuse.git && cd apfs-fuse && sudo git submodule init && sudo git submodule update && sudo mkdir build && cd build && sudo cmake .. && sudo ccmake .`<br>
-Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
-`sudo make`
-<br><br><br>
-
 
 <!-- USAGE EXAMPLES -->
 ## Usage
@@ -101,10 +75,8 @@ Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
 `python3 elrond.py -aqvVCPS case_name /images -K keywords.txt`
 <br><br>
 ### Support
-Please note that if you are using the -C flag (i.e. your artefacts have already been collected via another means). Please ensure your folder structure is as follows: `<path_to_hostname(s)>`/folder/`<hostname(s)>/<artefacts(s)>`
-<br>
-See the [support](https://github.com/ezaspy/elrond/issues) for a list of commands and additional third-party tools to help with preparing images or data for elrond.
-<br><br><br>
+Please note that if you are using the -C flag (i.e. your artefacts have already been collected via another means). Please ensure your folder structure is as follows: `<path_to_hostname(s)>`/folder/`<hostname(s)>/<artefacts(s)>`<br><br>
+See the [support file](https://github.com/ezaspy/elrond/SUPPORT.md) for a list of commands and additional third-party tools to help with preparing images or data for elrond.<br><br><br>
 
 
 <!-- ROADMAP -->
