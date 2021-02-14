@@ -67,14 +67,14 @@ Download import and start SIFT<br>
 Shutdown SIFT<br>
 ###### Menu Bar -> Virtual Machine -> Settings... ->
 * CD/DVD (SATA) -> Dropdown -> Autodetect -> Show All
-* Network Adaptor -> Bridged Networking (Autodetect)<br>
+* Network Adaptor -> Bridged Networking (Autodetect)<br><br>
 
 #### Condensed Version
 Collect https://github.com/ezaspy/elrond/tools/make_elrond-env.sh<br>
 `chmod u+x make_elrond-env.sh`<br>
 `./make_elrond-env.sh`<br>
 Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
-`sudo make`<br>
+`sudo make`<br><br>
 
 #### Long Version
 ##### Installing python3.7
