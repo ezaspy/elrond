@@ -66,15 +66,28 @@ Alternatviely, if you prefer to install the packages yourself...
 Download import and start SIFT<br>
 Shutdown SIFT<br>
 ###### Menu Bar -> Virtual Machine -> Settings... ->
-* CD/DVD (SATA) -> Dropdown -> Autodetect -> Show All
-* Network Adaptor -> Bridged Networking (Autodetect)<br><br>
+* 'CD/DVD (SATA)' -> 'Dropdown' -> 'Autodetect' -> 'Show All'
+* 'Network Adaptor' -> 'Bridged Networking (Autodetect)' (optional)<br><br>
+###### Menu Bar -> Virtual Machine -> Reinstall VMware Tools... ->
+* 'Network Adaptor' -> 'Bridged Networking (Autodetect)'<br>
+Copy VMware-<version_number>.tar.gz -> ~/Downloads<br>
+`cd Downloads`<br>
+`tar -xvf VMware-<version_number>.tar.gz`<br>
+`cd vmware-tools-distrib`<br>
+`sudo ./vmware-install.pl` (select **ENTER** to all except '...recover wasted disk space...' (last one))<br>
+`cd ../..`<br>
 
 #### Condensed Version
-Collect https://github.com/ezaspy/elrond/tools/make_elrond-env.sh<br>
+`git clone https://github.com/ezaspy/elrond`<br>
+`cd elrond/tools/`<br>
 `chmod u+x make_elrond-env.sh`<br>
 `./make_elrond-env.sh`<br>
+**ENTER**<br>
+**Y ENTER**<br>
 Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
-`sudo make`<br><br>
+`cd /usr/local/bin/apfs-fuse/build/`<br>
+`sudo make`<br>
+`cd ~/Downloads/elrond`<br><br>
 
 #### Long Version
 ##### Installing python3.7
@@ -92,8 +105,8 @@ Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
 ##### Installing apfs-fuse
 `sudo apt install libbz2-dev libattr1-dev cmake cmake-curses-gui && cd /usr/local/bin && sudo git clone https://github.com/ezaspy/apfs-fuse.git && cd apfs-fuse && sudo git submodule init && sudo git submodule update && sudo mkdir build && cd build && sudo cmake .. && sudo ccmake .`<br>
 Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
-`sudo make`
-<br><br>
+`sudo make`<br>
+`cd ~/Downloads/elrond`<br><br>
 
 ###### Menu Bar -> Virtual Machine -> Settings... ->
 * Network Adaptor -> Custom (Private)<br><br><br>
