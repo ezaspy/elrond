@@ -63,7 +63,7 @@ Alternatviely, if you prefer to install the packages yourself...
 <br><br>
 
 ### Condensed Version
-`./make_SIFT-elrond.sh` (https://github.com/ezaspy/elrond/tools/)<br>
+`./make_elrond-env.sh` (https://github.com/ezaspy/elrond/tools/)<br>
 Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
 `sudo make`<br><br>
 
