@@ -123,7 +123,7 @@ Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
 `python3 elrond.py -aqvVCPS case_name /images -K keywords.txt`
 <br><br>
 ### Support
-Please note that if you are using the -C flag (i.e. your artefacts have already been collected via another means). Please ensure your folder structure is as follows: `<path_to_hostname(s)>`/folder/`<hostname(s)>/<artefacts(s)>`<br>
+Please note that if you are using the -C flag (i.e. your artefacts have already been collected via another means). Please ensure your folder structure is as follows: `<path_to_hostname(s)>`/folder/`<hostname(s)>/<artefacts(s)>`<br><br>
 See the [support file](https://github.com/ezaspy/elrond/SUPPORT.md) for a list of commands and additional third-party tools to help with preparing images or data for elrond.<br><br><br>
 
 
