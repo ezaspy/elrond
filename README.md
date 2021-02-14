@@ -63,10 +63,10 @@ Alternatviely, if you prefer to install the packages yourself...
 <br><br>
 
 ### Condensed Version
-Download import and start SIFT
-Shutdown SIFT
-Menu Bar -> Virtual Machine -> Settings... ->
-CD/DVD (SATA) -> Dropdown -> Autodetect -> Show All
+Download import and start SIFT<br>
+Shutdown SIFT<br>
+Menu Bar -> Virtual Machine -> Settings... -><br>
+CD/DVD (SATA) -> Dropdown -> Autodetect -> Show All<br>
 Network Adaptor -> Bridged Networking (Autodetect)<br>
 Collect https://github.com/ezaspy/elrond/tools/make_elrond-env.sh<br>
 `chmod u+x make_elrond-env.sh`<br>
