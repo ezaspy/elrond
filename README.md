@@ -62,7 +62,7 @@ Alternatviely, if you prefer to install the packages yourself...
 * [exiftool](https://exiftool.org) - obtain metadata information from image files (.jpg, .png etc.)
 <br><br>
 
-#### Installing & Configuring Software
+### Installing & Configuring Software
 Download import and start SIFT<br>
 Shutdown SIFT<br>
 ###### Menu Bar -> Virtual Machine -> Settings... ->
