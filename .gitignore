@@ -1,3 +1,14 @@
+# Testing Environment
+TEST_DATA/
+
+# Python Tools for Visual Studio (PTVS)
+__pycache__/
+*.pyc
+
+# Mac
+.DS_Store
+xcode/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
