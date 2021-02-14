@@ -68,6 +68,7 @@ Shutdown SIFT<br>
 ##### Menu Bar -> Virtual Machine -> Settings... ->
 * CD/DVD (SATA) -> Dropdown -> Autodetect -> Show All
 * Network Adaptor -> Bridged Networking (Autodetect)<br><br>
+
 Collect https://github.com/ezaspy/elrond/tools/make_elrond-env.sh<br>
 `chmod u+x make_elrond-env.sh`<br>
 `./make_elrond-env.sh`<br>
