@@ -62,20 +62,18 @@ Alternatviely, if you prefer to install the packages yourself...
 * [exiftool](https://exiftool.org) - obtain metadata information from image files (.jpg, .png etc.)
 <br><br>
 
-### Condensed Version
 Download import and start SIFT<br>
 Shutdown SIFT<br>
 ##### Menu Bar -> Virtual Machine -> Settings... ->
 * CD/DVD (SATA) -> Dropdown -> Autodetect -> Show All
 * Network Adaptor -> Bridged Networking (Autodetect)<br>
 
+### Condensed Version
 Collect https://github.com/ezaspy/elrond/tools/make_elrond-env.sh<br>
 `chmod u+x make_elrond-env.sh`<br>
 `./make_elrond-env.sh`<br>
 Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
 `sudo make`<br>
-##### Menu Bar -> Virtual Machine -> Settings... ->
-* Network Adaptor -> Custom (Private)<br><br>
 
 ### Long Version
 #### Installing python3.7
@@ -94,8 +92,10 @@ Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
 `sudo apt install libbz2-dev libattr1-dev cmake cmake-curses-gui && cd /usr/local/bin && sudo git clone https://github.com/ezaspy/apfs-fuse.git && cd apfs-fuse && sudo git submodule init && sudo git submodule update && sudo mkdir build && cd build && sudo cmake .. && sudo ccmake .`<br>
 Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
 `sudo make`
-<br><br><br>
+<br><br>
 
+##### Menu Bar -> Virtual Machine -> Settings... ->
+* Network Adaptor -> Custom (Private)<br><br><br>
 
 <!-- USAGE EXAMPLES -->
 ## Usage
