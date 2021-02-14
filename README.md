@@ -56,10 +56,10 @@ Alternatviely, if you prefer to install the packages yourself...
 
 * [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (18.04)
 * [apfs-fuse](https://github.com/ezaspy/apfs-fuse) - macOS disk analysis
-* [Volatility3](https://github.com/volatilityfoundation/volatility3/) - optional
+* [Volatility3](https://github.com/volatilityfoundation/volatility3/) (optional)
   * [Python 3.5.3+](https://www.python.org/downloads/release/python-353/) - required if installing volatility3
 * [dwarfdump](https://manpages.ubuntu.com/manpages/trusty/man1/dwarfdump.1.html) - creating own memory profiles for volatility2.6
-* [exiftool](https://exiftool.org) - obtain metadata information from image files (.jpg, .png etc.)
+* [exiftool](https://exiftool.org) - to obtain metadata information from image files (.jpg, .png etc.)
 <br><br>
 
 ### Installing & Configuring Software
