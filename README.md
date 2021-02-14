@@ -63,6 +63,8 @@ Alternatviely, if you prefer to install the packages yourself...
 <br><br>
 
 ### Condensed Version
+Collect https://github.com/ezaspy/elrond/tools/make_elrond-env.sh<br>
+`chmod u+x make_elrond-env.sh`<br>
 `./make_elrond-env.sh` (https://github.com/ezaspy/elrond/tools/)<br>
 Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
 `sudo make`<br><br>
