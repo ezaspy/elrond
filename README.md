@@ -73,7 +73,9 @@ Collect https://github.com/ezaspy/elrond/tools/make_elrond-env.sh<br>
 `chmod u+x make_elrond-env.sh`<br>
 `./make_elrond-env.sh`<br>
 Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
-`sudo make`<br><br>
+`sudo make`<br>
+##### Menu Bar -> Virtual Machine -> Settings... ->
+* Network Adaptor -> Custom (Private)<br><br>
 
 ### Long Version
 #### Installing python3.7
