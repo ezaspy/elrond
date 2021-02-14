@@ -63,16 +63,16 @@ Alternatviely, if you prefer to install the packages yourself...
 <br><br>
 
 ### Condensed Version
-* Download import and start SIFT<br><br>
-* Shutdown SIFT<br><br>
-* Menu Bar -> Virtual Machine -> Settings... -><br><br>
-* CD/DVD (SATA) -> Dropdown -> Autodetect -> Show All<br><br>
-* Network Adaptor -> Bridged Networking (Autodetect)<br><br>
-* Collect https://github.com/ezaspy/elrond/tools/make_elrond-env.sh<br><br>
-`chmod u+x make_elrond-env.sh`<br><br>
-`./make_elrond-env.sh`<br><br>
-Enter the keys in the following order: **&darr; &darr; c g ENTER**<br><br>
-`sudo make`<br><br><br>
+##### Download import and start SIFT<br>
+##### Shutdown SIFT<br>
+##### Menu Bar -> Virtual Machine -> Settings... -><br>
+##### CD/DVD (SATA) -> Dropdown -> Autodetect -> Show All<br>
+##### Network Adaptor -> Bridged Networking (Autodetect)<br>
+##### Collect https://github.com/ezaspy/elrond/tools/make_elrond-env.sh<br>
+`chmod u+x make_elrond-env.sh`<br>
+`./make_elrond-env.sh`<br>
+Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
+`sudo make`<br><br>
 
 ### Long Version
 #### Installing python3.7
