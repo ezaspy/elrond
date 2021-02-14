@@ -52,8 +52,6 @@ elrond also provides features includng image and file hashing, metadata extracti
 ## Prerequisites
 
 There are several software package required for using elrond but almost all of them are contained within the SANS SIFT Worksation virtual machine OVA. You can download the SIFT OVA where I have included all of the software which might be used by elrond (volatility3, apfs-fuse etc.).
-* [elrond-SIFT Workstation](https://github.com/ezaspy/elrond/tools/SIFT-elrond.ova) (WIP)
-
 Alternatviely, if you prefer to install the packages yourself...
 
 * [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (18.04)
@@ -65,7 +63,7 @@ Alternatviely, if you prefer to install the packages yourself...
 <br><br>
 
 ### Condensed Version
-`sudo add-apt-repository ppa:deadsnakes/ppa && sudo apt-get update && sudo apt-get install python3.7 && git clone https://github.com/volatilityfoundation/volatility3 && sudo mv volatility3/ /usr/lib/python3.7/ && sudo chmod -R 755 /usr/lib/python3.7/volatility3/ && sudo chown -R root:root /usr/lib/python3.7/volatility3/ && sudo apt-get install -y dwarfdump && sudo apt install libimage-exiftool-perl && sudo apt install libbz2-dev libattr1-dev cmake cmake-curses-gui && cd /usr/local/bin && sudo git clone https://github.com/ezaspy/apfs-fuse.git && cd apfs-fuse && sudo git submodule init && sudo git submodule update && sudo mkdir build && cd build && sudo cmake .. && sudo ccmake .`<br>
+`./make_SIFT-elrond.sh`<br>
 Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
 `sudo make`<br><br>
 
