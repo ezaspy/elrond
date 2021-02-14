@@ -52,7 +52,7 @@ elrond also provides features includng image and file hashing, metadata extracti
 ## Prerequisites
 
 There are several software package required for using elrond but almost all of them are contained within the SANS SIFT Worksation virtual machine OVA. You can download the SIFT OVA where I have included all of the software which might be used by elrond (volatility3, apfs-fuse etc.).
-* [elrond-SIFT Workstation](https://github.com/ezaspy/elrond/tools/SIFT-elrond.ova)
+* [elrond-SIFT Workstation](https://github.com/ezaspy/elrond/tools/SIFT-elrond.ova) (WIP)
 
 Alternatviely, if you prefer to install the packages yourself...
 
