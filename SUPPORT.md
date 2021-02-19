@@ -45,16 +45,10 @@ Copy osxpmem to the host and run the following commands:<br>
 
 ### Linux
 
-* Analysis Machine
-
-Download avml from https://github.com/ezaspy/elrond/tools/<br>
-`sudo apt-get install musl-dev musl-tools musl && curl https://sh.rustup.rs -sSf | sh -s -- -y && rustup target add x86_64-unknown-linux-musl && cargo build --release --target x86_64-unknown-linux-musl && cargo build --release --target x86_64-unknown-linux-musl --no-default-features`<br>
-`cd target/x86_64-unknown-linux-musl/release/` (directory path might be slightly different)<br>
-
  * Target Machine<br>
 
-Copy avml directory to the host and run the following command:<br>
-`HOSTNAME=$(uname -r) && sudo ./avml <path/to/directory>/$(uname -r).mem`
+Download avml from https://github.com/ezaspy/elrond/tools/<br>
+`sudo chmod +x avml && HOSTNAME=$(uname -r) && sudo ./avml <path/to/directory>/$(uname -r).mem`
 <br><br><br>
 
 ## Creating memory Profiles
@@ -76,6 +70,10 @@ Download volatility from https://github.com/ezaspy/elrond/tools/<br>
 `sudo make -C /lib/modules/HOSTNAME/build/ CONFIG_DEBUG_INFO=y M=$PWD modules`<br>
 `sudo rm -rf module.dwarf`<br>
 `sudo dwarfdump -di ./module.o > module.dwarf`<br>
+RHEL-based Hosts<br>
+``
+``
+Ubuntu-based Hosts<br>
 `sudo zip Ubuntu64-HOSTNAME.zip module.dwarf /boot/System.map-HOSTNAME`<br>
 `sudo cp Ubuntu64-HOSTNAME.zip /usr/lib/python2.7/dist-packages/volatility/plugins/overlays/linux/`<br>
 <br><br>
