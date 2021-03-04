@@ -1,6 +1,14 @@
-# Additional Tools & Commands to facilitate elrond
+# Additional Tools & Commands to Facilitate elrond Analysis
 
-Additional commands and tools to help support with getting data ready for elrond
+Additional commands and tools to help get data ready for elrond
+<!-- TABLE OF CONTENTS -->
+## Table of Contents
+
+* [Multiple VMDK Files](#Merging-multiple-.vmdk-disk-files)
+* [Convert DMG to E01](#Convert-DMG-to-E01)
+* [Capturing Memory & Creating Profiles](#Capturing-Memory-and-Creating-Profiles-(volatility2.6))
+    * [macOS](#macOS-(Target-Machine))
+    * [Linux](#Linux-(Target-Machine))
 <br><br>
 
 ## Merging multiple .vmdk disk files
@@ -12,7 +20,7 @@ Additional commands and tools to help support with getting data ready for elrond
 * VMware Workstation
 
 `C:\Program Files (x86)\VMware\VMware Player\vmware-vdiskmanager.exe -r <location of virtual machine>.vmwarevm\VirtualDisk.vmdk -t 0 <new disk name>.vmdk`
-<br><br><br><br>
+<br><br><br>
 
 ## Convert DMG to E01
 
@@ -22,56 +30,45 @@ If you have collected artefacts into a DMG file (using option "dmg" or "ro-dmg")
 `$ diskutil list    -> confirm device name which DMG has been mounted`<br>
 `$ ewfacquire -t evidence -v /dev/disk4s1    -> create evidence.E01 from /dev/disk4s1`<br>
 `$ hdiutil detach /dev/disk4`
-<br><br><br><br>
+<br><br><br>
 
-## Capturing and Converting memory
+## Capturing Memory and Creating Profiles (volatility2.6)
 
-### macOS
+### macOS (Target Machine)
 
-* Target Machine
+#### Capturing Memory
+* Download osxpmem from https://github.com/ezaspy/elrond/tools/<br>
 
-`git clone https://github.com/ezaspy/elrond`<br>
-`cd elrond/tools/`<br>
 `sudo chown -R root:wheel osxpmem.app/`<br>
 `sudo osxpmem.app/osxpmem -o /tmp/mem.aff4`<br>
 `sudo osxpmem.app/osxpmem -e /dev/pmem -o /tmp/mem.raw /tmp/mem.aff4`<br>
 `sudo osxpmem.app/osxpmem -u`
+
+#### Creating Profile
+* Download the relevant Kernel Debug Kit: http://developer.apple.com/hardwaredrivers<br>
+* Download volatility3 from https://github.com/ezaspy/elrond/tools/<br>
+
+`unzip volatility3.zip`<br>
+`dwarfdump -arch x86_64 /Library/Developer/KDKs/KDK_<MACOSXVERSION>_16D32.kdk/System/Library/Kernels/kernel.dSYM > <MACOSXVERSION>_x64.dwarfdump`<br>
+`python tools/mac/convert.py <MACOSXVERSION>.dwarfdump converted-<MACOSXVERSION>_x64.dwarfdump`<br>
+`python tools/mac/convert.py converted-<MACOSXVERSION>_x64.dwarfdump > 10.12.3.64bit.vtypes`<br>
+`dsymutil -s -arch x86_64 /Library/Developer/KDKs/KDK_<MACOSXVERSION>_16D32.kdk/System/Library/Kernels/kernel > <MACOSXVERSION>.64bit.symbol.dsymutil`<br>
+`zip <MACOSXVERSION>.64bit.zip <MACOSXVERSION>.64bit.symbol.dsymutil <MACOSXVERSION>.64bit.vtypes`<br>
+`cp <MACOSXVERSION>.64bit.zip volatility/plugins/overlays/mac/`<br>
 <br><br>
 
-### Linux
+### Linux (Target Machine)
 
-* Analysis Machine
+#### Capturing Memory
+* Download avml from https://github.com/ezaspy/elrond/tools/<br>
 
-`git clone https://github.com/ezaspy/elrond`<br>
-`cd elrond/tools/`<br>
-`sudo apt-get install musl-dev musl-tools musl && curl https://sh.rustup.rs -sSf | sh -s -- -y && rustup target add x86_64-unknown-linux-musl && cargo build --release --target x86_64-unknown-linux-musl && cargo build --release --target x86_64-unknown-linux-musl --no-default-features`<br>
-`cd target/x86_64-unknown-linux-musl/release/` (directory path might be slightly different)<br>
+`sudo chmod +x avml && HOSTNAME=$(uname -r) && sudo ./avml <path/to/directory>/$(uname -r).mem`<br><br>
+#### Creating Profile
+* Download volatility from https://github.com/ezaspy/elrond/tools/<br>
 
- * Target Machine<br>
-
-Copy avml directory (from analysis machine above)<br>
-`HOSTNAME=$(uname -r) && sudo ./avml <path/to/directory>/$(uname -r).mem`
-<br><br><br>
-
-## Creating volatility Profiles
-
-### macOS
-
-Download the relevant Kernel Debug Kit: http://developer.apple.com/hardwaredrivers<br>
-`dwarfdump -arch x86_64 /Library/Developer/KDKs/KDK_MACOSXVERSION_16D32.kdk/System/Library/Kernels/kernel.dSYM > MACOSXVERSION_x64.dwarfdump`<br>
-`python tools/mac/convert.py MACOSXVERSION.dwarfdump converted-MACOSXVERSION_x64.dwarfdump`<br>
-`python tools/mac/convert.py converted-MACOSXVERSION_x64.dwarfdump > 10.12.3.64bit.vtypes`<br>
-`dsymutil -s -arch x86_64 /Library/Developer/KDKs/KDK_MACOSXVERSION_16D32.kdk/System/Library/Kernels/kernel > MACOSXVERSION.64bit.symbol.dsymutil`<br>
-`zip MACOSXVERSION.64bit.zip MACOSXVERSION.64bit.symbol.dsymutil MACOSXVERSION.64bit.vtypes`<br>
-`cp MACOSXVERSION.64bit.zip volatility/plugins/overlays/mac/`<br>
-
-### Linux
-
-Download volatility from https://github.com/ezaspy/elrond/tree/main/tools/<br>
 `cd volatility/tools/linux/`<br>
-`sudo make -C /lib/modules/HOSTNAME/build/ CONFIG_DEBUG_INFO=y M=$PWD modules`<br>
+`sudo make -C /lib/modules/$(uname -r)/build/ CONFIG_DEBUG_INFO=y M=$PWD modules`<br>
 `sudo rm -rf module.dwarf`<br>
 `sudo dwarfdump -di ./module.o > module.dwarf`<br>
-`sudo zip Ubuntu64-HOSTNAME.zip module.dwarf /boot/System.map-HOSTNAME`<br>
-`sudo cp Ubuntu64-HOSTNAME.zip /usr/lib/python2.7/dist-packages/volatility/plugins/overlays/linux/`<br>
-<br><br>
+`sudo zip [RHEL|Ubuntu]64-$(uname -r).zip module.dwarf /boot/System.map-$(uname -r)`<br>
+`sudo cp [RHEL|Ubuntu]64-$(uname -r).zip /usr/lib/python2.7/dist-packages/volatility/plugins/overlays/linux/`<br><br>
