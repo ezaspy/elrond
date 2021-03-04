@@ -66,9 +66,9 @@ If you have collected artefacts into a DMG file (using option "dmg" or "ro-dmg")
 #### Creating Profile
 * Download volatility from https://github.com/ezaspy/elrond/tree/main/tools/<br>
 
-`cd volatility/tools/linux/`<br>
+`sudo apt-get install build-essential && sudo apt-get install dwarfdump`
+`mkdir volatility && cd volatility && unzip ../volatility.zip && cd tools/linux/ && HOSTNAME=$(uname -r)`<br>
 `sudo make -C /lib/modules/$(uname -r)/build/ CONFIG_DEBUG_INFO=y M=$PWD modules`<br>
-`sudo rm -rf module.dwarf`<br>
-`sudo dwarfdump -di ./module.o > module.dwarf`<br>
+`sudo rm -rf module.dwarf && sudo dwarfdump -di ./module.o > module.dwarf`<br>
 `sudo zip [RHEL|Ubuntu]64-$(uname -r).zip module.dwarf /boot/System.map-$(uname -r)`<br>
-`sudo cp [RHEL|Ubuntu]64-$(uname -r).zip /usr/lib/python2.7/dist-packages/volatility/plugins/overlays/linux/`<br><br>
+Copy **[RHEL|Ubuntu]64-$(uname -r).zip** to **/usr/lib/python2.7/dist-packages/volatility/plugins/overlays/linux/** on analysis machine<br>
