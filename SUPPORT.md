@@ -37,7 +37,7 @@ If you have collected artefacts into a DMG file (using option "dmg" or "ro-dmg")
 ### macOS (Target Machine)
 
 #### Capturing Memory
-* Download osxpmem from https://github.com/ezaspy/elrond/tools/<br>
+* Download osxpmem from https://github.com/ezaspy/elrond/tree/main/tools/<br>
 
 `sudo chown -R root:wheel osxpmem.app/`<br>
 `sudo osxpmem.app/osxpmem -o /tmp/mem.aff4`<br>
@@ -46,7 +46,7 @@ If you have collected artefacts into a DMG file (using option "dmg" or "ro-dmg")
 
 #### Creating Profile
 * Download the relevant Kernel Debug Kit: http://developer.apple.com/hardwaredrivers<br>
-* Download volatility3 from https://github.com/ezaspy/elrond/tools/<br>
+* Download volatility3 from https://github.com/ezaspy/elrond/tree/main/tools/<br>
 
 `unzip volatility3.zip`<br>
 `dwarfdump -arch x86_64 /Library/Developer/KDKs/KDK_<MACOSXVERSION>_16D32.kdk/System/Library/Kernels/kernel.dSYM > <MACOSXVERSION>_x64.dwarfdump`<br>
@@ -60,11 +60,11 @@ If you have collected artefacts into a DMG file (using option "dmg" or "ro-dmg")
 ### Linux (Target Machine)
 
 #### Capturing Memory
-* Download avml from https://github.com/ezaspy/elrond/tools/<br>
+* Download avml from https://github.com/ezaspy/elrond/tree/main/tools/<br>
 
 `sudo chmod +x avml && HOSTNAME=$(uname -r) && sudo ./avml <path/to/directory>/$(uname -r).mem`<br><br>
 #### Creating Profile
-* Download volatility from https://github.com/ezaspy/elrond/tools/<br>
+* Download volatility from https://github.com/ezaspy/elrond/tree/main/tools/<br>
 
 `cd volatility/tools/linux/`<br>
 `sudo make -C /lib/modules/$(uname -r)/build/ CONFIG_DEBUG_INFO=y M=$PWD modules`<br>
