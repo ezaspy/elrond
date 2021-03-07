@@ -1,6 +1,6 @@
 # Additional Tools & Commands to Facilitate elrond Analysis
 
-Additional commands and tools to help get data ready for elrond
+Additional commands and tools to help get data ready for elrond<br><br>
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
 
@@ -9,7 +9,9 @@ Additional commands and tools to help get data ready for elrond
 * [Capturing Memory & Creating Profiles](#Capturing-Memory-and-Creating-Profiles-(volatility2.6))
     * [macOS](#macOS-(Target-Machine))
     * [Linux](#Linux-(Target-Machine))
-<br><br>
+* [Appendix](#Appendix)
+    * [Building avml](#Building-avml-(Analysis-Machine))
+<br><br><br>
 
 ## Merging multiple .vmdk disk files
 
@@ -39,10 +41,7 @@ If you have collected artefacts into a DMG file (using option "dmg" or "ro-dmg")
 #### Capturing Memory
 * Download osxpmem from https://github.com/ezaspy/elrond/tree/main/tools/<br>
 
-`sudo chown -R root:wheel osxpmem.app/`<br>
-`sudo osxpmem.app/osxpmem -o /tmp/mem.aff4`<br>
-`sudo osxpmem.app/osxpmem -e /dev/pmem -o /tmp/mem.raw /tmp/mem.aff4`<br>
-`sudo osxpmem.app/osxpmem -u`
+`sudo chown -R root:wheel osxpmem.app/ && sudo osxpmem.app/osxpmem -o /tmp/mem.aff4 && sudo osxpmem.app/osxpmem -e /dev/pmem -o /tmp/mem.raw /tmp/mem.aff4`<br>
 
 #### Creating Profile
 * Download the relevant Kernel Debug Kit: http://developer.apple.com/hardwaredrivers<br>
@@ -71,4 +70,13 @@ If you have collected artefacts into a DMG file (using option "dmg" or "ro-dmg")
 `sudo make -C /lib/modules/$(uname -r)/build/ CONFIG_DEBUG_INFO=y M=$PWD modules`<br>
 `sudo rm -rf module.dwarf && sudo dwarfdump -di ./module.o > module.dwarf`<br>
 `sudo zip [RHEL|Ubuntu]64-$(uname -r).zip module.dwarf /boot/System.map-$(uname -r)`<br><br>
-Copy **[RHEL|Ubuntu]64-$(uname -r).zip** to **/usr/lib/python2.7/dist-packages/volatility/plugins/overlays/linux/** on analysis machine<br>
+Copy **[RHEL|Ubuntu]64-$(uname -r).zip** to **/usr/lib/python2.7/dist-packages/volatility/plugins/overlays/linux/** on analysis machine<br><br><br><br>
+
+
+## Appendix
+
+### Building avml (Analysis Machine)
+**Only required if execution of avml fails**
+
+`sudo apt-get install musl-dev musl-tools musl && curl https://sh.rustup.rs -sSf | sh -s -- -y && rustup target add x86_64-unknown-linux-musl && cargo build --release --target x86_64-unknown-linux-musl && cargo build --release --target x86_64-unknown-linux-musl --no-default-features`<br>
+`cd target/x86_64-unknown-linux-musl/release/` (directory path might be slightly different)<br>
