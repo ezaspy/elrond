@@ -42,8 +42,6 @@ Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
 `git clone https://github.com/volatilityfoundation/volatility3 && sudo mv volatility3/ /usr/lib/python3.7/`
 #### Configuring Volatility3
 `sudo chmod -R 755 /usr/lib/python3.7/volatility3/ && sudo chown -R root:root /usr/lib/python3.7/volatility3/`
-#### Installing dwarfdump
-`sudo apt-get install -y dwarfdump`
 #### Installing exilftool
 `sudo apt install libimage-exiftool-perl`
 #### Installing apfs-fuse
