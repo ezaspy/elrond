@@ -1,10 +1,9 @@
 # Configuring SIFT Workstation
 ## VMware Tools
-Download, import and start SIFT<br>
-Shutdown SIFT<br>
+Download and import SIFT (adjust settings such as RAM if desired)<br>
 ### Configuring SIFT Workstation Virtual Machine
 #### **Menu Bar -> Virtual Machine -> Settings... ->**
-* **'CD/DVD (SATA)' -> 'Dropdown' -> 'Autodetect' -> 'Show All'**<br>
+* **'Add Device...' -> 'CD/DVD Drive' -> 'Autodetect'**<br>
 
 Start SIFT<br>
 #### **Menu Bar -> Virtual Machine -> Reinstall VMware Tools... ->**
