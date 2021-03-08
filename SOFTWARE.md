@@ -6,6 +6,7 @@ Download and import SIFT (adjust settings such as RAM if desired)<br>
 * **'Add Device...' -> 'CD/DVD Drive' -> 'Autodetect'**<br>
 
 Start SIFT<br>
+Restart SIFT<br>
 #### **Menu Bar -> Virtual Machine -> Reinstall VMware Tools... ->**
 
 Copy VMware-<version_number>.tar.gz -> ~/Downloads<br>
@@ -20,7 +21,6 @@ Copy VMware-<version_number>.tar.gz -> ~/Downloads<br>
 * **'Network Adaptor' -> 'Bridged Networking (Autodetect)'**<br>
 #### **Menu Bar -> Virtual Machine -> Reinstall VMware Tools... ->**
 ### Condensed Version
-`cd ~/Desktop`
 `git clone https://github.com/ezaspy/elrond`<br>
 `cd elrond/tools/`<br>
 `chmod u+x make_elrond-env.sh`<br>

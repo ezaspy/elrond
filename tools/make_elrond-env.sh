@@ -1,7 +1,7 @@
 #!/bin/bash
 mkdir /home/sansforensics/Desktop/posters
 mv /home/sansforensics/Desktop/*.pdf /home/sansforensics/Desktop/posters/
-gsettings set org.gnome.desktop.background picture-uri "file:///elrond_background.jpg"
+gsettings set org.gnome.desktop.background picture-uri "file:///home/sansforensics/Downloads/elrond/tools/elrond_background.jpg"
 cd ..
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt-get update && sudo apt-get install python3.7
