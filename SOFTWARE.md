@@ -21,16 +21,16 @@ Copy VMware-<version_number>.tar.gz -> ~/Downloads<br>
 #### **Menu Bar -> Virtual Machine -> Reinstall VMware Tools... ->**
 ### Condensed Version
 `cd /opt`<br>
-`git clone https://github.com/ezaspy/elrond`<br>
+`sudo git clone https://github.com/ezaspy/elrond`<br>
 `cd elrond/tools/`<br>
-`chmod u+x make_elrond-env.sh`<br>
-`./make_elrond-env.sh`<br>
+`sudo chmod u+x make_elrond-env.sh`<br>
+`sudo ./make_elrond-env.sh`<br>
 **ENTER**<br>
 **Y ENTER**<br>
 Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
 `cd /usr/local/bin/apfs-fuse/build/`<br>
 `sudo make`<br>
-`cd ~/elrond`<br><br>
+`cd /opt/elrond`<br><br>
 
 ### Long Version
 #### Installing python3.7

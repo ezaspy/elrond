@@ -4,11 +4,11 @@ mv ~/Desktop/*.pdf ~/Desktop/posters/
 gsettings set org.gnome.desktop.background picture-uri "file:///opt/elrond/tools/elrond_background.jpg"
 cd ..
 export PATH=$PATH:/opt/elrond
-chmod +x /opt/elrond/elrond.py
+sudo chmod +x /opt/elrond/elrond.py
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt-get update
 sudo apt-get install python3.7
-git clone https://github.com/volatilityfoundation/volatility3
+sudo git clone https://github.com/volatilityfoundation/volatility3
 sudo mv volatility3/ /usr/lib/python3.7/
 sudo chmod -R 755 /usr/lib/python3.7/volatility3/
 sudo chown -R root:root /usr/lib/python3.7/volatility3/
