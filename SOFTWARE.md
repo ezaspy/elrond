@@ -10,17 +10,17 @@ Restart SIFT<br>
 #### **Menu Bar -> Virtual Machine -> Reinstall VMware Tools... ->**
 
 Copy VMware-<version_number>.tar.gz -> ~/Downloads<br>
-`cd Downloads`<br>
+`cd ~/Downloads`<br>
 `tar -xvf VMware-<version_number>.tar.gz`<br>
 `cd vmware-tools-distrib`<br>
-`sudo ./vmware-install.pl` (select **ENTER** to all except '...recover wasted disk space...' (last one))<br>
-`cd ../..`<br><br><br>
+`sudo ./vmware-install.pl` (select **ENTER** to all except '...recover wasted disk space...' (last one))<br><br><br>
 
 ## Installing & Configuring Software
 #### **Menu Bar -> Virtual Machine -> Settings... ->**
 * **'Network Adaptor' -> 'Bridged Networking (Autodetect)'**<br>
 #### **Menu Bar -> Virtual Machine -> Reinstall VMware Tools... ->**
 ### Condensed Version
+`cd /opt`<br>
 `git clone https://github.com/ezaspy/elrond`<br>
 `cd elrond/tools/`<br>
 `chmod u+x make_elrond-env.sh`<br>
@@ -30,7 +30,7 @@ Copy VMware-<version_number>.tar.gz -> ~/Downloads<br>
 Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
 `cd /usr/local/bin/apfs-fuse/build/`<br>
 `sudo make`<br>
-`cd ~/Downloads/elrond`<br><br>
+`cd ~/elrond`<br><br>
 
 ### Long Version
 #### Installing python3.7

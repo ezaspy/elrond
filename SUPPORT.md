@@ -11,7 +11,8 @@ Additional commands and tools to help get data ready for elrond<br><br>
     * [Linux](#Linux-(Target-Machine))
 * [Appendix](#Appendix)
     * [Building avml](#Building-avml-(Analysis-Machine))
-<br><br><br>
+    * [Pre-created Profiles (volatility2.6)](#Pre-created-Profiles-(volatility2.6))
+<br><br>
 
 ## Merging multiple .vmdk disk files
 
@@ -79,4 +80,15 @@ Copy **[RHEL|Ubuntu]64-$(uname -r).zip** to **/usr/lib/python2.7/dist-packages/v
 **Only required if execution of avml fails**
 
 `sudo apt-get install musl-dev musl-tools musl && curl https://sh.rustup.rs -sSf | sh -s -- -y && rustup target add x86_64-unknown-linux-musl && cargo build --release --target x86_64-unknown-linux-musl && cargo build --release --target x86_64-unknown-linux-musl --no-default-features`<br>
-`cd target/x86_64-unknown-linux-musl/release/` (directory path might be slightly different)<br>
+`cd target/x86_64-unknown-linux-musl/release/` (directory path might be slightly different)<br><br>
+
+### Pre-created Profiles (volatility2.6)
+
+For a full list/repository of currently developed profiles for volatility2.6 please visit https://github.com/ezaspy/profiles
+Of course, you develop your own, please adhere to the following naming conventions:
+* Uploading to GitHub (directory structure):
+    * **profiles -> Mac -> 10.11 -> ElCapitan_10.11.1_15B42.zip**
+    * **profiles -> Linux -> x64 -> Ubuntu1010[-4.4.0-203-generic].zip**
+* Importing into volatility locally (.../volatility/plugins/overlays/[mac|linux]/):
+    * **10.11/ElCapitan_10.11.1_15B42.zip**
+    * **LinuxUbuntu1010[-4.4.0-203-generic]x64.zip**
