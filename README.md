@@ -83,7 +83,7 @@ See the [support file](https://github.com/ezaspy/elrond/SUPPORT.md) for a list o
 <!-- ROADMAP -->
 ## Roadmap
 
-* volatility3 compatibility
+* volatility3 for Linux
 * Index into Elastic
 * Live mode
 

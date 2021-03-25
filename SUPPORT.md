@@ -42,7 +42,7 @@ If you have collected artefacts into a DMG file (using option "dmg" or "ro-dmg")
 #### Capturing Memory
 * Download osxpmem from https://github.com/ezaspy/elrond/tree/main/tools/<br>
 
-`sudo chown -R root:wheel osxpmem.app/ && sudo osxpmem.app/osxpmem -o /tmp/mem.aff4 && sudo osxpmem.app/osxpmem -e /dev/pmem -o /tmp/mem.raw /tmp/mem.aff4`<br>
+`sudo chown -R root:wheel osxpmem.app/ && sudo osxpmem.app/osxpmem -o mem.aff4 && sudo osxpmem.app/osxpmem -e /dev/pmem -o mem.raw mem.aff4`<br>
 
 #### Creating Profile
 * Download the relevant Kernel Debug Kit: http://developer.apple.com/hardwaredrivers<br>
