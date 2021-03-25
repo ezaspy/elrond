@@ -1,5 +1,9 @@
 # Testing Environment
-TEST_DATA/
+TEST_DATA/*
+rivendell/audit/__pycache__/*
+rivendell/mounting/__pycache__/*
+rivendell/splunk/__pycache__/*
+rivendell/volatility/__pycache__/*
 
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
