@@ -66,13 +66,15 @@ Alternatviely, if you prefer to install the packages yourself...<br>
 
 <!-- USAGE EXAMPLES -->
 ## Usage
-`python3 elrond.py [-h] [-AaCcDFHIiMoPpQqRrSsTtUVvZ] <case_id> <directory> [<output_directory>] [-K] [<keyword_file>]`
-<br><br>
-#### Example [Previously collected disk artefacts] (Automatically Process, Analysis and index (collected) artefacts in Splunk)
+`python3 elrond.py [-h] [-AaCcDFHIiMoPpQqRrSsTtUVvZ] <case_id> <directory> [<output_directory>] [-K] [<keyword_file>]`<br>
+#### Example
+Automatically Process, Analysis and index artefacts in Splunk (previously collected disk artefacts)<br>
 `python3 elrond.py -aqvVPAS case_name /images`
-#### Example [Disk( & Memory) Image(s)] (Automatically Collect, Process, Analysis and index all default in Splunk)
+#### Example
+Automatically Collect, Process, Analysis and index all artefacts (including memory) in Splunk<br>
 `python3 elrond.py -aqvVMCPAS case_name /images`
-#### Example [Disk Image(s)] (Automatically, Collect, Process and conduct keyword searching)
+#### Example
+Automatically Collect, Process and conduct Keyword Searching<br>
 `python3 elrond.py -aqvVCPS case_name /images -K keywords.txt`
 <br><br>
 ### Support
@@ -87,10 +89,7 @@ See the [support file](https://github.com/ezaspy/elrond/SUPPORT.md) for a list o
 * Index into Elastic
 * Live mode
 
-<br>See the [open issues](https://github.com/ezaspy/elrond/issues) for a list of proposed features (and known issues).
-<br>
-See the [changes](https://github.com/ezaspy/elrond/blob/main/CHANGES.txt) for a list of previous changes to elrond.
-<br><br><br>
+<br>See the [open issues](https://github.com/ezaspy/elrond/issues) for a list of proposed features (and known issues).<br><br><br>
 
 
 <!-- CONTRIBUTING -->
@@ -116,7 +115,7 @@ Distributed under the MIT License. See [LICENSE](https://github.com/ezaspy/elron
 <!-- CONTACT -->
 ## Contact
 
-ezaspy - ezaspython@gmail.com
+ezaspy - ezaspython (at) gmail (dot) com
 
 Project Link: [https://github.com/ezaspy/elrond](https://github.com/ezaspy/elrond)
 
