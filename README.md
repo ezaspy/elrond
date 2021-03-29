@@ -68,11 +68,11 @@ Alternatviely, if you prefer to install the packages yourself...<br>
 ## Usage
 `python3 elrond.py [-h] [-AaCcDFHIiMoPpQqRrSsTtUVvZ] <case_id> <directory> [<output_directory>] [-K] [<keyword_file>]`
 <br><br>
-#### Example [Previously collected disk artefacts] (Automatically Process, Analysis and index (collected) artefacts in Splunk)
+#### Example Automatically Process, Analysis and index artefacts in Splunk (previously collected disk artefacts)
 `python3 elrond.py -aqvVPAS case_name /images`
-#### Example [Disk( & Memory) Image(s)] (Automatically Collect, Process, Analysis and index all default in Splunk)
+#### Example Automatically Collect, Process, Analysis and index all artefacts (including memory) in Splunk
 `python3 elrond.py -aqvVMCPAS case_name /images`
-#### Example [Disk Image(s)] (Automatically, Collect, Process and conduct keyword searching)
+#### Example Automatically Collect, Process and conduct Keyword Searching
 `python3 elrond.py -aqvVCPS case_name /images -K keywords.txt`
 <br><br>
 ### Support
@@ -116,7 +116,7 @@ Distributed under the MIT License. See [LICENSE](https://github.com/ezaspy/elron
 <!-- CONTACT -->
 ## Contact
 
-ezaspy - ezaspython@gmail.com
+ezaspy - ezaspython (at) gmail (dot) com
 
 Project Link: [https://github.com/ezaspy/elrond](https://github.com/ezaspy/elrond)
 
