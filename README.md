@@ -89,10 +89,7 @@ See the [support file](https://github.com/ezaspy/elrond/SUPPORT.md) for a list o
 * Index into Elastic
 * Live mode
 
-<br>See the [open issues](https://github.com/ezaspy/elrond/issues) for a list of proposed features (and known issues).
-<br>
-See the [changes](https://github.com/ezaspy/elrond/blob/main/CHANGES.txt) for a list of previous changes to elrond.
-<br><br><br>
+<br>See the [open issues](https://github.com/ezaspy/elrond/issues) for a list of proposed features (and known issues).<br><br><br>
 
 
 <!-- CONTRIBUTING -->
