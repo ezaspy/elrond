@@ -68,13 +68,13 @@ Alternatviely, if you prefer to install the packages yourself...<br>
 ## Usage
 `python3 elrond.py [-h] [-AaCcDFHIiMoPpQqRrSsTtUVvZ] <case_id> <directory> [<output_directory>] [-K] [<keyword_file>]`<br>
 #### Example
-Automatically Process, Analysis and index artefacts in Splunk (previously collected disk artefacts)
+Automatically Process, Analysis and index artefacts in Splunk (previously collected disk artefacts)<br>
 `python3 elrond.py -aqvVPAS case_name /images`
 #### Example
-Automatically Collect, Process, Analysis and index all artefacts (including memory) in Splunk
+Automatically Collect, Process, Analysis and index all artefacts (including memory) in Splunk<br>
 `python3 elrond.py -aqvVMCPAS case_name /images`
 #### Example
-Automatically Collect, Process and conduct Keyword Searching
+Automatically Collect, Process and conduct Keyword Searching<br>
 `python3 elrond.py -aqvVCPS case_name /images -K keywords.txt`
 <br><br>
 ### Support
