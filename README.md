@@ -66,8 +66,7 @@ Alternatviely, if you prefer to install the packages yourself...<br>
 
 <!-- USAGE EXAMPLES -->
 ## Usage
-`python3 elrond.py [-h] [-AaCcDFHIiMoPpQqRrSsTtUVvZ] <case_id> <directory> [<output_directory>] [-K] [<keyword_file>]`
-<br><br>
+`python3 elrond.py [-h] [-AaCcDFHIiMoPpQqRrSsTtUVvZ] <case_id> <directory> [<output_directory>] [-K] [<keyword_file>]`<br>
 #### Example
 Automatically Process, Analysis and index artefacts in Splunk (previously collected disk artefacts)
 `python3 elrond.py -aqvVPAS case_name /images`
