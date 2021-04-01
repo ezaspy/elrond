@@ -9,8 +9,8 @@ Additional commands and tools to help get data ready for elrond<br><br>
     * [Convert DMG to E01](#Convert-DMG-to-E01)
 * [Preparing Memory Images](Preparing-Memory-Images)
     * [Capturing Memory](#Capturing-Memory)
-    * [Creating Symbol Tables (volatility3)](#Creating-Symbol-Tables--volatility3-)
-    * [Creating Profiles (volatility2.6)](#Creating-Profiles-(volatility2.6))
+    * [Creating Symbol Tables (volatility3)](#Creating-Symbol-Tables-volatility3)
+    * [Creating Profiles (volatility2.6)](#Creating-Profiles-volatility26)
 * [Appendix](#Appendix)
 <br><br>
 
