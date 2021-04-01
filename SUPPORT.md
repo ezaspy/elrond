@@ -4,19 +4,19 @@ Additional commands and tools to help get data ready for elrond<br><br>
 <!-- TABLE OF CONTENTS -->
 # Table of Contents
 
-* [Preparing Disk Images](Preparing-Disk-Images)
-    * [Merging Multiple VMDK Files](#Merging-multiple-.vmdk-disk-files)
+* [Preparing Disk Images](#Preparing-Disk-Images)
+    * [Merging Multiple VMDK Files](#Merging-multiple-VMDK-Files)
     * [Convert DMG to E01](#Convert-DMG-to-E01)
 * [Preparing Memory Images](Preparing-Memory-Images)
     * [Capturing Memory](#Capturing-Memory)
-    * [Creating Symbol Tables (volatility3)](#Creating-Symbol-Tables-(volatility3))
+    * [Creating Symbol Tables (volatility3)](#Creating-Symbol-Tables--volatility3-)
     * [Creating Profiles (volatility2.6)](#Creating-Profiles-(volatility2.6))
 * [Appendix](#Appendix)
 <br><br>
 
 # Preparing Disk Images
 
-## Merging multiple .vmdk disk files
+## Merging multiple VMDK Files
 * VMware Fusion
 
 `/Applications/VMware\ Fusion.app/Contents/Library/vmware-vdiskmanager -r <location of virtual machine>.vmwarevm/Virtual\ Disk.vmdk -t 0 <new disk name>.vmdk`
