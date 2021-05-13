@@ -6,7 +6,7 @@ mv ~/Desktop/*.pdf ~/Desktop/posters/
 sudo chmod 744 -R ~/Desktop/posters/
 sudo chown sansforensics:sansforensics -R ~/Desktop/posters/
 sudo chmod -R 744 /opt/elrond/
-gsettings set org.gnome.desktop.background picture-uri "file:///opt/elrond/images/elrond_background.jpg"
+gsettings set org.gnome.desktop.background picture-uri "file:///opt/elrond/tools/elrond_background.jpg"
 export PATH=$PATH:/opt/elrond
 sudo chmod +x /opt/elrond/elrond.py
 sleep 1
