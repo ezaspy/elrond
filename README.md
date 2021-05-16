@@ -44,7 +44,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-elrond has been created to help fellow digitial forensicators with the identification, collection, processing, analysis and outputting of forensic artefacts from a Windows, macOS or Linux E01 or VMDK disk images as well as raw memory images and previously collected artefacts which can all be outputted into Splunk or Elastic. I have spent many an incident repeating the same processes by mounting, collecting and (mainly Windows) forensic artefacts and then attempting to correlate them together as well as with other data sources and artefacts. Thus, as mentioned above elrond has been built to consolidate those seperate processes into one single script helping to accerlate and automate these otherwise repetitive, tedious and often occasionally-run commands. As elrond outputs the artefact information as either CSV or JSON, they can be processed by many commonly-used log file analysis tools. As elrond does have the capability to stand up a dedicated Splunk or Elastic instance, the artefacts are automatically assigned and aligned with the MITRE ATT&CK Framework in the form of dashboards.
+elrond has been created to help fellow digitial forensicators with the identification, collection, processing, analysis and outputting of forensic artefacts from a Windows E01 or VMDK, macOS or Linux VMDK disk image as well as raw memory images and previously collected artefacts which can all be outputted into Splunk. I have spent many an incident repeating the same processes by mounting, collecting (mainly Windows) forensic artefacts and then attempting to correlate them together with other data sources and artefacts. Thus, as mentioned above elrond has been built to consolidate those seperate processes into one single script helping to accerlate and automate these otherwise repetitive, tedious and often occasionally-referenced commands. As elrond outputs the artefact information as either CSV or JSON, they can be processed by many commonly-used log file analysis tools, consequently, elrond does have the capability to stand up a dedicated Splunk instance, whereby the artefacts are automatically assigned and aligned with the MITRE ATT&CK Framework.
 elrond also provides additional features such as image and file hashing, metadata extraction, file recovery and carving, IOC extraction, keyword searching and timelining.
 <br><br><br>
 
@@ -57,11 +57,9 @@ There are several software package required for using elrond but almost all of t
 Please note the elrond also only supports x64 memory images.<br><br>
 
 Alternatviely, if you prefer to install the packages yourself...<br>
-* [apfs-fuse](https://github.com/ezaspy/apfs-fuse) - macOS disk analysis
 * [Volatility3](https://github.com/volatilityfoundation/volatility3/) (optional)
-  * [Python 3.5.3+](https://www.python.org/downloads/release/python-353/) - required if installing volatility3
-* [dwarfdump](https://manpages.ubuntu.com/manpages/trusty/man1/dwarfdump.1.html) - creating own memory profiles for volatility2.6
-* [exiftool](https://exiftool.org) - to obtain metadata information from image files (.jpg, .png etc.)
+* [dwarfdump](https://manpages.ubuntu.com/manpages/trusty/man1/dwarfdump.1.html) - (optional)
+* [apfs-fuse](https://github.com/ezaspy/apfs-fuse) - macOS disk analysis
 <br><br>
 
 <!-- USAGE EXAMPLES -->
@@ -85,9 +83,8 @@ See the [support file](https://github.com/ezaspy/elrond/SUPPORT.md) for a list o
 <!-- ROADMAP -->
 ## Roadmap
 
-* volatility3 for Linux
-* Index into Elastic
-* Live mode
+* ELK/Elastic 'module'
+* Live 'module'
 
 <br>See the [open issues](https://github.com/ezaspy/elrond/issues) for a list of proposed features (and known issues).<br><br><br>
 
@@ -134,6 +131,7 @@ Other Projects: [https://github.com/ezaspy/](https://github.com/ezaspy/)
   * [williballenthin](https://github.com/williballenthin)
   * [dkovar](https://github.com/dkovar)
   * [Richard Penman](https://github.com/richardpenman)
+  * [mnrkbys](https://github.com/mnrkbys/macosac)
   * [The Volatility Foundation](https://github.com/volatilityfoundation)
   * [AVML](https://github.com/microsoft/avml)
   * [Jonathon Poling](https://ponderthebits.com/2017/02/osx-mac-memory-acquisition-and-analysis-using-osxpmem-and-volatility/)

@@ -25,11 +25,16 @@ Additional commands and tools to help get data ready for elrond<br><br>
 `C:\Program Files (x86)\VMware\VMware Player\vmware-vdiskmanager.exe -r <location of virtual machine>.vmwarevm\VirtualDisk.vmdk -t 0 <new disk name>.vmdk`<br><br><br>
 
 ## Convert DMG to E01
-If you have collected artefacts into a DMG file (using option "dmg" or "ro-dmg"), you can convert it into E01.<br>
+If you have collected a macOS disk image in the form of a DMG, you can convert it into E01. Note, this can only be done on a macOS device (preferably not the same host where the disk was acquired).<br>
 `$ brew install libewf`<br>
-`$ hdiutil attach -nomount xxxxxx_YYYYMMDD_hhmmss.dmg`<br>
-`$ diskutil list    -> confirm device name which DMG has been mounted`<br>
-`$ ewfacquire -t evidence -v /dev/disk4s1    -> create evidence.E01 from /dev/disk4s1`<br>
+`$ hdiutil attach -nomount <filename>.dmg`<br>
+`$ diskutil list`
+ * Confirm device name which DMG has been mounted<br>
+
+`$ ewfacquire -t evidence -v /dev/diskN`
+ * Create evidence.E01 from /dev/diskN (N being the number it has been assigned - usually 3 or 4 but depends on how many additional disks or images are mounted)<br>
+ * Adjust 'Evidence segment file size' to a value larger then the size of the DMG - this forces it to create a single E01 file as opposed to multiple<br>
+
 `$ hdiutil detach /dev/disk4`<br><br><br>
 
 
@@ -50,6 +55,7 @@ If you have collected artefacts into a DMG file (using option "dmg" or "ro-dmg")
 #### Analysis Machine
 * Follow instructions, download relevant debug symbol and execute the following commands (relevant to your distro):<br>
 
+Obtain the relevant debug symbol
 `$ wget <debugsymbol>`
 * RHEL: https://access.redhat.com/solutions/9907<br>
 `$ yum install <path-to-debug-package> /tmp/`<br>
