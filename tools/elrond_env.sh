@@ -6,12 +6,18 @@ mv ~/Desktop/*.pdf ~/Desktop/posters/
 sudo chmod 744 -R ~/Desktop/posters/
 sudo chown sansforensics:sansforensics -R ~/Desktop/posters/
 sudo chmod -R 744 /opt/elrond/
-gsettings set org.gnome.desktop.background picture-uri "file:///opt/elrond/tools/elrond_background.jpg"
+gsettings set org.gnome.desktop.background picture-uri "file:///opt/elrond/tools/lotr_background.jpg"
 export PATH=$PATH:/opt/elrond
 sudo chmod +x /opt/elrond/elrond.py
 sleep 1
-sudo apt install libgdbm-dev libreadline-dev libsqlite3-dev libbz2-dev libattr1-dev cmake cmake-curses-gui liblzma-dev john -y --fix-missing
+sudo apt install build-essential checkinstall libgdbm-dev libreadline-dev libsqlite3-dev libbz2-dev libattr1-dev libncursesw5-dev libssl-dev tk-dev libc6-dev libffi-dev zlib1g-dev cmake cmake-curses-gui liblzma-dev john -y --fix-missing
 sudo apt install libnss3-dev -y --fix-missing
+sudo wget https://www.python.org/ftp/python/3.8.7/Python-3.8.7.tgz
+sudo tar xzf Python-3.8.7.tgz
+cd Python-3.8.7
+sudo ./configure --enable-optimizations
+sudo make altinstall
+cd ..
 git clone https://github.com/volatilityfoundation/volatility3.git
 sudo mv volatility3/ /usr/lib/python3.8/
 sudo chmod -R 755 /usr/lib/python3.8/volatility3/
@@ -38,8 +44,8 @@ sudo chown sansforensics:sansforensics -R /opt/elrond/
 cd /opt/elrond
 printf "\n\n\n    Press ENTER to continue...\n"
 read answer
-printf "\n    Finished! - enjoy elrond!\n"
-sleep 4
-gsettings set org.gnome.desktop.background picture-uri "file:///opt/elrond/tools/elrond_background.jpg"
+printf "\n\n      Finished - enjoy elrond!\n"
+sleep 2
+gsettings set org.gnome.desktop.background picture-uri "file:///opt/elrond/tools/lotr_background.jpg"
 sudo rm -rf ~/tmp
 clear

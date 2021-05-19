@@ -24,17 +24,16 @@ Copy VMware-<version_number>.tar.gz -> ~/Downloads<br>
 `cd /opt`<br>
 `sudo git clone https://github.com/ezaspy/elrond`<br>
 `cd elrond/tools/`<br>
-`sudo chmod u+x elrond-env.sh`<br>
-`sudo ./elrond-env.sh`<br>
+`sudo chmod u+x elrond_env.sh`<br>
+`sudo ./elrond_env.sh`<br>
 **ENTER**<br>
 **Y ENTER**<br>
 Enter the keys in the following order: **&darr; &darr; c g ENTER**<br>
 
 ### Long Version
-#### Installing python3.9
-`sudo add-apt-repository ppa:deadsnakes/ppa && sudo apt-get update && sudo apt-get install python3.9`
-#### Configuring python3.9 (optional)
-`sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1`
+#### Installing Python3.8.7 (optional)
+`sudo apt install build-essential checkinstall libgdbm-dev libreadline-dev libsqlite3-dev libbz2-dev libattr1-dev libncursesw5-dev libssl-dev tk-dev libc6-dev libffi-dev zlib1g-dev cmake cmake-curses-gui liblzma-dev john -y --fix-missing && sudo apt install libnss3-dev -y --fix-missing`<br>
+`sudo wget https://www.python.org/ftp/python/3.8.7/Python-3.8.7.tgz && sudo tar xzf Python-3.8.7.tgz && cd Python-3.8.7 && sudo ./configure --enable-optimizations && sudo make altinstall && cd ..`
 #### Installing Volatility3
 `git clone https://github.com/volatilityfoundation/volatility3 && sudo mv volatility3/ /usr/lib/python3.9/`
 #### Configuring Volatility3
