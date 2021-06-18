@@ -1,10 +1,6 @@
 #!/bin/bash
 mkdir ~/tmp
 cd ~/tmp
-mkdir ~/Desktop/posters
-mv ~/Desktop/*.pdf ~/Desktop/posters/
-sudo chmod 744 -R ~/Desktop/posters/
-sudo chown sansforensics:sansforensics -R ~/Desktop/posters/
 sudo chmod -R 744 /opt/elrond/
 gsettings set org.gnome.desktop.background picture-uri "file:///opt/elrond/tools/lotr_background.jpg"
 export PATH=$PATH:/opt/elrond
