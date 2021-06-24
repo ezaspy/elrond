@@ -53,7 +53,7 @@ If you have collected a macOS disk image in the form of a DMG, you can convert i
 ## Creating Symbol Tables (volatility3)
 ### Linux
 #### Analysis Machine
-* Follow instructions, download relevant debug symbol and execute the following commands (relevant to your distro):<br>
+* Download relevant debug symbol and execute the following commands (relevant to your distro):<br>
 
 Obtain the relevant debug symbol
 `$ wget <debugsymbol>`
@@ -61,6 +61,8 @@ Obtain the relevant debug symbol
 `$ yum install <path-to-debug-package> /tmp/`<br>
 * Ubuntu: http://ddebs.ubuntu.com/ubuntu/pool/main/l/linux/<br>
 `$ dpkg -x <path-to-debug-package> /tmp/`<br>
+
+INSERT ADDITIONAL COMMANDS HERE...
 
 Copy created symbol table to Analysis Machine<br>
 `$ ./dwarf2json linux --elf /tmp/usr/lib/debug/boot/<downloaded-ddeb>.ddeb > .../volatility3/volatility3/symbols/linux/<downloaded-ddeb>.json`<br>

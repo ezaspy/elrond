@@ -44,36 +44,45 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-elrond has been created to help fellow digitial forensicators with the identification, collection, processing, analysis and outputting of forensic artefacts from a Windows E01 or VMDK, macOS DMG/E01 or VMDK, Linux dd or VMDK disk images as well as raw memory images and previously collected artefacts which can all be outputted into Splunk. I have spent many an incident repeating the same processes by mounting, collecting (mainly Windows) forensic artefacts and then attempting to correlate them together with other data sources and artefacts. Thus, as mentioned above elrond has been built to consolidate those seperate processes into one single script helping to accerlate and automate these otherwise repetitive, tedious and often occasionally-referenced commands. As elrond outputs the artefact information as either CSV or JSON, they can be processed by many commonly-used log file analysis tools, consequently, elrond does have the capability to stand up a dedicated Splunk instance, whereby the artefacts are automatically assigned and aligned with the MITRE ATT&CK Framework.
+elrond has been created to help fellow digitial forensicators with the identification, collection, processing, analysis and outputting of forensic artefacts from a Windows E01 or VMDK, macOS DMG/E01 or VMDK, Linux dd or VMDK disk images as well as raw memory images and previously collected artefacts which can all be outputted into Splunk. I have spent many an incident repeating the same processes by mounting, collecting (mainly Windows) forensic artefacts and then attempting to correlate them together with other data sources and artefacts. Thus, as mentioned above elrond has been built to consolidate those seperate processes into one single script helping to accerlate and automate these otherwise repetitive, tedious and often occasionally-referenced commands. As elrond outputs the artefact information as either CSV or JSON, they can be processed by many commonly-used log file analysis tools, consequently, elrond does have the capability to stand up a dedicated Splunk instance, whereby the artefacts are automatically assigned and aligned with the MITRE ATT&CK® Framework.
 elrond also provides additional features such as image and file hashing, metadata extraction, file recovery and carving, IOC extraction, keyword searching and timelining.
 <br><br><br>
 
 <!-- Prerequisites -->
 ## Prerequisites
 
-There are several software package required for using elrond but almost all of them are contained within the SANS SIFT Worksation virtual machine OVA. However, for the software which is not included, I have provided a script ([elrond_env.sh](https://github.com/ezaspy/elrond/tools/elrond_env.sh)) which installs and configures the additional software which might be required during running elrond (volatility3, apfs-fuse etc.).<br>
-* [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (18.04)
+There are several software package required for using elrond but almost all of them are contained within the SANS SIFT Worksation virtual machine OVA. However, for the software which is not included, I have provided a script ([elrond_env.sh](https://github.com/ezaspy/elrond/elrond_env.sh)) which installs and configures the additional software which might be required during running elrond (volatility3, apfs-fuse etc.).<br>
+* [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (20.04 & 18.04)
 * See the [software file](https://github.com/ezaspy/elrond/SOFTWARE.md) to install and configure the additional software.
-Please note the elrond also only supports x64 memory images.<br><br>
+  * Please note the elrond also only supports x64 memory images.<br><br>
 
 Alternatviely, if you prefer to install the packages yourself...<br>
 * [Volatility3](https://github.com/volatilityfoundation/volatility3/) - (optional)
-* [dwarfdump](https://manpages.ubuntu.com/manpages/trusty/man1/dwarfdump.1.html) - (optional)
+* [dwarfdump](https://manpages.ubuntu.com/manpages/trusty/man1/dwarfdump.1.html) - processing Linux memory images in volatility3
 * [apfs-fuse](https://github.com/ezaspy/apfs-fuse) - macOS disk analysis
 <br><br>
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 `python3 elrond.py [-h] [-AaCcDFHIiMoPpQqRrSsTtUVvZ] <case_id> <directory> [<output_directory>] [-K] [<keyword_file>]`<br>
-#### Example
+### Recommended examples<br>
+* With previously collected artefacts
+
+Automatically (attain )Metadata, Collect, Process, Analysis and index artefacts in Splunk<br>
+`python3 elrond.py -aqvVPAS case_name /images`
+* Without previously collected artefacts
+
+Automatically (attain )Metadata, Collect, Process, Analysis and index artefacts in Splunk<br>
+`python3 elrond.py -aqvVPAS case_name /images`<br><br>
+### Additional examples
 Automatically Process, Analysis and index artefacts in Splunk (previously collected disk artefacts)<br>
 `python3 elrond.py -aqvVPAS case_name /images`
-#### Example
-Automatically Collect, Process, Analysis and index all artefacts (including memory) in Splunk<br>
-`python3 elrond.py -aqvVMCPAS case_name /images`
-#### Example
-Automatically Collect, Process and conduct Keyword Searching<br>
-`python3 elrond.py -aqvVCPS case_name /images -K keywords.txt`
+
+Automatically, super-quietly Collect, Process, Analysis and index all artefacts (including memory) in Splunk<br>
+`python3 elrond.py -aqQvVMCPAS case_name /images`
+
+Automatically, super-quietly Collect, Process and conduct Keyword Searching (with no printing)<br>
+`python3 elrond.py -aqQCPS case_name /images -K keywords.txt`
 <br><br>
 ### Support
 Please note that if you are using the -C flag (i.e. your artefacts have already been collected via another means). Please ensure your folder structure is as follows: `<path_to_hostname(s)>`/folder/`<hostname(s)>/<artefacts(s)>`<br><br>

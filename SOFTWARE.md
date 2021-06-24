@@ -23,7 +23,7 @@ Copy VMware-<version_number>.tar.gz -> ~/Downloads<br>
 ### Condensed Version
 `cd /opt`<br>
 `sudo git clone https://github.com/ezaspy/elrond`<br>
-`cd elrond/tools/`<br>
+`cd elrond/`<br>
 `sudo chmod u+x elrond_env.sh`<br>
 `sudo ./elrond_env.sh`<br>
 **ENTER**<br>
