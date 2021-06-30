@@ -52,12 +52,12 @@ elrond also provides additional features such as image and file hashing, metadat
 ## Prerequisites
 
 There are several software package required for using elrond but almost all of them are contained within the SANS SIFT Worksation virtual machine OVA. However, for the software which is not included, I have provided a script ([elrond_env.sh](https://github.com/ezaspy/elrond/elrond_env.sh)) which installs and configures the additional software which might be required during running elrond (volatility3, apfs-fuse etc.).<br>
-* [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (20.04 & 18.04)
-* See the [software file](https://github.com/ezaspy/elrond/SOFTWARE.md) to install and configure the additional software.
+* [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (20.04)
+* See the [software file](https://github.com/ezaspy/elrond/SOFTWARE.md) to install and configure the additional software for both SIFT 20.04 and 18.04.
   * Please note the elrond also only supports x64 memory images.<br><br>
 
 Alternatviely, if you prefer to install the packages yourself...<br>
-* [Volatility3](https://github.com/volatilityfoundation/volatility3/) - (optional)
+* [volatility3](https://github.com/volatilityfoundation/volatility3/) - (optional)
 * [dwarfdump](https://manpages.ubuntu.com/manpages/trusty/man1/dwarfdump.1.html) - processing Linux memory images in volatility3
 * [apfs-fuse](https://github.com/ezaspy/apfs-fuse) - macOS disk analysis
 <br><br>
