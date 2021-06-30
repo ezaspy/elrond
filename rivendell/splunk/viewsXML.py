@@ -1,5 +1,5 @@
 #!/usr/bin/env python3 -tt
-def doXML(): # unfinished dashboard panels: Analysis & IOCs (own dashboard?), timeline
+def doXML(sd): # unfinished dashboard panels: Analysis & IOCs (own dashboard?), timeline
   # Initial Access
     with open(sd+"t1189.xml", "w") as t1189xml:
         t1189xml.write("<form stylesheet=\"mitre.css\" theme=\"dark\">\n  <label>T1189: Drive-by Compromise</label>\n  ")
