@@ -65,7 +65,7 @@ Obtain the relevant debug symbol
 INSERT ADDITIONAL COMMANDS HERE...
 
 Copy created symbol table to Analysis Machine<br>
-`$ ./dwarf2json linux --elf /tmp/usr/lib/debug/boot/<downloaded-ddeb>.ddeb > .../volatility3/volatility3/symbols/linux/<downloaded-ddeb>.json`<br>
+`$ ./dwarf2json linux --elf /tmp/usr/lib/debug/boot/<downloaded-ddeb> > .../volatility3/volatility3/symbols/linux/<downloaded-ddeb>.json`<br>
 
 See Appendix for information on additional Linux distros<br><br><br>
 
@@ -74,9 +74,9 @@ See Appendix for information on additional Linux distros<br><br><br>
 ### macOS
 #### Target Machine
 * Download the relevant Kernel Debug Kit: http://developer.apple.com/hardwaredrivers<br>
-* Download volatility3 from https://github.com/ezaspy/elrond/tree/main/tools/<br>
+* Download volatility from https://github.com/ezaspy/elrond/tree/main/tools/<br>
 
-`$ unzip volatility3.zip`<br>
+`$ unzip volatility.zip`<br>
 `$ dwarfdump -arch x86_64 /Library/Developer/KDKs/KDK_<MACOSXVERSION>_16D32.kdk/System/Library/Kernels/kernel.dSYM > <MACOSXVERSION>_x64.dwarfdump`<br>
 `$ python tools/mac/convert.py <MACOSXVERSION>.dwarfdump converted-<MACOSXVERSION>_x64.dwarfdump`<br>
 `$ python tools/mac/convert.py converted-<MACOSXVERSION>_x64.dwarfdump > 10.12.3.64bit.vtypes`<br>

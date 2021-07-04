@@ -609,6 +609,7 @@ def doTransform(transformsconf):
     transformsconf.write("if(match(Message,\"(\\.lnk)\"), \"T1547 - Shortcut Modification\", ")
     transformsconf.write("if(match(Message,\"(\\.mp3|\\.wav|\\.aac|\\.m4a)\"), \"T1123 - Audio Capture\", ")
     transformsconf.write("if(match(Message,\"(\\.mp4|\\.mkv|\\.avi|\\.mov|\\.wmv|\\.mpg|\\.mpeg|\\.m4v|\\.flv)\"), \"T1125 - Video Capture\", ")
+    transformsconf.write("if(match(Message,\"(DISPLAY|display|HID|hid|PCI|pci|IDE|ide|ROOT|root|UMB|umb|FDC|fdc|IDE|ide|SCSI|scsi|STORAGE|storage|USBSTOR|usbstor|USB|usb)\"), \"T1200 - Hardware Additions | T1025 - Data from Removable Media | T1052 - Exfiltration over Physical Medium | T1056 - Keylogging | T1091 - Replication through Removable Media | T1570 - Lateral Tool Transfer\", ")
     transformsconf.write("if(match(Message,\"(github|gitlab|bitbucket)\"), \"T1567 - Exfiltration to Code Repository\", ")
     transformsconf.write("if(match(Message,\"(init\\.d)\"), \"T1037 - Boot or Logon Initialization Scripts\", ")
     transformsconf.write("if(match(Message,\"(/etc/profile|/etc/zshenv|/etc/zprofile|/etc/zlogin)\"), \"T1546 - Unix Shell Configuration Modification\", ")
@@ -790,6 +791,9 @@ def doTransform(transformsconf):
     transformsconf.write("if(match(Plist,\"(loginitems|loginwindow|smloginitemsetenabled|uielement|quarantine)\"), \"T1547 - Plist Modification\", ")
     transformsconf.write("if(match(Plist,\"(startupparameters)\"), \"T1037 - Startup Items | T1547 - Plist Modification\", ")
     transformsconf.write("if(match(Plist,\"(vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu)\"), \"T1564 - Run Virtual Instance\", ")
+  # urls
+    transformsconf.write("if(match(url,\"(onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared)\"), \"T1537 - Transfer Data to Cloud Account | T1567 - Exfiltration to Cloud Storage\", ")
+    transformsconf.write("if(match(url,\"(github|gitlab|bitbucket)\"), \"T1567 - Exfiltration to Code Repository\", ")
   # LastAccessTime, metadata & IOCs
     transformsconf.write("if(match(Filename,\"(\\.7z|\\.arj|\\.tar|\\.tgz|\\.zip|libzip|zlib|rarfile|bzip2)\"), \"T1560 - Archive Collected Data | T1560 - Archive via Utility\", ")
     transformsconf.write("if(match(Filename,\"(\\.asc|\\.cer|\\.gpg|\\.key|\\.p12|\\.p7b|\\.pem|\\.pfx|\\.pgp|\\.ppk)\"), \"T1552 - Private Keys\", ")
@@ -848,5 +852,5 @@ def doTransform(transformsconf):
     transformsconf.write("if(match(Filename,\"(wmic|msxsl)\"), \"T1047 - Windows Management Instrumentation | T1220 - XSL Script Processing\", ")
     transformsconf.write("if(match(Filename,\"(\\.msg|\\.eml)\"), \"T1566 - Spearphishing Attachment | T1566 - Spearphishing Attachment | T1203 - Exploitation for Client Execution | T1204 - User Execution\", ")
   # END
-    transformsconf.write("\"-\")))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))), ")
+    transformsconf.write("\"-\"))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))), ")
     transformsconf.write("mitre_technique=split(mitre_techniques,\" | \")\n\n")
