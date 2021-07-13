@@ -1,6 +1,3 @@
-#cd /mnt/hgfs/OneDrive/Projects/Code/elrond/ && ./elrond_env.sh
-#sudo rm -rf /opt/splunk && sudo rm -rf TEST_DATA/testing/testoutput && cd /mnt/hgfs/OneDrive/Projects/Code/elrond/ && sleep 2 && sudo python3 elrond.py casetest TEST_DATA/testing/testimages TEST_DATA/testing/testoutput -aqQvVCPS
-
 #!/bin/bash
 # configuring elrond
 mkdir ~/tmp
@@ -10,7 +7,7 @@ export PATH=$PATH:/opt/elrond
 sudo chmod +x /opt/elrond/elrond.py
 clear
 sleep 2
-printf "  Installing & configuring volatility3 and dependancies...\n"
+printf "\n\n  Installing & configuring volatility3 and dependancies...\n"
 # installing volatility3
 sleep 5
 sudo apt install mlocate build-essential checkinstall libgdbm-dev libreadline-dev libsqlite3-dev libbz2-dev libattr1-dev libncursesw5-dev libssl-dev tk-dev libc6-dev libffi-dev zlib1g-dev cmake cmake-curses-gui liblzma-dev john -y --fix-missing
@@ -29,7 +26,7 @@ export PATH=$PATH:/usr/local/go/bin
 sudo git clone https://github.com/ezaspy/dwarf2json.git
 clear
 sleep 5
-printf "  Installing & configuring apfs-fuse...\n"
+printf "\n\n  Installing & configuring apfs-fuse...\n"
 # installing apfs-fuse
 sleep 5
 cd /usr/local/bin
@@ -44,7 +41,7 @@ sudo ccmake .
 sudo make
 clear
 sleep 5
-printf "  Installing & configuring attack-navigator...\n"
+printf "\n\n  Installing & configuring attack-navigator...\n"
 # installing attack-navigator
 sleep 5
 cd /tmp
