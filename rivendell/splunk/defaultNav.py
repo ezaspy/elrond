@@ -2,10 +2,10 @@
 def doNav(defaultxml):
     defaultxml.write("<collection label=\"MITRE\">\n		")
     defaultxml.write("<view name=\"mitre\" default=\"true\" />\n		")
-    defaultxml.write("<a href=\"http://localhost/attack-navigator/index.html\" target=\"_blank\">ATT&amp;CK Navigator&reg; Mapping</a>\n	")
-    defaultxml.write("<view name=\"info\" />\n		")
+    defaultxml.write("<a href=\"http://localhost/attack-navigator/index.html\" target=\"_blank\">ATT&amp;CK® Navigator Mapping</a>\n		")
+    defaultxml.write("<view name=\"info\" />\n	")
     defaultxml.write("</collection>\n	")
-    defaultxml.write("<collection label=\"ATT&amp;CK&reg; Techniques\">\n		")
+    defaultxml.write("<collection label=\"ATT&amp;CK® Techniques\">\n		")
     defaultxml.write("<collection label=\"Initial Access\">\n			")
     defaultxml.write("<view name=\"t1189\" />\n			")
     defaultxml.write("<view name=\"t1190\" />\n			")
