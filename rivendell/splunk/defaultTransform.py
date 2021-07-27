@@ -1,850 +1,855 @@
 #!/usr/bin/env python3 -tt
+import time
 def doTransform(transformsconf):
+    start, prefix, suffix, end = "if(match(", ",\"(", ")\"), \"", "\", "
+    assignment_pairings = {
+      # memory
+      "ForeignPort_|_^20|21$": "T1041.000 - Exfiltration over C2 Channel | T1071.002 - File Transfer Protocols | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "ForeignPort_|_^22|23$": "T1021.004 - SSH | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1133.000 - External Remote Services | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "ForeignPort_|_^25$": "T1041.000 - Exfiltration over C2 Channel | T1071.003 - Mail Protocols | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "ForeignPort_|_^53$": "T1041.000 - Exfiltration over C2 Channel | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol | T1071.002 - DNS",
+      "ForeignPort_|_^69|989|990$": "T1071.002 - File Transfer Protocols | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "ForeignPort_|_^80$": "T1041.000 - Exfiltration over C2 Channel | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol | T1071.001 - Web Protocols | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1187.000 - Forced Authentication | T1189.000 - Drive-by Compromise",
+      "ForeignPort_|_^110|143|465|993|995$": "T1071.003 - Mail Protocols | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "ForeignPort_|_^135$": "T1047.000 - Windows Management Instrumentation | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "ForeignPort_|_^137$": "T1187.000 - Forced Authentication | T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay",
+      "ForeignPort_|_^139$": "T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1133.000 - External Remote Services | T1187.000 - Forced Authentication",
+      "ForeignPort_|_^389|88|1433|1521|3306$": "T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying",
+      "ForeignPort_|_^443$": "T1041.000 - Exfiltration over C2 Channel  | T1048.001 - Exfiltration Over Symmetric Encrypted Non-C2 Protocol | T1048.002 - Exfiltration Over Asymmetric Encrypted Non-C2 Protocol | T1071.001 - Web Protocols | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1187.000 - Forced Authentication | T1189.000 - Drive-by Compromise",
+      "ForeignPort_|_^445$": "T1021.002 - SMB/Windows Admin Shares | T1041.000 - Exfiltration over C2 Channel | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1133.000 - External Remote Services | T1187.000 - Forced Authentication | T1210.000 - Exploitation of Remote Services",
+      "ForeignPort_|_^2375|2376$": "T1612.000 - Build Image on Host",
+      "ForeignPort_|_^3389$": "T1021.001 - Remote Desktop Protocol | T1210.000 - Exploitation of Remote Services | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "ForeignPort_|_^5355$": "T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "ForeignPort_|_^5800|5895|5938|5984|5986|8200$": "T1219.000 - Remote Access Software | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "ForeignPort_|_^5900$": "T1021.05 - VNC | T1219.000 - Remote Access Software | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      ##ForeignPort_|_^NEGATE_STANDARD_PORTS_-_(ALL_PORTS_LISTED_ABOVE)$": "T1571.00 - Non-Standard Port
+      "LocalPort_|_^20|21$": "T1041.000 - Exfiltration over C2 Channel | T1071.002 - File Transfer Protocols | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "LocalPort_|_^22|23$": "T1021.004 - SSH | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1133.000 - External Remote Services | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "LocalPort_|_^25$": "T1041.000 - Exfiltration over C2 Channel | T1071.003 - Mail Protocols | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "LocalPort_|_^53$": "T1041.000 - Exfiltration over C2 Channel | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol | T1071.002 - DNS",
+      "LocalPort_|_^69|989|990$": "T1071.002 - File Transfer Protocols | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "LocalPort_|_^80$": "T1041.000 - Exfiltration over C2 Channel | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol | T1071.001 - Web Protocols | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1187.000 - Forced Authentication | T1189.000 - Drive-by Compromise",
+      "LocalPort_|_^110|143|465|993|995$": "T1071.003 - Mail Protocols | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "LocalPort_|_^135$": "T1047.000 - Windows Management Instrumentation | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "LocalPort_|_^137$": "T1187.000 - Forced Authentication | T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay",
+      "LocalPort_|_^139$": "T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1133.000 - External Remote Services | T1187.000 - Forced Authentication",
+      "LocalPort_|_^389|88|1433|1521|3306$": "T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying",
+      "LocalPort_|_^443$": "T1041.000 - Exfiltration over C2 Channel  | T1048.001 - Exfiltration Over Symmetric Encrypted Non-C2 Protocol | T1048.002 - Exfiltration Over Asymmetric Encrypted Non-C2 Protocol | T1071.001 - Web Protocols | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1187.000 - Forced Authentication | T1189.000 - Drive-by Compromise",
+      "LocalPort_|_^445$": "T1021.002 - SMB/Windows Admin Shares | T1041.000 - Exfiltration over C2 Channel | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1133.000 - External Remote Services | T1187.000 - Forced Authentication | T1210.000 - Exploitation of Remote Services",
+      "LocalPort_|_^2375|2376$": "T1612.000 - Build Image on Host",
+      "LocalPort_|_^3389$": "T1021.001 - Remote Desktop Protocol | T1210.000 - Exploitation of Remote Services | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "LocalPort_|_^5355$": "T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "LocalPort_|_^5800|5895|5938|5984|5986|8200$": "T1219.000 - Remote Access Software | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      "LocalPort_|_^5900$": "T1021.05 - VNC | T1219.000 - Remote Access Software | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol",
+      ##LocalPort_|_^NEGATE_STANDARD_PORTS_-_(ALL_PORTS_LISTED_ABOVE)$": "T1571.00 - Non-Standard Port
+      "nixCommand_|_/var/log": "T1070.002 - Clear Linux or Mac System Logs",
+      "nixCommand_|_\\.7z|\\.arj|\\.tar|\\.tgz|\\.zip": "T1560.001 - Archive via Utility",
+      "nixCommand_|_libzip|zlib|rarfile|bzip2": "T1560.002 - Archive via Library",
+      "nixCommand_|_\\.lnk": "T1547.009 - Shortcut Modification",
+      "nixCommand_|_\\.eml": "T1114.001 - Local Email Collection",
+      "nixCommand_|_\\.mobileconfig|profiles": "T1176.000 - Browser Extensions",
+      "nixCommand_|_add-trusted-cert|trustroot": "T1553.004 - Install Root Certificate",
+      "nixCommand_|_ascii|unicode|hex|base64|mime": "T1132.001 - Standard Encoding",
+      "nixCommand_|_at\\.": "T1053.001 - At (Linux)",
+      "nixCommand_|_authorizationexecutewithprivileges|security_authtrampoline": "T1548.004 - Elevated Execution with Prompt",
+      "nixCommand_|_authorized_keys|sshd_config|ssh-keygen": "T1098.004 - SSH Authorized Keys",
+      "nixCommand_|_bash_history": "T1552.003 - Bash History",
+      "nixCommand_|_bluetooth": "T1011.001 - Exfiltration over Bluetooth",
+      "nixCommand_|_chage|common-password|pwpolicy|getaccountpolicies": "T1201.000 - Password Policy Discovery",
+      "nixCommand_|_chmod": "T1222.002 - Linux and Mac File and Directory Permissions Modification | T1548.001 - Setuid and Setgid",
+      "nixCommand_|_chown|chgrp": "T1222.002 - Linux and Mac File and Directory Permissions Modification",
+      "nixCommand_|_clipboard|pbpaste": "T1115.000 - Clipboard Data",
+      "nixCommand_|_com\\.apple\\.quarantine": "T1553.001 - Gatekeeper Bypass",
+      "nixCommand_|_contentsofdirectoryatpath|pathextension|compare|fork |fork_": "T1106.000 - Native API",
+      "nixCommand_|_dscacheutil|ldapsearch": "T1087.002 - Domain Accounts | T1069.002 - Domain Groups",
+      "nixCommand_|_dscl": "T1069.001 - Local Groups | T1564.002 - Hidden Users",
+      "nixCommand_|_emond": "T1546.014 - Emond | T1547.011 - Plist Modification",
+      "nixCommand_|_encrypt": "T1573.001 - Symmetric Cryptography | T1573.002 - Asymmetric Cryptography",
+      "nixCommand_|_find |locate |find_|locate_": "T1083.000 - File and Directory Discovery",
+      "nixCommand_|_forwardingsmtpaddress|x-forwarded-to|x-mailfwdby|x-ms-exchange-organization-autoforwarded": "T1114.003 - Email Forwarding Rule",
+      "nixCommand_|_fsutil|fsinfo": "T1120.000 - Peripheral Device Discovery",
+      "nixCommand_|_gcc |gcc_": "T1027.004 - Compile After Delivery",
+      "nixCommand_|_github|gitlab|bitbucket": "T1567.001 - Exfiltration to Code Repository",
+      "nixCommand_|_group |group_": "T1069.001 - Local Groups | T1069.002 - Domain Groups",
+      "nixCommand_|_halt": "T1529.000 - System Shutdown/Reboot",
+      "nixCommand_|_hidden": "T1564.003 - Hidden Window",
+      "nixCommand_|_histcontrol": "T1562.003 - Impair Command History Logging",
+      "nixCommand_|_history|histfile": "T1562.003 - Impair Command History Logging | T1070.003 - Clear Command History | T1552.003 - Bash History",
+      "nixCommand_|_hostname|systeminfo|whoami": "T1033.000 - System Owner/User Discovery",
+      "nixCommand_|_ifconfig": "T1016.001 - Internet Connection Discovery",
+      "nixCommand_|_is_debugging|sysctl|ptrace": "T1497.001 - System Checks",
+      "nixCommand_|_keychain": "T1555.001 - Keychain",
+      "nixCommand_|_kill": "T1548.003 - Sudo and Sudo Caching | T1562.001 - Disable or Modify Tools | T1489.000 - Service Stop",
+      "nixCommand_|_launchagents": "T1543.001 - Launch Agent",
+      "nixCommand_|_launchctl": "T1569.001 - Launchctl",
+      "nixCommand_|_launchdaemons": "T1543.004 - Launch Daemon",
+      "nixCommand_|_lc_code_signature|lc_load_dylib": "T1546.006 - LC_LOAD_DYLIB Addition | T1574.004 - Dylib Hijacking",
+      "nixCommand_|_lc_load_weak_dylib|rpath|loader_path|executable_path|ottol": "T1547.004 - Dylib Hijacking",
+      "nixCommand_|_ld_preload|dyld_insert_libraries|export|setenv|putenv|os\\.environ|ld\\.so\\.preload|dlopen|mmap|failure": "T1547.006 - Dynamic Linker Hijacking",
+      "nixCommand_|_loginwindow|hide500users|dscl|uniqueid": "T1564.002 - Hidden Users",
+      "nixCommand_|_lsof|who": "T1049.000 - System Network Connections Discovery",
+      "nixCommand_|_malloc|ptrace_setregs|ptrace_poketext|ptrace_pokedata": "T1055.008 - Ptrace System Calls",
+      "nixCommand_|_microphone": "T1123.000 - Audio Capture",
+      "nixCommand_|_modprobe|insmod|lsmod|rmmod|modinfo|kextload|kextunload|autostart": "T1547.006 - Kernel Modules and Extensions",
+      "nixCommand_|_pam_unix\\.so": "T1556.003 - Pluggable Authentication Modules",
+      "nixCommand_|_passwd|shadow": "T1003.008 - /etc/passwd and /etc/shadow | T1087.001 - Local Account | T1556.003 - Pluggable Authentication Modules",
+      "nixCommand_|_password|pwd|login|store|secure|credentials": "T1552.001 - Credentials in Files | T1555.005 - Password Managers",
+      "nixCommand_|_ping|traceroute|etc/host|etc/hosts|bonjour": "T1016.001 - Internet Connection Discovery | T1018.000 - Remote System Discovery",
+      "nixCommand_|_portopening": "T1090.001 - Internal Proxy",
+      "nixCommand_|_profile\\.d|bash_profile|bashrc|bash_login|bash_logout": "T1546.004 - Unix Shell Configuration Modification",
+      "nixCommand_|_ps |ps_": "T1057.000 - Process Discovery",
+      "nixCommand_|_pubprn": "T1216.001 - PubPrn",
+      "nixCommand_|_python|\\.py": "T1059.006 - Python",
+      "nixCommand_|_rc\\.local|rc\\.common": "T1037.004 - RC Scripts",
+      "nixCommand_|_rm |rm_": "T1070.004 - File Deletion | T1485.000 - Data Destruction",
+      "nixCommand_|_scp|rsync|sftp": "T1105.000 - Ingress Tool Transfer",
+      "nixCommand_|_services": "T1489.000 - Service Stop",
+      "nixCommand_|_startupitems|startupparameters": "T1037.002 - Logon Script (Mac)",
+      "nixCommand_|_sudo|timestamp_timeout|tty_tickets": "T1548.003 - Sudo and Sudo Caching",
+      "nixCommand_|_systemctl": "T1543.001 - Launch Agent",
+      "nixCommand_|_systemsetup": "T1082.000 - System Information Discovery",
+      "nixCommand_|_time|sleep": "T1497.003 - Time Based Evasion",
+      "nixCommand_|_timer": "T1053.006 - Systemd Timers",
+      "nixCommand_|_trap": "T1546.005 - Trap",
+      "nixCommand_|_u202e": "T1036.002 - Right-to-Left Override",
+      "nixCommand_|_uielement": "T1564.003 - Hidden Window",
+      "nixCommand_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",
+      "nixCommand_|_xattr|xttr": "T1553.001 - Gatekeeper Bypass",
+      "nixCommand_|_xdg|autostart": "T1547.013 - XDG Autostart Entries",
+      "nixCommand_|_xwd|screencapture": "T1113.000 - Screen Capture",
+      "nixCommand_|_zshrc|zshenv|zlogout|zlogin|profile": "T1546.004 - Unix Shell Configuration Modification",
+      "nixCommand_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",
+      "nixCommand_|_curl |curl_": "T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol | T1553.001 - Gatekeeper Bypass",
+      "nixCommand_|_docker exec|docker  exec|docker run|docker  run|kubectl exec|kubectl  exec|kubectl run|kubectl  run|docker_exec|docker__exec|docker_run|docker__run|kubectl_exec|kubectl__exec|kubectl_run|kubectl__run": "T1609.000 - Container Administration Command",
+      "nixCommand_|_docker create|docker  create|docker start|docker  start|docker_create|docker__create|docker_start|docker_start": "T1610.000 - Deploy Container",
+      "nixCommand_|_docker build|docker  build|docker_build|docker__build": "T1612.000 - Build Image on Host",
+      "nixProcess_|_bluetooth": "T1011.001 - Exfiltration over Bluetooth",
+      "nixProcess_|_fsutil|fsinfo": "T1120.000 - Peripheral Device Discovery",
+      "nixProcess_|_python|\\.py |\\.py_": "T1059.006 - Python",
+      "nixProcess_|_scp|rsync|sftp": "T1105.000 - Ingress Tool Transfer",
+      "nixProcess_|_services": "T1489.000 - Service Stop",
+      "nixProcess_|_timer": "T1053.006 - Systemd Timers",
+      "nixProcess_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",
+      "nixProcess_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",
+      "WinCommand_|_-create|dscl|hide500users": "T1564.002 - Hidden Users",
+      "WinCommand_|_-decode|openssl": "T1140.000 - Deobfuscate/Decode Files or Information",
+      "WinCommand_|_-noprofile": "T1547.013 - PowerShell Profile",
+      "WinCommand_|_/add": "T1136.001 - Local Account | T1136.002 - Domain Account",
+      "WinCommand_|_/delete": "T1070.005 - Network Share Connection Removal",
+      "WinCommand_|_/domain": "T1087.002 - Domain Account | T1136.002 - Domain Account",
+      "WinCommand_|_\\.7z|\\.arj|\\.cab|\\.tar|\\.tgz|\\.zip|winzip|winrar": "T1560.001 - Archive via Utility",
+      "WinCommand_|_libzip|zlib": "T1560.002 - Archive via Library",
+      "WinCommand_|_\\.cpl": "T1218.002 - Control Panel",
+      "WinCommand_|_\\.lnk": "T1547.009 - Shortcut Modification",
+      "WinCommand_|_\\.local|\\.manifest": "T1574.001 - DLL Search Order Hijacking",
+      "WinCommand_|_\\.ost|\\.pst|\\.msg": "T1114.001 - Local Email Collection",
+      "WinCommand_|_\\.service|services\\.exe|sc\\.exe": "T1007.000 - System Service Discovery | T1543.003 - Windows Service | T1569.002 - Service Execution | T1489.000 - Service Stop",
+      "WinCommand_|_add-mailboxpermission|set-casmailbox": "T1098.002 - Exchange Email Delegate Permissions",
+      "WinCommand_|_addfile|bits|setnotifyflags|setnotifycmdline|transfer": "T1197.000 - BITS Jobs",
+      "WinCommand_|_addmonitor": "T1547.010 - Port Monitors",
+      "WinCommand_|_addprintprocessor|getprintprocessordirectory|seloaddriverprivilege": "T1547.012 - Print Processors",
+      "WinCommand_|_addsid|get-aduser|dsaddsidhistory": "T1134.005 - SID-History Injection",
+      "WinCommand_|_admin%24|admin\\$|admin$|c%24|c\\$|c$": "T1021.002 - SMB/Windows Admin Shares | T1570.000 - Lateral Tool Transfer",
+      "WinCommand_|_ascii|unicode|hex|base64|mime": "T1132.001 - Standard Encoding",
+      "WinCommand_|_at\\.": "T1053.002 - At (Windows)",
+      "WinCommand_|_atbroker|displayswitch|magnify|narrator|osk|sethc|utilman": "T1546.008 - Accessibility Features",
+      "WinCommand_|_attrib": "T1564.001 - Hidden Files and Directories",
+      "WinCommand_|_auditpol": "T1562.002 - Disable Windows Event Logging",
+      "WinCommand_|_authentication packages|authentication_packages": "T1547.002 - Authentication Package",
+      "WinCommand_|_autoruns|regdelnull": "T1112.000 - Modify Registry",
+      "WinCommand_|_bcdedit|vssadmin|wbadmin|shadows|shadowcopy": "T1490.000 - Inhibit System Recovery | T1553.006 - Code Signing Policy Modification",
+      "WinCommand_|_bluetooth": "T1011.001 - Exfiltration over Bluetooth",
+      "WinCommand_|_bootexecute|autocheck|autochk": "T1547.001 - Registry Run Keys / Startup Folder",
+      "WinCommand_|_certmgr": "T1553.004 - Install Root Certificate",
+      "WinCommand_|_certutil": "T1036.003 - Rename System Utilities | T1140.000 - Deobfuscate/Decode Files or Information | T1553.004 - Install Root Certificate",
+      "WinCommand_|_clear-history": "T1070.003 - Clear Command History",
+      "WinCommand_|_clipboard|pbpaste": "T1115.000 - Clipboard Data",
+      "WinCommand_|_cmd |cmd_|cmd\\.": "T1059.003 - Windows Command Shell | T1106.000 - Native API",
+      "WinCommand_|_cmmgr32|cmstp|cmlua": "T1218.003 - CMSTP",
+      "WinCommand_|_cmsadcs|ntds": "T1003.003 - NTDS",
+      "WinCommand_|_consolehost|clear-history|historysavestyle|savenothing": "T1562.003 - Impair Command History Logging",
+      "WinCommand_|_copyfromscreen": "T1113.000 - Screen Capture_",
+      "WinCommand_|_cor_profiler": "T1547.012 - COR_PROFILER",
+      "WinCommand_|_createfiletransacted|createtransaction|ntcreatethreadex|ntunmapviewofsection|rollbacktransaction|virtualprotectex": "T1055.013 - Process Doppelganging",
+      "WinCommand_|_createprocess": "T1546.009 - AppCert DLLs | T1134.002 - Create Process with Token | T1134.004 - Parent PID Spoofing | T1106.000 - Native API | T1055.012 - Process Hollowing | T1055.013 - Process Doppelganging",
+      "WinCommand_|_createremotethread": "T1106.000 - Native API | T1055.001 - Dynamic-link Library Injection | T1055.011 - Extra Window Memory Injection | T1055.002 - Portable Executable Injection | T1055.005 - Thread Local Storage",
+      "WinCommand_|_createtoolhelp32snapshot|get-process": "T1424.000 - Process Discovery",
+      "WinCommand_|_csc\\.exe": "T1027.004 - Compile After Delivery",
+      "WinCommand_|_cscript": "T1216.001 - PubPrn",
+      "WinCommand_|_csrutil|g_cioptions|requiresigned": "T1553.006 - Code Signing Policy Modification",
+      "WinCommand_|_dcsync": "T1550.003 - Pass the Ticket",
+      "WinCommand_|_debug only this process|debug  only  this  process|debug process|debug  process|debug_only_this_process|debug__only__this__process|debug_process|debug__process|ntsd": "T1546.012 - Image File Execution Options Injection",
+      "WinCommand_|_del|rm|/delete|sdelete": "T1485.000 - Data Destruction | T1070.004 - File Deletion",
+      "WinCommand_|_dir|tree|ls": "T1083.000 - File and Directory Discovery",
+      "WinCommand_|_dsaddsidhistory|get-aduser": "T1134.005 - SID-History Injection",
+      "WinCommand_|_dscl": "T1069.001 - Local Groups",
+      "WinCommand_|_dsenumeratedomaintrusts|getalltrustrelationships|get-accepteddomain|nltest|dsquery|get-netdomaintrust|get-netforesttrust": "T1482.000 - Domain Trust Discovery",
+      "WinCommand_|_duo-sid": "T1550.004 - Web Session Cookie",
+      "WinCommand_|_duplicatetoken": "T1134.002 - Create Process with Token | T1134.001 - Token Impersonation/Theft | T1134.001 - Token Impersonation/Theft",
+      "WinCommand_|_impersonateloggedonuser|impersonateloggedonuser|runas|setthreadtoken|impersonatenamedpipeclient": "T1134.001 - Token Impersonation/Theft",
+      "WinCommand_|_enablemulticast": "T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay",
+      "WinCommand_|_encrypt": "T1573.001 - Symmetric Cryptography | T1573.002 - Asymmetric Cryptography",
+      "WinCommand_|_eventvwr|sdclt": "T1548.002 - Bypass User Account Control",
+      "WinCommand_|_failure": "T1547.011 - Services Registry Permissions Weakness",
+      "WinCommand_|_filerecvwriterand": "T1027.001 - Binary Padding",
+      "WinCommand_|_find-avsignature": "T1027.005 - Indicator Removal from Tools",
+      "WinCommand_|_forwardingsmtpaddress|x-forwarded-to|x-mailfwdby|x-ms-exchange-organization-autoforwarded": "T1114.003 - Email Forwarding Rule",
+      "WinCommand_|_gcc|mingw|microsoft\\.csharp\\.csharpcodeprovider": "T1027.004 - Compile After Delivery",
+      "WinCommand_|_get-addefaultdomainpasswordpolicy": "T1201.000 - Password Policy Discovery",
+      "WinCommand_|_get-globaladdresslist": "T1087.003 - Email Account",
+      "WinCommand_|_get-process|createtoolhelp32snapshot": "T1057.000 - Process Discovery",
+      "WinCommand_|_get-unattendedinstallfile|get-webconfig|get-applicationhost|get-sitelistpassword|get-cachedgpppassword|get-registryautologon": "T1552.002 - Credentials in Registry",
+      "WinCommand_|_getasynckeystate|getkeystate|setwindowshook": "T1056.001 - Keylogging",
+      "WinCommand_|_getprintprocessordirectory": "T1547.012 - Print Processors",
+      "WinCommand_|_getwindowlong|setwindowlong": "T1055.011 - Extra Window Memory Injection",
+      "WinCommand_|_github|gitlab|bitbucket": "T1567.001 - Exfiltration to Code Repository",
+      "WinCommand_|_gsecdump|mimikatz|pwdumpx|secretsdump|reg save|reg  save|net user|net  user|net\\.exe user|net\\.exe  user|net1 user|net1  user|net1\\.exe user|net1\\.exe  user|reg_save|reg__save|net_user|net__user|net\\.exe_user|net\\.exe__user|net1_user|net1__user|net1\\.exe_user|net1\\.exe__user": "T1003.002 - Security Account Manager",
+      "WinCommand_|_hidden": "T1564.003 - Hidden Window",
+      "WinCommand_|_hklm/sam|hklm/system": "T1003.002 - Security Account Manager",
+      "WinCommand_|_hostname|net config|net  config|net\\.exe config|net\\.exe  config|net1 config|net1  config|net1\\.exe config|net1\\.exe  config|netuser-getinfo|query user|query  user|net_config|net__config|net\\.exe_config|net\\.exe__config|net1_config|net1__config|net1\\.exe_config|net1\\.exe__config|query_user|query__user|quser|systeminfo|whoami": "T1033.000 - System Owner/User Discovery",
+      "WinCommand_|_icacls|cacls|takeown|attrib": "T1222.001 - Windows File and Directory Permissions Modification",
+      "WinCommand_|_ifconfig": "T1016.001 - Internet Connection Discovery",
+      "WinCommand_|_impersonateloggedonuser|logonuser|runas|setthreadtoken|impersonatenamedpipeclient": "T1134.001 - Token Impersonation/Theft",
+      "WinCommand_|_installutil": "T1218.004 - InstallUtil",
+      "WinCommand_|_\\.ps1|invoke-command|start-process|system\\.management\\.automation": "T1059.001 - PowerShell",
+      "WinCommand_|_powershell": "T1059.001 - PowerShell | T1106.000 - Native API",
+      "WinCommand_|_invoke-psimage": "T1001.002 - Steganography",
+      "WinCommand_|_ipc%24|ipc\\$|ipc$": "T1021.002 - SMB/Windows Admin Shares | T1570.000 - Lateral Tool Transfer | T1559.001 - Component Object Model",
+      "WinCommand_|_itaskservice|itaskdefinition|itasksettings": "T1559.001 - Component Object Model",
+      "WinCommand_|_loadlibrary": "T1106.000 - Native API | T1055.004 - Asynchronous Procedure Call | T1055.001 - Dynamic-link Library Injection | T1055.002 - Portable Executable Injection",
+      "WinCommand_|_logonuser|runas|setthreadtoken": "T1134.003 - Make and Impersonate Token",
+      "WinCommand_|_lsadump|dcshadow": "T1207.000 - Rogue Domain Controller",
+      "WinCommand_|_mailboxexportrequest|x-ms-exchange-organization-autoforwarded|x-mailfwdby|x-forwarded-to|forwardingsmtpaddress": "T1114.003 - Email Forwarding Rule",
+      "WinCommand_|_microphone": "T1123.000 - Audio Capture",
+      "WinCommand_|_microsoft\\.office\\.interop": "T1559.001 - Component Object Model",
+      "WinCommand_|_mof|register-wmievent|wmiprvse|eventfilter|eventconsumer|filtertoconsumerbinding": "T1546.003 - Windows Management Instrumentation Event Subscription",
+      "WinCommand_|_msbuild": "T1127.001 - MSBuild | T1569.002 - Service Execution",
+      "WinCommand_|_mshta|alwaysinstallelevated": "T1218.005 - Mshta",
+      "WinCommand_|_msiexec|alwaysinstallelevated": "T1218.007 - Msiexec",
+      "WinCommand_|_msxml": "T1220.000 - XSL Script Processing",
+      "WinCommand_|_net accounts|net  accounts|net\\.exe accounts|net\\.exe  accounts|net1 accounts|net1  accounts|net1\\.exe accounts|net1\\.exe  accounts|net_accounts|net__accounts|net\\.exe_accounts|net\\.exe__accounts|net1_accounts|net1__accounts|net1\\.exe_accounts|net1\\.exe__accounts": "T1201.000 - Password Policy Discovery",
+      "WinCommand_|_net share|net  share|net\\.exe share|net\\.exe  share|net1 share|net1  share|net1\\.exe share|net1\\.exe  share|net_share|net__share|net\\.exe_share|net\\.exe__share|net1_share|net1__share|net1\\.exe_share|net1\\.exe__share": "T1135.000 - Network Share Discovery",
+      "WinCommand_|_net start|net  start|net\\.exe start|net\\.exe  start|net1 start|net1  start|net1\\.exe start|net1\\.exe  start|net stop|net  stop|net\\.exe stop|net\\.exe  stop|net1 stop|net1  stop|net1\\.exe stop|net1\\.exe  stop|net_start|net__start|net\\.exe_start|net\\.exe__start|net1_start|net1__start|net1\\.exe_start|net1\\.exe__start|net_stop|net__stop|net\\.exe_stop|net\\.exe__stop|net1_stop|net1__stop|net1\\.exe_stop|net1\\.exe__stop": "T1007.000 - System Service Discovery | T1569.002 - Service Execution",
+      "WinCommand_|_net stop|net  stop|net\\.exe stop|net\\.exe  stop|net1 stop|net1  stop|net1\\.exe stop|net1\\.exe  stop|net_stop|net__stop|net\\.exe_stop|net\\.exe__stop|net1_stop|net1__stop|net1\\.exe_stop|net1\\.exe__stop|msexchangeis|changeserviceconfigw": "T1489.000 - Service Stop | T1569.002 - Service Execution",
+      "WinCommand_|_net time|net  time|net\\.exe time|net\\.exe  time|net1 time|net1  time|net1\\.exe time|net1\\.exe  time|net_time|net__time|net\\.exe_time|net\\.exe__time|net1_time|net1__time|net1\\.exe_time|net1\\.exe__time": "T1124.000 - System Time Discovery",
+      "WinCommand_|_net use|net  use|net\\.exe use|net\\.exe  use|net1 use|net1  use|net1\\.exe use|net1\\.exe  use|net_use|net__use|net\\.exe_use|net\\.exe__use|net1_use|net1__use|net1\\.exe_use|net1\\.exe__use": "T1049.000 - System Network Connections Discovery | T1136.001 - Local Account | T1136.002 - Domain Account | T1070.005 - Network Share Connection Removal | T1574.008 - Path Interception by Search Order Hijacking",
+      "WinCommand_|_net view|net  view|net_view|net__view": "T1135.000 - Network Share Discovery | T1018.000 - Remote System Discovery",
+      "WinCommand_|_netsh": "T1135.000 - Network Share Discovery | T1518.001 - Security Software Discovery | T1049.000 - System Network Connections Discovery | T1090.001 - Internal Proxy",
+      "WinCommand_|_netstat|net session|net  session|net\\.exe session|net\\.exe  session|net1 session|net1  session|net1\\.exe session|net1\\.exe  session|net_session|net__session|net\\.exe_session|net\\.exe__session|net1_session|net1__session|net1\\.exe_session|net1\\.exe__session": "T1049.000 - System Network Connections Discovery",
+      "WinCommand_|_new-gpoimmediatetask": "T1484.001 - Group Policy Modification",
+      "WinCommand_|_nltest": "T1482.000 - Domain Trust Discovery",
+      "WinCommand_|_ntds|ntdsutil|secretsdump": "T1003.003 - NTDS",
+      "WinCommand_|_ntsd": "T1546.012 - Image File Execution Options Injection",
+      "WinCommand_|_ntunmapviewofsection": "T1055.012 - Process Hollowing | T1055.013 - Process Doppelganging",
+      "WinCommand_|_odbcconf": "T1218.008 - Odbcconf",
+      "WinCommand_|_openprocess": "T1556.001 - Domain Controller Authentication",
+      "WinCommand_|_openthread": "T1055.004 - Asynchronous Procedure Call | T1055.003 - Thread Execution Hijacking",
+      "WinCommand_|_password|secure|credentials|security": "T1555.004 - Windows Credential Manager | T1555.005 - Password Managers | T1552.001 - Credentials in Files",
+      "WinCommand_|_performancecache|_vba_project": "T1564.007 - VBA Stomping",
+      "WinCommand_|_ping|tracert": "T1016.001 - Internet Connection Discovery | T1018.000 - Remote System Discovery",
+      "WinCommand_|_policy\\.vpol|vaultcmd|vcrd|listcreds|credenumeratea": "T1555.004 - Windows Credential Manager",
+      "WinCommand_|_shellexecute|isdebuggerpresent|outputdebugstring|setlasterror|httpopenrequesta|createpipe|getusernamew|callwindowproc|enumresourcetypesa|connectnamedpipe|wnetaddconnection2|zwwritevirtualmemory|zwprotectvirtualmemory|zwqueueapcthread|ntresumethread|terminateprocess|getmodulefilename|lstrcat|createfile|readfile|getprocessbyid|writefile|closehandle|getcurrenthwprofile|getprocaddress|dwritecreatefactory|findnexturlcacheentrya|findfirsturlcacheentrya|getwindowsdirectoryw|movefileex|ntqueryinformationprocess|regenumkeyw": "T1106.000 - Native API",
+      "WinCommand_|_procdump|sekurlsa": "T1003.001 - LSASS Memory",
+      "WinCommand_|_lsass": "T1003.001 - LSASS Memory | T1547.008 - LSASS Driver | T1556.001 - Domain Controller Authentication",
+      "WinCommand_|_psexec": "T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer",
+      "WinCommand_|_psinject|peinject|ntqueueapcthread|queueuserapc": "T1055.004 - Asynchronous Procedure Call",
+      "WinCommand_|_psreadline|set-psreadlineoption": "T1070.003 - Clear Command History | T1562.003 - Impair Command History Logging",
+      "WinCommand_|_pubprn": "T1216.001 - PubPrn",
+      "WinCommand_|_python|\\.py": "T1059.006 - Python",
+      "WinCommand_|_queueuserapc": "T1055.004 - Asynchronous Procedure Call",
+      "WinCommand_|_quser|query user|query  user|query_user|query__user|hostname": "T1033.000 - System Owner/User Discovery",
+      "WinCommand_|_reg |reg_|reg\\.exe": "T1112.000 - Modify Registry",
+      "WinCommand_|_reg query|reg  query|reg_query|reg__query": "T1012.000 - Query Registry | T1518.001 - Security Software Discovery",
+      "WinCommand_|_regsvcs|regasm|comregisterfunction|comunregisterfunction": "T1218.009 - Regsvcs/Regasm",
+      "WinCommand_|_regsvr": "T1218.010 - Regsvr32 | T1218.008 - Odbcconf",
+      "WinCommand_|_resumethread": "T1055.004 - Asynchronous Procedure Call | T1055.012 - Process Hollowing | T1055.003 - Thread Execution Hijacking | T1055.005 - Thread Local Storage",
+      "WinCommand_|_rundll32": "T1218.010 - Regsvr32",
+      "WinCommand_|_rundll32|cplapplet|dllentrypoint|control_rundll|controlrundllasuser": "T1218.011 - Rundll32 | T1036.003 - Rename System Utilities",
+      "WinCommand_|_schtask|\\.job": "T1053.005 - Scheduled Task",
+      "WinCommand_|_scp|rsync|sftp": "T1105.000 - Ingress Tool Transfer",
+      "WinCommand_|_scrnsave": "T1546.002 - Screensaver",
+      "WinCommand_|_set-etwtraceprovider|zwopenprocess|getextendedtcptable": "T1562.006 - Indicator Blocking",
+      "WinCommand_|_setthreadcontext": "T1106.000 - Native API | T1055.004 - Asynchronous Procedure Call | T1055.013 - Process Doppelganging | T1055.012 - Process Hollowing | T1055.003 - Thread Execution Hijacking | T1055.005 - Thread Local Storage",
+      "WinCommand_|_setwindowshook|setwineventhook": "T1056.004 - Credential API Hooking",
+      "WinCommand_|_shutdown": "T1529.000 - System Shutdown/Reboot",
+      "WinCommand_|_startupitems": "T1037.005 - Startup Items",
+      "WinCommand_|_suspendthread": "T1055.004 - Asynchronous Procedure Call | T1055.003 - Thread Execution Hijacking | T1055.005 - Thread Local Storage",
+      "WinCommand_|_sysmain\\.sdb|profile": "T1546.013 - PowerShell Profile",
+      "WinCommand_|_systemdiskclean|getwindowsdirectoryw": "T1036.005 - Match Legitimate Name or Location",
+      "WinCommand_|_tasklist": "T1518.001 - Security Software Discovery | T1007.000 - System Service Discovery",
+      "WinCommand_|_testsigning": "T1553.006 - Code Signing Policy Modification",
+      "WinCommand_|_time|sleep": "T1497.003 - Time Based Evasion",
+      "WinCommand_|_tscon": "T1563.002 - RDP Hijacking",
+      "WinCommand_|_u202e": "T1036.002 - Right-to-Left Override",
+      "WinCommand_|_update-msolfederateddomain|set federation|domain authentication|set  federation|domain  authentication|set_federation|domain_authentication|set__federation|domain__authentication": "T1484.002 - Domain Trust Modification",
+      "WinCommand_|_updateprocthreadattribute": "T1134.003 - Make and Impersonate Token | T1134.004 - Parent PID Spoofing",
+      "WinCommand_|_useradd": "T1136.001 - Local Account",
+      "WinCommand_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",
+      "WinCommand_|_vbscript": "T1059.005 - Visual Basic",
+      "WinCommand_|_verclsid": "T1218.012 - Verclsid",
+      "WinCommand_|_virtualalloc": "T1106.000 - Native API | T1055.001 - Dynamic-link Library Injection | T1055.002 - Portable Executable Injection | T1055.012 - Process Hollowing | T1055.003 - Thread Execution Hijacking | T1055.004 - Asynchronous Procedure Call | T1055.005 - Thread Local Storage",
+      "WinCommand_|_vpcext|vmtoolsd|msacpi_thermalzonetemperature": "T1497.001 - System Checks",
+      "WinCommand_|_vssadmin|wbadmin|shadows|shadowcopy": "T1490.000 - Inhibit System Recovery",
+      "WinCommand_|_wevtutil|openeventlog|cleareventlog": "T1070.001 - Clear Windows Event Logs",
+      "WinCommand_|_who": "T1033.000 - System Owner/User Discovery | T1049.000 - System Network Connections Discovery",
+      "WinCommand_|_windowstyle|hidden": "T1564.003 - Hidden Window",
+      "WinCommand_|_winexec": "T1106.000 - Native API | T1546.009 - AppCert DLLs | T1543.003 - Windows Service",
+      "WinCommand_|_winrm": "T1021.006 - Windows Remote Management",
+      "WinCommand_|_winword|excel|powerpnt|acrobat|acrord32": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "WinCommand_|_wmic|invoke-wmi": "T1047.000 - Windows Management Instrumentation | T1220.000 - XSL Script Processing",
+      "WinCommand_|_writeprocessmemory": "T1106.000 - Native API | T1055.011 - Extra Window Memory Injection | T1055.001 - Dynamic-link Library Injection | T1055.002 - Portable Executable Injection | T1055.012 - Process Hollowing | T1055.003 - Thread Execution Hijacking | T1055.013 - Process Doppelganging | T1055.004 - Asynchronous Procedure Call | T1055.005 - Thread Local Storage",
+      "WinCommand_|_wscript": "T1059.005 - Visual Basic | T1059.007 - JavaScript",
+      "WinCommand_|_zwseteafile|zwqueryeafile|:ads|stream": "T1564.004 - NTFS File Attributes",
+      "WinCommand_|_zwunmapviewofsection": "T1055.012 - Process Hollowing",
+      "WinCommand_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",
+      "WinCommand_|_getlocaleinfow": "T1614.000 - System Location Discovery",
+      "WinCommand_|_notonorafter|accesstokenlifetime|lifetimetokenpolicy": "T1606.002 - SAML Tokens",
+      "WinCommand_|_scvhost|svchast|svchust|svchest|lssas|lsasss|lsaas|cssrs|canhost|conhast|connhost|connhst|iexplorer|iexploror|iexplorar": "T1036.004 - Masquerade Task or Service",
+      "WinCommand_|_curl |curl_": "T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol | T1553.001 - Gatekeeper Bypass",
+      "WinCommand_|_docker exec|docker  exec|docker run|docker  run|kubectl exec|kubectl  exec|kubectl run|kubectl  run|docker_exec|docker__exec|docker_run|docker__run|kubectl_exec|kubectl__exec|kubectl_run|kubectl__run": "T1609.000 - Container Administration Command",
+      "WinCommand_|_docker create|docker  create|docker start|docker  start|docker_create|docker__create|docker_start|docker_start": "T1610.000 - Deploy Container",
+      "WinCommand_|_docker build|docker  build|docker_build|docker__build": "T1612.000 - Build Image on Host",
+      # evt & ShimCache
+      "WinProcess_|_\\.asc|\\.cer|\\.gpg|\\.key|\\.p12|\\.p7b|\\.pem|\\.pfx|\\.pgp|\\.ppk": "T1552.004 - Private Keys",
+      "WinProcess_|_\\.chm|\\.hh": "T1218.001 - Compiled HTML File",
+      "WinProcess_|_\\.cpl": "T1218.002 - Control Panel",
+      "WinProcess_|_\\.doc|\\.xls|\\.ppt|\\.pdf": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "WinProcess_|_\\.docm|\\.xlsm|\\.pptm": "T1137.001 - Office Template Macros | T1559.001 - Component Object Model | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "WinProcess_|_\\.docx|\\.xlsx|\\.pptx": "T1221.000 - Template Injection | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "WinProcess_|_\\.job": "T1053.005 - Scheduled Task",
+      "WinProcess_|_\\.lnk": "T1547.009 - Shortcut Modification",
+      "WinProcess_|_\\.local|\\.manifest": "T1574.001 - DLL Search Order Hijacking",
+      "WinProcess_|_\\.mp3|\\.wav|\\.aac|\\.m4a": "T1123.000 - Audio Capture",
+      "WinProcess_|_\\.mp4|\\.mkv|\\.avi|\\.mov|\\.wmv|\\.mpg|\\.mpeg|\\.m4v|\\.flv": "T1125.000 - Video Capture",
+      "WinProcess_|_\\.ost|\\.pst|\\.msg": "T1114.001 - Local Email Collection",
+      "WinProcess_|_\\.service|services\\.exe|sc\\.exe": "T1007.000 - System Service Discovery | T1543.003 - Windows Service | T1569.002 - Service Execution | T1489.000 - Service Stop",
+      "WinProcess_|_admin%24|admin\\$|admin$|c%24|c\\$|c$": "T1021.002 - SMB/Windows Admin Shares | T1570.000 - Lateral Tool Transfer",
+      "WinProcess_|_atbroker|displayswitch|magnify|narrator|osk|sethc|utilman": "T1546.008 - Accessibility Features",
+      "WinProcess_|_autoruns": "T1112.000 - Modify Registry",
+      "WinProcess_|_bcdedit|csrutil": "T1553.006 - Code Signing Policy Modification",
+      "WinProcess_|_certmgr": "T1553.004 - Install Root Certificate",
+      "WinProcess_|_certutil": "T1036.003 - Rename System Utilities | T1140.000 - Deobfuscate/Decode Files or Information | T1553.004 - Install Root Certificate",
+      "WinProcess_|_cmd |cmd_|cmd\\.": "T1059.003 - Windows Command Shell | T1106.000 - Native API",
+      "WinProcess_|_cmmgr32|cmstp|cmlua": "T1218.003 - CMSTP",
+      "WinProcess_|_csc\\.exe": "T1027.004 - Compile After Delivery",
+      "WinProcess_|_cscript": "T1216.001 - PubPrn",
+      "WinProcess_|_eventvwr|sdclt": "T1548.002 - Bypass User Account Control",
+      "WinProcess_|_github|gitlab|bitbucket": "T1567.001 - Exfiltration to Code Repository",
+      "WinProcess_|_gpttmpl\\.inf|scheduledtasks\\.xml": "T1484.001 - Group Policy Modification",
+      "WinProcess_|_gsecdump|mimikatz|pwdumpx|secretsdump|reg save|reg  save|net user|net  user|net\\.exe user|net\\.exe  user|net1 user|net1  user|net1\\.exe user|net1\\.exe  user|reg_save|reg_save|net user|net  user|net\\.exe user|net\\.exe  user|net1 user|net1  user|net1\\.exe user|net1\\.exe  user|reg_save|reg__save|net_user|net__user|net\\.exe_user|net\\.exe__user|net1_user|net1__user|net1\\.exe_user|net1\\.exe__user": "T1003.002 - Security Account Manager",
+      "WinProcess_|_ipc%24|ipc\\$|ipc$": "T1021.002 - SMB/Windows Admin Shares | T1559.001 - Component Object Model",
+      "WinProcess_|_mshta": "T1218.005 - Mshta",
+      "WinProcess_|_msiexec": "T1218.007 - Msiexec",
+      "WinProcess_|_msxml": "T1220.000 - XSL Script Processing",
+      "WinProcess_|_net |net\\.exe |net1 |net1\\.exe |net_|net\\.exe_|net1_|net1\\.exe_": "T1070.005 - Network Share Connection Removal | T1018.000 - Remote System Discovery | T1569.002 - Service Execution | T1574.008 - Path Interception by Search Order Hijacking",
+      "WinProcess_|_netsh": "T1135.000 - Network Share Discovery | T1518.001 - Security Software Discovery | T1049.000 - System Network Connections Discovery | T1090.001 - Internal Proxy",
+      "WinProcess_|_ntds|ntdsutil|secretsdump": "T1003.003 - NTDS",
+      "WinProcess_|_odbcconf": "T1218.008 - Odbcconf",
+      "WinProcess_|_policy\\.vpol|vaultcmd|vcrd": "T1555.004 - Windows Credential Manager",
+      "WinProcess_|_powershell": "T1059.001 - PowerShell | T1106.000 - Native API",
+      "WinProcess_|_\\.ps1": "T1059.001 - PowerShell",
+      "WinProcess_|_psexec": "T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer",
+      "WinProcess_|_pubprn": "T1216.001 - PubPrn",
+      "WinProcess_|_python|\\.py": "T1059.006 - Python",
+      "WinProcess_|_reg |reg\\.exe": "T1112.000 - Modify Registry",
+      "WinProcess_|_rundll32": "T1218.011 - Rundll32",
+      "WinProcess_|_schtask": "T1053.005 - Scheduled Task",
+      "WinProcess_|_scrnsave": "T1546.002 - Screensaver",
+      "WinProcess_|_sdelete": "T1485.000 - Data Destruction | T1070.004 - File Deletion",
+      "WinProcess_|_tasklist": "T1518.001 - Security Software Discovery | T1007.000 - System Service Discovery",
+      "WinProcess_|_tscon": "T1563.002 - RDP Hijacking",
+      "WinProcess_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",
+      "WinProcess_|_vbscript|wscript": "T1059.005 - Visual Basic | T1059.007 - JavaScript",
+      "WinProcess_|_verclsid": "T1218.012 - Verclsid",
+      "WinProcess_|_winrm": "T1021.006 - Windows Remote Management",
+      "WinProcess_|_winword|excel|powerpnt|acrobat|acrord32": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "WinProcess_|_wmic": "T1047.000 - Windows Management Instrumentation | T1220.000 - XSL Script Processing",
+      "WinProcess_|_wmic|msxsl": "T1047.000 - Windows Management Instrumentation | T1220.000 - XSL Script Processing",
+      "WinProcess_|_zwqueryeafile|zwseteafile": "T1564.004 - NTFS File Attributes",
+      "WinProcess_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",
+      "WinProcess_|_scvhost|svchast|svchust|svchest|lssas|lsasss|lsaas|cssrs|canhost|conhast|connhost|connhst|iexplorer|iexploror|iexplorar": "T1036.004 - Masquerade Task or Service",
+      "WinProcess_|_docker exec|docker  exec|docker run|docker  run|kubectl exec|kubectl  exec|kubectl run|kubectl  run|docker_exec|docker__exec|docker_run|docker__run|kubectl_exec|kubectl__exec|kubectl_run|kubectl__run": "T1609.000 - Container Administration Command",
+      "WinProcess_|_docker create|docker  create|docker start|docker  start|docker_create|docker__create|docker_start|docker_start": "T1610.000 - Deploy Container",
+      "WinProcess_|_docker build|docker  build|docker_build|docker__build": "T1612.000 - Build Image on Host",
+      # MFT
+      "Filename1_|_\\.7z|\\.arj|\\.tar|\\.tgz|\\.zip": "T1560.001 - Archive via Utility",
+      "Filename1_|_\\.asc|\\.cer|\\.gpg|\\.key|\\.p12|\\.p7b|\\.pem|\\.pfx|\\.pgp|\\.ppk": "T1552.004 - Private Keys",
+      "Filename1_|_\\.chm|\\.hh": "T1218.001 - Compiled HTML File",
+      "Filename1_|_\\.cpl": "T1218.002 - Control Panel",
+      "Filename1_|_\\.doc|\\.xls|\\.ppt|\\.pdf": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "Filename1_|_\\.docm|\\.xlsm|\\.pptm": "T1137.001 - Office Template Macros | T1559.001 - Component Object Model | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "Filename1_|_\\.docx|\\.xlsx|\\.pptx": "T1221.000 - Template Injection | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "Filename1_|_\\.job": "T1053.005 - Scheduled Task",
+      "Filename1_|_\\.lnk": "T1547.009 - Shortcut Modification",
+      "Filename1_|_\\.local|\\.manifest": "T1574.001 - DLL Search Order Hijacking",
+      "Filename1_|_\\.mp3|\\.wav|\\.aac|\\.m4a": "T1123.000 - Audio Capture",
+      "Filename1_|_\\.mp4|\\.mkv|\\.avi|\\.mov|\\.wmv|\\.mpg|\\.mpeg|\\.m4v|\\.flv": "T1125.000 - Video Capture",
+      "Filename1_|_\\.ost|\\.pst|\\.msg": "T1114.001 - Local Email Collection",
+      "Filename1_|_\\.service|services\\.exe|sc\\.exe": "T1007.000 - System Service Discovery | T1543.003 - Windows Service | T1569.002 - Service Execution | T1489.000 - Service Stop",
+      "Filename1_|_atbroker|displayswitch|magnify|narrator|osk|sethc|utilman": "T1546.008 - Accessibility Features",
+      "Filename1_|_autoruns": "T1112.000 - Modify Registry",
+      "Filename1_|_bcdedit|csrutil": "T1553.006 - Code Signing Policy Modification",
+      "Filename1_|_certmgr": "T1553.004 - Install Root Certificate",
+      "Filename1_|_certutil": "T1036.003 - Rename System Utilities | T1140.000 - Deobfuscate/Decode Files or Information | T1553.004 - Install Root Certificate",
+      "Filename1_|_cmd |cmd_|cmd\\.": "T1059.003 - Windows Command Shell | T1106.000 - Native API",
+      "Filename1_|_powershell": "T1059.001 - PowerShell | T1106.000 - Native API",
+      "Filename1_|_\\.ps1": "T1059.001 - PowerShell",
+      "Filename1_|_csc\\.exe": "T1027.004 - Compile After Delivery",
+      "Filename1_|_cscript": "T1216.001 - PubPrn",
+      "Filename1_|_eventvwr|sdclt": "T1548.002 - Bypass User Account Control",
+      "Filename1_|_github|gitlab|bitbucket": "T1567.001 - Exfiltration to Code Repository",
+      "Filename1_|_gpttmpl\\.inf|scheduledtasks\\.xml": "T1484.001 - Group Policy Modification",
+      "Filename1_|_mshta": "T1218.005 - Mshta",
+      "Filename1_|_msiexec": "T1218.007 - Msiexec",
+      "Filename1_|_normal\\.dotm|personal\\.xlsb": "T1137.001 - Office Template Macros",
+      "Filename1_|_odbcconf": "T1218.008 - Odbcconf",
+      "Filename1_|_policy\\.vpol|vaultcmd|vcrd": "T1555.004 - Windows Credential Manager",
+      "Filename1_|_psexec": "T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer",
+      "Filename1_|_pubprn": "T1216.001 - PubPrn",
+      "Filename1_|_reg\\.exe": "T1112.000 - Modify Registry",
+      "Filename1_|_scrnsave": "T1546.002 - Screensaver",
+      "Filename1_|_sdelete": "T1485.000 - Data Destruction | T1070.004 - File Deletion",
+      "Filename1_|_tscon": "T1563.002 - RDP Hijacking",
+      "Filename1_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",
+      "Filename1_|_wmic|msxsl": "T1047.000 - Windows Management Instrumentation | T1220.000 - XSL Script Processing",
+      "Filename1_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",
+      "Filename1_|_scvhost|svchast|svchust|svchest|lssas|lsasss|lsaas|cssrs|canhost|conhast|connhost|connhst|iexplorer|iexploror|iexplorar": "T1036.004 - Masquerade Task or Service",
+      "Filename1_|_\\.msg|\\.eml": "T1566.001 - Spearphishing Attachment | T1566.002 - Spearphishing Link | T1203.000 - Exploitation for Client Execution | T1204.001 - Malicious Link | T1204.002 - Malicious File",
+      "Filename2_|_\\.7z|\\.arj|\\.cab|\\.tar|\\.tgz|\\.zip": "T1560.001 - Archive via Utility",
+      "Filename2_|_\\.asc|\\.cer|\\.gpg|\\.key|\\.p12|\\.p7b|\\.pem|\\.pfx|\\.pgp|\\.ppk": "T1552.004 - Private Keys",
+      "Filename2_|_\\.chm|\\.hh": "T1218.001 - Compiled HTML File",
+      "Filename2_|_\\.cpl": "T1218.002 - Control Panel",
+      "Filename2_|_\\.doc|\\.xls|\\.ppt|\\.pdf": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "Filename2_|_\\.docm|\\.xlsm|\\.pptm": "T1137.001 - Office Template Macros | T1559.001 - Component Object Model | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "Filename2_|_\\.docx|\\.xlsx|\\.pptx": "T1221.000 - Template Injection | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "Filename2_|_\\.job": "T1053.005 - Scheduled Task",
+      "Filename2_|_\\.lnk": "T1547.009 - Shortcut Modification",
+      "Filename2_|_\\.local|\\.manifest": "T1574.001 - DLL Search Order Hijacking",
+      "Filename2_|_\\.mp3|\\.wav|\\.aac|\\.m4a": "T1123.000 - Audio Capture",
+      "Filename2_|_\\.mp4|\\.mkv|\\.avi|\\.mov|\\.wmv|\\.mpg|\\.mpeg|\\.m4v|\\.flv": "T1125.000 - Video Capture",
+      "Filename2_|_\\.ost|\\.pst|\\.msg": "T1114.001 - Local Email Collection",
+      "Filename2_|_\\.service|services\\.exe|sc\\.exe": "T1007.000 - System Service Discovery | T1543.003 - Windows Service | T1569.002 - Service Execution | T1489.000 - Service Stop",
+      "Filename2_|_atbroker|displayswitch|magnify|narrator|osk|sethc|utilman": "T1546.008 - Accessibility Features",
+      "Filename2_|_autoruns": "T1112.000 - Modify Registry",
+      "Filename2_|_bcdedit|csrutil": "T1553.006 - Code Signing Policy Modification",
+      "Filename2_|_certmgr": "T1553.004 - Install Root Certificate",
+      "Filename2_|_certutil": "T1036.003 - Rename System Utilities | T1140.000 - Deobfuscate/Decode Files or Information | T1553.004 - Install Root Certificate",
+      "Filename2_|_cmd |cmd_|cmd\\.": "T1059.003 - Windows Command Shell | T1106.000 - Native API",
+      "Filename2_|_powershell": "T1059.001 - PowerShell | T1106.000 - Native API",
+      "Filename2_|_\\.ps1": "T1059.001 - PowerShell",
+      "Filename2_|_csc\\.exe": "T1027.004 - Compile After Delivery",
+      "Filename2_|_cscript": "T1216.001 - PubPrn",
+      "Filename2_|_eventvwr|sdclt": "T1548.002 - Bypass User Account Control",
+      "Filename2_|_github|gitlab|bitbucket": "T1567.001 - Exfiltration to Code Repository",
+      "Filename2_|_gpttmpl\\.inf|scheduledtasks\\.xml": "T1484.001 - Group Policy Modification",
+      "Filename2_|_mshta": "T1218.005 - Mshta",
+      "Filename2_|_msiexec": "T1218.007 - Msiexec",
+      "Filename2_|_normal\\.dotm|personal\\.xlsb": "T1137.001 - Office Template Macros",
+      "Filename2_|_odbcconf": "T1218.008 - Odbcconf",
+      "Filename2_|_policy\\.vpol|vaultcmd|vcrd": "T1555.004 - Windows Credential Manager",
+      "Filename2_|_psexec": "T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer",
+      "Filename2_|_pubprn": "T1216.001 - PubPrn",
+      "Filename2_|_reg\\.exe": "T1112.000 - Modify Registry",
+      "Filename2_|_scrnsave": "T1546.002 - Screensaver",
+      "Filename2_|_sdelete": "T1485.000 - Data Destruction | T1070.004 - File Deletion",
+      "Filename2_|_tscon": "T1563.002 - RDP Hijacking",
+      "Filename2_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",
+      "Filename2_|_wmic|msxsl": "T1047.000 - Windows Management Instrumentation | T1220.000 - XSL Script Processing",
+      "Filename2_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",
+      "Filename2_|_scvhost|svchast|svchust|svchest|lssas|lsasss|lsaas|cssrs|canhost|conhast|connhost|connhst|iexplorer|iexploror|iexplorar": "T1036.004 - Masquerade Task or Service",
+      "Filename2_|_\\.msg|\\.eml": "T1566.001 - Spearphishing Attachment | T1566.002 - Spearphishing Link | T1203.000 - Exploitation for Client Execution | T1204.001 - Malicious Link | T1204.002 - Malicious File",
+      "Filename3_|_\\.7z|\\.arj|\\.cab|\\.tar|\\.tgz|\\.zip": "T1560.001 - Archive via Utility",
+      "Filename3_|_\\.asc|\\.cer|\\.gpg|\\.key|\\.p12|\\.p7b|\\.pem|\\.pfx|\\.pgp|\\.ppk": "T1552.004 - Private Keys",
+      "Filename3_|_\\.chm|\\.hh": "T1218.001 - Compiled HTML File",
+      "Filename3_|_\\.cpl": "T1218.002 - Control Panel",
+      "Filename3_|_\\.doc|\\.xls|\\.ppt|\\.pdf": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "Filename3_|_\\.docm|\\.xlsm|\\.pptm": "T1137.001 - Office Template Macros | T1559.001 - Component Object Model | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "Filename3_|_\\.docx|\\.xlsx|\\.pptx": "T1221.000 - Template Injection | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "Filename3_|_\\.job": "T1053.005 - Scheduled Task",
+      "Filename3_|_\\.lnk": "T1547.009 - Shortcut Modification",
+      "Filename3_|_\\.local|\\.manifest": "T1574.001 - DLL Search Order Hijacking",
+      "Filename3_|_\\.mp3|\\.wav|\\.aac|\\.m4a": "T1123.000 - Audio Capture",
+      "Filename3_|_\\.mp4|\\.mkv|\\.avi|\\.mov|\\.wmv|\\.mpg|\\.mpeg|\\.m4v|\\.flv": "T1125.000 - Video Capture",
+      "Filename3_|_\\.ost|\\.pst|\\.msg": "T1114.001 - Local Email Collection",
+      "Filename3_|_\\.service|services\\.exe|sc\\.exe": "T1007.000 - System Service Discovery | T1543.003 - Windows Service | T1569.002 - Service Execution | T1489.000 - Service Stop",
+      "Filename3_|_atbroker|displayswitch|magnify|narrator|osk|sethc|utilman": "T1546.008 - Accessibility Features",
+      "Filename3_|_autoruns": "T1112.000 - Modify Registry",
+      "Filename3_|_bcdedit|csrutil": "T1553.006 - Code Signing Policy Modification",
+      "Filename3_|_certmgr": "T1553.004 - Install Root Certificate",
+      "Filename3_|_certutil": "T1036.003 - Rename System Utilities | T1140.000 - Deobfuscate/Decode Files or Information | T1553.004 - Install Root Certificate",
+      "Filename3_|_cmd |cmd_|cmd\\.": "T1059.003 - Windows Command Shell | T1106.000 - Native API",
+      "Filename3_|_powershell": "T1059.001 - PowerShell | T1106.000 - Native API",
+      "Filename3_|_\\.ps1": "T1059.001 - PowerShell",
+      "Filename3_|_csc\\.exe": "T1027.004 - Compile After Delivery",
+      "Filename3_|_cscript": "T1216.001 - PubPrn",
+      "Filename3_|_eventvwr|sdclt": "T1548.002 - Bypass User Account Control",
+      "Filename3_|_github|gitlab|bitbucket": "T1567.001 - Exfiltration to Code Repository",
+      "Filename3_|_gpttmpl\\.inf|scheduledtasks\\.xml": "T1484.001 - Group Policy Modification",
+      "Filename3_|_mshta": "T1218.005 - Mshta",
+      "Filename3_|_msiexec": "T1218.007 - Msiexec",
+      "Filename3_|_normal\\.dotm|personal\\.xlsb": "T1137.001 - Office Template Macros",
+      "Filename3_|_odbcconf": "T1218.008 - Odbcconf",
+      "Filename3_|_policy\\.vpol|vaultcmd|vcrd": "T1555.004 - Windows Credential Manager",
+      "Filename3_|_psexec": "T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer",
+      "Filename3_|_pubprn": "T1216.001 - PubPrn",
+      "Filename3_|_reg\\.exe": "T1112.000 - Modify Registry",
+      "Filename3_|_scrnsave": "T1546.002 - Screensaver",
+      "Filename3_|_sdelete": "T1485.000 - Data Destruction | T1070.004 - File Deletion",
+      "Filename3_|_tscon": "T1563.002 - RDP Hijacking",
+      "Filename3_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",
+      "Filename3_|_wmic|msxsl": "T1047.000 - Windows Management Instrumentation | T1220.000 - XSL Script Processing",
+      "Filename3_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",
+      "Filename3_|_scvhost|svchast|svchust|svchest|lssas|lsasss|lsaas|cssrs|canhost|conhast|connhost|connhst|iexplorer|iexploror|iexplorar": "T1036.004 - Masquerade Task or Service",
+      "Filename3_|_\\.msg|\\.eml": "T1566.001 - Spearphishing Attachment | T1566.002 - Spearphishing Link | T1203.000 - Exploitation for Client Execution | T1204.001 - Malicious Link | T1204.002 - Malicious File",
+      "Filename4_|_\\.7z|\\.arj|\\.cab|\\.tar|\\.tgz|\\.zip": "T1560.001 - Archive via Utility",
+      "Filename4_|_\\.asc|\\.cer|\\.gpg|\\.key|\\.p12|\\.p7b|\\.pem|\\.pfx|\\.pgp|\\.ppk": "T1552.004 - Private Keys",
+      "Filename4_|_\\.chm|\\.hh": "T1218.001 - Compiled HTML File",
+      "Filename4_|_\\.cpl": "T1218.002 - Control Panel",
+      "Filename4_|_\\.doc|\\.xls|\\.ppt|\\.pdf": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "Filename4_|_\\.docm|\\.xlsm|\\.pptm": "T1137.001 - Office Template Macros | T1559.001 - Component Object Model | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "Filename4_|_\\.docx|\\.xlsx|\\.pptx": "T1221.000 - Template Injection | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "Filename4_|_\\.job": "T1053.005 - Scheduled Task",
+      "Filename4_|_\\.lnk": "T1547.009 - Shortcut Modification",
+      "Filename4_|_\\.local|\\.manifest": "T1574.001 - DLL Search Order Hijacking",
+      "Filename4_|_\\.mp3|\\.wav|\\.aac|\\.m4a": "T1123.000 - Audio Capture",
+      "Filename4_|_\\.mp4|\\.mkv|\\.avi|\\.mov|\\.wmv|\\.mpg|\\.mpeg|\\.m4v|\\.flv": "T1125.000 - Video Capture",
+      "Filename4_|_\\.ost|\\.pst|\\.msg": "T1114.001 - Local Email Collection",
+      "Filename4_|_\\.service|services\\.exe|sc\\.exe": "T1007.000 - System Service Discovery | T1543.003 - Windows Service | T1569.002 - Service Execution | T1489.000 - Service Stop",
+      "Filename4_|_atbroker|displayswitch|magnify|narrator|osk|sethc|utilman": "T1546.008 - Accessibility Features",
+      "Filename4_|_autoruns": "T1112.000 - Modify Registry",
+      "Filename4_|_bcdedit|csrutil": "T1553.006 - Code Signing Policy Modification",
+      "Filename4_|_certmgr": "T1553.004 - Install Root Certificate",
+      "Filename4_|_certutil": "T1036.003 - Rename System Utilities | T1140.000 - Deobfuscate/Decode Files or Information | T1553.004 - Install Root Certificate",
+      "Filename4_|_cmd |cmd_|cmd\\.": "T1059.003 - Windows Command Shell | T1106.000 - Native API",
+      "Filename4_|_powershell": "T1059.001 - PowerShell | T1106.000 - Native API",
+      "Filename4_|_\\.ps1": "T1059.001 - PowerShell",
+      "Filename4_|_csc\\.exe": "T1027.004 - Compile After Delivery",
+      "Filename4_|_cscript": "T1216.001 - PubPrn",
+      "Filename4_|_eventvwr|sdclt": "T1548.002 - Bypass User Account Control",
+      "Filename4_|_github|gitlab|bitbucket": "T1567.001 - Exfiltration to Code Repository",
+      "Filename4_|_gpttmpl\\.inf|scheduledtasks\\.xml": "T1484.001 - Group Policy Modification",
+      "Filename4_|_mshta": "T1218.005 - Mshta",
+      "Filename4_|_msiexec": "T1218.007 - Msiexec",
+      "Filename4_|_normal\\.dotm|personal\\.xlsb": "T1137.001 - Office Template Macros",
+      "Filename4_|_odbcconf": "T1218.008 - Odbcconf",
+      "Filename4_|_policy\\.vpol|vaultcmd|vcrd": "T1555.004 - Windows Credential Manager",
+      "Filename4_|_psexec": "T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer",
+      "Filename4_|_pubprn": "T1216.001 - PubPrn",
+      "Filename4_|_reg\\.exe": "T1112.000 - Modify Registry",
+      "Filename4_|_scrnsave": "T1546.002 - Screensaver",
+      "Filename4_|_sdelete": "T1485.000 - Data Destruction | T1070.004 - File Deletion",
+      "Filename4_|_tscon": "T1563.002 - RDP Hijacking",
+      "Filename4_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",
+      "Filename4_|_wmic|msxsl": "T1047.000 - Windows Management Instrumentation | T1220.000 - XSL Script Processing",
+      "Filename4_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",
+      "Filename4_|_scvhost|svchast|svchust|svchest|lssas|lsasss|lsaas|cssrs|canhost|conhast|connhost|connhst|iexplorer|iexploror|iexplorar": "T1036.004 - Masquerade Task or Service",
+      "Filename4_|_\\.msg|\\.eml": "T1566.001 - Spearphishing Attachment | T1566.002 - Spearphishing Link | T1203.000 - Exploitation for Client Execution | T1204.001 - Malicious Link | T1204.002 - Malicious File",
+      # evt
+      "EventID_|_^10|12|13$": "T1218.003 - CMSTP",
+      "EventID_|_^1074|6006$": "T1529.000 - System Shutdown/Reboot",
+      "EventID_|_^1102$": "T1070.001 - Clear Windows Event Logs",
+      "EventID_|_^17|18$": "T1055.002 - Portable Execution Injection",
+      "EventID_|_^3033|3063$": "T1547.008 - LSASS Driver | T1553.003 - SIP and Trust Provider Hijacking",
+      "EventID_|_^307|510$": "T1484.002 - Domain Trust Modification",
+      "EventID_|_^4624|4634$": "T1558.001 - Golden Ticket | T1558.002 - Silver Ticket",
+      "EventID_|_^4625|4648|4771$": "T1110.003 - Password Spraying",
+      "EventID_|_^4657$": "T1112.000 - Modify Registry | T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay",
+      "EventID_|_^4670$": "T1098.000 - Account Manipulation | T1222.001 - Windows File and Directory Permissions Modification",
+      "EventID_|_^4672$": "T1484.001 - Group Policy Modification | T1558.001 - Golden Ticket",
+      "EventID_|_^4697|7045$": "T1021.003 - Windows Service",
+      "EventID_|_^4704|5136|5137|5138|5139|5141$": "T1484.001 - Group Policy Modification",
+      "EventID_|_^4720$": "T1136.001 - Local Account | T1136.002 - Domain Account",
+      "EventID_|_^4723|4724|4726|4740$": "T1531.000 - Account Access Removal",
+      "EventID_|_^4728|4738$": "T1098.000 - Account Manipulation",
+      "EventID_|_^4768|4769$": "T1550.002 - Pass the Hash | T1550.003 - Pass the Ticket | T1558.003 - Kerberoasting",
+      "EventID_|_^4928|4929$": "T1207.000 - Rogue Domain Controller",
+      "EventID_|_^524$": "T1490.000 - Inhibit System Recovery",
+      "EventID_|_^7045$": "T1021.003 - Windows Service | T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay",
+      "EventID_|_^81$": "T1553.003 - SIP and Trust Provider Hijacking",
+      "EventID_|_^5861$": "T1546.003 - Windows Management Instrumentation Event Subscription",
+      # registry
+      "Registry_|_/print processors/|/print_processors/": "T1547.012 - Print Processors",
+      "Registry_|_/security/policy/secrets": "T1003.004 - LSA Secrets",
+      "Registry_|_/special/perf": "T1337.002 - Office Test",
+      "Registry_|_active setup/installed components|active_setup/installed_components": "T1547.014 - Active Setup",
+      "Registry_|_currentcontrolset/control/lsa": "T1547.002 - Authentication Package | T1547.005 - Security Support Provider | T1003.001 - LSASS Memory | T1556.002 - Password Filter DLL",
+      "Registry_|_currentcontrolset/control/print/monitors": "T1547.010 - Port Monitors",
+      "Registry_|_currentcontrolset/control/session manager|currentcontrolset/control/session_manager": "T1547.001 - Registry Run Keys / Startup Folder | T1546.009 - AppCert DLLs",
+      "Registry_|_currentcontrolset/services/": "T1574.011 - Services Registry Permissions Weakness",
+      "Registry_|_currentcontrolset/services/w32time/timeproviders": "T1547.003 - Time Providers",
+      "Registry_|_currentversion/app paths|software/classes/ms-settings/shell/open/command|currentversion/app_paths|software/classes/mscfile/shell/open/command|software/classes/exefile/shell/runas/command/isolatedcommand": "T1548.002 - Bypass User Account Control",
+      "Registry_|_currentversion/appcompatflags/installedsdb": "T1546.011 - Application Shimming",
+      "Registry_|_currentversion/explorer/fileexts": "T1546.001 - Change Default File Association",
+      "Registry_|_currentversion/image file execution options|currentversion/image_file_execution_options": "T1547.002 - Authentication Package | T1547.005 - Security Support Provider | T1546.008 - Accessibility Features | T1546.012 - Image File Execution Options Injection",
+      "Registry_|_currentversion/policies/credui/enumerateadministrators": "T1087.002 - Local Account | T1087.002 - Domain Account",
+      "Registry_|_currentversion/run|currentversion/policies/explorer/run|currentversion/explorer/user|currentversion/explorer/shell": "T1547.001 - Registry Run Keys / Startup Folder",
+      "Registry_|_currentversion/windows|nt/currentversion/windows": "T1546.010 - AppInit DLLs",
+      "Registry_|_currentversion/winlogon/notify|currentversion/winlogon/userinit|currentversion/winlogon/shell": "T1547.001 - Registry Run Keys / Startup Folder | T1547.004 - Winlogon Helper DLL",
+      "Registry_|_environment/userinitmprlogonscript": "T1037.001 - Logon Script (Windows)",
+      "Registry_|_manager/safedllsearchmode|security/policy/secrets": "T1003.001 - LSASS Memory | T1547.008 - LSASS Driver",
+      "Registry_|_microsoft/windows/softwareprotectionplatform/eventcachemanager": "T1036.004 - Masquerade Task or Service",
+      "Registry_|_nt/dnsclient": "T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay",
+      "Registry_|_panel/cpls": "T1218.002 - Control Panel",
+      "Registry_|_software/microsoft/netsh": "T1546.007 - Netsh Helper DLL",
+      "Registry_|_software/microsoft/ole": "T1175.001 - Component Object Model",
+      "Registry_|_software/policies/microsoft/previousversions/disablelocalpage": "T1490.000 - Inhibit System Recovery",
+      "Registry_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",
+      # usb
+      "SectionDescription_|_DISPLAY|display|HID|hid|PCI|pci|IDE|ide|ROOT|root|UMB|umb|FDC|fdc|IDE|ide|SCSI|scsi|STORAGE|storage|USBSTOR|usbstor|USB|usb|WpdBusEnumRoot": "T1200.000 - Hardware Additions | T1025.000 - Data from Removable Media | T1052.001 - Exfiltration over USB | T1056.001 - Keylogging | T1091.000 - Replication through Removable Media | T1570.000 - Lateral Tool Transfer",
+      "SectionDescription_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",
+      # Unix logs
+      "Message_|_\\.7z|\\.arj|\\.cab|\\.tar|\\.tgz|\\.zip": "T1560.001 - Archive via Utility",
+      "Message_|_\\.asc|\\.cer|\\.gpg|\\.key|\\.p12|\\.p7b|\\.pem|\\.pfx|\\.pgp|\\.ppk": "T1552.004 - Private Keys",
+      "Message_|_\\.chm|\\.hh": "T1218.001 - Compiled HTML File",
+      "Message_|_\\.eml": "T1114.001 - Local Email Collection",
+      "Message_|_\\.job": "T1053.005 - Scheduled Task",
+      "Message_|_\\.lnk": "T1547.009 - Shortcut Modification",
+      "Message_|_\\.mp3|\\.wav|\\.aac|\\.m4a": "T1123.000 - Audio Capture",
+      "Message_|_\\.mp4|\\.mkv|\\.avi|\\.mov|\\.wmv|\\.mpg|\\.mpeg|\\.m4v|\\.flv": "T1125.000 - Video Capture",
+      "Message_|_DISPLAY|display|HID|hid|PCI|pci|IDE|ide|ROOT|root|UMB|umb|FDC|fdc|IDE|ide|SCSI|scsi|STORAGE|storage|USBSTOR|usbstor|USB|usb": "T1200.000 - Hardware Additions | T1025.000 - Data from Removable Media | T1052.001 - Exfiltration over USB | T1056.001 - Keylogging | T1091.000 - Replication through Removable Media | T1570.000 - Lateral Tool Transfer",
+      "Message_|_github|gitlab|bitbucket": "T1567.001 - Exfiltration to Code Repository",
+      "Message_|_/etc/profile|/etc/zshenv|/etc/zprofile|/etc/zlogin": "T1546.004 - Unix Shell Configuration Modification",
+      "Message_|_/var/log": "T1070.002 - Clear Linux or Mac System Logs",
+      "Message_|_\\.7z|\\.arj|\\.tar|\\.tgz|\\.zip": "T1560.001 - Archive via Utility",
+      "Message_|_libzip|zlib|rarfile|bzip2": "T1560.002 - Archive via Library",
+      "Message_|_\\.lnk": "T1547.009 - Shortcut Modification",
+      "Message_|_\\.mobileconfig|profiles": "T1176.000 - Browser Extensions",
+      "Message_|_add-trusted-cert|trustroot": "T1553.004 - Install Root Certificate",
+      "Message_|_ascii|unicode|hex|base64|mime": "T1132.001 - Standard Encoding",
+      "Message_|_at\\.": "T1053.001 - At (Linux)",
+      "Message_|_authorizationexecutewithprivileges|security_authtrampoline": "T1548.004 - Elevated Execution with Prompt",
+      "Message_|_authorized_keys|sshd_config|ssh-keygen": "T1098.004 - SSH Authorized Keys",
+      "Message_|_bash_history": "T1552.003 - Bash History",
+      "Message_|_bluetooth": "T1011.001 - Exfiltration over Bluetooth",
+      "Message_|_chage|common-password|pwpolicy|getaccountpolicies": "T1201.000 - Password Policy Discovery",
+      "Message_|_chmod": "T1222.002 - Linux and Mac File and Directory Permissions Modification | T1548.001 - Setuid and Setgid",
+      "Message_|_chown|chgrp": "T1222.002 - Linux and Mac File and Directory Permissions Modification",
+      "Message_|_clipboard|pbpaste": "T1115.000 - Clipboard Data",
+      "Message_|_com\\.apple\\.quarantine": "T1553.001 - Gatekeeper Bypass",
+      "Message_|_contentsofdirectoryatpath|pathextension|compare|fork |fork_": "T1106.000 - Native API",
+      "Message_|_dscacheutil|ldapsearch": "T1087.002 - Domain Accounts | T1069.002 - Domain Groups",
+      "Message_|_dscl": "T1069.001 - Local Groups | T1564.002 - Hidden Users",
+      "Message_|_emond": "T1546.014 - Emond | T1547.011 - Plist Modification",
+      "Message_|_encrypt": "T1573.001 - Symmetric Cryptography | T1573.002 - Asymmetric Cryptography",
+      "Message_|_find |locate |find_|locate_": "T1083.000 - File and Directory Discovery",
+      "Message_|_forwardingsmtpaddress|x-forwarded-to|x-mailfwdby|x-ms-exchange-organization-autoforwarded": "T1114.003 - Email Forwarding Rule",
+      "Message_|_fsutil|fsinfo": "T1120.000 - Peripheral Device Discovery",
+      "Message_|_gcc |gcc_": "T1027.004 - Compile After Delivery",
+      "Message_|_group": "T1069.001 - Local Groups | T1069.002 - Domain Groups",
+      "Message_|_halt": "T1529.000 - System Shutdown/Reboot",
+      "Message_|_hidden": "T1564.003 - Hidden Window",
+      "Message_|_histcontrol": "T1562.003 - Impair Command History Logging",
+      "Message_|_history|histfile": "T1562.003 - Impair Command History Logging | T1070.003 - Clear Command History | T1552.003 - Bash History",
+      "Message_|_hostname|systeminfo|whoami": "T1033.000 - System Owner/User Discovery",
+      "Message_|_ifconfig": "T1016.001 - Internet Connection Discovery",
+      "Message_|_is_debugging|sysctl|ptrace": "T1497.001 - System Checks",
+      "Message_|_keychain": "T1555.001 - Keychain",
+      "Message_|_kill": "T1548.003 - Sudo and Sudo Caching | T1562.001 - Disable or Modify Tools | T1489.000 - Service Stop",
+      "Message_|_launchagents": "T1543.001 - Launch Agent",
+      "Message_|_launchctl": "T1569.001 - Launchctl",
+      "Message_|_launchdaemons": "T1543.004 - Launch Daemon",
+      "Message_|_lc_code_signature|lc_load_dylib": "T1546.006 - LC_LOAD_DYLIB Addition | T1574.004 - Dylib Hijacking",
+      "Message_|_lc_load_weak_dylib|rpath|loader_path|executable_path|ottol": "T1547.004 - Dylib Hijacking",
+      "Message_|_ld_preload|dyld_insert_libraries|export|setenv|putenv|os\\.environ|ld\\.so\\.preload|dlopen|mmap|failure": "T1547.006 - Dynamic Linker Hijacking",
+      "Message_|_loginwindow|hide500users|dscl|uniqueid": "T1564.002 - Hidden Users",
+      "Message_|_lsof|who": "T1049.000 - System Network Connections Discovery",
+      "Message_|_malloc|ptrace_setregs|ptrace_poketext|ptrace_pokedata": "T1055.008 - Ptrace System Calls",
+      "Message_|_microphone": "T1123.000 - Audio Capture",
+      "Message_|_modprobe|insmod|lsmod|rmmod|modinfo|kextload|kextunload|autostart": "T1547.006 - Kernel Modules and Extensions",
+      "Message_|_pam_unix\\.so": "T1556.003 - Pluggable Authentication Modules",
+      "Message_|_passwd|shadow": "T1003.008 - /etc/passwd and /etc/shadow | T1087.001 - Local Account | T1556.003 - Pluggable Authentication Modules",
+      "Message_|_password|pwd|login|store|secure|credentials": "T1552.001 - Credentials in Files | T1555.005 - Password Managers",
+      "Message_|_ping|traceroute|etc/host|etc/hosts|bonjour": "T1016.001 - Internet Connection Discovery | T1018.000 - Remote System Discovery",
+      "Message_|_portopening": "T1090.001 - Internal Proxy",
+      "Message_|_profile\\.d|bash_profile|bashrc|bash_login|bash_logout": "T1546.004 - Unix Shell Configuration Modification",
+      "Message_|_ps |ps_": "T1057.000 - Process Discovery",
+      "Message_|_pubprn": "T1216.001 - PubPrn",
+      "Message_|_python|\\.py": "T1059.006 - Python",
+      "Message_|_rc\\.local|rc\\.common": "T1037.004 - RC Scripts",
+      "Message_|_rm |rm_": "T1070.004 - File Deletion | T1485.000 - Data Destruction",
+      "Message_|_scp|rsync|sftp": "T1105.000 - Ingress Tool Transfer",
+      "Message_|_services": "T1489.000 - Service Stop",
+      "Message_|_startupitems|startupparameters": "T1037.002 - Logon Script (Mac)",
+      "Message_|_sudo|timestamp_timeout|tty_tickets": "T1548.003 - Sudo and Sudo Caching",
+      "Message_|_systemctl": "T1543.001 - Launch Agent",
+      "Message_|_systemsetup": "T1082.000 - System Information Discovery",
+      "Message_|_time|sleep": "T1497.003 - Time Based Evasion",
+      "Message_|_timer": "T1053.006 - Systemd Timers",
+      "Message_|_trap": "T1546.005 - Trap",
+      "Message_|_u202e": "T1036.002 - Right-to-Left Override",
+      "Message_|_uielement": "T1564.003 - Hidden Window",
+      "Message_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",
+      "Message_|_xattr|xttr": "T1553.001 - Gatekeeper Bypass",
+      "Message_|_xdg|autostart": "T1547.013 - XDG Autostart Entries",
+      "Message_|_xwd|screencapture": "T1113.000 - Screen Capture",
+      "Message_|_zshrc|zshenv|zlogout|zlogin|profile": "T1546.004 - Unix Shell Configuration Modification",
+      "Message_|_python|\\.py |\\.py_": "T1059.006 - Python",
+      "Message_|_timer": "T1053.006 - Systemd Timers",
+      "Message_|_loginitems|loginwindow|smloginitemsetenabled|uielement|quarantine": "T1547.011 - Plist Modification",
+      "Message_|_startupparameters": "T1037.005 - Startup Items | T1547.011 - Plist Modification",
+      "Message_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",
+      "Message_|_\\.msg|\\.eml": "T1566.001 - Spearphishing Attachment | T1566.002 - Spearphishing Link | T1203.000 - Exploitation for Client Execution | T1204.001 - Malicious Link | T1204.002 - Malicious File",
+      "Message_|_curl |curl_": "T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol | T1553.001 - Gatekeeper Bypass",
+      # Unix services
+      "BusName_|_\\.mobileconfig|profiles": "T1176.000 - Browser Extensions",
+      "BusName_|_bluetooth": "T1011.001 - Exfiltration over Bluetooth",
+      "BusName_|_is_debugging|sysctl|ptrace": "T1497.001 - System Checks",
+      "BusName_|_keychain": "T1555.001 - Keychain",
+      "BusName_|_launchagents": "T1543.001 - Launch Agent",
+      "BusName_|_launchctl": "T1569.001 - Launchctl",
+      "BusName_|_launchdaemons": "T1543.004 - Launch Daemon",
+      "BusName_|_malloc|ptrace_setregs|ptrace_poketext|ptrace_pokedata": "T1055.008 - Ptrace System Calls",
+      "BusName_|_microphone": "T1123.000 - Audio Capture",
+      "BusName_|_modprobe|insmod|lsmod|rmmod|modinfo|kextload|kextunload|autostart": "T1547.006 - Kernel Modules and Extensions",
+      "BusName_|_pam_unix\\.so": "T1556.003 - Pluggable Authentication Modules",
+      "BusName_|_ping|traceroute|etc/host|etc/hosts|bonjour": "T1016.001 - Internet Connection Discovery | T1018.000 - Remote System Discovery",
+      "BusName_|_python|\\.py": "T1059.006 - Python",
+      "BusName_|_rc\\.local|rc\\.common": "T1037.004 - RC Scripts",
+      "BusName_|_scp|rsync|sftp": "T1105.000 - Ingress Tool Transfer",
+      "BusName_|_services": "T1489.000 - Service Stop",
+      "BusName_|_startupitems|startupparameters": "T1037.002 - Logon Script (Mac)",
+      "BusName_|_sudo|timestamp_timeout|tty_tickets": "T1548.003 - Sudo and Sudo Caching",
+      "BusName_|_systemctl": "T1543.001 - Launch Agent",
+      "BusName_|_systemsetup": "T1082.000 - System Information Discovery",
+      "BusName_|_time|sleep": "T1497.003 - Time Based Evasion",
+      "BusName_|_timer": "T1053.006 - Systemd Timers",
+      "BusName_|_trap": "T1546.005 - Trap",
+      "BusName_|_uielement": "T1564.003 - Hidden Window",
+      "BusName_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",
+      "BusName_|_xattr|xttr": "T1553.001 - Gatekeeper Bypass",
+      "BusName_|_xdg|autostart": "T1547.013 - XDG Autostart Entries",
+      "BusName_|_xwd|screencapture": "T1113.000 - Screen Capture",
+      "BusName_|_loginitems|loginwindow|smloginitemsetenabled|uielement|quarantine": "T1547.011 - Plist Modification",
+      "BusName_|_startupparameters": "T1037.005 - Startup Items | T1547.011 - Plist Modification",
+      "BusName_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",
+      "ExecStart_|_\\.mobileconfig|profiles": "T1176.000 - Browser Extensions",
+      "ExecStart_|_bluetooth": "T1011.001 - Exfiltration over Bluetooth",
+      "ExecStart_|_is_debugging|sysctl|ptrace": "T1497.001 - System Checks",
+      "ExecStart_|_keychain": "T1555.001 - Keychain",
+      "ExecStart_|_launchagents": "T1543.001 - Launch Agent",
+      "ExecStart_|_launchctl": "T1569.001 - Launchctl",
+      "ExecStart_|_launchdaemons": "T1543.004 - Launch Daemon",
+      "ExecStart_|_malloc|ptrace_setregs|ptrace_poketext|ptrace_pokedata": "T1055.008 - Ptrace System Calls",
+      "ExecStart_|_microphone": "T1123.000 - Audio Capture",
+      "ExecStart_|_modprobe|insmod|lsmod|rmmod|modinfo|kextload|kextunload|autostart": "T1547.006 - Kernel Modules and Extensions",
+      "ExecStart_|_pam_unix\\.so": "T1556.003 - Pluggable Authentication Modules",
+      "ExecStart_|_ping|traceroute|etc/host|etc/hosts|bonjour": "T1016.001 - Internet Connection Discovery | T1018.000 - Remote System Discovery",
+      "ExecStart_|_python|\\.py": "T1059.006 - Python",
+      "ExecStart_|_rc\\.local|rc\\.common": "T1037.004 - RC Scripts",
+      "ExecStart_|_scp|rsync|sftp": "T1105.000 - Ingress Tool Transfer",
+      "ExecStart_|_ExecStarts": "T1489.000 - Service Stop",
+      "ExecStart_|_startupitems|startupparameters": "T1037.002 - Logon Script (Mac)",
+      "ExecStart_|_sudo|timestamp_timeout|tty_tickets": "T1548.003 - Sudo and Sudo Caching",
+      "ExecStart_|_systemctl": "T1543.001 - Launch Agent",
+      "ExecStart_|_systemsetup": "T1082.000 - System Information Discovery",
+      "ExecStart_|_time|sleep": "T1497.003 - Time Based Evasion",
+      "ExecStart_|_timer": "T1053.006 - Systemd Timers",
+      "ExecStart_|_trap": "T1546.005 - Trap",
+      "ExecStart_|_uielement": "T1564.003 - Hidden Window",
+      "ExecStart_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",
+      "ExecStart_|_xattr|xttr": "T1553.001 - Gatekeeper Bypass",
+      "ExecStart_|_xdg|autostart": "T1547.013 - XDG Autostart Entries",
+      "ExecStart_|_xwd|screencapture": "T1113.000 - Screen Capture",
+      "ExecStart_|_loginitems|loginwindow|smloginitemsetenabled|uielement|quarantine": "T1547.011 - Plist Modification",
+      "ExecStart_|_startupparameters": "T1037.005 - Startup Items | T1547.011 - Plist Modification",
+      "ExecStart_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",
+      "Service_|_\\.mobileconfig|profiles": "T1176.000 - Browser Extensions",
+      "Service_|_bluetooth": "T1011.001 - Exfiltration over Bluetooth",
+      "Service_|_is_debugging|sysctl|ptrace": "T1497.001 - System Checks",
+      "Service_|_keychain": "T1555.001 - Keychain",
+      "Service_|_launchagents": "T1543.001 - Launch Agent",
+      "Service_|_launchctl": "T1569.001 - Launchctl",
+      "Service_|_launchdaemons": "T1543.004 - Launch Daemon",
+      "Service_|_malloc|ptrace_setregs|ptrace_poketext|ptrace_pokedata": "T1055.008 - Ptrace System Calls",
+      "Service_|_microphone": "T1123.000 - Audio Capture",
+      "Service_|_modprobe|insmod|lsmod|rmmod|modinfo|kextload|kextunload|autostart": "T1547.006 - Kernel Modules and Extensions",
+      "Service_|_pam_unix\\.so": "T1556.003 - Pluggable Authentication Modules",
+      "Service_|_ping|traceroute|etc/host|etc/hosts|bonjour": "T1016.001 - Internet Connection Discovery | T1018.000 - Remote System Discovery",
+      "Service_|_python|\\.py": "T1059.006 - Python",
+      "Service_|_rc\\.local|rc\\.common": "T1037.004 - RC Scripts",
+      "Service_|_scp|rsync|sftp": "T1105.000 - Ingress Tool Transfer",
+      "Service_|_services": "T1489.000 - Service Stop",
+      "Service_|_startupitems|startupparameters": "T1037.002 - Logon Script (Mac)",
+      "Service_|_sudo|timestamp_timeout|tty_tickets": "T1548.003 - Sudo and Sudo Caching",
+      "Service_|_systemctl": "T1543.001 - Launch Agent",
+      "Service_|_systemsetup": "T1082.000 - System Information Discovery",
+      "Service_|_time|sleep": "T1497.003 - Time Based Evasion",
+      "Service_|_timer": "T1053.006 - Systemd Timers",
+      "Service_|_trap": "T1546.005 - Trap",
+      "Service_|_uielement": "T1564.003 - Hidden Window",
+      "Service_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",
+      "Service_|_xattr|xttr": "T1553.001 - Gatekeeper Bypass",
+      "Service_|_xdg|autostart": "T1547.013 - XDG Autostart Entries",
+      "Service_|_xwd|screencapture": "T1113.000 - Screen Capture",
+      "Service_|_loginitems|loginwindow|smloginitemsetenabled|uielement|quarantine": "T1547.011 - Plist Modification",
+      "Service_|_startupparameters": "T1037.005 - Startup Items | T1547.011 - Plist Modification",
+      "Service_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",
+      # Plist
+      "Plist_|_loginitems|loginwindow|smloginitemsetenabled|uielement|quarantine": "T1547.011 - Plist Modification",
+      "Plist_|_startupparameters": "T1037.005 - Startup Items | T1547.011 - Plist Modification",
+      "Plist_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",
+      # urls
+      "url_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",
+      "url_|_github|gitlab|bitbucket": "T1567.001 - Exfiltration to Code Repository",
+      # LastAccessTime, metadata & IOCs
+      "Filename_|_\\.7z|\\.arj|\\.tar|\\.tgz|\\.zip": "T1560.001 - Archive via Utility",
+      "Filename_|_\\.asc|\\.cer|\\.gpg|\\.key|\\.p12|\\.p7b|\\.pem|\\.pfx|\\.pgp|\\.ppk": "T1552.004 - Private Keys",
+      "Filename_|_\\.chm|\\.hh": "T1218.001 - Compiled HTML File",
+      "Filename_|_\\.cpl": "T1218.002 - Control Panel",
+      "Filename_|_\\.doc|\\.xls|\\.ppt|\\.pdf": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "Filename_|_\\.docm|\\.xlsm|\\.pptm": "T1137.001 - Office Template Macros | T1559.001 - Component Object Model | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "Filename_|_\\.docx|\\.xlsx|\\.pptx": "T1221.000 - Template Injection | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",
+      "Filename_|_\\.job": "T1053.005 - Scheduled Task",
+      "Filename_|_\\.lnk": "T1547.009 - Shortcut Modification",
+      "Filename_|_\\.local|\\.manifest": "T1574.001 - DLL Search Order Hijacking",
+      "Filename_|_\\.mobileconfig|profiles": "T1176.000 - Browser Extensions",
+      "Filename_|_\\.mp3|\\.wav|\\.aac|\\.m4a": "T1123.000 - Audio Capture",
+      "Filename_|_\\.mp4|\\.mkv|\\.avi|\\.mov|\\.wmv|\\.mpg|\\.mpeg|\\.m4v|\\.flv": "T1125.000 - Video Capture",
+      "Filename_|_\\.ost|\\.pst|\\.msg|\\.eml": "T1114.001 - Local Email Collection",
+      "Filename_|_\\.service|services\\.exe|sc\\.exe": "T1007.000 - System Service Discovery | T1543.003 - Windows Service | T1569.002 - Service Execution | T1489.000 - Service Stop",
+      "Filename_|_at\\.": "T1053.001 - At (Linux)",
+      "Filename_|_atbroker|displayswitch|magnify|narrator|osk|sethc|utilman": "T1546.008 - Accessibility Features",
+      "Filename_|_autoruns": "T1112.000 - Modify Registry",
+      "Filename_|_bash_history": "T1552.003 - Bash History",
+      "Filename_|_bcdedit|csrutil": "T1553.006 - Code Signing Policy Modification",
+      "Filename_|_bluetooth": "T1011.001 - Exfiltration over Bluetooth",
+      "Filename_|_certmgr": "T1553.004 - Install Root Certificate",
+      "Filename_|_certutil": "T1036.003 - Rename System Utilities | T1140.000 - Deobfuscate/Decode Files or Information | T1553.004 - Install Root Certificate",
+      "Filename_|_cmd |cmd_|cmd\\.": "T1059.003 - Windows Command Shell | T1106.000 - Native API",
+      "Filename_|_powershell": "T1059.001 - PowerShell | T1106.000 - Native API",
+      "Filename_|_\\.ps1": "T1059.001 - PowerShell",
+      "Filename_|_com\\.apple\\.quarantine": "T1553.001 - Gatekeeper Bypass",
+      "Filename_|_csc\\.exe": "T1027.004 - Compile After Delivery",
+      "Filename_|_cscript": "T1216.001 - PubPrn",
+      "Filename_|_eventvwr|sdclt": "T1548.002 - Bypass User Account Control",
+      "Filename_|_fsutil|fsinfo": "T1120.000 - Peripheral Device Discovery",
+      "Filename_|_github|gitlab|bitbucket": "T1567.001 - Exfiltration to Code Repository",
+      "Filename_|_gpttmpl\\.inf|scheduledtasks\\.xml": "T1484.001 - Group Policy Modification",
+      "Filename_|_keychain": "T1555.001 - Keychain",
+      "Filename_|_microphone": "T1123.000 - Audio Capture",
+      "Filename_|_mshta": "T1218.005 - Mshta",
+      "Filename_|_msiexec": "T1218.007 - Msiexec",
+      "Filename_|_normal\\.dotm|personal\\.xlsb": "T1137.001 - Office Template Macros",
+      "Filename_|_odbcconf": "T1218.008 - Odbcconf",
+      "Filename_|_pam_unix\\.so": "T1556.003 - Pluggable Authentication Modules",
+      "Filename_|_passwd|shadow": "T1003.008 - /etc/passwd and /etc/shadow | T1087.001 - Local Account | T1556.003 - Pluggable Authentication Modules",
+      "Filename_|_policy\\.vpol|vaultcmd|vcrd": "T1555.004 - Windows Credential Manager",
+      "Filename_|_profile\\.d|bash_profile|bashrc|bash_login|bash_logout": "T1546.004 - Unix Shell Configuration Modification",
+      "Filename_|_psexec": "T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer",
+      "Filename_|_pubprn": "T1216.001 - PubPrn",
+      "Filename_|_python|\\.py": "T1059.006 - Python",
+      "Filename_|_rc\\.local|rc\\.common": "T1037.004 - RC Scripts",
+      "Filename_|_reg\\.exe": "T1112.000 - Modify Registry",
+      "Filename_|_scrnsave": "T1546.002 - Screensaver",
+      "Filename_|_sdelete": "T1485.000 - Data Destruction | T1070.004 - File Deletion",
+      "Filename_|_sudo|timestamp_timeout|tty_tickets": "T1548.003 - Sudo and Sudo Caching",
+      "Filename_|_tscon": "T1563.002 - RDP Hijacking",
+      "Filename_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",
+      "Filename_|_wmic|msxsl": "T1047.000 - Windows Management Instrumentation | T1220.000 - XSL Script Processing",
+      "Filename_|_\\.msg|\\.eml": "T1566.001 - Spearphishing Attachment | T1566.002 - Spearphishing Link | T1203.000 - Exploitation for Client Execution | T1204.001 - Malicious Link | T1204.002 - Malicious File"
+    }
     transformsconf.write("[mitre_assign]\nINGEST_EVAL = mitre_techniques=")
-  # memory
-    transformsconf.write("if(match(ForeignPort,\"(^20|21$)\"), \"T1041.000 - Exfiltration over C2 Channel | T1071.002 - File Transfer Protocols | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(ForeignPort,\"(^22|23$)\"), \"T1021.004 - SSH | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1133.000 - External Remote Services | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(ForeignPort,\"(^25$)\"), \"T1041.000 - Exfiltration over C2 Channel | T1071.003 - Mail Protocols | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(ForeignPort,\"(^53$)\"), \"T1041.000 - Exfiltration over C2 Channel | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol | T1071.002 - DNS\", ")
-    transformsconf.write("if(match(ForeignPort,\"(^69|989|990$)\"), \"T1071.002 - File Transfer Protocols | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(ForeignPort,\"(^80$)\"), \"T1041.000 - Exfiltration over C2 Channel | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol | T1071.001 - Web Protocols | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1187.000 - Forced Authentication | T1189.000 - Drive-by Compromise\", ")
-    transformsconf.write("if(match(ForeignPort,\"(^110|143|465|993|995$)\"), \"T1071.003 - Mail Protocols | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(ForeignPort,\"(^135$)\"), \"T1047.000 - Windows Management Instrumentation | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(ForeignPort,\"(^137$)\"), \"T1187.000 - Forced Authentication | T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay\", ")
-    transformsconf.write("if(match(ForeignPort,\"(^139$)\"), \"T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1133.000 - External Remote Services | T1187.000 - Forced Authentication\", ")
-    transformsconf.write("if(match(ForeignPort,\"(^389|88|1433|1521|3306$)\"), \"T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying\", ")
-    transformsconf.write("if(match(ForeignPort,\"(^443$)\"), \"T1041.000 - Exfiltration over C2 Channel  | T1048.001 - Exfiltration Over Symmetric Encrypted Non-C2 Protocol | T1048.002 - Exfiltration Over Asymmetric Encrypted Non-C2 Protocol | T1071.001 - Web Protocols | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1187.000 - Forced Authentication | T1189.000 - Drive-by Compromise\", ")
-    transformsconf.write("if(match(ForeignPort,\"(^445$)\"), \"T1021.002 - SMB/Windows Admin Shares | T1041.000 - Exfiltration over C2 Channel | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1133.000 - External Remote Services | T1187.000 - Forced Authentication | T1210.000 - Exploitation of Remote Services\", ")
-    transformsconf.write("if(match(ForeignPort,\"(^2375|2376$)\"), \"T1612.000 - Build Image on Host\", ")
-    transformsconf.write("if(match(ForeignPort,\"(^3389$)\"), \"T1021.001 - Remote Desktop Protocol | T1210.000 - Exploitation of Remote Services | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(ForeignPort,\"(^5355$)\"), \"T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(ForeignPort,\"(^5800|5895|5938|5984|5986|8200$)\"), \"T1219.000 - Remote Access Software | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(ForeignPort,\"(^5900$)\"), \"T1021.05 - VNC | T1219.000 - Remote Access Software | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    ##transformsconf.write("if(match(ForeignPort,\"(^NEGATE_STANDARD_PORTS_-_(ALL_PORTS_LISTED_ABOVE)$)\"), \"T1571.00 - Non-Standard Port\", ")
-    transformsconf.write("if(match(LocalPort,\"(^20|21$)\"), \"T1041.000 - Exfiltration over C2 Channel | T1071.002 - File Transfer Protocols | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(LocalPort,\"(^22|23$)\"), \"T1021.004 - SSH | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1133.000 - External Remote Services | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(LocalPort,\"(^25$)\"), \"T1041.000 - Exfiltration over C2 Channel | T1071.003 - Mail Protocols | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(LocalPort,\"(^53$)\"), \"T1041.000 - Exfiltration over C2 Channel | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol | T1071.002 - DNS\", ")
-    transformsconf.write("if(match(LocalPort,\"(^69|989|990$)\"), \"T1071.002 - File Transfer Protocols | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(LocalPort,\"(^80$)\"), \"T1041.000 - Exfiltration over C2 Channel | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol | T1071.001 - Web Protocols | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1187.000 - Forced Authentication | T1189.000 - Drive-by Compromise\", ")
-    transformsconf.write("if(match(LocalPort,\"(^110|143|465|993|995$)\"), \"T1071.003 - Mail Protocols | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(LocalPort,\"(^135$)\"), \"T1047.000 - Windows Management Instrumentation | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(LocalPort,\"(^137$)\"), \"T1187.000 - Forced Authentication | T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay\", ")
-    transformsconf.write("if(match(LocalPort,\"(^139$)\"), \"T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1133.000 - External Remote Services | T1187.000 - Forced Authentication\", ")
-    transformsconf.write("if(match(LocalPort,\"(^389|88|1433|1521|3306$)\"), \"T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying\", ")
-    transformsconf.write("if(match(LocalPort,\"(^443$)\"), \"T1041.000 - Exfiltration over C2 Channel  | T1048.001 - Exfiltration Over Symmetric Encrypted Non-C2 Protocol | T1048.002 - Exfiltration Over Asymmetric Encrypted Non-C2 Protocol | T1071.001 - Web Protocols | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1187.000 - Forced Authentication | T1189.000 - Drive-by Compromise\", ")
-    transformsconf.write("if(match(LocalPort,\"(^445$)\"), \"T1021.002 - SMB/Windows Admin Shares | T1041.000 - Exfiltration over C2 Channel | T1110.004 - Credential Stuffing | T1110.001 - Password Guessing | T1110.003 - Password Spraying | T1133.000 - External Remote Services | T1187.000 - Forced Authentication | T1210.000 - Exploitation of Remote Services\", ")
-    transformsconf.write("if(match(LocalPort,\"(^2375|2376$)\"), \"T1612.000 - Build Image on Host\", ")
-    transformsconf.write("if(match(LocalPort,\"(^3389$)\"), \"T1021.001 - Remote Desktop Protocol | T1210.000 - Exploitation of Remote Services | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(LocalPort,\"(^5355$)\"), \"T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(LocalPort,\"(^5800|5895|5938|5984|5986|8200$)\"), \"T1219.000 - Remote Access Software | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    transformsconf.write("if(match(LocalPort,\"(^5900$)\"), \"T1021.05 - VNC | T1219.000 - Remote Access Software | T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol\", ")
-    ##transformsconf.write("if(match(LocalPort,\"(^NEGATE_STANDARD_PORTS_-_(ALL_PORTS_LISTED_ABOVE)$)\"), \"T1571.00 - Non-Standard Port\", ")
-    transformsconf.write("if(match(nixCommand,\"(/var/log)\"), \"T1070.002 - Clear Linux or Mac System Logs\", ")
-    transformsconf.write("if(match(nixCommand,\"(\\.7z|\\.arj|\\.tar|\\.tgz|\\.zip)\"), \"T1560.001 - Archive via Utility\", ")
-    transformsconf.write("if(match(nixCommand,\"(libzip|zlib|rarfile|bzip2)\"), \"T1560.002 - Archive via Library\", ")
-    transformsconf.write("if(match(nixCommand,\"(\\.lnk)\"), \"T1547.009 - Shortcut Modification\", ")
-    transformsconf.write("if(match(nixCommand,\"(\\.eml)\"), \"T1114.001 - Local Email Collection\", ")
-    transformsconf.write("if(match(nixCommand,\"(\\.mobileconfig|profiles)\"), \"T1176.000 - Browser Extensions\", ")
-    transformsconf.write("if(match(nixCommand,\"(add-trusted-cert|trustroot)\"), \"T1553.004 - Install Root Certificate\", ")
-    transformsconf.write("if(match(nixCommand,\"(ascii|unicode|hex|base64|mime)\"), \"T1132.001 - Standard Encoding\", ")
-    transformsconf.write("if(match(nixCommand,\"(at\\.)\"), \"T1053.001 - At (Linux)\", ")
-    transformsconf.write("if(match(nixCommand,\"(authorizationexecutewithprivileges|security_authtrampoline)\"), \"T1548.004 - Elevated Execution with Prompt\", ")
-    transformsconf.write("if(match(nixCommand,\"(authorized_keys|sshd_config|ssh-keygen)\"), \"T1098.004 - SSH Authorized Keys\", ")
-    transformsconf.write("if(match(nixCommand,\"(bash_history)\"), \"T1552.003 - Bash History\", ")
-    transformsconf.write("if(match(nixCommand,\"(bluetooth)\"), \"T1011.001 - Exfiltration over Bluetooth\", ")
-    transformsconf.write("if(match(nixCommand,\"(chage|common-password|pwpolicy|getaccountpolicies)\"), \"T1201.000 - Password Policy Discovery\", ")
-    transformsconf.write("if(match(nixCommand,\"(chmod)\"), \"T1222.002 - Linux and Mac File and Directory Permissions Modification | T1548.001 - Setuid and Setgid\", ")
-    transformsconf.write("if(match(nixCommand,\"(chown|chgrp)\"), \"T1222.002 - Linux and Mac File and Directory Permissions Modification\", ")
-    transformsconf.write("if(match(nixCommand,\"(clipboard|pbpaste)\"), \"T1115.000 - Clipboard Data\", ")
-    transformsconf.write("if(match(nixCommand,\"(com\\.apple\\.quarantine)\"), \"T1553.001 - Gatekeeper Bypass\", ")
-    transformsconf.write("if(match(nixCommand,\"(contentsofdirectoryatpath|pathextension|compare|fork |fork_)\"), \"T1106.000 - Native API\", ")
-    transformsconf.write("if(match(nixCommand,\"(dscacheutil|ldapsearch)\"), \"T1087.002 - Domain Accounts | T1069.002 - Domain Groups\", ")
-    transformsconf.write("if(match(nixCommand,\"(dscl)\"), \"T1069.001 - Local Groups | T1564.002 - Hidden Users\", ")
-    transformsconf.write("if(match(nixCommand,\"(emond)\"), \"T1546.014 - Emond | T1547.011 - Plist Modification\", ")
-    transformsconf.write("if(match(nixCommand,\"(encrypt)\"), \"T1573.001 - Symmetric Cryptography | T1573.002 - Asymmetric Cryptography\", ")
-    transformsconf.write("if(match(nixCommand,\"(find |locate |find_|locate_)\"), \"T1083.000 - File and Directory Discovery\", ")
-    transformsconf.write("if(match(nixCommand,\"(forwardingsmtpaddress|x-forwarded-to|x-mailfwdby|x-ms-exchange-organization-autoforwarded)\"), \"T1114.003 - Email Forwarding Rule\", ")
-    transformsconf.write("if(match(nixCommand,\"(fsutil|fsinfo)\"), \"T1120.000 - Peripheral Device Discovery\", ")
-    transformsconf.write("if(match(nixCommand,\"(gcc |gcc_)\"), \"T1027.004 - Compile After Delivery\", ")
-    transformsconf.write("if(match(nixCommand,\"(github|gitlab|bitbucket)\"), \"T1567.001 - Exfiltration to Code Repository\", ")
-    transformsconf.write("if(match(nixCommand,\"(group |group_)\"), \"T1069.001 - Local Groups | T1069.002 - Domain Groups\", ")
-    transformsconf.write("if(match(nixCommand,\"(halt)\"), \"T1529.000 - System Shutdown/Reboot\", ")
-    transformsconf.write("if(match(nixCommand,\"(hidden)\"), \"T1564.003 - Hidden Window\", ")
-    transformsconf.write("if(match(nixCommand,\"(histcontrol)\"), \"T1562.003 - Impair Command History Logging\", ")
-    transformsconf.write("if(match(nixCommand,\"(history|histfile)\"), \"T1562.003 - Impair Command History Logging | T1070.003 - Clear Command History | T1552.003 - Bash History\", ")
-    transformsconf.write("if(match(nixCommand,\"(hostname|systeminfo|whoami)\"), \"T1033.000 - System Owner/User Discovery\", ")
-    transformsconf.write("if(match(nixCommand,\"(ifconfig)\"), \"T1016.001 - Internet Connection Discovery\", ")
-    transformsconf.write("if(match(nixCommand,\"(is_debugging|sysctl|ptrace)\"), \"T1497.001 - System Checks\", ")
-    transformsconf.write("if(match(nixCommand,\"(keychain)\"), \"T1555.001 - Keychain\", ")
-    transformsconf.write("if(match(nixCommand,\"(kill)\"), \"T1548.003 - Sudo and Sudo Caching | T1562.001 - Disable or Modify Tools | T1489.000 - Service Stop\", ")
-    transformsconf.write("if(match(nixCommand,\"(launchagents)\"), \"T1543.001 - Launch Agent\", ")
-    transformsconf.write("if(match(nixCommand,\"(launchctl)\"), \"T1569.001 - Launchctl\", ")
-    transformsconf.write("if(match(nixCommand,\"(launchdaemons)\"), \"T1543.004 - Launch Daemon\", ")
-    transformsconf.write("if(match(nixCommand,\"(lc_code_signature|lc_load_dylib)\"), \"T1546.006 - LC_LOAD_DYLIB Addition | T1574.004 - Dylib Hijacking\", ")
-    transformsconf.write("if(match(nixCommand,\"(lc_load_weak_dylib|rpath|loader_path|executable_path|ottol)\"), \"T1547.004 - Dylib Hijacking\", ")
-    transformsconf.write("if(match(nixCommand,\"(ld_preload|dyld_insert_libraries|export|setenv|putenv|os\\.environ|ld\\.so\\.preload|dlopen|mmap|failure)\"), \"T1547.006 - Dynamic Linker Hijacking\", ")
-    transformsconf.write("if(match(nixCommand,\"(loginwindow|hide500users|dscl|uniqueid)\"), \"T1564.002 - Hidden Users\", ")
-    transformsconf.write("if(match(nixCommand,\"(lsof|who)\"), \"T1049.000 - System Network Connections Discovery\", ")
-    transformsconf.write("if(match(nixCommand,\"(malloc|ptrace_setregs|ptrace_poketext|ptrace_pokedata)\"), \"T1055.008 - Ptrace System Calls\", ")
-    transformsconf.write("if(match(nixCommand,\"(microphone)\"), \"T1123.000 - Audio Capture\", ")
-    transformsconf.write("if(match(nixCommand,\"(modprobe|insmod|lsmod|rmmod|modinfo|kextload|kextunload|autostart)\"), \"T1547.006 - Kernel Modules and Extensions\", ")
-    transformsconf.write("if(match(nixCommand,\"(pam_unix\\.so)\"), \"T1556.003 - Pluggable Authentication Modules\", ")
-    transformsconf.write("if(match(nixCommand,\"(passwd|shadow)\"), \"T1003.008 - /etc/passwd and /etc/shadow | T1087.001 - Local Account | T1556.003 - Pluggable Authentication Modules\", ")
-    transformsconf.write("if(match(nixCommand,\"(password|pwd|login|store|secure|credentials)\"), \"T1552.001 - Credentials in Files | T1555.005 - Password Managers\", ")
-    transformsconf.write("if(match(nixCommand,\"(ping|traceroute|etc/host|etc/hosts|bonjour)\"), \"T1016.001 - Internet Connection Discovery | T1018.000 - Remote System Discovery\", ")
-    transformsconf.write("if(match(nixCommand,\"(portopening)\"), \"T1090.001 - Internal Proxy\", ")
-    transformsconf.write("if(match(nixCommand,\"(profile\\.d|bash_profile|bashrc|bash_login|bash_logout)\"), \"T1546.004 - Unix Shell Configuration Modification\", ")
-    transformsconf.write("if(match(nixCommand,\"(ps |ps_)\"), \"T1057.000 - Process Discovery\", ")
-    transformsconf.write("if(match(nixCommand,\"(pubprn)\"), \"T1216.001 - PubPrn\", ")
-    transformsconf.write("if(match(nixCommand,\"(python|\\.py)\"), \"T1059.006 - Python\", ")
-    transformsconf.write("if(match(nixCommand,\"(rc\\.local|rc\\.common)\"), \"T1037.004 - RC Scripts\", ")
-    transformsconf.write("if(match(nixCommand,\"(rm |rm_)\"), \"T1070.004 - File Deletion | T1485.000 - Data Destruction\", ")
-    transformsconf.write("if(match(nixCommand,\"(scp|rsync|sftp)\"), \"T1105.000 - Ingress Tool Transfer\", ")
-    transformsconf.write("if(match(nixCommand,\"(services)\"), \"T1489.000 - Service Stop\", ")
-    transformsconf.write("if(match(nixCommand,\"(startupitems|startupparameters)\"), \"T1037.002 - Logon Script (Mac)\", ")
-    transformsconf.write("if(match(nixCommand,\"(sudo|timestamp_timeout|tty_tickets)\"), \"T1548.003 - Sudo and Sudo Caching\", ")
-    transformsconf.write("if(match(nixCommand,\"(systemctl)\"), \"T1543.001 - Launch Agent\", ")
-    transformsconf.write("if(match(nixCommand,\"(systemsetup)\"), \"T1082.000 - System Information Discovery\", ")
-    transformsconf.write("if(match(nixCommand,\"(time|sleep)\"), \"T1497.003 - Time Based Evasion\", ")
-    transformsconf.write("if(match(nixCommand,\"(timer)\"), \"T1053.006 - Systemd Timers\", ")
-    transformsconf.write("if(match(nixCommand,\"(trap)\"), \"T1546.005 - Trap\", ")
-    transformsconf.write("if(match(nixCommand,\"(u202e)\"), \"T1036.002 - Right-to-Left Override\", ")
-    transformsconf.write("if(match(nixCommand,\"(uielement)\"), \"T1564.003 - Hidden Window\", ")
-    transformsconf.write("if(match(nixCommand,\"(vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu)\"), \"T1564.006 - Run Virtual Instance\", ")
-    transformsconf.write("if(match(nixCommand,\"(xattr|xttr)\"), \"T1553.001 - Gatekeeper Bypass\", ")
-    transformsconf.write("if(match(nixCommand,\"(xdg|autostart)\"), \"T1547.013 - XDG Autostart Entries\", ")
-    transformsconf.write("if(match(nixCommand,\"(xwd|screencapture)\"), \"T1113.000 - Screen Capture\", ")
-    transformsconf.write("if(match(nixCommand,\"(zshrc|zshenv|zlogout|zlogin|profile)\"), \"T1546.004 - Unix Shell Configuration Modification\", ")
-    transformsconf.write("if(match(nixCommand,\"(onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared)\"), \"T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage\", ")
-    transformsconf.write("if(match(nixCommand,\"(curl |curl_)\"), \"T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol | T1553.001 - Gatekeeper Bypass\", ")
-    transformsconf.write("if(match(nixCommand,\"(docker exec|docker  exec|docker run|docker  run|kubectl exec|kubectl  exec|kubectl run|kubectl  run|docker_exec|docker__exec|docker_run|docker__run|kubectl_exec|kubectl__exec|kubectl_run|kubectl__run)\"), \"T1609.000 - Container Administration Command\", ")
-    transformsconf.write("if(match(nixCommand,\"(docker create|docker  create|docker start|docker  start|docker_create|docker__create|docker_start|docker_start)\"), \"T1610.000 - Deploy Container\", ")
-    transformsconf.write("if(match(nixCommand,\"(docker build|docker  build|docker_build|docker__build)\"), \"T1612.000 - Build Image on Host\", ")
-    transformsconf.write("if(match(nixProcess,\"(bluetooth)\"), \"T1011.001 - Exfiltration over Bluetooth\", ")
-    transformsconf.write("if(match(nixProcess,\"(fsutil|fsinfo)\"), \"T1120.000 - Peripheral Device Discovery\", ")
-    transformsconf.write("if(match(nixProcess,\"(python|\\.py |\\.py_)\"), \"T1059.006 - Python\", ")
-    transformsconf.write("if(match(nixProcess,\"(scp|rsync|sftp)\"), \"T1105.000 - Ingress Tool Transfer\", ")
-    transformsconf.write("if(match(nixProcess,\"(services)\"), \"T1489.000 - Service Stop\", ")
-    transformsconf.write("if(match(nixProcess,\"(timer)\"), \"T1053.006 - Systemd Timers\", ")
-    transformsconf.write("if(match(nixProcess,\"(vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu)\"), \"T1564.006 - Run Virtual Instance\", ")
-    transformsconf.write("if(match(nixProcess,\"(onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared)\"), \"T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage\", ")
-    transformsconf.write("if(match(WinCommand,\"(-create|dscl|hide500users)\"), \"T1564.002 - Hidden Users\", ")
-    transformsconf.write("if(match(WinCommand,\"(-decode|openssl)\"), \"T1140.000 - Deobfuscate/Decode Files or Information\", ")
-    transformsconf.write("if(match(WinCommand,\"(-noprofile)\"), \"T1547.013 - PowerShell Profile\", ")
-    transformsconf.write("if(match(WinCommand,\"(/add)\"), \"T1136.001 - Local Account | T1136.002 - Domain Account\", ")
-    transformsconf.write("if(match(WinCommand,\"(/delete)\"), \"T1070.005 - Network Share Connection Removal\", ")
-    transformsconf.write("if(match(WinCommand,\"(/domain)\"), \"T1087.002 - Domain Account | T1136.002 - Domain Account\", ")
-    transformsconf.write("if(match(WinCommand,\"(\\.7z|\\.arj|\\.cab|\\.tar|\\.tgz|\\.zip|winzip|winrar)\"), \"T1560.001 - Archive via Utility\", ")
-    transformsconf.write("if(match(WinCommand,\"(libzip|zlib)\"), \"T1560.002 - Archive via Library\", ")
-    transformsconf.write("if(match(WinCommand,\"(\\.cpl)\"), \"T1218.002 - Control Panel\", ")
-    transformsconf.write("if(match(WinCommand,\"(\\.lnk)\"), \"T1547.009 - Shortcut Modification\", ")
-    transformsconf.write("if(match(WinCommand,\"(\\.local|\\.manifest)\"), \"T1574.001 - DLL Search Order Hijacking\", ")
-    transformsconf.write("if(match(WinCommand,\"(\\.ost|\\.pst|\\.msg)\"), \"T1114.001 - Local Email Collection\", ")
-    transformsconf.write("if(match(WinCommand,\"(\\.service|services\\.exe|sc\\.exe)\"), \"T1007.000 - System Service Discovery | T1543.003 - Windows Service | T1569.002 - Service Execution | T1489.000 - Service Stop\", ")
-    transformsconf.write("if(match(WinCommand,\"(add-mailboxpermission|set-casmailbox)\"), \"T1098.002 - Exchange Email Delegate Permissions\", ")
-    transformsconf.write("if(match(WinCommand,\"(addfile|bits|setnotifyflags|setnotifycmdline|transfer)\"), \"T1197.000 - BITS Jobs\", ")
-    transformsconf.write("if(match(WinCommand,\"(addmonitor)\"), \"T1547.010 - Port Monitors\", ")
-    transformsconf.write("if(match(WinCommand,\"(addprintprocessor|getprintprocessordirectory|seloaddriverprivilege)\"), \"T1547.012 - Print Processors\", ")
-    transformsconf.write("if(match(WinCommand,\"(addsid|get-aduser|dsaddsidhistory)\"), \"T1134.005 - SID-History Injection\", ")
-    transformsconf.write("if(match(WinCommand,\"(admin%24|admin\\$|admin$|c%24|c\\$|c$)\"), \"T1021.002 - SMB/Windows Admin Shares | T1570.000 - Lateral Tool Transfer\", ")
-    transformsconf.write("if(match(WinCommand,\"(ascii|unicode|hex|base64|mime)\"), \"T1132.001 - Standard Encoding\", ")
-    transformsconf.write("if(match(WinCommand,\"(at\\.)\"), \"T1053.002 - At (Windows)\", ")
-    transformsconf.write("if(match(WinCommand,\"(atbroker|displayswitch|magnify|narrator|osk|sethc|utilman)\"), \"T1546.008 - Accessibility Features\", ")
-    transformsconf.write("if(match(WinCommand,\"(attrib)\"), \"T1564.001 - Hidden Files and Directories\", ")
-    transformsconf.write("if(match(WinCommand,\"(auditpol)\"), \"T1562.002 - Disable Windows Event Logging\", ")
-    transformsconf.write("if(match(WinCommand,\"(authentication packages|authentication_packages)\"), \"T1547.002 - Authentication Package\", ")
-    transformsconf.write("if(match(WinCommand,\"(autoruns|regdelnull)\"), \"T1112.000 - Modify Registry\", ")
-    transformsconf.write("if(match(WinCommand,\"(bcdedit|vssadmin|wbadmin|shadows|shadowcopy)\"), \"T1490.000 - Inhibit System Recovery | T1553.006 - Code Signing Policy Modification\", ")
-    transformsconf.write("if(match(WinCommand,\"(bluetooth)\"), \"T1011.001 - Exfiltration over Bluetooth\", ")
-    transformsconf.write("if(match(WinCommand,\"(bootexecute|autocheck|autochk)\"), \"T1547.001 - Registry Run Keys / Startup Folder\", ")
-    transformsconf.write("if(match(WinCommand,\"(certmgr)\"), \"T1553.004 - Install Root Certificate\", ")
-    transformsconf.write("if(match(WinCommand,\"(certutil)\"), \"T1036.003 - Rename System Utilities | T1140.000 - Deobfuscate/Decode Files or Information | T1553.004 - Install Root Certificate\", ")
-    transformsconf.write("if(match(WinCommand,\"(clear-history)\"), \"T1070.003 - Clear Command History\", ")
-    transformsconf.write("if(match(WinCommand,\"(clipboard|pbpaste)\"), \"T1115.000 - Clipboard Data\", ")
-    transformsconf.write("if(match(WinCommand,\"(cmd |cmd_|cmd\\.)\"), \"T1059.003 - Windows Command Shell | T1106.000 - Native API\", ")
-    transformsconf.write("if(match(WinCommand,\"(cmmgr32|cmstp|cmlua)\"), \"T1218.003 - CMSTP\", ")
-    transformsconf.write("if(match(WinCommand,\"(cmsadcs|ntds)\"), \"T1003.003 - NTDS\", ")
-    transformsconf.write("if(match(WinCommand,\"(consolehost|clear-history|historysavestyle|savenothing)\"), \"T1562.003 - Impair Command History Logging\", ")
-    transformsconf.write("if(match(WinCommand,\"(copyfromscreen)\"), \"T1113.000 - Screen Capture_\", ")
-    transformsconf.write("if(match(WinCommand,\"(cor_profiler)\"), \"T1547.012 - COR_PROFILER\", ")
-    transformsconf.write("if(match(WinCommand,\"(createfiletransacted|createtransaction|ntcreatethreadex|ntunmapviewofsection|rollbacktransaction|virtualprotectex)\"), \"T1055.013 - Process Doppelganging\", ")
-    transformsconf.write("if(match(WinCommand,\"(createprocess)\"), \"T1546.009 - AppCert DLLs | T1134.002 - Create Process with Token | T1134.004 - Parent PID Spoofing | T1106.000 - Native API | T1055.012 - Process Hollowing | T1055.013 - Process Doppelganging\", ")
-    transformsconf.write("if(match(WinCommand,\"(createremotethread)\"), \"T1106.000 - Native API | T1055.001 - Dynamic-link Library Injection | T1055.011 - Extra Window Memory Injection | T1055.002 - Portable Executable Injection | T1055.005 - Thread Local Storage\", ")
-    transformsconf.write("if(match(WinCommand,\"(createtoolhelp32snapshot|get-process)\"), \"T1424.000 - Process Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(csc\\.exe)\"), \"T1027.004 - Compile After Delivery\", ")
-    transformsconf.write("if(match(WinCommand,\"(cscript)\"), \"T1216.001 - PubPrn\", ")
-    transformsconf.write("if(match(WinCommand,\"(csrutil|g_cioptions|requiresigned)\"), \"T1553.006 - Code Signing Policy Modification\", ")
-    transformsconf.write("if(match(WinCommand,\"(dcsync)\"), \"T1550.003 - Pass the Ticket\", ")
-    transformsconf.write("if(match(WinCommand,\"(debug only this process|debug  only  this  process|debug process|debug  process|debug_only_this_process|debug__only__this__process|debug_process|debug__process|ntsd)\"), \"T1546.012 - Image File Execution Options Injection\", ")
-    transformsconf.write("if(match(WinCommand,\"(del|rm|/delete|sdelete)\"), \"T1485.000 - Data Destruction | T1070.004 - File Deletion\", ")
-    transformsconf.write("if(match(WinCommand,\"(dir|tree|ls)\"), \"T1083.000 - File and Directory Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(dsaddsidhistory|get-aduser)\"), \"T1134.005 - SID-History Injection\", ")
-    transformsconf.write("if(match(WinCommand,\"(dscl)\"), \"T1069.001 - Local Groups\", ")
-    transformsconf.write("if(match(WinCommand,\"(dsenumeratedomaintrusts|getalltrustrelationships|get-accepteddomain|nltest|dsquery|get-netdomaintrust|get-netforesttrust)\"), \"T1482.000 - Domain Trust Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(duo-sid)\"), \"T1550.004 - Web Session Cookie\", ")
-    transformsconf.write("if(match(WinCommand,\"(duplicatetoken)\"), \"T1134.002 - Create Process with Token | T1134.001 - Token Impersonation/Theft | T1134.001 - Token Impersonation/Theft\", ")
-    transformsconf.write("if(match(WinCommand,\"(impersonateloggedonuser|impersonateloggedonuser|runas|setthreadtoken|impersonatenamedpipeclient)\"), \"T1134.001 - Token Impersonation/Theft\", ")
-    transformsconf.write("if(match(WinCommand,\"(enablemulticast)\"), \"T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay\", ")
-    transformsconf.write("if(match(WinCommand,\"(encrypt)\"), \"T1573.001 - Symmetric Cryptography | T1573.002 - Asymmetric Cryptography\", ")
-    transformsconf.write("if(match(WinCommand,\"(eventvwr|sdclt)\"), \"T1548.002 - Bypass User Account Control\", ")
-    transformsconf.write("if(match(WinCommand,\"(failure)\"), \"T1547.011 - Services Registry Permissions Weakness\", ")
-    transformsconf.write("if(match(WinCommand,\"(filerecvwriterand)\"), \"T1027.001 - Binary Padding\", ")
-    transformsconf.write("if(match(WinCommand,\"(find-avsignature)\"), \"T1027.005 - Indicator Removal from Tools\", ")
-    transformsconf.write("if(match(WinCommand,\"(forwardingsmtpaddress|x-forwarded-to|x-mailfwdby|x-ms-exchange-organization-autoforwarded)\"), \"T1114.003 - Email Forwarding Rule\", ")
-    transformsconf.write("if(match(WinCommand,\"(gcc|mingw|microsoft\\.csharp\\.csharpcodeprovider)\"), \"T1027.004 - Compile After Delivery\", ")
-    transformsconf.write("if(match(WinCommand,\"(get-addefaultdomainpasswordpolicy)\"), \"T1201.000 - Password Policy Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(get-globaladdresslist)\"), \"T1087.003 - Email Account\", ")
-    transformsconf.write("if(match(WinCommand,\"(get-process|createtoolhelp32snapshot)\"), \"T1057.000 - Process Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(get-unattendedinstallfile|get-webconfig|get-applicationhost|get-sitelistpassword|get-cachedgpppassword|get-registryautologon)\"), \"T1552.002 - Credentials in Registry\", ")
-    transformsconf.write("if(match(WinCommand,\"(getasynckeystate|getkeystate|setwindowshook)\"), \"T1056.001 - Keylogging\", ")
-    transformsconf.write("if(match(WinCommand,\"(getprintprocessordirectory)\"), \"T1547.012 - Print Processors\", ")
-    transformsconf.write("if(match(WinCommand,\"(getwindowlong|setwindowlong)\"), \"T1055.011 - Extra Window Memory Injection\", ")
-    transformsconf.write("if(match(WinCommand,\"(github|gitlab|bitbucket)\"), \"T1567.001 - Exfiltration to Code Repository\", ")
-    transformsconf.write("if(match(WinCommand,\"(gsecdump|mimikatz|pwdumpx|secretsdump|reg save|reg  save|net user|net  user|net\\.exe user|net\\.exe  user|net1 user|net1  user|net1\\.exe user|net1\\.exe  user|reg_save|reg__save|net_user|net__user|net\\.exe_user|net\\.exe__user|net1_user|net1__user|net1\\.exe_user|net1\\.exe__user)\"), \"T1003.002 - Security Account Manager\", ")
-    transformsconf.write("if(match(WinCommand,\"(hidden)\"), \"T1564.003 - Hidden Window\", ")
-    transformsconf.write("if(match(WinCommand,\"(hklm/sam|hklm/system)\"), \"T1003.002 - Security Account Manager\", ")
-    transformsconf.write("if(match(WinCommand,\"(hostname|net config|net  config|net\\.exe config|net\\.exe  config|net1 config|net1  config|net1\\.exe config|net1\\.exe  config|netuser-getinfo|query user|query  user|net_config|net__config|net\\.exe_config|net\\.exe__config|net1_config|net1__config|net1\\.exe_config|net1\\.exe__config|query_user|query__user|quser|systeminfo|whoami)\"), \"T1033.000 - System Owner/User Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(icacls|cacls|takeown|attrib)\"), \"T1222.001 - Windows File and Directory Permissions Modification\", ")
-    transformsconf.write("if(match(WinCommand,\"(ifconfig)\"), \"T1016.001 - Internet Connection Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(impersonateloggedonuser|logonuser|runas|setthreadtoken|impersonatenamedpipeclient)\"), \"T1134.001 - Token Impersonation/Theft\", ")
-    transformsconf.write("if(match(WinCommand,\"(installutil)\"), \"T1218.004 - InstallUtil\", ")
-    transformsconf.write("if(match(WinCommand,\"(\\.ps1|invoke-command|start-process|system\\.management\\.automation)\"), \"T1059.001 - PowerShell\", ")
-    transformsconf.write("if(match(WinCommand,\"(powershell)\"), \"T1059.001 - PowerShell | T1106.000 - Native API\", ")
-    transformsconf.write("if(match(WinCommand,\"(invoke-psimage)\"), \"T1001.002 - Steganography\", ")
-    transformsconf.write("if(match(WinCommand,\"(ipc%24|ipc\\$|ipc$)\"), \"T1021.002 - SMB/Windows Admin Shares | T1570.000 - Lateral Tool Transfer | T1559.001 - Component Object Model\", ")
-    transformsconf.write("if(match(WinCommand,\"(itaskservice|itaskdefinition|itasksettings)\"), \"T1559.001 - Component Object Model\", ")
-    transformsconf.write("if(match(WinCommand,\"(loadlibrary)\"), \"T1106.000 - Native API | T1055.004 - Asynchronous Procedure Call | T1055.001 - Dynamic-link Library Injection | T1055.002 - Portable Executable Injection\", ")
-    transformsconf.write("if(match(WinCommand,\"(logonuser|runas|setthreadtoken)\"), \"T1134.003 - Make and Impersonate Token\", ")
-    transformsconf.write("if(match(WinCommand,\"(lsadump|dcshadow)\"), \"T1207.000 - Rogue Domain Controller\", ")
-    transformsconf.write("if(match(WinCommand,\"(mailboxexportrequest|x-ms-exchange-organization-autoforwarded|x-mailfwdby|x-forwarded-to|forwardingsmtpaddress)\"), \"T1114.003 - Email Forwarding Rule\", ")
-    transformsconf.write("if(match(WinCommand,\"(microphone)\"), \"T1123.000 - Audio Capture\", ")
-    transformsconf.write("if(match(WinCommand,\"(microsoft\\.office\\.interop)\"), \"T1559.001 - Component Object Model\", ")
-    transformsconf.write("if(match(WinCommand,\"(mof|register-wmievent|wmiprvse|eventfilter|eventconsumer|filtertoconsumerbinding)\"), \"T1546.003 - Windows Management Instrumentation Event Subscription\", ")
-    transformsconf.write("if(match(WinCommand,\"(msbuild)\"), \"T1127.001 - MSBuild | T1569.002 - Service Execution\", ")
-    transformsconf.write("if(match(WinCommand,\"(mshta|alwaysinstallelevated)\"), \"T1218.005 - Mshta\", ")
-    transformsconf.write("if(match(WinCommand,\"(msiexec|alwaysinstallelevated)\"), \"T1218.007 - Msiexec\", ")
-    transformsconf.write("if(match(WinCommand,\"(msxml)\"), \"T1220.000 - XSL Script Processing\", ")
-    transformsconf.write("if(match(WinCommand,\"(net accounts|net  accounts|net\\.exe accounts|net\\.exe  accounts|net1 accounts|net1  accounts|net1\\.exe accounts|net1\\.exe  accounts|net_accounts|net__accounts|net\\.exe_accounts|net\\.exe__accounts|net1_accounts|net1__accounts|net1\\.exe_accounts|net1\\.exe__accounts)\"), \"T1201.000 - Password Policy Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(net share|net  share|net\\.exe share|net\\.exe  share|net1 share|net1  share|net1\\.exe share|net1\\.exe  share|net_share|net__share|net\\.exe_share|net\\.exe__share|net1_share|net1__share|net1\\.exe_share|net1\\.exe__share)\"), \"T1135.000 - Network Share Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(net start|net  start|net\\.exe start|net\\.exe  start|net1 start|net1  start|net1\\.exe start|net1\\.exe  start|net stop|net  stop|net\\.exe stop|net\\.exe  stop|net1 stop|net1  stop|net1\\.exe stop|net1\\.exe  stop|net_start|net__start|net\\.exe_start|net\\.exe__start|net1_start|net1__start|net1\\.exe_start|net1\\.exe__start|net_stop|net__stop|net\\.exe_stop|net\\.exe__stop|net1_stop|net1__stop|net1\\.exe_stop|net1\\.exe__stop)\"), \"T1007.000 - System Service Discovery | T1569.002 - Service Execution\", ")
-    transformsconf.write("if(match(WinCommand,\"(net stop|net  stop|net\\.exe stop|net\\.exe  stop|net1 stop|net1  stop|net1\\.exe stop|net1\\.exe  stop|net_stop|net__stop|net\\.exe_stop|net\\.exe__stop|net1_stop|net1__stop|net1\\.exe_stop|net1\\.exe__stop|msexchangeis|changeserviceconfigw)\"), \"T1489.000 - Service Stop | T1569.002 - Service Execution\", ")
-    transformsconf.write("if(match(WinCommand,\"(net time|net  time|net\\.exe time|net\\.exe  time|net1 time|net1  time|net1\\.exe time|net1\\.exe  time|net_time|net__time|net\\.exe_time|net\\.exe__time|net1_time|net1__time|net1\\.exe_time|net1\\.exe__time)\"), \"T1124.000 - System Time Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(net use|net  use|net\\.exe use|net\\.exe  use|net1 use|net1  use|net1\\.exe use|net1\\.exe  use|net_use|net__use|net\\.exe_use|net\\.exe__use|net1_use|net1__use|net1\\.exe_use|net1\\.exe__use)\"), \"T1049.000 - System Network Connections Discovery | T1136.001 - Local Account | T1136.002 - Domain Account | T1070.005 - Network Share Connection Removal | T1574.008 - Path Interception by Search Order Hijacking\", ")
-    transformsconf.write("if(match(WinCommand,\"(net view|net  view|net_view|net__view)\"), \"T1135.000 - Network Share Discovery | T1018.000 - Remote System Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(netsh)\"), \"T1135.000 - Network Share Discovery | T1518.001 - Security Software Discovery | T1049.000 - System Network Connections Discovery | T1090.001 - Internal Proxy\", ")
-    transformsconf.write("if(match(WinCommand,\"(netstat|net session|net  session|net\\.exe session|net\\.exe  session|net1 session|net1  session|net1\\.exe session|net1\\.exe  session|net_session|net__session|net\\.exe_session|net\\.exe__session|net1_session|net1__session|net1\\.exe_session|net1\\.exe__session)\"), \"T1049.000 - System Network Connections Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(new-gpoimmediatetask)\"), \"T1484.001 - Group Policy Modification\", ")
-    transformsconf.write("if(match(WinCommand,\"(nltest)\"), \"T1482.000 - Domain Trust Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(ntds|ntdsutil|secretsdump)\"), \"T1003.003 - NTDS\", ")
-    transformsconf.write("if(match(WinCommand,\"(ntsd)\"), \"T1546.012 - Image File Execution Options Injection\", ")
-    transformsconf.write("if(match(WinCommand,\"(ntunmapviewofsection)\"), \"T1055.012 - Process Hollowing | T1055.013 - Process Doppelganging\", ")
-    transformsconf.write("if(match(WinCommand,\"(odbcconf)\"), \"T1218.008 - Odbcconf\", ")
-    transformsconf.write("if(match(WinCommand,\"(openprocess)\"), \"T1556.001 - Domain Controller Authentication\", ")
-    transformsconf.write("if(match(WinCommand,\"(openthread)\"), \"T1055.004 - Asynchronous Procedure Call | T1055.003 - Thread Execution Hijacking\", ")
-    transformsconf.write("if(match(WinCommand,\"(password|secure|credentials|security)\"), \"T1555.004 - Windows Credential Manager | T1555.005 - Password Managers | T1552.001 - Credentials in Files\", ")
-    transformsconf.write("if(match(WinCommand,\"(performancecache|_vba_project)\"), \"T1564.007 - VBA Stomping\", ")
-    transformsconf.write("if(match(WinCommand,\"(ping|tracert)\"), \"T1016.001 - Internet Connection Discovery | T1018.000 - Remote System Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(policy\\.vpol|vaultcmd|vcrd|listcreds|credenumeratea)\"), \"T1555.004 - Windows Credential Manager\", ")
-    transformsconf.write("if(match(WinCommand,\"(shellexecute|isdebuggerpresent|outputdebugstring|setlasterror|httpopenrequesta|createpipe|getusernamew|callwindowproc|enumresourcetypesa|connectnamedpipe|wnetaddconnection2|zwwritevirtualmemory|zwprotectvirtualmemory|zwqueueapcthread|ntresumethread|terminateprocess|getmodulefilename|lstrcat|createfile|readfile|getprocessbyid|writefile|closehandle|getcurrenthwprofile|getprocaddress|dwritecreatefactory|findnexturlcacheentrya|findfirsturlcacheentrya|getwindowsdirectoryw|movefileex|ntqueryinformationprocess|regenumkeyw)\"), \"T1106.000 - Native API\", ")
-    transformsconf.write("if(match(WinCommand,\"(procdump|sekurlsa)\"), \"T1003.001 - LSASS Memory\", ")
-    transformsconf.write("if(match(WinCommand,\"(lsass)\"), \"T1003.001 - LSASS Memory | T1547.008 - LSASS Driver | T1556.001 - Domain Controller Authentication\", ")
-    transformsconf.write("if(match(WinCommand,\"(psexec)\"), \"T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer\", ")
-    transformsconf.write("if(match(WinCommand,\"(psinject|peinject|ntqueueapcthread|queueuserapc)\"), \"T1055.004 - Asynchronous Procedure Call\", ")
-    transformsconf.write("if(match(WinCommand,\"(psreadline|set-psreadlineoption)\"), \"T1070.003 - Clear Command History | T1562.003 - Impair Command History Logging\", ")
-    transformsconf.write("if(match(WinCommand,\"(pubprn)\"), \"T1216.001 - PubPrn\", ")
-    transformsconf.write("if(match(WinCommand,\"(python|\\.py)\"), \"T1059.006 - Python\", ")
-    transformsconf.write("if(match(WinCommand,\"(queueuserapc)\"), \"T1055.004 - Asynchronous Procedure Call\", ")
-    transformsconf.write("if(match(WinCommand,\"(quser|query user|query  user|query_user|query__user|hostname)\"), \"T1033.000 - System Owner/User Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(reg |reg_|reg\\.exe)\"), \"T1112.000 - Modify Registry\", ")
-    transformsconf.write("if(match(WinCommand,\"(reg query|reg  query|reg_query|reg__query)\"), \"T1012.000 - Query Registry | T1518.001 - Security Software Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(regsvcs|regasm|comregisterfunction|comunregisterfunction)\"), \"T1218.009 - Regsvcs/Regasm\", ")
-    transformsconf.write("if(match(WinCommand,\"(regsvr)\"), \"T1218.010 - Regsvr32 | T1218.008 - Odbcconf\", ")
-    transformsconf.write("if(match(WinCommand,\"(resumethread)\"), \"T1055.004 - Asynchronous Procedure Call | T1055.012 - Process Hollowing | T1055.003 - Thread Execution Hijacking | T1055.005 - Thread Local Storage\", ")
-    transformsconf.write("if(match(WinCommand,\"(rundll32)\"), \"T1218.010 - Regsvr32\", ")
-    transformsconf.write("if(match(WinCommand,\"(rundll32|cplapplet|dllentrypoint|control_rundll|controlrundllasuser)\"), \"T1218.011 - Rundll32 | T1036.003 - Rename System Utilities\", ")
-    transformsconf.write("if(match(WinCommand,\"(schtask|\\.job)\"), \"T1053.005 - Scheduled Task\", ")
-    transformsconf.write("if(match(WinCommand,\"(scp|rsync|sftp)\"), \"T1105.000 - Ingress Tool Transfer\", ")
-    transformsconf.write("if(match(WinCommand,\"(scrnsave)\"), \"T1546.002 - Screensaver\", ")
-    transformsconf.write("if(match(WinCommand,\"(set-etwtraceprovider|zwopenprocess|getextendedtcptable)\"), \"T1562.006 - Indicator Blocking\", ")
-    transformsconf.write("if(match(WinCommand,\"(setthreadcontext)\"), \"T1106.000 - Native API | T1055.004 - Asynchronous Procedure Call | T1055.013 - Process Doppelganging | T1055.012 - Process Hollowing | T1055.003 - Thread Execution Hijacking | T1055.005 - Thread Local Storage\", ")
-    transformsconf.write("if(match(WinCommand,\"(setwindowshook|setwineventhook)\"), \"T1056.004 - Credential API Hooking\", ")
-    transformsconf.write("if(match(WinCommand,\"(shutdown)\"), \"T1529.000 - System Shutdown/Reboot\", ")
-    transformsconf.write("if(match(WinCommand,\"(startupitems)\"), \"T1037.005 - Startup Items\", ")
-    transformsconf.write("if(match(WinCommand,\"(suspendthread)\"), \"T1055.004 - Asynchronous Procedure Call | T1055.003 - Thread Execution Hijacking | T1055.005 - Thread Local Storage\", ")
-    transformsconf.write("if(match(WinCommand,\"(sysmain\\.sdb|profile)\"), \"T1546.013 - PowerShell Profile\", ")
-    transformsconf.write("if(match(WinCommand,\"(systemdiskclean|getwindowsdirectoryw)\"), \"T1036.005 - Match Legitimate Name or Location\", ")
-    transformsconf.write("if(match(WinCommand,\"(tasklist)\"), \"T1518.001 - Security Software Discovery | T1007.000 - System Service Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(testsigning)\"), \"T1553.006 - Code Signing Policy Modification\", ")
-    transformsconf.write("if(match(WinCommand,\"(time|sleep)\"), \"T1497.003 - Time Based Evasion\", ")
-    transformsconf.write("if(match(WinCommand,\"(tscon)\"), \"T1563.002 - RDP Hijacking\", ")
-    transformsconf.write("if(match(WinCommand,\"(u202e)\"), \"T1036.002 - Right-to-Left Override\", ")
-    transformsconf.write("if(match(WinCommand,\"(update-msolfederateddomain|set federation|domain authentication|set  federation|domain  authentication|set_federation|domain_authentication|set__federation|domain__authentication)\"), \"T1484.002 - Domain Trust Modification\", ")
-    transformsconf.write("if(match(WinCommand,\"(updateprocthreadattribute)\"), \"T1134.003 - Make and Impersonate Token | T1134.004 - Parent PID Spoofing\", ")
-    transformsconf.write("if(match(WinCommand,\"(useradd)\"), \"T1136.001 - Local Account\", ")
-    transformsconf.write("if(match(WinCommand,\"(vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu)\"), \"T1564.006 - Run Virtual Instance\", ")
-    transformsconf.write("if(match(WinCommand,\"(vbscript)\"), \"T1059.005 - Visual Basic\", ")
-    transformsconf.write("if(match(WinCommand,\"(verclsid)\"), \"T1218.012 - Verclsid\", ")
-    transformsconf.write("if(match(WinCommand,\"(virtualalloc)\"), \"T1106.000 - Native API | T1055.001 - Dynamic-link Library Injection | T1055.002 - Portable Executable Injection | T1055.012 - Process Hollowing | T1055.003 - Thread Execution Hijacking | T1055.004 - Asynchronous Procedure Call | T1055.005 - Thread Local Storage\", ")
-    transformsconf.write("if(match(WinCommand,\"(vpcext|vmtoolsd|msacpi_thermalzonetemperature)\"), \"T1497.001 - System Checks\", ")
-    transformsconf.write("if(match(WinCommand,\"(vssadmin|wbadmin|shadows|shadowcopy)\"), \"T1490.000 - Inhibit System Recovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(wevtutil|openeventlog|cleareventlog)\"), \"T1070.001 - Clear Windows Event Logs\", ")
-    transformsconf.write("if(match(WinCommand,\"(who)\"), \"T1033.000 - System Owner/User Discovery | T1049.000 - System Network Connections Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(windowstyle|hidden)\"), \"T1564.003 - Hidden Window\", ")
-    transformsconf.write("if(match(WinCommand,\"(winexec)\"), \"T1106.000 - Native API | T1546.009 - AppCert DLLs | T1543.003 - Windows Service\", ")
-    transformsconf.write("if(match(WinCommand,\"(winrm)\"), \"T1021.006 - Windows Remote Management\", ")
-    transformsconf.write("if(match(WinCommand,\"(winword|excel|powerpnt|acrobat|acrord32)\"), \"T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(WinCommand,\"(wmic|invoke-wmi)\"), \"T1047.000 - Windows Management Instrumentation | T1220.000 - XSL Script Processing\", ")
-    transformsconf.write("if(match(WinCommand,\"(writeprocessmemory)\"), \"T1106.000 - Native API | T1055.011 - Extra Window Memory Injection | T1055.001 - Dynamic-link Library Injection | T1055.002 - Portable Executable Injection | T1055.012 - Process Hollowing | T1055.003 - Thread Execution Hijacking | T1055.013 - Process Doppelganging | T1055.004 - Asynchronous Procedure Call | T1055.005 - Thread Local Storage\", ")
-    transformsconf.write("if(match(WinCommand,\"(wscript)\"), \"T1059.005 - Visual Basic | T1059.007 - JavaScript\", ")
-    transformsconf.write("if(match(WinCommand,\"(zwseteafile|zwqueryeafile|:ads|stream)\"), \"T1564.004 - NTFS File Attributes\", ")
-    transformsconf.write("if(match(WinCommand,\"(zwunmapviewofsection)\"), \"T1055.012 - Process Hollowing\", ")
-    transformsconf.write("if(match(WinCommand,\"(onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared)\"), \"T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage\", ")
-    transformsconf.write("if(match(WinCommand,\"(getlocaleinfow)\"), \"T1614.000 - System Location Discovery\", ")
-    transformsconf.write("if(match(WinCommand,\"(notonorafter|accesstokenlifetime|lifetimetokenpolicy)\"), \"T1606.002 - SAML Tokens\", ")
-    transformsconf.write("if(match(WinCommand,\"(scvhost|svchast|svchust|svchest|lssas|lsasss|lsaas|cssrs|canhost|conhast|connhost|connhst|iexplorer|iexploror|iexplorar)\"), \"T1036.004 - Masquerade Task or Service\", ")
-    transformsconf.write("if(match(WinCommand,\"(curl |curl_)\"), \"T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol | T1553.001 - Gatekeeper Bypass\", ")
-    transformsconf.write("if(match(WinCommand,\"(docker exec|docker  exec|docker run|docker  run|kubectl exec|kubectl  exec|kubectl run|kubectl  run|docker_exec|docker__exec|docker_run|docker__run|kubectl_exec|kubectl__exec|kubectl_run|kubectl__run)\"), \"T1609.000 - Container Administration Command\", ")
-    transformsconf.write("if(match(WinCommand,\"(docker create|docker  create|docker start|docker  start|docker_create|docker__create|docker_start|docker_start)\"), \"T1610.000 - Deploy Container\", ")
-    transformsconf.write("if(match(WinCommand,\"(docker build|docker  build|docker_build|docker__build)\"), \"T1612.000 - Build Image on Host\", ")
-  # evt & ShimCache
-    transformsconf.write("if(match(WinProcess,\"(\\.asc|\\.cer|\\.gpg|\\.key|\\.p12|\\.p7b|\\.pem|\\.pfx|\\.pgp|\\.ppk)\"), \"T1552.004 - Private Keys\", ")
-    transformsconf.write("if(match(WinProcess,\"(\\.chm|\\.hh)\"), \"T1218.001 - Compiled HTML File\", ")
-    transformsconf.write("if(match(WinProcess,\"(\\.cpl)\"), \"T1218.002 - Control Panel\", ")
-    transformsconf.write("if(match(WinProcess,\"(\\.doc|\\.xls|\\.ppt|\\.pdf)\"), \"T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(WinProcess,\"(\\.docm|\\.xlsm|\\.pptm)\"), \"T1137.001 - Office Template Macros | T1559.001 - Component Object Model | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(WinProcess,\"(\\.docx|\\.xlsx|\\.pptx)\"), \"T1221.000 - Template Injection | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(WinProcess,\"(\\.job)\"), \"T1053.005 - Scheduled Task\", ")
-    transformsconf.write("if(match(WinProcess,\"(\\.lnk)\"), \"T1547.009 - Shortcut Modification\", ")
-    transformsconf.write("if(match(WinProcess,\"(\\.local|\\.manifest)\"), \"T1574.001 - DLL Search Order Hijacking\", ")
-    transformsconf.write("if(match(WinProcess,\"(\\.mp3|\\.wav|\\.aac|\\.m4a)\"), \"T1123.000 - Audio Capture\", ")
-    transformsconf.write("if(match(WinProcess,\"(\\.mp4|\\.mkv|\\.avi|\\.mov|\\.wmv|\\.mpg|\\.mpeg|\\.m4v|\\.flv)\"), \"T1125.000 - Video Capture\", ")
-    transformsconf.write("if(match(WinProcess,\"(\\.ost|\\.pst|\\.msg)\"), \"T1114.001 - Local Email Collection\", ")
-    transformsconf.write("if(match(WinProcess,\"(\\.service|services\\.exe|sc\\.exe)\"), \"T1007.000 - System Service Discovery | T1543.003 - Windows Service | T1569.002 - Service Execution | T1489.000 - Service Stop\", ")
-    transformsconf.write("if(match(WinProcess,\"(admin%24|admin\\$|admin$|c%24|c\\$|c$)\"), \"T1021.002 - SMB/Windows Admin Shares | T1570.000 - Lateral Tool Transfer\", ")
-    transformsconf.write("if(match(WinProcess,\"(atbroker|displayswitch|magnify|narrator|osk|sethc|utilman)\"), \"T1546.008 - Accessibility Features\", ")
-    transformsconf.write("if(match(WinProcess,\"(autoruns)\"), \"T1112.000 - Modify Registry\", ")
-    transformsconf.write("if(match(WinProcess,\"(bcdedit|csrutil)\"), \"T1553.006 - Code Signing Policy Modification\", ")
-    transformsconf.write("if(match(WinProcess,\"(certmgr)\"), \"T1553.004 - Install Root Certificate\", ")
-    transformsconf.write("if(match(WinProcess,\"(certutil)\"), \"T1036.003 - Rename System Utilities | T1140.000 - Deobfuscate/Decode Files or Information | T1553.004 - Install Root Certificate\", ")
-    transformsconf.write("if(match(WinProcess,\"(cmd |cmd_|cmd\\.)\"), \"T1059.003 - Windows Command Shell | T1106.000 - Native API\", ")
-    transformsconf.write("if(match(WinProcess,\"(cmmgr32|cmstp|cmlua)\"), \"T1218.003 - CMSTP\", ")
-    transformsconf.write("if(match(WinProcess,\"(csc\\.exe)\"), \"T1027.004 - Compile After Delivery\", ")
-    transformsconf.write("if(match(WinProcess,\"(cscript)\"), \"T1216.001 - PubPrn\", ")
-    transformsconf.write("if(match(WinProcess,\"(eventvwr|sdclt)\"), \"T1548.002 - Bypass User Account Control\", ")
-    transformsconf.write("if(match(WinProcess,\"(github|gitlab|bitbucket)\"), \"T1567.001 - Exfiltration to Code Repository\", ")
-    transformsconf.write("if(match(WinProcess,\"(gpttmpl\\.inf|scheduledtasks\\.xml)\"), \"T1484.001 - Group Policy Modification\", ")
-    transformsconf.write("if(match(WinProcess,\"(gsecdump|mimikatz|pwdumpx|secretsdump|reg save|reg  save|net user|net  user|net\\.exe user|net\\.exe  user|net1 user|net1  user|net1\\.exe user|net1\\.exe  user|reg_save|reg_save|net user|net  user|net\\.exe user|net\\.exe  user|net1 user|net1  user|net1\\.exe user|net1\\.exe  user|reg_save|reg__save|net_user|net__user|net\\.exe_user|net\\.exe__user|net1_user|net1__user|net1\\.exe_user|net1\\.exe__user)\"), \"T1003.002 - Security Account Manager\", ")
-    transformsconf.write("if(match(WinProcess,\"(ipc%24|ipc\\$|ipc$)\"), \"T1021.002 - SMB/Windows Admin Shares | T1559.001 - Component Object Model\", ")
-    transformsconf.write("if(match(WinProcess,\"(mshta)\"), \"T1218.005 - Mshta\", ")
-    transformsconf.write("if(match(WinProcess,\"(msiexec)\"), \"T1218.007 - Msiexec\", ")
-    transformsconf.write("if(match(WinProcess,\"(msxml)\"), \"T1220.000 - XSL Script Processing\", ")
-    transformsconf.write("if(match(WinProcess,\"(net |net\\.exe |net1 |net1\\.exe |net_|net\\.exe_|net1_|net1\\.exe_)\"), \"T1070.005 - Network Share Connection Removal | T1018.000 - Remote System Discovery | T1569.002 - Service Execution | T1574.008 - Path Interception by Search Order Hijacking\", ")
-    transformsconf.write("if(match(WinProcess,\"(netsh)\"), \"T1135.000 - Network Share Discovery | T1518.001 - Security Software Discovery | T1049.000 - System Network Connections Discovery | T1090.001 - Internal Proxy\", ")
-    transformsconf.write("if(match(WinProcess,\"(ntds|ntdsutil|secretsdump)\"), \"T1003.003 - NTDS\", ")
-    transformsconf.write("if(match(WinProcess,\"(odbcconf)\"), \"T1218.008 - Odbcconf\", ")
-    transformsconf.write("if(match(WinProcess,\"(policy\\.vpol|vaultcmd|vcrd)\"), \"T1555.004 - Windows Credential Manager\", ")
-    transformsconf.write("if(match(WinProcess,\"(powershell)\"), \"T1059.001 - PowerShell | T1106.000 - Native API\", ")
-    transformsconf.write("if(match(WinProcess,\"(\\.ps1)\"), \"T1059.001 - PowerShell\", ")
-    transformsconf.write("if(match(WinProcess,\"(psexec)\"), \"T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer\", ")
-    transformsconf.write("if(match(WinProcess,\"(pubprn)\"), \"T1216.001 - PubPrn\", ")
-    transformsconf.write("if(match(WinProcess,\"(python|\\.py)\"), \"T1059.006 - Python\", ")
-    transformsconf.write("if(match(WinProcess,\"(reg |reg\\.exe)\"), \"T1112.000 - Modify Registry\", ")
-    transformsconf.write("if(match(WinProcess,\"(rundll32)\"), \"T1218.011 - Rundll32\", ")
-    transformsconf.write("if(match(WinProcess,\"(schtask)\"), \"T1053.005 - Scheduled Task\", ")
-    transformsconf.write("if(match(WinProcess,\"(scrnsave)\"), \"T1546.002 - Screensaver\", ")
-    transformsconf.write("if(match(WinProcess,\"(sdelete)\"), \"T1485.000 - Data Destruction | T1070.004 - File Deletion\", ")
-    transformsconf.write("if(match(WinProcess,\"(tasklist)\"), \"T1518.001 - Security Software Discovery | T1007.000 - System Service Discovery\", ")
-    transformsconf.write("if(match(WinProcess,\"(tscon)\"), \"T1563.002 - RDP Hijacking\", ")
-    transformsconf.write("if(match(WinProcess,\"(vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu)\"), \"T1564.006 - Run Virtual Instance\", ")
-    transformsconf.write("if(match(WinProcess,\"(vbscript|wscript)\"), \"T1059.005 - Visual Basic | T1059.007 - JavaScript\", ")
-    transformsconf.write("if(match(WinProcess,\"(verclsid)\"), \"T1218.012 - Verclsid\", ")
-    transformsconf.write("if(match(WinProcess,\"(winrm)\"), \"T1021.006 - Windows Remote Management\", ")
-    transformsconf.write("if(match(WinProcess,\"(winword|excel|powerpnt|acrobat|acrord32)\"), \"T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(WinProcess,\"(wmic)\"), \"T1047.000 - Windows Management Instrumentation | T1220.000 - XSL Script Processing\", ")
-    transformsconf.write("if(match(WinProcess,\"(wmic|msxsl)\"), \"T1047.000 - Windows Management Instrumentation | T1220.000 - XSL Script Processing\", ")
-    transformsconf.write("if(match(WinProcess,\"(zwqueryeafile|zwseteafile)\"), \"T1564.004 - NTFS File Attributes\", ")
-    transformsconf.write("if(match(WinProcess,\"(onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared)\"), \"T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage\", ")
-    transformsconf.write("if(match(WinProcess,\"(scvhost|svchast|svchust|svchest|lssas|lsasss|lsaas|cssrs|canhost|conhast|connhost|connhst|iexplorer|iexploror|iexplorar)\"), \"T1036.004 - Masquerade Task or Service\", ")
-    transformsconf.write("if(match(WinProcess,\"(docker exec|docker  exec|docker run|docker  run|kubectl exec|kubectl  exec|kubectl run|kubectl  run|docker_exec|docker__exec|docker_run|docker__run|kubectl_exec|kubectl__exec|kubectl_run|kubectl__run)\"), \"T1609.000 - Container Administration Command\", ")
-    transformsconf.write("if(match(WinProcess,\"(docker create|docker  create|docker start|docker  start|docker_create|docker__create|docker_start|docker_start)\"), \"T1610.000 - Deploy Container\", ")
-    transformsconf.write("if(match(WinProcess,\"(docker build|docker  build|docker_build|docker__build)\"), \"T1612.000 - Build Image on Host\", ")
-  # MFT
-    transformsconf.write("if(match(Filename1,\"(\\.7z|\\.arj|\\.tar|\\.tgz|\\.zip)\"), \"T1560.001 - Archive via Utility\", ")
-    transformsconf.write("if(match(Filename1,\"(\\.asc|\\.cer|\\.gpg|\\.key|\\.p12|\\.p7b|\\.pem|\\.pfx|\\.pgp|\\.ppk)\"), \"T1552.004 - Private Keys\", ")
-    transformsconf.write("if(match(Filename1,\"(\\.chm|\\.hh)\"), \"T1218.001 - Compiled HTML File\", ")
-    transformsconf.write("if(match(Filename1,\"(\\.cpl)\"), \"T1218.002 - Control Panel\", ")
-    transformsconf.write("if(match(Filename1,\"(\\.doc|\\.xls|\\.ppt|\\.pdf)\"), \"T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename1,\"(\\.docm|\\.xlsm|\\.pptm)\"), \"T1137.001 - Office Template Macros | T1559.001 - Component Object Model | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename1,\"(\\.docx|\\.xlsx|\\.pptx)\"), \"T1221.000 - Template Injection | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename1,\"(\\.job)\"), \"T1053.005 - Scheduled Task\", ")
-    transformsconf.write("if(match(Filename1,\"(\\.lnk)\"), \"T1547.009 - Shortcut Modification\", ")
-    transformsconf.write("if(match(Filename1,\"(\\.local|\\.manifest)\"), \"T1574.001 - DLL Search Order Hijacking\", ")
-    transformsconf.write("if(match(Filename1,\"(\\.mp3|\\.wav|\\.aac|\\.m4a)\"), \"T1123.000 - Audio Capture\", ")
-    transformsconf.write("if(match(Filename1,\"(\\.mp4|\\.mkv|\\.avi|\\.mov|\\.wmv|\\.mpg|\\.mpeg|\\.m4v|\\.flv)\"), \"T1125.000 - Video Capture\", ")
-    transformsconf.write("if(match(Filename1,\"(\\.ost|\\.pst|\\.msg)\"), \"T1114.001 - Local Email Collection\", ")
-    transformsconf.write("if(match(Filename1,\"(\\.service|services\\.exe|sc\\.exe)\"), \"T1007.000 - System Service Discovery | T1543.003 - Windows Service | T1569.002 - Service Execution | T1489.000 - Service Stop\", ")
-    transformsconf.write("if(match(Filename1,\"(atbroker|displayswitch|magnify|narrator|osk|sethc|utilman)\"), \"T1546.008 - Accessibility Features\", ")
-    transformsconf.write("if(match(Filename1,\"(autoruns)\"), \"T1112.000 - Modify Registry\", ")
-    transformsconf.write("if(match(Filename1,\"(bcdedit|csrutil)\"), \"T1553.006 - Code Signing Policy Modification\", ")
-    transformsconf.write("if(match(Filename1,\"(certmgr)\"), \"T1553.004 - Install Root Certificate\", ")
-    transformsconf.write("if(match(Filename1,\"(certutil)\"), \"T1036.003 - Rename System Utilities | T1140.000 - Deobfuscate/Decode Files or Information | T1553.004 - Install Root Certificate\", ")
-    transformsconf.write("if(match(Filename1,\"(cmd |cmd_|cmd\\.)\"), \"T1059.003 - Windows Command Shell | T1106.000 - Native API\", ")
-    transformsconf.write("if(match(Filename1,\"(powershell)\"), \"T1059.001 - PowerShell | T1106.000 - Native API\", ")
-    transformsconf.write("if(match(Filename1,\"(\\.ps1)\"), \"T1059.001 - PowerShell\", ")
-    transformsconf.write("if(match(Filename1,\"(csc\\.exe)\"), \"T1027.004 - Compile After Delivery\", ")
-    transformsconf.write("if(match(Filename1,\"(cscript)\"), \"T1216.001 - PubPrn\", ")
-    transformsconf.write("if(match(Filename1,\"(eventvwr|sdclt)\"), \"T1548.002 - Bypass User Account Control\", ")
-    transformsconf.write("if(match(Filename1,\"(github|gitlab|bitbucket)\"), \"T1567.001 - Exfiltration to Code Repository\", ")
-    transformsconf.write("if(match(Filename1,\"(gpttmpl\\.inf|scheduledtasks\\.xml)\"), \"T1484.001 - Group Policy Modification\", ")
-    transformsconf.write("if(match(Filename1,\"(mshta)\"), \"T1218.005 - Mshta\", ")
-    transformsconf.write("if(match(Filename1,\"(msiexec)\"), \"T1218.007 - Msiexec\", ")
-    transformsconf.write("if(match(Filename1,\"(normal\\.dotm|personal\\.xlsb)\"), \"T1137.001 - Office Template Macros\", ")
-    transformsconf.write("if(match(Filename1,\"(odbcconf)\"), \"T1218.008 - Odbcconf\", ")
-    transformsconf.write("if(match(Filename1,\"(policy\\.vpol|vaultcmd|vcrd)\"), \"T1555.004 - Windows Credential Manager\", ")
-    transformsconf.write("if(match(Filename1,\"(psexec)\"), \"T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer\", ")
-    transformsconf.write("if(match(Filename1,\"(pubprn)\"), \"T1216.001 - PubPrn\", ")
-    transformsconf.write("if(match(Filename1,\"(reg\\.exe)\"), \"T1112.000 - Modify Registry\", ")
-    transformsconf.write("if(match(Filename1,\"(scrnsave)\"), \"T1546.002 - Screensaver\", ")
-    transformsconf.write("if(match(Filename1,\"(sdelete)\"), \"T1485.000 - Data Destruction | T1070.004 - File Deletion\", ")
-    transformsconf.write("if(match(Filename1,\"(tscon)\"), \"T1563.002 - RDP Hijacking\", ")
-    transformsconf.write("if(match(Filename1,\"(vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu)\"), \"T1564.006 - Run Virtual Instance\", ")
-    transformsconf.write("if(match(Filename1,\"(wmic|msxsl)\"), \"T1047.000 - Windows Management Instrumentation | T1220.000 - XSL Script Processing\", ")
-    transformsconf.write("if(match(Filename1,\"(onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared)\"), \"T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage\", ")
-    transformsconf.write("if(match(Filename1,\"(scvhost|svchast|svchust|svchest|lssas|lsasss|lsaas|cssrs|canhost|conhast|connhost|connhst|iexplorer|iexploror|iexplorar)\"), \"T1036.004 - Masquerade Task or Service\", ")
-    transformsconf.write("if(match(Filename1,\"(\\.msg|\\.eml)\"), \"T1566.001 - Spearphishing Attachment | T1566.002 - Spearphishing Link | T1203.000 - Exploitation for Client Execution | T1204.001 - Malicious Link | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename2,\"(\\.7z|\\.arj|\\.cab|\\.tar|\\.tgz|\\.zip)\"), \"T1560.001 - Archive via Utility\", ")
-    transformsconf.write("if(match(Filename2,\"(\\.asc|\\.cer|\\.gpg|\\.key|\\.p12|\\.p7b|\\.pem|\\.pfx|\\.pgp|\\.ppk)\"), \"T1552.004 - Private Keys\", ")
-    transformsconf.write("if(match(Filename2,\"(\\.chm|\\.hh)\"), \"T1218.001 - Compiled HTML File\", ")
-    transformsconf.write("if(match(Filename2,\"(\\.cpl)\"), \"T1218.002 - Control Panel\", ")
-    transformsconf.write("if(match(Filename2,\"(\\.doc|\\.xls|\\.ppt|\\.pdf)\"), \"T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename2,\"(\\.docm|\\.xlsm|\\.pptm)\"), \"T1137.001 - Office Template Macros | T1559.001 - Component Object Model | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename2,\"(\\.docx|\\.xlsx|\\.pptx)\"), \"T1221.000 - Template Injection | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename2,\"(\\.job)\"), \"T1053.005 - Scheduled Task\", ")
-    transformsconf.write("if(match(Filename2,\"(\\.lnk)\"), \"T1547.009 - Shortcut Modification\", ")
-    transformsconf.write("if(match(Filename2,\"(\\.local|\\.manifest)\"), \"T1574.001 - DLL Search Order Hijacking\", ")
-    transformsconf.write("if(match(Filename2,\"(\\.mp3|\\.wav|\\.aac|\\.m4a)\"), \"T1123.000 - Audio Capture\", ")
-    transformsconf.write("if(match(Filename2,\"(\\.mp4|\\.mkv|\\.avi|\\.mov|\\.wmv|\\.mpg|\\.mpeg|\\.m4v|\\.flv)\"), \"T1125.000 - Video Capture\", ")
-    transformsconf.write("if(match(Filename2,\"(\\.ost|\\.pst|\\.msg)\"), \"T1114.001 - Local Email Collection\", ")
-    transformsconf.write("if(match(Filename2,\"(\\.service|services\\.exe|sc\\.exe)\"), \"T1007.000 - System Service Discovery | T1543.003 - Windows Service | T1569.002 - Service Execution | T1489.000 - Service Stop\", ")
-    transformsconf.write("if(match(Filename2,\"(atbroker|displayswitch|magnify|narrator|osk|sethc|utilman)\"), \"T1546.008 - Accessibility Features\", ")
-    transformsconf.write("if(match(Filename2,\"(autoruns)\"), \"T1112.000 - Modify Registry\", ")
-    transformsconf.write("if(match(Filename2,\"(bcdedit|csrutil)\"), \"T1553.006 - Code Signing Policy Modification\", ")
-    transformsconf.write("if(match(Filename2,\"(certmgr)\"), \"T1553.004 - Install Root Certificate\", ")
-    transformsconf.write("if(match(Filename2,\"(certutil)\"), \"T1036.003 - Rename System Utilities | T1140.000 - Deobfuscate/Decode Files or Information | T1553.004 - Install Root Certificate\", ")
-    transformsconf.write("if(match(Filename2,\"(cmd |cmd_|cmd\\.)\"), \"T1059.003 - Windows Command Shell | T1106.000 - Native API\", ")
-    transformsconf.write("if(match(Filename2,\"(powershell)\"), \"T1059.001 - PowerShell | T1106.000 - Native API\", ")
-    transformsconf.write("if(match(Filename2,\"(\\.ps1)\"), \"T1059.001 - PowerShell\", ")
-    transformsconf.write("if(match(Filename2,\"(csc\\.exe)\"), \"T1027.004 - Compile After Delivery\", ")
-    transformsconf.write("if(match(Filename2,\"(cscript)\"), \"T1216.001 - PubPrn\", ")
-    transformsconf.write("if(match(Filename2,\"(eventvwr|sdclt)\"), \"T1548.002 - Bypass User Account Control\", ")
-    transformsconf.write("if(match(Filename2,\"(github|gitlab|bitbucket)\"), \"T1567.001 - Exfiltration to Code Repository\", ")
-    transformsconf.write("if(match(Filename2,\"(gpttmpl\\.inf|scheduledtasks\\.xml)\"), \"T1484.001 - Group Policy Modification\", ")
-    transformsconf.write("if(match(Filename2,\"(mshta)\"), \"T1218.005 - Mshta\", ")
-    transformsconf.write("if(match(Filename2,\"(msiexec)\"), \"T1218.007 - Msiexec\", ")
-    transformsconf.write("if(match(Filename2,\"(normal\\.dotm|personal\\.xlsb)\"), \"T1137.001 - Office Template Macros\", ")
-    transformsconf.write("if(match(Filename2,\"(odbcconf)\"), \"T1218.008 - Odbcconf\", ")
-    transformsconf.write("if(match(Filename2,\"(policy\\.vpol|vaultcmd|vcrd)\"), \"T1555.004 - Windows Credential Manager\", ")
-    transformsconf.write("if(match(Filename2,\"(psexec)\"), \"T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer\", ")
-    transformsconf.write("if(match(Filename2,\"(pubprn)\"), \"T1216.001 - PubPrn\", ")
-    transformsconf.write("if(match(Filename2,\"(reg\\.exe)\"), \"T1112.000 - Modify Registry\", ")
-    transformsconf.write("if(match(Filename2,\"(scrnsave)\"), \"T1546.002 - Screensaver\", ")
-    transformsconf.write("if(match(Filename2,\"(sdelete)\"), \"T1485.000 - Data Destruction | T1070.004 - File Deletion\", ")
-    transformsconf.write("if(match(Filename2,\"(tscon)\"), \"T1563.002 - RDP Hijacking\", ")
-    transformsconf.write("if(match(Filename2,\"(vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu)\"), \"T1564.006 - Run Virtual Instance\", ")
-    transformsconf.write("if(match(Filename2,\"(wmic|msxsl)\"), \"T1047.000 - Windows Management Instrumentation | T1220.000 - XSL Script Processing\", ")
-    transformsconf.write("if(match(Filename2,\"(onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared)\"), \"T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage\", ")
-    transformsconf.write("if(match(Filename2,\"(scvhost|svchast|svchust|svchest|lssas|lsasss|lsaas|cssrs|canhost|conhast|connhost|connhst|iexplorer|iexploror|iexplorar)\"), \"T1036.004 - Masquerade Task or Service\", ")
-    transformsconf.write("if(match(Filename2,\"(\\.msg|\\.eml)\"), \"T1566.001 - Spearphishing Attachment | T1566.002 - Spearphishing Link | T1203.000 - Exploitation for Client Execution | T1204.001 - Malicious Link | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename3,\"(\\.7z|\\.arj|\\.cab|\\.tar|\\.tgz|\\.zip)\"), \"T1560.001 - Archive via Utility\", ")
-    transformsconf.write("if(match(Filename3,\"(\\.asc|\\.cer|\\.gpg|\\.key|\\.p12|\\.p7b|\\.pem|\\.pfx|\\.pgp|\\.ppk)\"), \"T1552.004 - Private Keys\", ")
-    transformsconf.write("if(match(Filename3,\"(\\.chm|\\.hh)\"), \"T1218.001 - Compiled HTML File\", ")
-    transformsconf.write("if(match(Filename3,\"(\\.cpl)\"), \"T1218.002 - Control Panel\", ")
-    transformsconf.write("if(match(Filename3,\"(\\.doc|\\.xls|\\.ppt|\\.pdf)\"), \"T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename3,\"(\\.docm|\\.xlsm|\\.pptm)\"), \"T1137.001 - Office Template Macros | T1559.001 - Component Object Model | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename3,\"(\\.docx|\\.xlsx|\\.pptx)\"), \"T1221.000 - Template Injection | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename3,\"(\\.job)\"), \"T1053.005 - Scheduled Task\", ")
-    transformsconf.write("if(match(Filename3,\"(\\.lnk)\"), \"T1547.009 - Shortcut Modification\", ")
-    transformsconf.write("if(match(Filename3,\"(\\.local|\\.manifest)\"), \"T1574.001 - DLL Search Order Hijacking\", ")
-    transformsconf.write("if(match(Filename3,\"(\\.mp3|\\.wav|\\.aac|\\.m4a)\"), \"T1123.000 - Audio Capture\", ")
-    transformsconf.write("if(match(Filename3,\"(\\.mp4|\\.mkv|\\.avi|\\.mov|\\.wmv|\\.mpg|\\.mpeg|\\.m4v|\\.flv)\"), \"T1125.000 - Video Capture\", ")
-    transformsconf.write("if(match(Filename3,\"(\\.ost|\\.pst|\\.msg)\"), \"T1114.001 - Local Email Collection\", ")
-    transformsconf.write("if(match(Filename3,\"(\\.service|services\\.exe|sc\\.exe)\"), \"T1007.000 - System Service Discovery | T1543.003 - Windows Service | T1569.002 - Service Execution | T1489.000 - Service Stop\", ")
-    transformsconf.write("if(match(Filename3,\"(atbroker|displayswitch|magnify|narrator|osk|sethc|utilman)\"), \"T1546.008 - Accessibility Features\", ")
-    transformsconf.write("if(match(Filename3,\"(autoruns)\"), \"T1112.000 - Modify Registry\", ")
-    transformsconf.write("if(match(Filename3,\"(bcdedit|csrutil)\"), \"T1553.006 - Code Signing Policy Modification\", ")
-    transformsconf.write("if(match(Filename3,\"(certmgr)\"), \"T1553.004 - Install Root Certificate\", ")
-    transformsconf.write("if(match(Filename3,\"(certutil)\"), \"T1036.003 - Rename System Utilities | T1140.000 - Deobfuscate/Decode Files or Information | T1553.004 - Install Root Certificate\", ")
-    transformsconf.write("if(match(Filename3,\"(cmd |cmd_|cmd\\.)\"), \"T1059.003 - Windows Command Shell | T1106.000 - Native API\", ")
-    transformsconf.write("if(match(Filename3,\"(powershell)\"), \"T1059.001 - PowerShell | T1106.000 - Native API\", ")
-    transformsconf.write("if(match(Filename3,\"(\\.ps1)\"), \"T1059.001 - PowerShell\", ")
-    transformsconf.write("if(match(Filename3,\"(csc\\.exe)\"), \"T1027.004 - Compile After Delivery\", ")
-    transformsconf.write("if(match(Filename3,\"(cscript)\"), \"T1216.001 - PubPrn\", ")
-    transformsconf.write("if(match(Filename3,\"(eventvwr|sdclt)\"), \"T1548.002 - Bypass User Account Control\", ")
-    transformsconf.write("if(match(Filename3,\"(github|gitlab|bitbucket)\"), \"T1567.001 - Exfiltration to Code Repository\", ")
-    transformsconf.write("if(match(Filename3,\"(gpttmpl\\.inf|scheduledtasks\\.xml)\"), \"T1484.001 - Group Policy Modification\", ")
-    transformsconf.write("if(match(Filename3,\"(mshta)\"), \"T1218.005 - Mshta\", ")
-    transformsconf.write("if(match(Filename3,\"(msiexec)\"), \"T1218.007 - Msiexec\", ")
-    transformsconf.write("if(match(Filename3,\"(normal\\.dotm|personal\\.xlsb)\"), \"T1137.001 - Office Template Macros\", ")
-    transformsconf.write("if(match(Filename3,\"(odbcconf)\"), \"T1218.008 - Odbcconf\", ")
-    transformsconf.write("if(match(Filename3,\"(policy\\.vpol|vaultcmd|vcrd)\"), \"T1555.004 - Windows Credential Manager\", ")
-    transformsconf.write("if(match(Filename3,\"(psexec)\"), \"T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer\", ")
-    transformsconf.write("if(match(Filename3,\"(pubprn)\"), \"T1216.001 - PubPrn\", ")
-    transformsconf.write("if(match(Filename3,\"(reg\\.exe)\"), \"T1112.000 - Modify Registry\", ")
-    transformsconf.write("if(match(Filename3,\"(scrnsave)\"), \"T1546.002 - Screensaver\", ")
-    transformsconf.write("if(match(Filename3,\"(sdelete)\"), \"T1485.000 - Data Destruction | T1070.004 - File Deletion\", ")
-    transformsconf.write("if(match(Filename3,\"(tscon)\"), \"T1563.002 - RDP Hijacking\", ")
-    transformsconf.write("if(match(Filename3,\"(vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu)\"), \"T1564.006 - Run Virtual Instance\", ")
-    transformsconf.write("if(match(Filename3,\"(wmic|msxsl)\"), \"T1047.000 - Windows Management Instrumentation | T1220.000 - XSL Script Processing\", ")
-    transformsconf.write("if(match(Filename3,\"(onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared)\"), \"T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage\", ")
-    transformsconf.write("if(match(Filename3,\"(scvhost|svchast|svchust|svchest|lssas|lsasss|lsaas|cssrs|canhost|conhast|connhost|connhst|iexplorer|iexploror|iexplorar)\"), \"T1036.004 - Masquerade Task or Service\", ")
-    transformsconf.write("if(match(Filename3,\"(\\.msg|\\.eml)\"), \"T1566.001 - Spearphishing Attachment | T1566.002 - Spearphishing Link | T1203.000 - Exploitation for Client Execution | T1204.001 - Malicious Link | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename4,\"(\\.7z|\\.arj|\\.cab|\\.tar|\\.tgz|\\.zip)\"), \"T1560.001 - Archive via Utility\", ")
-    transformsconf.write("if(match(Filename4,\"(\\.asc|\\.cer|\\.gpg|\\.key|\\.p12|\\.p7b|\\.pem|\\.pfx|\\.pgp|\\.ppk)\"), \"T1552.004 - Private Keys\", ")
-    transformsconf.write("if(match(Filename4,\"(\\.chm|\\.hh)\"), \"T1218.001 - Compiled HTML File\", ")
-    transformsconf.write("if(match(Filename4,\"(\\.cpl)\"), \"T1218.002 - Control Panel\", ")
-    transformsconf.write("if(match(Filename4,\"(\\.doc|\\.xls|\\.ppt|\\.pdf)\"), \"T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename4,\"(\\.docm|\\.xlsm|\\.pptm)\"), \"T1137.001 - Office Template Macros | T1559.001 - Component Object Model | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename4,\"(\\.docx|\\.xlsx|\\.pptx)\"), \"T1221.000 - Template Injection | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename4,\"(\\.job)\"), \"T1053.005 - Scheduled Task\", ")
-    transformsconf.write("if(match(Filename4,\"(\\.lnk)\"), \"T1547.009 - Shortcut Modification\", ")
-    transformsconf.write("if(match(Filename4,\"(\\.local|\\.manifest)\"), \"T1574.001 - DLL Search Order Hijacking\", ")
-    transformsconf.write("if(match(Filename4,\"(\\.mp3|\\.wav|\\.aac|\\.m4a)\"), \"T1123.000 - Audio Capture\", ")
-    transformsconf.write("if(match(Filename4,\"(\\.mp4|\\.mkv|\\.avi|\\.mov|\\.wmv|\\.mpg|\\.mpeg|\\.m4v|\\.flv)\"), \"T1125.000 - Video Capture\", ")
-    transformsconf.write("if(match(Filename4,\"(\\.ost|\\.pst|\\.msg)\"), \"T1114.001 - Local Email Collection\", ")
-    transformsconf.write("if(match(Filename4,\"(\\.service|services\\.exe|sc\\.exe)\"), \"T1007.000 - System Service Discovery | T1543.003 - Windows Service | T1569.002 - Service Execution | T1489.000 - Service Stop\", ")
-    transformsconf.write("if(match(Filename4,\"(atbroker|displayswitch|magnify|narrator|osk|sethc|utilman)\"), \"T1546.008 - Accessibility Features\", ")
-    transformsconf.write("if(match(Filename4,\"(autoruns)\"), \"T1112.000 - Modify Registry\", ")
-    transformsconf.write("if(match(Filename4,\"(bcdedit|csrutil)\"), \"T1553.006 - Code Signing Policy Modification\", ")
-    transformsconf.write("if(match(Filename4,\"(certmgr)\"), \"T1553.004 - Install Root Certificate\", ")
-    transformsconf.write("if(match(Filename4,\"(certutil)\"), \"T1036.003 - Rename System Utilities | T1140.000 - Deobfuscate/Decode Files or Information | T1553.004 - Install Root Certificate\", ")
-    transformsconf.write("if(match(Filename4,\"(cmd |cmd_|cmd\\.)\"), \"T1059.003 - Windows Command Shell | T1106.000 - Native API\", ")
-    transformsconf.write("if(match(Filename4,\"(powershell)\"), \"T1059.001 - PowerShell | T1106.000 - Native API\", ")
-    transformsconf.write("if(match(Filename4,\"(\\.ps1)\"), \"T1059.001 - PowerShell\", ")
-    transformsconf.write("if(match(Filename4,\"(csc\\.exe)\"), \"T1027.004 - Compile After Delivery\", ")
-    transformsconf.write("if(match(Filename4,\"(cscript)\"), \"T1216.001 - PubPrn\", ")
-    transformsconf.write("if(match(Filename4,\"(eventvwr|sdclt)\"), \"T1548.002 - Bypass User Account Control\", ")
-    transformsconf.write("if(match(Filename4,\"(github|gitlab|bitbucket)\"), \"T1567.001 - Exfiltration to Code Repository\", ")
-    transformsconf.write("if(match(Filename4,\"(gpttmpl\\.inf|scheduledtasks\\.xml)\"), \"T1484.001 - Group Policy Modification\", ")
-    transformsconf.write("if(match(Filename4,\"(mshta)\"), \"T1218.005 - Mshta\", ")
-    transformsconf.write("if(match(Filename4,\"(msiexec)\"), \"T1218.007 - Msiexec\", ")
-    transformsconf.write("if(match(Filename4,\"(normal\\.dotm|personal\\.xlsb)\"), \"T1137.001 - Office Template Macros\", ")
-    transformsconf.write("if(match(Filename4,\"(odbcconf)\"), \"T1218.008 - Odbcconf\", ")
-    transformsconf.write("if(match(Filename4,\"(policy\\.vpol|vaultcmd|vcrd)\"), \"T1555.004 - Windows Credential Manager\", ")
-    transformsconf.write("if(match(Filename4,\"(psexec)\"), \"T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer\", ")
-    transformsconf.write("if(match(Filename4,\"(pubprn)\"), \"T1216.001 - PubPrn\", ")
-    transformsconf.write("if(match(Filename4,\"(reg\\.exe)\"), \"T1112.000 - Modify Registry\", ")
-    transformsconf.write("if(match(Filename4,\"(scrnsave)\"), \"T1546.002 - Screensaver\", ")
-    transformsconf.write("if(match(Filename4,\"(sdelete)\"), \"T1485.000 - Data Destruction | T1070.004 - File Deletion\", ")
-    transformsconf.write("if(match(Filename4,\"(tscon)\"), \"T1563.002 - RDP Hijacking\", ")
-    transformsconf.write("if(match(Filename4,\"(vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu)\"), \"T1564.006 - Run Virtual Instance\", ")
-    transformsconf.write("if(match(Filename4,\"(wmic|msxsl)\"), \"T1047.000 - Windows Management Instrumentation | T1220.000 - XSL Script Processing\", ")
-    transformsconf.write("if(match(Filename4,\"(onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared)\"), \"T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage\", ")
-    transformsconf.write("if(match(Filename4,\"(scvhost|svchast|svchust|svchest|lssas|lsasss|lsaas|cssrs|canhost|conhast|connhost|connhst|iexplorer|iexploror|iexplorar)\"), \"T1036.004 - Masquerade Task or Service\", ")
-    transformsconf.write("if(match(Filename4,\"(\\.msg|\\.eml)\"), \"T1566.001 - Spearphishing Attachment | T1566.002 - Spearphishing Link | T1203.000 - Exploitation for Client Execution | T1204.001 - Malicious Link | T1204.002 - Malicious File\", ")
-  # evt
-    transformsconf.write("if(match(EventID,\"(^10|12|13$)\"), \"T1218.003 - CMSTP\", ")
-    transformsconf.write("if(match(EventID,\"(^1074|6006$)\"), \"T1529.000 - System Shutdown/Reboot\", ")
-    transformsconf.write("if(match(EventID,\"(^1102$)\"), \"T1070.001 - Clear Windows Event Logs\", ")
-    transformsconf.write("if(match(EventID,\"(^17|18$)\"), \"T1055.002 - Portable Execution Injection\", ")
-    transformsconf.write("if(match(EventID,\"(^3033|3063$)\") ,\"T1547.008 - LSASS Driver | T1553.003 - SIP and Trust Provider Hijacking\", ")
-    transformsconf.write("if(match(EventID,\"(^307|510$)\"), \"T1484.002 - Domain Trust Modification\", ")
-    transformsconf.write("if(match(EventID,\"(^4624|4634$)\"), \"T1558.001 - Golden Ticket | T1558.002 - Silver Ticket\", ")
-    transformsconf.write("if(match(EventID,\"(^4625|4648|4771$)\"), \"T1110.003 - Password Spraying\", ")
-    transformsconf.write("if(match(EventID,\"(^4657$)\"), \"T1112.000 - Modify Registry | T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay\", ")
-    transformsconf.write("if(match(EventID,\"(^4670$)\"), \"T1098.000 - Account Manipulation | T1222.001 - Windows File and Directory Permissions Modification\", ")
-    transformsconf.write("if(match(EventID,\"(^4672$)\"), \"T1484.001 - Group Policy Modification | T1558.001 - Golden Ticket\", ")
-    transformsconf.write("if(match(EventID,\"(^4697|7045$)\"), \"T1021.003 - Windows Service\", ")
-    transformsconf.write("if(match(EventID,\"(^4704|5136|5137|5138|5139|5141$)\"), \"T1484.001 - Group Policy Modification\", ")
-    transformsconf.write("if(match(EventID,\"(^4720$)\"), \"T1136.001 - Local Account | T1136.002 - Domain Account\", ")
-    transformsconf.write("if(match(EventID,\"(^4723|4724|4726|4740$)\"), \"T1531.000 - Account Access Removal\", ")
-    transformsconf.write("if(match(EventID,\"(^4728|4738$)\"), \"T1098.000 - Account Manipulation\", ")
-    transformsconf.write("if(match(EventID,\"(^4768|4769$)\"), \"T1550.002 - Pass the Hash | T1550.003 - Pass the Ticket | T1558.003 - Kerberoasting\", ")
-    transformsconf.write("if(match(EventID,\"(^4928|4929$)\"), \"T1207.000 - Rogue Domain Controller\", ")
-    transformsconf.write("if(match(EventID,\"(^524$)\"), \"T1490.000 - Inhibit System Recovery\", ")
-    transformsconf.write("if(match(EventID,\"(^7045$)\"), \"T1021.003 - Windows Service | T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay\", ")
-    transformsconf.write("if(match(EventID,\"(^81$)\") ,\"T1553.003 - SIP and Trust Provider Hijacking\", ")
-    transformsconf.write("if(match(EventID,\"(^5861$)\"), \"T1546.003 - Windows Management Instrumentation Event Subscription\", ")
-  # registry
-    transformsconf.write("if(match(Registry,\"(/print processors/|/print_processors/)\"), \"T1547.012 - Print Processors\", ")
-    transformsconf.write("if(match(Registry,\"(/security/policy/secrets)\"), \"T1003.004 - LSA Secrets\", ")
-    transformsconf.write("if(match(Registry,\"(/special/perf)\"), \"T1337.002 - Office Test\", ")
-    transformsconf.write("if(match(Registry,\"(active setup/installed components|active_setup/installed_components)\"), \"T1547.014 - Active Setup\", ")
-    transformsconf.write("if(match(Registry,\"(currentcontrolset/control/lsa)\"), \"T1547.002 - Authentication Package | T1547.005 - Security Support Provider | T1003.001 - LSASS Memory | T1556.002 - Password Filter DLL\", ")
-    transformsconf.write("if(match(Registry,\"(currentcontrolset/control/print/monitors)\"), \"T1547.010 - Port Monitors\", ")
-    transformsconf.write("if(match(Registry,\"(currentcontrolset/control/session manager|currentcontrolset/control/session_manager)\"), \"T1547.001 - Registry Run Keys / Startup Folder | T1546.009 - AppCert DLLs\", ")
-    transformsconf.write("if(match(Registry,\"(currentcontrolset/services/)\"), \"T1574.011 - Services Registry Permissions Weakness\", ")
-    transformsconf.write("if(match(Registry,\"(currentcontrolset/services/w32time/timeproviders)\"), \"T1547.003 - Time Providers\", ")
-    transformsconf.write("if(match(Registry,\"(currentversion/app paths|software/classes/ms-settings/shell/open/command|currentversion/app_paths|software/classes/mscfile/shell/open/command|software/classes/exefile/shell/runas/command/isolatedcommand)\"), \"T1548.002 - Bypass User Account Control\", ")
-    transformsconf.write("if(match(Registry,\"(currentversion/appcompatflags/installedsdb)\"), \"T1546.011 - Application Shimming\", ")
-    transformsconf.write("if(match(Registry,\"(currentversion/explorer/fileexts)\"), \"T1546.001 - Change Default File Association\", ")
-    transformsconf.write("if(match(Registry,\"(currentversion/image file execution options|currentversion/image_file_execution_options)\"), \"T1547.002 - Authentication Package | T1547.005 - Security Support Provider | T1546.008 - Accessibility Features | T1546.012 - Image File Execution Options Injection\", ")
-    transformsconf.write("if(match(Registry,\"(currentversion/policies/credui/enumerateadministrators)\"), \"T1087.002 - Local Account | T1087.002 - Domain Account\", ")
-    transformsconf.write("if(match(Registry,\"(currentversion/run|currentversion/policies/explorer/run|currentversion/explorer/user|currentversion/explorer/shell)\"), \"T1547.001 - Registry Run Keys / Startup Folder\", ")
-    transformsconf.write("if(match(Registry,\"(currentversion/windows|nt/currentversion/windows)\"), \"T1546.010 - AppInit DLLs\", ")
-    transformsconf.write("if(match(Registry,\"(currentversion/winlogon/notify|currentversion/winlogon/userinit|currentversion/winlogon/shell)\"), \"T1547.001 - Registry Run Keys / Startup Folder | T1547.004 - Winlogon Helper DLL\", ")
-    transformsconf.write("if(match(Registry,\"(environment/userinitmprlogonscript)\"), \"T1037.001 - Logon Script (Windows)\", ")
-    transformsconf.write("if(match(Registry,\"(manager/safedllsearchmode|security/policy/secrets)\"), \"T1003.001 - LSASS Memory | T1547.008 - LSASS Driver\", ")
-    transformsconf.write("if(match(Registry,\"(microsoft/windows/softwareprotectionplatform/eventcachemanager)\"), \"T1036.004 - Masquerade Task or Service\", ")
-    transformsconf.write("if(match(Registry,\"(nt/dnsclient)\"), \"T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay\", ")
-    transformsconf.write("if(match(Registry,\"(panel/cpls)\"), \"T1218.002 - Control Panel\", ")
-    transformsconf.write("if(match(Registry,\"(software/microsoft/netsh)\"), \"T1546.007 - Netsh Helper DLL\", ")
-    transformsconf.write("if(match(Registry,\"(software/microsoft/ole)\"), \"T1175.001 - Component Object Model\", ")
-    transformsconf.write("if(match(Registry,\"(software/policies/microsoft/previousversions/disablelocalpage)\"), \"T1490.000 - Inhibit System Recovery\", ")
-    transformsconf.write("if(match(Registry,\"(vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu)\"), \"T1564.006 - Run Virtual Instance\", ")
-  # usb
-    transformsconf.write("if(match(SectionDescription,\"(DISPLAY|display|HID|hid|PCI|pci|IDE|ide|ROOT|root|UMB|umb|FDC|fdc|IDE|ide|SCSI|scsi|STORAGE|storage|USBSTOR|usbstor|USB|usb|WpdBusEnumRoot)\"), \"T1200.000 - Hardware Additions | T1025.000 - Data from Removable Media | T1052.001 - Exfiltration over USB | T1056.001 - Keylogging | T1091.000 - Replication through Removable Media | T1570.000 - Lateral Tool Transfer\", ")
-    transformsconf.write("if(match(SectionDescription,\"(vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu)\"), \"T1564.006 - Run Virtual Instance\", ")
-  # Unix logs
-    transformsconf.write("if(match(Message,\"(\\.7z|\\.arj|\\.cab|\\.tar|\\.tgz|\\.zip)\"), \"T1560.001 - Archive via Utility\", ")
-    transformsconf.write("if(match(Message,\"(\\.asc|\\.cer|\\.gpg|\\.key|\\.p12|\\.p7b|\\.pem|\\.pfx|\\.pgp|\\.ppk)\"), \"T1552.004 - Private Keys\", ")
-    transformsconf.write("if(match(Message,\"(\\.chm|\\.hh)\"), \"T1218.001 - Compiled HTML File\", ")
-    transformsconf.write("if(match(Message,\"(\\.eml)\"), \"T1114.001 - Local Email Collection\", ")
-    transformsconf.write("if(match(Message,\"(\\.job)\"), \"T1053.005 - Scheduled Task\", ")
-    transformsconf.write("if(match(Message,\"(\\.lnk)\"), \"T1547.009 - Shortcut Modification\", ")
-    transformsconf.write("if(match(Message,\"(\\.mp3|\\.wav|\\.aac|\\.m4a)\"), \"T1123.000 - Audio Capture\", ")
-    transformsconf.write("if(match(Message,\"(\\.mp4|\\.mkv|\\.avi|\\.mov|\\.wmv|\\.mpg|\\.mpeg|\\.m4v|\\.flv)\"), \"T1125.000 - Video Capture\", ")
-    transformsconf.write("if(match(Message,\"(DISPLAY|display|HID|hid|PCI|pci|IDE|ide|ROOT|root|UMB|umb|FDC|fdc|IDE|ide|SCSI|scsi|STORAGE|storage|USBSTOR|usbstor|USB|usb)\"), \"T1200.000 - Hardware Additions | T1025.000 - Data from Removable Media | T1052.001 - Exfiltration over USB | T1056.001 - Keylogging | T1091.000 - Replication through Removable Media | T1570.000 - Lateral Tool Transfer\", ")
-    transformsconf.write("if(match(Message,\"(github|gitlab|bitbucket)\"), \"T1567.001 - Exfiltration to Code Repository\", ")
-    transformsconf.write("if(match(Message,\"(/etc/profile|/etc/zshenv|/etc/zprofile|/etc/zlogin)\"), \"T1546.004 - Unix Shell Configuration Modification\", ")
-    transformsconf.write("if(match(Message,\"(/var/log)\"), \"T1070.002 - Clear Linux or Mac System Logs\", ")
-    transformsconf.write("if(match(Message,\"(\\.7z|\\.arj|\\.tar|\\.tgz|\\.zip)\"), \"T1560.001 - Archive via Utility\", ")
-    transformsconf.write("if(match(Message,\"(libzip|zlib|rarfile|bzip2)\"), \"T1560.002 - Archive via Library\", ")
-    transformsconf.write("if(match(Message,\"(\\.lnk)\"), \"T1547.009 - Shortcut Modification\", ")
-    transformsconf.write("if(match(Message,\"(\\.mobileconfig|profiles)\"), \"T1176.000 - Browser Extensions\", ")
-    transformsconf.write("if(match(Message,\"(add-trusted-cert|trustroot)\"), \"T1553.004 - Install Root Certificate\", ")
-    transformsconf.write("if(match(Message,\"(ascii|unicode|hex|base64|mime)\"), \"T1132.001 - Standard Encoding\", ")
-    transformsconf.write("if(match(Message,\"(at\\.)\"), \"T1053.001 - At (Linux)\", ")
-    transformsconf.write("if(match(Message,\"(authorizationexecutewithprivileges|security_authtrampoline)\"), \"T1548.004 - Elevated Execution with Prompt\", ")
-    transformsconf.write("if(match(Message,\"(authorized_keys|sshd_config|ssh-keygen)\"), \"T1098.004 - SSH Authorized Keys\", ")
-    transformsconf.write("if(match(Message,\"(bash_history)\"), \"T1552.003 - Bash History\", ")
-    transformsconf.write("if(match(Message,\"(bluetooth)\"), \"T1011.001 - Exfiltration over Bluetooth\", ")
-    transformsconf.write("if(match(Message,\"(chage|common-password|pwpolicy|getaccountpolicies)\"), \"T1201.000 - Password Policy Discovery\", ")
-    transformsconf.write("if(match(Message,\"(chmod)\"), \"T1222.002 - Linux and Mac File and Directory Permissions Modification | T1548.001 - Setuid and Setgid\", ")
-    transformsconf.write("if(match(Message,\"(chown|chgrp)\"), \"T1222.002 - Linux and Mac File and Directory Permissions Modification\", ")
-    transformsconf.write("if(match(Message,\"(clipboard|pbpaste)\"), \"T1115.000 - Clipboard Data\", ")
-    transformsconf.write("if(match(Message,\"(com\\.apple\\.quarantine)\"), \"T1553.001 - Gatekeeper Bypass\", ")
-    transformsconf.write("if(match(Message,\"(contentsofdirectoryatpath|pathextension|compare|fork |fork_)\"), \"T1106.000 - Native API\", ")
-    transformsconf.write("if(match(Message,\"(dscacheutil|ldapsearch)\"), \"T1087.002 - Domain Accounts | T1069.002 - Domain Groups\", ")
-    transformsconf.write("if(match(Message,\"(dscl)\"), \"T1069.001 - Local Groups | T1564.002 - Hidden Users\", ")
-    transformsconf.write("if(match(Message,\"(emond)\"), \"T1546.014 - Emond | T1547.011 - Plist Modification\", ")
-    transformsconf.write("if(match(Message,\"(encrypt)\"), \"T1573.001 - Symmetric Cryptography | T1573.002 - Asymmetric Cryptography\", ")
-    transformsconf.write("if(match(Message,\"(find |locate |find_|locate_)\"), \"T1083.000 - File and Directory Discovery\", ")
-    transformsconf.write("if(match(Message,\"(forwardingsmtpaddress|x-forwarded-to|x-mailfwdby|x-ms-exchange-organization-autoforwarded)\"), \"T1114.003 - Email Forwarding Rule\", ")
-    transformsconf.write("if(match(Message,\"(fsutil|fsinfo)\"), \"T1120.000 - Peripheral Device Discovery\", ")
-    transformsconf.write("if(match(Message,\"(gcc |gcc_)\"), \"T1027.004 - Compile After Delivery\", ")
-    transformsconf.write("if(match(Message,\"(group)\"), \"T1069.001 - Local Groups | T1069.002 - Domain Groups\", ")
-    transformsconf.write("if(match(Message,\"(halt)\"), \"T1529.000 - System Shutdown/Reboot\", ")
-    transformsconf.write("if(match(Message,\"(hidden)\"), \"T1564.003 - Hidden Window\", ")
-    transformsconf.write("if(match(Message,\"(histcontrol)\"), \"T1562.003 - Impair Command History Logging\", ")
-    transformsconf.write("if(match(Message,\"(history|histfile)\"), \"T1562.003 - Impair Command History Logging | T1070.003 - Clear Command History | T1552.003 - Bash History\", ")
-    transformsconf.write("if(match(Message,\"(hostname|systeminfo|whoami)\"), \"T1033.000 - System Owner/User Discovery\", ")
-    transformsconf.write("if(match(Message,\"(ifconfig)\"), \"T1016.001 - Internet Connection Discovery\", ")
-    transformsconf.write("if(match(Message,\"(is_debugging|sysctl|ptrace)\"), \"T1497.001 - System Checks\", ")
-    transformsconf.write("if(match(Message,\"(keychain)\"), \"T1555.001 - Keychain\", ")
-    transformsconf.write("if(match(Message,\"(kill)\"), \"T1548.003 - Sudo and Sudo Caching | T1562.001 - Disable or Modify Tools | T1489.000 - Service Stop\", ")
-    transformsconf.write("if(match(Message,\"(launchagents)\"), \"T1543.001 - Launch Agent\", ")
-    transformsconf.write("if(match(Message,\"(launchctl)\"), \"T1569.001 - Launchctl\", ")
-    transformsconf.write("if(match(Message,\"(launchdaemons)\"), \"T1543.004 - Launch Daemon\", ")
-    transformsconf.write("if(match(Message,\"(lc_code_signature|lc_load_dylib)\"), \"T1546.006 - LC_LOAD_DYLIB Addition | T1574.004 - Dylib Hijacking\", ")
-    transformsconf.write("if(match(Message,\"(lc_load_weak_dylib|rpath|loader_path|executable_path|ottol)\"), \"T1547.004 - Dylib Hijacking\", ")
-    transformsconf.write("if(match(Message,\"(ld_preload|dyld_insert_libraries|export|setenv|putenv|os\\.environ|ld\\.so\\.preload|dlopen|mmap|failure)\"), \"T1547.006 - Dynamic Linker Hijacking\", ")
-    transformsconf.write("if(match(Message,\"(loginwindow|hide500users|dscl|uniqueid)\"), \"T1564.002 - Hidden Users\", ")
-    transformsconf.write("if(match(Message,\"(lsof|who)\"), \"T1049.000 - System Network Connections Discovery\", ")
-    transformsconf.write("if(match(Message,\"(malloc|ptrace_setregs|ptrace_poketext|ptrace_pokedata)\"), \"T1055.008 - Ptrace System Calls\", ")
-    transformsconf.write("if(match(Message,\"(microphone)\"), \"T1123.000 - Audio Capture\", ")
-    transformsconf.write("if(match(Message,\"(modprobe|insmod|lsmod|rmmod|modinfo|kextload|kextunload|autostart)\"), \"T1547.006 - Kernel Modules and Extensions\", ")
-    transformsconf.write("if(match(Message,\"(pam_unix\\.so)\"), \"T1556.003 - Pluggable Authentication Modules\", ")
-    transformsconf.write("if(match(Message,\"(passwd|shadow)\"), \"T1003.008 - /etc/passwd and /etc/shadow | T1087.001 - Local Account | T1556.003 - Pluggable Authentication Modules\", ")
-    transformsconf.write("if(match(Message,\"(password|pwd|login|store|secure|credentials)\"), \"T1552.001 - Credentials in Files | T1555.005 - Password Managers\", ")
-    transformsconf.write("if(match(Message,\"(ping|traceroute|etc/host|etc/hosts|bonjour)\"), \"T1016.001 - Internet Connection Discovery | T1018.000 - Remote System Discovery\", ")
-    transformsconf.write("if(match(Message,\"(portopening)\"), \"T1090.001 - Internal Proxy\", ")
-    transformsconf.write("if(match(Message,\"(profile\\.d|bash_profile|bashrc|bash_login|bash_logout)\"), \"T1546.004 - Unix Shell Configuration Modification\", ")
-    transformsconf.write("if(match(Message,\"(ps |ps_)\"), \"T1057.000 - Process Discovery\", ")
-    transformsconf.write("if(match(Message,\"(pubprn)\"), \"T1216.001 - PubPrn\", ")
-    transformsconf.write("if(match(Message,\"(python|\\.py)\"), \"T1059.006 - Python\", ")
-    transformsconf.write("if(match(Message,\"(rc\\.local|rc\\.common)\"), \"T1037.004 - RC Scripts\", ")
-    transformsconf.write("if(match(Message,\"(rm |rm_)\"), \"T1070.004 - File Deletion | T1485.000 - Data Destruction\", ")
-    transformsconf.write("if(match(Message,\"(scp|rsync|sftp)\"), \"T1105.000 - Ingress Tool Transfer\", ")
-    transformsconf.write("if(match(Message,\"(services)\"), \"T1489.000 - Service Stop\", ")
-    transformsconf.write("if(match(Message,\"(startupitems|startupparameters)\"), \"T1037.002 - Logon Script (Mac)\", ")
-    transformsconf.write("if(match(Message,\"(sudo|timestamp_timeout|tty_tickets)\"), \"T1548.003 - Sudo and Sudo Caching\", ")
-    transformsconf.write("if(match(Message,\"(systemctl)\"), \"T1543.001 - Launch Agent\", ")
-    transformsconf.write("if(match(Message,\"(systemsetup)\"), \"T1082.000 - System Information Discovery\", ")
-    transformsconf.write("if(match(Message,\"(time|sleep)\"), \"T1497.003 - Time Based Evasion\", ")
-    transformsconf.write("if(match(Message,\"(timer)\"), \"T1053.006 - Systemd Timers\", ")
-    transformsconf.write("if(match(Message,\"(trap)\"), \"T1546.005 - Trap\", ")
-    transformsconf.write("if(match(Message,\"(u202e)\"), \"T1036.002 - Right-to-Left Override\", ")
-    transformsconf.write("if(match(Message,\"(uielement)\"), \"T1564.003 - Hidden Window\", ")
-    transformsconf.write("if(match(Message,\"(vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu)\"), \"T1564.006 - Run Virtual Instance\", ")
-    transformsconf.write("if(match(Message,\"(xattr|xttr)\"), \"T1553.001 - Gatekeeper Bypass\", ")
-    transformsconf.write("if(match(Message,\"(xdg|autostart)\"), \"T1547.013 - XDG Autostart Entries\", ")
-    transformsconf.write("if(match(Message,\"(xwd|screencapture)\"), \"T1113.000 - Screen Capture\", ")
-    transformsconf.write("if(match(Message,\"(zshrc|zshenv|zlogout|zlogin|profile)\"), \"T1546.004 - Unix Shell Configuration Modification\", ")
-    transformsconf.write("if(match(Message,\"(python|\\.py |\\.py_)\"), \"T1059.006 - Python\", ")
-    transformsconf.write("if(match(Message,\"(timer)\"), \"T1053.006 - Systemd Timers\", ")
-    transformsconf.write("if(match(Message,\"(loginitems|loginwindow|smloginitemsetenabled|uielement|quarantine)\"), \"T1547.011 - Plist Modification\", ")
-    transformsconf.write("if(match(Message,\"(startupparameters)\"), \"T1037.005 - Startup Items | T1547.011 - Plist Modification\", ")
-    transformsconf.write("if(match(Message,\"(onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared)\"), \"T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage\", ")
-    transformsconf.write("if(match(Message,\"(\\.msg|\\.eml)\"), \"T1566.001 - Spearphishing Attachment | T1566.002 - Spearphishing Link | T1203.000 - Exploitation for Client Execution | T1204.001 - Malicious Link | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Message,\"(curl |curl_)\"), \"T1048.003 - Exfiltration over Unencrypted/Obfuscated Non-C2 Protocol | T1553.001 - Gatekeeper Bypass\", ")
-  # Unix services
-    transformsconf.write("if(match(BusName,\"(\\.mobileconfig|profiles)\"), \"T1176.000 - Browser Extensions\", ")
-    transformsconf.write("if(match(BusName,\"(bluetooth)\"), \"T1011.001 - Exfiltration over Bluetooth\", ")
-    transformsconf.write("if(match(BusName,\"(is_debugging|sysctl|ptrace)\"), \"T1497.001 - System Checks\", ")
-    transformsconf.write("if(match(BusName,\"(keychain)\"), \"T1555.001 - Keychain\", ")
-    transformsconf.write("if(match(BusName,\"(launchagents)\"), \"T1543.001 - Launch Agent\", ")
-    transformsconf.write("if(match(BusName,\"(launchctl)\"), \"T1569.001 - Launchctl\", ")
-    transformsconf.write("if(match(BusName,\"(launchdaemons)\"), \"T1543.004 - Launch Daemon\", ")
-    transformsconf.write("if(match(BusName,\"(malloc|ptrace_setregs|ptrace_poketext|ptrace_pokedata)\"), \"T1055.008 - Ptrace System Calls\", ")
-    transformsconf.write("if(match(BusName,\"(microphone)\"), \"T1123.000 - Audio Capture\", ")
-    transformsconf.write("if(match(BusName,\"(modprobe|insmod|lsmod|rmmod|modinfo|kextload|kextunload|autostart)\"), \"T1547.006 - Kernel Modules and Extensions\", ")
-    transformsconf.write("if(match(BusName,\"(pam_unix\\.so)\"), \"T1556.003 - Pluggable Authentication Modules\", ")
-    transformsconf.write("if(match(BusName,\"(ping|traceroute|etc/host|etc/hosts|bonjour)\"), \"T1016.001 - Internet Connection Discovery | T1018.000 - Remote System Discovery\", ")
-    transformsconf.write("if(match(BusName,\"(python|\\.py)\"), \"T1059.006 - Python\", ")
-    transformsconf.write("if(match(BusName,\"(rc\\.local|rc\\.common)\"), \"T1037.004 - RC Scripts\", ")
-    transformsconf.write("if(match(BusName,\"(scp|rsync|sftp)\"), \"T1105.000 - Ingress Tool Transfer\", ")
-    transformsconf.write("if(match(BusName,\"(services)\"), \"T1489.000 - Service Stop\", ")
-    transformsconf.write("if(match(BusName,\"(startupitems|startupparameters)\"), \"T1037.002 - Logon Script (Mac)\", ")
-    transformsconf.write("if(match(BusName,\"(sudo|timestamp_timeout|tty_tickets)\"), \"T1548.003 - Sudo and Sudo Caching\", ")
-    transformsconf.write("if(match(BusName,\"(systemctl)\"), \"T1543.001 - Launch Agent\", ")
-    transformsconf.write("if(match(BusName,\"(systemsetup)\"), \"T1082.000 - System Information Discovery\", ")
-    transformsconf.write("if(match(BusName,\"(time|sleep)\"), \"T1497.003 - Time Based Evasion\", ")
-    transformsconf.write("if(match(BusName,\"(timer)\"), \"T1053.006 - Systemd Timers\", ")
-    transformsconf.write("if(match(BusName,\"(trap)\"), \"T1546.005 - Trap\", ")
-    transformsconf.write("if(match(BusName,\"(uielement)\"), \"T1564.003 - Hidden Window\", ")
-    transformsconf.write("if(match(BusName,\"(vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu)\"), \"T1564.006 - Run Virtual Instance\", ")
-    transformsconf.write("if(match(BusName,\"(xattr|xttr)\"), \"T1553.001 - Gatekeeper Bypass\", ")
-    transformsconf.write("if(match(BusName,\"(xdg|autostart)\"), \"T1547.013 - XDG Autostart Entries\", ")
-    transformsconf.write("if(match(BusName,\"(xwd|screencapture)\"), \"T1113.000 - Screen Capture\", ")
-    transformsconf.write("if(match(BusName,\"(loginitems|loginwindow|smloginitemsetenabled|uielement|quarantine)\"), \"T1547.011 - Plist Modification\", ")
-    transformsconf.write("if(match(BusName,\"(startupparameters)\"), \"T1037.005 - Startup Items | T1547.011 - Plist Modification\", ")
-    transformsconf.write("if(match(BusName,\"(onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared)\"), \"T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage\", ")
-    transformsconf.write("if(match(ExecStart,\"(\\.mobileconfig|profiles)\"), \"T1176.000 - Browser Extensions\", ")
-    transformsconf.write("if(match(ExecStart,\"(bluetooth)\"), \"T1011.001 - Exfiltration over Bluetooth\", ")
-    transformsconf.write("if(match(ExecStart,\"(is_debugging|sysctl|ptrace)\"), \"T1497.001 - System Checks\", ")
-    transformsconf.write("if(match(ExecStart,\"(keychain)\"), \"T1555.001 - Keychain\", ")
-    transformsconf.write("if(match(ExecStart,\"(launchagents)\"), \"T1543.001 - Launch Agent\", ")
-    transformsconf.write("if(match(ExecStart,\"(launchctl)\"), \"T1569.001 - Launchctl\", ")
-    transformsconf.write("if(match(ExecStart,\"(launchdaemons)\"), \"T1543.004 - Launch Daemon\", ")
-    transformsconf.write("if(match(ExecStart,\"(malloc|ptrace_setregs|ptrace_poketext|ptrace_pokedata)\"), \"T1055.008 - Ptrace System Calls\", ")
-    transformsconf.write("if(match(ExecStart,\"(microphone)\"), \"T1123.000 - Audio Capture\", ")
-    transformsconf.write("if(match(ExecStart,\"(modprobe|insmod|lsmod|rmmod|modinfo|kextload|kextunload|autostart)\"), \"T1547.006 - Kernel Modules and Extensions\", ")
-    transformsconf.write("if(match(ExecStart,\"(pam_unix\\.so)\"), \"T1556.003 - Pluggable Authentication Modules\", ")
-    transformsconf.write("if(match(ExecStart,\"(ping|traceroute|etc/host|etc/hosts|bonjour)\"), \"T1016.001 - Internet Connection Discovery | T1018.000 - Remote System Discovery\", ")
-    transformsconf.write("if(match(ExecStart,\"(python|\\.py)\"), \"T1059.006 - Python\", ")
-    transformsconf.write("if(match(ExecStart,\"(rc\\.local|rc\\.common)\"), \"T1037.004 - RC Scripts\", ")
-    transformsconf.write("if(match(ExecStart,\"(scp|rsync|sftp)\"), \"T1105.000 - Ingress Tool Transfer\", ")
-    transformsconf.write("if(match(ExecStart,\"(ExecStarts)\"), \"T1489.000 - Service Stop\", ")
-    transformsconf.write("if(match(ExecStart,\"(startupitems|startupparameters)\"), \"T1037.002 - Logon Script (Mac)\", ")
-    transformsconf.write("if(match(ExecStart,\"(sudo|timestamp_timeout|tty_tickets)\"), \"T1548.003 - Sudo and Sudo Caching\", ")
-    transformsconf.write("if(match(ExecStart,\"(systemctl)\"), \"T1543.001 - Launch Agent\", ")
-    transformsconf.write("if(match(ExecStart,\"(systemsetup)\"), \"T1082.000 - System Information Discovery\", ")
-    transformsconf.write("if(match(ExecStart,\"(time|sleep)\"), \"T1497.003 - Time Based Evasion\", ")
-    transformsconf.write("if(match(ExecStart,\"(timer)\"), \"T1053.006 - Systemd Timers\", ")
-    transformsconf.write("if(match(ExecStart,\"(trap)\"), \"T1546.005 - Trap\", ")
-    transformsconf.write("if(match(ExecStart,\"(uielement)\"), \"T1564.003 - Hidden Window\", ")
-    transformsconf.write("if(match(ExecStart,\"(vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu)\"), \"T1564.006 - Run Virtual Instance\", ")
-    transformsconf.write("if(match(ExecStart,\"(xattr|xttr)\"), \"T1553.001 - Gatekeeper Bypass\", ")
-    transformsconf.write("if(match(ExecStart,\"(xdg|autostart)\"), \"T1547.013 - XDG Autostart Entries\", ")
-    transformsconf.write("if(match(ExecStart,\"(xwd|screencapture)\"), \"T1113.000 - Screen Capture\", ")
-    transformsconf.write("if(match(ExecStart,\"(loginitems|loginwindow|smloginitemsetenabled|uielement|quarantine)\"), \"T1547.011 - Plist Modification\", ")
-    transformsconf.write("if(match(ExecStart,\"(startupparameters)\"), \"T1037.005 - Startup Items | T1547.011 - Plist Modification\", ")
-    transformsconf.write("if(match(ExecStart,\"(onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared)\"), \"T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage\", ")
-    transformsconf.write("if(match(Service,\"(\\.mobileconfig|profiles)\"), \"T1176.000 - Browser Extensions\", ")
-    transformsconf.write("if(match(Service,\"(bluetooth)\"), \"T1011.001 - Exfiltration over Bluetooth\", ")
-    transformsconf.write("if(match(Service,\"(is_debugging|sysctl|ptrace)\"), \"T1497.001 - System Checks\", ")
-    transformsconf.write("if(match(Service,\"(keychain)\"), \"T1555.001 - Keychain\", ")
-    transformsconf.write("if(match(Service,\"(launchagents)\"), \"T1543.001 - Launch Agent\", ")
-    transformsconf.write("if(match(Service,\"(launchctl)\"), \"T1569.001 - Launchctl\", ")
-    transformsconf.write("if(match(Service,\"(launchdaemons)\"), \"T1543.004 - Launch Daemon\", ")
-    transformsconf.write("if(match(Service,\"(malloc|ptrace_setregs|ptrace_poketext|ptrace_pokedata)\"), \"T1055.008 - Ptrace System Calls\", ")
-    transformsconf.write("if(match(Service,\"(microphone)\"), \"T1123.000 - Audio Capture\", ")
-    transformsconf.write("if(match(Service,\"(modprobe|insmod|lsmod|rmmod|modinfo|kextload|kextunload|autostart)\"), \"T1547.006 - Kernel Modules and Extensions\", ")
-    transformsconf.write("if(match(Service,\"(pam_unix\\.so)\"), \"T1556.003 - Pluggable Authentication Modules\", ")
-    transformsconf.write("if(match(Service,\"(ping|traceroute|etc/host|etc/hosts|bonjour)\"), \"T1016.001 - Internet Connection Discovery | T1018.000 - Remote System Discovery\", ")
-    transformsconf.write("if(match(Service,\"(python|\\.py)\"), \"T1059.006 - Python\", ")
-    transformsconf.write("if(match(Service,\"(rc\\.local|rc\\.common)\"), \"T1037.004 - RC Scripts\", ")
-    transformsconf.write("if(match(Service,\"(scp|rsync|sftp)\"), \"T1105.000 - Ingress Tool Transfer\", ")
-    transformsconf.write("if(match(Service,\"(services)\"), \"T1489.000 - Service Stop\", ")
-    transformsconf.write("if(match(Service,\"(startupitems|startupparameters)\"), \"T1037.002 - Logon Script (Mac)\", ")
-    transformsconf.write("if(match(Service,\"(sudo|timestamp_timeout|tty_tickets)\"), \"T1548.003 - Sudo and Sudo Caching\", ")
-    transformsconf.write("if(match(Service,\"(systemctl)\"), \"T1543.001 - Launch Agent\", ")
-    transformsconf.write("if(match(Service,\"(systemsetup)\"), \"T1082.000 - System Information Discovery\", ")
-    transformsconf.write("if(match(Service,\"(time|sleep)\"), \"T1497.003 - Time Based Evasion\", ")
-    transformsconf.write("if(match(Service,\"(timer)\"), \"T1053.006 - Systemd Timers\", ")
-    transformsconf.write("if(match(Service,\"(trap)\"), \"T1546.005 - Trap\", ")
-    transformsconf.write("if(match(Service,\"(uielement)\"), \"T1564.003 - Hidden Window\", ")
-    transformsconf.write("if(match(Service,\"(vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu)\"), \"T1564.006 - Run Virtual Instance\", ")
-    transformsconf.write("if(match(Service,\"(xattr|xttr)\"), \"T1553.001 - Gatekeeper Bypass\", ")
-    transformsconf.write("if(match(Service,\"(xdg|autostart)\"), \"T1547.013 - XDG Autostart Entries\", ")
-    transformsconf.write("if(match(Service,\"(xwd|screencapture)\"), \"T1113.000 - Screen Capture\", ")
-    transformsconf.write("if(match(Service,\"(loginitems|loginwindow|smloginitemsetenabled|uielement|quarantine)\"), \"T1547.011 - Plist Modification\", ")
-    transformsconf.write("if(match(Service,\"(startupparameters)\"), \"T1037.005 - Startup Items | T1547.011 - Plist Modification\", ")
-    transformsconf.write("if(match(Service,\"(onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared)\"), \"T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage\", ")
-  # Plist
-    transformsconf.write("if(match(Plist,\"(loginitems|loginwindow|smloginitemsetenabled|uielement|quarantine)\"), \"T1547.011 - Plist Modification\", ")
-    transformsconf.write("if(match(Plist,\"(startupparameters)\"), \"T1037.005 - Startup Items | T1547.011 - Plist Modification\", ")
-    transformsconf.write("if(match(Plist,\"(vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu)\"), \"T1564.006 - Run Virtual Instance\", ")
-  # urls
-    transformsconf.write("if(match(url,\"(onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|fileshare|mediafire|zippyshare|megaupload|4shared)\"), \"T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage\", ")
-    transformsconf.write("if(match(url,\"(github|gitlab|bitbucket)\"), \"T1567.001 - Exfiltration to Code Repository\", ")
-  # LastAccessTime, metadata & IOCs
-    transformsconf.write("if(match(Filename,\"(\\.7z|\\.arj|\\.tar|\\.tgz|\\.zip)\"), \"T1560.001 - Archive via Utility\", ")
-    transformsconf.write("if(match(Filename,\"(\\.asc|\\.cer|\\.gpg|\\.key|\\.p12|\\.p7b|\\.pem|\\.pfx|\\.pgp|\\.ppk)\"), \"T1552.004 - Private Keys\", ")
-    transformsconf.write("if(match(Filename,\"(\\.chm|\\.hh)\"), \"T1218.001 - Compiled HTML File\", ")
-    transformsconf.write("if(match(Filename,\"(\\.cpl)\"), \"T1218.002 - Control Panel\", ")
-    transformsconf.write("if(match(Filename,\"(\\.doc|\\.xls|\\.ppt|\\.pdf)\"), \"T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename,\"(\\.docm|\\.xlsm|\\.pptm)\"), \"T1137.001 - Office Template Macros | T1559.001 - Component Object Model | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename,\"(\\.docx|\\.xlsx|\\.pptx)\"), \"T1221.000 - Template Injection | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File\", ")
-    transformsconf.write("if(match(Filename,\"(\\.job)\"), \"T1053.005 - Scheduled Task\", ")
-    transformsconf.write("if(match(Filename,\"(\\.lnk)\"), \"T1547.009 - Shortcut Modification\", ")
-    transformsconf.write("if(match(Filename,\"(\\.local|\\.manifest)\"), \"T1574.001 - DLL Search Order Hijacking\", ")
-    transformsconf.write("if(match(Filename,\"(\\.mobileconfig|profiles)\"), \"T1176.000 - Browser Extensions\", ")
-    transformsconf.write("if(match(Filename,\"(\\.mp3|\\.wav|\\.aac|\\.m4a)\"), \"T1123.000 - Audio Capture\", ")
-    transformsconf.write("if(match(Filename,\"(\\.mp4|\\.mkv|\\.avi|\\.mov|\\.wmv|\\.mpg|\\.mpeg|\\.m4v|\\.flv)\"), \"T1125.000 - Video Capture\", ")
-    transformsconf.write("if(match(Filename,\"(\\.ost|\\.pst|\\.msg|\\.eml)\"), \"T1114.001 - Local Email Collection\", ")
-    transformsconf.write("if(match(Filename,\"(\\.service|services\\.exe|sc\\.exe)\"), \"T1007.000 - System Service Discovery | T1543.003 - Windows Service | T1569.002 - Service Execution | T1489.000 - Service Stop\", ")
-    transformsconf.write("if(match(Filename,\"(at\\.)\"), \"T1053.001 - At (Linux)\", ")
-    transformsconf.write("if(match(Filename,\"(atbroker|displayswitch|magnify|narrator|osk|sethc|utilman)\"), \"T1546.008 - Accessibility Features\", ")
-    transformsconf.write("if(match(Filename,\"(autoruns)\"), \"T1112.000 - Modify Registry\", ")
-    transformsconf.write("if(match(Filename,\"(bash_history)\"), \"T1552.003 - Bash History\", ")
-    transformsconf.write("if(match(Filename,\"(bcdedit|csrutil)\"), \"T1553.006 - Code Signing Policy Modification\", ")
-    transformsconf.write("if(match(Filename,\"(bluetooth)\"), \"T1011.001 - Exfiltration over Bluetooth\", ")
-    transformsconf.write("if(match(Filename,\"(certmgr)\"), \"T1553.004 - Install Root Certificate\", ")
-    transformsconf.write("if(match(Filename,\"(certutil)\"), \"T1036.003 - Rename System Utilities | T1140.000 - Deobfuscate/Decode Files or Information | T1553.004 - Install Root Certificate\", ")
-    transformsconf.write("if(match(Filename,\"(cmd |cmd_|cmd\\.)\"), \"T1059.003 - Windows Command Shell | T1106.000 - Native API\", ")
-    transformsconf.write("if(match(Filename,\"(powershell)\"), \"T1059.001 - PowerShell | T1106.000 - Native API\", ")
-    transformsconf.write("if(match(Filename,\"(\\.ps1)\"), \"T1059.001 - PowerShell\", ")
-    transformsconf.write("if(match(Filename,\"(com\\.apple\\.quarantine)\"), \"T1553.001 - Gatekeeper Bypass\", ")
-    transformsconf.write("if(match(Filename,\"(csc\\.exe)\"), \"T1027.004 - Compile After Delivery\", ")
-    transformsconf.write("if(match(Filename,\"(cscript)\"), \"T1216.001 - PubPrn\", ")
-    transformsconf.write("if(match(Filename,\"(eventvwr|sdclt)\"), \"T1548.002 - Bypass User Account Control\", ")
-    transformsconf.write("if(match(Filename,\"(fsutil|fsinfo)\"), \"T1120.000 - Peripheral Device Discovery\", ")
-    transformsconf.write("if(match(Filename,\"(github|gitlab|bitbucket)\"), \"T1567.001 - Exfiltration to Code Repository\", ")
-    transformsconf.write("if(match(Filename,\"(gpttmpl\\.inf|scheduledtasks\\.xml)\"), \"T1484.001 - Group Policy Modification\", ")
-    transformsconf.write("if(match(Filename,\"(keychain)\"), \"T1555.001 - Keychain\", ")
-    transformsconf.write("if(match(Filename,\"(microphone)\"), \"T1123.000 - Audio Capture\", ")
-    transformsconf.write("if(match(Filename,\"(mshta)\"), \"T1218.005 - Mshta\", ")
-    transformsconf.write("if(match(Filename,\"(msiexec)\"), \"T1218.007 - Msiexec\", ")
-    transformsconf.write("if(match(Filename,\"(normal\\.dotm|personal\\.xlsb)\"), \"T1137.001 - Office Template Macros\", ")
-    transformsconf.write("if(match(Filename,\"(odbcconf)\"), \"T1218.008 - Odbcconf\", ")
-    transformsconf.write("if(match(Filename,\"(pam_unix\\.so)\"), \"T1556.003 - Pluggable Authentication Modules\", ")
-    transformsconf.write("if(match(Filename,\"(passwd|shadow)\"), \"T1003.008 - /etc/passwd and /etc/shadow | T1087.001 - Local Account | T1556.003 - Pluggable Authentication Modules\", ")
-    transformsconf.write("if(match(Filename,\"(policy\\.vpol|vaultcmd|vcrd)\"), \"T1555.004 - Windows Credential Manager\", ")
-    transformsconf.write("if(match(Filename,\"(profile\\.d|bash_profile|bashrc|bash_login|bash_logout)\"), \"T1546.004 - Unix Shell Configuration Modification\", ")
-    transformsconf.write("if(match(Filename,\"(psexec)\"), \"T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer\", ")
-    transformsconf.write("if(match(Filename,\"(pubprn)\"), \"T1216.001 - PubPrn\", ")
-    transformsconf.write("if(match(Filename,\"(python|\\.py)\"), \"T1059.006 - Python\", ")
-    transformsconf.write("if(match(Filename,\"(rc\\.local|rc\\.common)\"), \"T1037.004 - RC Scripts\", ")
-    transformsconf.write("if(match(Filename,\"(reg\\.exe)\"), \"T1112.000 - Modify Registry\", ")
-    transformsconf.write("if(match(Filename,\"(scrnsave)\"), \"T1546.002 - Screensaver\", ")
-    transformsconf.write("if(match(Filename,\"(sdelete)\"), \"T1485.000 - Data Destruction | T1070.004 - File Deletion\", ")
-    transformsconf.write("if(match(Filename,\"(sudo|timestamp_timeout|tty_tickets)\"), \"T1548.003 - Sudo and Sudo Caching\", ")
-    transformsconf.write("if(match(Filename,\"(tscon)\"), \"T1563.002 - RDP Hijacking\", ")
-    transformsconf.write("if(match(Filename,\"(vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu)\"), \"T1564.006 - Run Virtual Instance\", ")
-    transformsconf.write("if(match(Filename,\"(wmic|msxsl)\"), \"T1047.000 - Windows Management Instrumentation | T1220.000 - XSL Script Processing\", ")
-    transformsconf.write("if(match(Filename,\"(\\.msg|\\.eml)\"), \"T1566.001 - Spearphishing Attachment | T1566.002 - Spearphishing Link | T1203.000 - Exploitation for Client Execution | T1204.001 - Malicious Link | T1204.002 - Malicious File\", ")
-  # END
-    transformsconf.write("\"-\"))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))), ")
+    for ioc, mitre in assignment_pairings.items():
+        transformsconf.write("{}{}{}{}{}{}{}".format(start, ioc.split("_|_")[0], prefix, ioc.split("_|_")[1], suffix, mitre, end))
+    transformsconf.write("\"-\"))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))), ")
     transformsconf.write("mitre_technique=split(mitre_techniques,\" | \")\n\n")
