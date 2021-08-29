@@ -62,10 +62,8 @@ Obtain the relevant debug symbol
 * Ubuntu: http://ddebs.ubuntu.com/ubuntu/pool/main/l/linux/<br>
 `$ dpkg -x <path-to-debug-package> /tmp/`<br>
 
-INSERT ADDITIONAL COMMANDS HERE...
-
 Copy created symbol table to Analysis Machine<br>
-`$ ./dwarf2json linux --elf /tmp/usr/lib/debug/boot/<downloaded-ddeb> > .../volatility3/volatility3/symbols/linux/<downloaded-ddeb>.json`<br>
+`$ sudo ./dwarf2json linux --elf /tmp/usr/lib/debug/boot/<downloaded-ddeb>.ddeb > .../volatility3/volatility3/symbols/linux/<downloaded-ddeb>.json`<br>
 
 See Appendix for information on additional Linux distros<br><br><br>
 
@@ -73,20 +71,31 @@ See Appendix for information on additional Linux distros<br><br><br>
 ## Creating Profiles (volatility2.6)
 ### macOS
 #### Target Machine
-* Download the relevant Kernel Debug Kit: http://developer.apple.com/hardwaredrivers<br>
-* Download volatility from https://github.com/ezaspy/elrond/tree/main/tools/<br>
+* Identify the relevant Kernel for the version of macOS you are analysing<br><br>
 
-`$ unzip volatility.zip`<br>
+#### Analysis Machine
+* Download the relevant Kernel Debug Kit: http://developer.apple.com/hardwaredrivers<br>
+* Download volatility3 from https://github.com/ezaspy/elrond/tree/main/tools/<br>
+
+`$ unzip volatility3.zip`<br>
 `$ dwarfdump -arch x86_64 /Library/Developer/KDKs/KDK_<MACOSXVERSION>_16D32.kdk/System/Library/Kernels/kernel.dSYM > <MACOSXVERSION>_x64.dwarfdump`<br>
 `$ python tools/mac/convert.py <MACOSXVERSION>.dwarfdump converted-<MACOSXVERSION>_x64.dwarfdump`<br>
 `$ python tools/mac/convert.py converted-<MACOSXVERSION>_x64.dwarfdump > 10.12.3.64bit.vtypes`<br>
 `$ dsymutil -s -arch x86_64 /Library/Developer/KDKs/KDK_<MACOSXVERSION>_16D32.kdk/System/Library/Kernels/kernel > <MACOSXVERSION>.64bit.symbol.dsymutil`<br>
 `$ zip <MACOSXVERSION>.64bit.zip <MACOSXVERSION>.64bit.symbol.dsymutil <MACOSXVERSION>.64bit.vtypes`<br>
-Copy created profile to Analysis Machine
-#### Analysis Machine
 `$ cp <MACOSXVERSION>.64bit.zip volatility/plugins/overlays/mac/`<br><br><br>
+
+
 ### Linux
 #### Target Machine
+* Identify the relevant Kernel for the version of Linux you are analysing<br>
+
+`$ uname -r`<br>
+`$ cd Downloads/ && sudo apt-get install build-essential && sudo apt-get install dwarfdump && git clone https://github.com/volatilityfoundation/volatility.git && cd volatility/tools/linux/ && sudo make -C /lib/modules/$(uname -r)-generic/build/ CONFIG_DEBUG_INFO=y M=$PWD modules && sudo rm -rf module.dwarf && sudo dwarfdump -di ./module.o > module.dwarf && sudo zip Ubuntu64-$(uname -r)-generic.zip module.dwarf /boot/System.map-$(uname -r)-generic && ls -lah`<br><br>
+
+#### Analysis Machine
+`$ cp [RHEL|Ubuntu]64-$(uname -r).zip volatility/plugins/overlays/linux/`<br>
+
 * Download volatility from https://github.com/ezaspy/elrond/tree/main/tools/<br>
 
 `$ sudo apt-get install build-essential && sudo apt-get install dwarfdump`<br>
@@ -94,9 +103,6 @@ Copy created profile to Analysis Machine
 `$ sudo make -C /lib/modules/$(uname -r)/build/ CONFIG_DEBUG_INFO=y M=$PWD modules`<br>
 `$ sudo rm -rf module.dwarf && sudo dwarfdump -di ./module.o > module.dwarf`<br>
 `$ sudo zip [RHEL|Ubuntu]64-$(uname -r).zip module.dwarf /boot/System.map-$(uname -r)`<br>
-Copy created profile to Analysis Machine
-#### Analysis Machine
-`$ cp [RHEL|Ubuntu]64-$(uname -r).zip volatility/plugins/overlays/linux/`<br><br><br><br>
 
 
 # Appendix
@@ -111,8 +117,7 @@ Required for volatility3 symbol tables, you will need to obain the relevant debu
 
 ### Building avml (Analysis Machine)
 **Only required if execution of avml fails**
-
-`$ sudo apt-get install musl-dev musl-tools musl && curl https://sh.rustup.rs -sSf | sh -s -- -y && rustup target add x86_64-unknown-linux-musl && cargo build --release --target x86_64-unknown-linux-musl && cargo build --release --target x86_64-unknown-linux-musl --no-default-features`<br>
+`$ sudo mkdir /tmp/make_avml && sudo cd /tmp/make_avml && sudo apt-get install musl-dev musl-tools musl && sudo chmod 777 -R /tmp && curl https://sh.rustup.rs -sSf | sh -s -- -y && sudo snap install rustup --classic && rustup install stable && rustup target add x86_64-unknown-linux-musl && cargo new avml-main --bin && cd avml-main/ && cargo build --release --target x86_64-unknown-linux-musl && cp target/x86_64-unknown-linux-musl/release/avml <output_directory>`<br>
 `$ cd target/x86_64-unknown-linux-musl/release/` (directory path might be slightly different)<br><br>
 
 ### Pre-created Profiles (volatility2.6)
