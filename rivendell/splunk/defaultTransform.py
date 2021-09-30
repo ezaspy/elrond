@@ -12,7 +12,7 @@ def doTransform(transformsconf):
         "Artefact_|_\\.chm|\\.hh": "T1218.001 - Compiled HTML File",# timeline
         "Artefact_|_\\.cpl|panel/cpls": "T1218.002 - Control Panel",# timeline
         "Artefact_|_\\.doc|\\.xls|\\.ppt|\\.pdf| winword| excel| powerpnt| acrobat| acrord32|winword\\.|excel\\.|powerpnt\\.|acrobat\\.|acrord32\\.": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",# timeline
-        "Artefact_|_\\.docm|\\.xlsm|\\.pptm": "T1137.001 - Office Template Macros | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1559.001 - Component Object Model",# timeline
+        "Artefact_|_\\.docm|\\.xlsm|\\.pptm": "T1137.001 - Office Template Macros | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1559.001 - Component Object Model Hijacking",# timeline
         "Artefact_|_\\.docx|\\.xlsx|\\.pptx": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1221.000 - Template Injection | ",# timeline
         "Artefact_|_\\.job|schtask": "T1053.005 - Scheduled Task",# timeline
         "Artefact_|_\\.lnk": "T1547.009 - Shortcut Modification",# timeline
@@ -61,7 +61,7 @@ def doTransform(transformsconf):
         "Artefact_|_currentversion/run|currentversion/policies/explorer/run|currentversion/explorer/user/|currentversion/explorer/shell": "T1547.001 - Registry Run Keys / Startup Folder",# timeline
         "Artefact_|_currentversion/windows|nt/currentversion/windows": "T1546.010 - AppInit DLLs",# timeline
         "Artefact_|_currentversion/winlogon/notify|currentversion/winlogon/userinit|currentversion/winlogon/shell": "T1547.001 - Registry Run Keys / Startup Folder | T1547.004 - Winlogon Helper DLL",# timeline
-        "Artefact_|_DISPLAY|display|HID|hid|PCI|pci|UMB|umb|FDC|fdc|SCSI|scsi|STORAGE|storage|USBSTOR|usbstor|USB|usb": "T1025.000 - Data from Removable Media | T1052.001 - Exfiltration over USB | T1056.001 - Keylogging | T1091.000 - Replication through Removable Media | T1200.000 - Hardware Additions | T1570.000 - Lateral Tool Transfer",# timeline, usb
+        "Artefact_|_DISPLAY|display|HID|hid|PCI|pci|UMB|umb|FDC|fdc|SCSI|scsi|STORAGE|storage|USB|usb": "T1025.000 - Data from Removable Media | T1052.001 - Exfiltration over USB | T1056.001 - Keylogging | T1091.000 - Replication through Removable Media | T1200.000 - Hardware Additions | T1570.000 - Lateral Tool Transfer",# timeline, usb
         "Artefact_|_docker build|docker build|docker_build|docker__build": "T1612.000 - Build Image on Host",# timeline
         "Artefact_|_docker create|docker create|docker start|docker start|docker_create|docker__create|docker_start|docker_start": "T1610.000 - Deploy Container",# timeline
         "Artefact_|_docker exec|docker exec|docker run|docker run|kubectl exec|kubectl exec|kubectl run|kubectl run|docker_exec|docker__exec|docker_run|docker__run|kubectl_exec|kubectl__exec|kubectl_run|kubectl__run": "T1609.000 - Container Administration Command",# timeline
@@ -83,7 +83,7 @@ def doTransform(transformsconf):
         "Artefact_|_history|histfile": "T1070.003 - Clear Command History | T1552.003 - Bash History | T1562.003 - Impair Command History Logging",# timeline
         "Artefact_|_hostname |systeminfo|whoami": "T1033.000 - System Owner/User Discovery",# timeline
         "Artefact_|_ifconfig|dig ": "T1016.001 - Internet Connection Discovery",# timeline
-        "Artefact_|_ipc%24|ipc\\$|ipc$": "T1021.002 - SMB/Windows Admin Shares | T1559.001 - Component Object Model",# timeline
+        "Artefact_|_ipc%24|ipc\\$|ipc$": "T1021.002 - SMB/Windows Admin Shares | T1559.001 - Component Object Model Hijacking",# timeline
         "Artefact_|_is_debugging|sysctl|ptrace": "T1497.001 - System Checks",# timeline
         "Artefact_|_keychain": "T1555.001 - Keychain",# timeline
         "Artefact_|_kill": "T1489.000 - Service Stop | T1548.003 - Sudo and Sudo Caching | T1562.001 - Disable or Modify Tools",# timeline
@@ -128,7 +128,7 @@ def doTransform(transformsconf):
         "Artefact_|_sdelete": "T1070.004 - File Deletion | T1485.000 - Data Destruction",# timeline
         "Artefact_|_services": "T1489.000 - Service Stop",# timeline
         "Artefact_|_software/microsoft/netsh": "T1546.007 - Netsh Helper DLL",# timeline
-        "Artefact_|_software/microsoft/ole": "T1175.001 - Component Object Model",# timeline
+        "Artefact_|_software/microsoft/ole": "T1546.015 - Component Object Model Hijacking",# timeline
         "Artefact_|_software/policies/microsoft/previousversions/disablelocalpage": "T1490.000 - Inhibit System Recovery",# timeline
         "Artefact_|_startupitems": "T1037.002 - Logon Script (Mac)",# timeline
         "Artefact_|_startupparameters": "T1037.002 - Logon Script (Mac) | T1037.005 - Startup Items | T1547.011 - Plist Modification",# timeline
@@ -175,7 +175,7 @@ def doTransform(transformsconf):
         "Filename_|_\\.chm|\\.hh": "T1218.001 - Compiled HTML File",# LastAccessTime, metadata & iocs
         "Filename_|_\\.cpl": "T1218.002 - Control Panel",# LastAccessTime, metadata & iocs
         "Filename_|_\\.doc|\\.xls|\\.ppt|\\.pdf": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",# LastAccessTime, metadata & iocs
-        "Filename_|_\\.docm|\\.xlsm|\\.pptm": "T1137.001 - Office Template Macros | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1559.001 - Component Object Model",# LastAccessTime, metadata & iocs
+        "Filename_|_\\.docm|\\.xlsm|\\.pptm": "T1137.001 - Office Template Macros | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1559.001 - Component Object Model Hijacking",# LastAccessTime, metadata & iocs
         "Filename_|_\\.docx|\\.xlsx|\\.pptx": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1221.000 - Template Injection",# LastAccessTime, metadata & iocs
         "Filename_|_\\.job": "T1053.005 - Scheduled Task",# LastAccessTime, metadata & iocs
         "Filename_|_\\.lnk": "T1547.009 - Shortcut Modification",# LastAccessTime, metadata & iocs
@@ -230,7 +230,7 @@ def doTransform(transformsconf):
         "Filename1_|_\\.chm|\\.hh": "T1218.001 - Compiled HTML File",# mft
         "Filename1_|_\\.cpl": "T1218.002 - Control Panel",# mft
         "Filename1_|_\\.doc|\\.xls|\\.ppt|\\.pdf": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",# mft
-        "Filename1_|_\\.docm|\\.xlsm|\\.pptm": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1137.001 - Office Template Macros | T1559.001 - Component Object Model",# mft
+        "Filename1_|_\\.docm|\\.xlsm|\\.pptm": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1137.001 - Office Template Macros | T1559.001 - Component Object Model Hijacking",# mft
         "Filename1_|_\\.docx|\\.xlsx|\\.pptx": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1221.000 - Template Injection",# mft
         "Filename1_|_\\.job": "T1053.005 - Scheduled Task",# mft
         "Filename1_|_\\.lnk": "T1547.009 - Shortcut Modification",# mft
@@ -273,7 +273,7 @@ def doTransform(transformsconf):
         "Filename2_|_\\.chm|\\.hh": "T1218.001 - Compiled HTML File",# mft
         "Filename2_|_\\.cpl": "T1218.002 - Control Panel",# mft
         "Filename2_|_\\.doc|\\.xls|\\.ppt|\\.pdf": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",# mft
-        "Filename2_|_\\.docm|\\.xlsm|\\.pptm": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1137.001 - Office Template Macros | T1559.001 - Component Object Model",# mft
+        "Filename2_|_\\.docm|\\.xlsm|\\.pptm": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1137.001 - Office Template Macros | T1559.001 - Component Object Model Hijacking",# mft
         "Filename2_|_\\.docx|\\.xlsx|\\.pptx": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1221.000 - Template Injection",# mft
         "Filename2_|_\\.job": "T1053.005 - Scheduled Task",# mft
         "Filename2_|_\\.lnk": "T1547.009 - Shortcut Modification",# mft
@@ -316,7 +316,7 @@ def doTransform(transformsconf):
         "Filename3_|_\\.chm|\\.hh": "T1218.001 - Compiled HTML File",# mft
         "Filename3_|_\\.cpl": "T1218.002 - Control Panel",# mft
         "Filename3_|_\\.doc|\\.xls|\\.ppt|\\.pdf": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",# mft
-        "Filename3_|_\\.docm|\\.xlsm|\\.pptm": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1137.001 - Office Template Macros | T1559.001 - Component Object Model",# mft
+        "Filename3_|_\\.docm|\\.xlsm|\\.pptm": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1137.001 - Office Template Macros | T1559.001 - Component Object Model Hijacking",# mft
         "Filename3_|_\\.docx|\\.xlsx|\\.pptx": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1221.000 - Template Injection",# mft
         "Filename3_|_\\.job": "T1053.005 - Scheduled Task",# mft
         "Filename3_|_\\.lnk": "T1547.009 - Shortcut Modification",# mft
@@ -359,7 +359,7 @@ def doTransform(transformsconf):
         "Filename4_|_\\.chm|\\.hh": "T1218.001 - Compiled HTML File",# mft
         "Filename4_|_\\.cpl": "T1218.002 - Control Panel",# mft
         "Filename4_|_\\.doc|\\.xls|\\.ppt|\\.pdf": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",# mft
-        "Filename4_|_\\.docm|\\.xlsm|\\.pptm": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1137.001 - Office Template Macros | T1559.001 - Component Object Model",# mft
+        "Filename4_|_\\.docm|\\.xlsm|\\.pptm": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1137.001 - Office Template Macros | T1559.001 - Component Object Model Hijacking",# mft
         "Filename4_|_\\.docx|\\.xlsx|\\.pptx": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1221.000 - Template Injection",# mft
         "Filename4_|_\\.job": "T1053.005 - Scheduled Task",# mft
         "Filename4_|_\\.lnk": "T1547.009 - Shortcut Modification",# mft
@@ -443,7 +443,7 @@ def doTransform(transformsconf):
         "Message_|_\\.chm|\\.hh": "T1218.001 - Compiled HTML File",# unix-logs, timeline
         "Message_|_\\.cpl|panel/cpls": "T1218.002 - Control Panel",# unix-logs, timeline
         "Message_|_\\.doc|\\.xls|\\.ppt|\\.pdf| winword| excel| powerpnt| acrobat| acrord32|winword\\.|excel\\.|powerpnt\\.|acrobat\\.|acrord32\\.": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File",# unix-logs, timeline
-        "Message_|_\\.docm|\\.xlsm|\\.pptm": "T1137.001 - Office Template Macros | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1559.001 - Component Object Model",# unix-logs, timeline
+        "Message_|_\\.docm|\\.xlsm|\\.pptm": "T1137.001 - Office Template Macros | T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1559.001 - Component Object Model Hijacking",# unix-logs, timeline
         "Message_|_\\.docx|\\.xlsx|\\.pptx": "T1203.000 - Exploitation for Client Execution | T1204.002 - Malicious File | T1221.000 - Template Injection | ",# unix-logs, timeline
         "Message_|_\\.eml": "T1114.001 - Local Email Collection",# unix-logs, timeline
         "Message_|_\\.job|schtask": "T1053.005 - Scheduled Task",# unix-logs, timeline
@@ -493,7 +493,7 @@ def doTransform(transformsconf):
         "Message_|_currentversion/run|currentversion/policies/explorer/run|currentversion/explorer/user/|currentversion/explorer/shell": "T1547.001 - Registry Run Keys / Startup Folder",# unix-logs, timeline
         "Message_|_currentversion/windows|nt/currentversion/windows": "T1546.010 - AppInit DLLs",# unix-logs, timeline
         "Message_|_currentversion/winlogon/notify|currentversion/winlogon/userinit|currentversion/winlogon/shell": "T1547.001 - Registry Run Keys / Startup Folder | T1547.004 - Winlogon Helper DLL",# unix-logs, timeline
-        "Message_|_DISPLAY|display|HID|hid|PCI|pci|UMB|umb|FDC|fdc|SCSI|scsi|STORAGE|storage|USBSTOR|usbstor|USB|usb": "T1025.000 - Data from Removable Media | T1052.001 - Exfiltration over USB | T1056.001 - Keylogging | T1091.000 - Replication through Removable Media | T1200.000 - Hardware Additions | T1570.000 - Lateral Tool Transfer",# unix-logs, timeline
+        "Message_|_DISPLAY|display|HID|hid|PCI|pci|UMB|umb|FDC|fdc|SCSI|scsi|STORAGE|storage|USB|usb": "T1025.000 - Data from Removable Media | T1052.001 - Exfiltration over USB | T1056.001 - Keylogging | T1091.000 - Replication through Removable Media | T1200.000 - Hardware Additions | T1570.000 - Lateral Tool Transfer",# unix-logs, timeline
         "Message_|_docker build|docker build|docker_build|docker__build": "T1612.000 - Build Image on Host",# unix-logs, timeline
         "Message_|_docker create|docker create|docker start|docker start|docker_create|docker__create|docker_start|docker_start": "T1610.000 - Deploy Container",# unix-logs, timeline
         "Message_|_docker exec|docker exec|docker run|docker run|kubectl exec|kubectl exec|kubectl run|kubectl run|docker_exec|docker__exec|docker_run|docker__run|kubectl_exec|kubectl__exec|kubectl_run|kubectl__run": "T1609.000 - Container Administration Command",# unix-logs, timeline
@@ -516,10 +516,10 @@ def doTransform(transformsconf):
         "Message_|_history|histfile": "T1070.003 - Clear Command History | T1552.003 - Bash History | T1562.003 - Impair Command History Logging",# unix-logs, timeline
         "Message_|_hostname |systeminfo|whoami": "T1033.000 - System Owner/User Discovery",# unix-logs, timeline
         "Message_|_ifconfig|ipconfig|dig ": "T1016.001 - Internet Connection Discovery",# unix-logs, timeline
-        "Message_|_ipc%24|ipc\\$|ipc$": "T1021.002 - SMB/Windows Admin Shares | T1559.001 - Component Object Model",# unix-logs, timeline
+        "Message_|_ipc%24|ipc\\$|ipc$": "T1021.002 - SMB/Windows Admin Shares | T1559.001 - Component Object Model Hijacking",# unix-logs, timeline
         "Message_|_is_debugging|sysctl|ptrace": "T1497.001 - System Checks",# unix-logs, timeline
         "Message_|_keychain": "T1555.001 - Keychain",# unix-logs, timeline
-        "Message_|_kill|kill ": "T1489.000 - Service Stop | 1548.003 - Sudo and Sudo Caching | T1562.001 - Disable or Modify Tools",# unix-logs, timeline
+        "Message_|_kill ": "T1489.000 - Service Stop | 1548.003 - Sudo and Sudo Caching | T1562.001 - Disable or Modify Tools",# unix-logs, timeline
         "Message_|_launchagents": "T1543.001 - Launch Agent",# unix-logs, timeline
         "Message_|_launchctl": "T1569.001 - Launchctl",# unix-logs, timeline
         "Message_|_launchdaemons": "T1543.004 - Launch Daemon",# unix-logs, timeline
@@ -564,7 +564,7 @@ def doTransform(transformsconf):
         "Message_|_sdelete": "T1070.004 - File Deletion | T1485.000 - Data Destruction",# unix-logs, timeline
         "Message_|_services": "T1489.000 - Service Stop",# unix-logs, timeline
         "Message_|_software/microsoft/netsh": "T1546.007 - Netsh Helper DLL",# unix-logs, timeline
-        "Message_|_software/microsoft/ole": "T1175.001 - Component Object Model",# unix-logs, timeline
+        "Message_|_software/microsoft/ole": "T1546.015 - Component Object Model Hijacking",# unix-logs, timeline
         "Message_|_software/policies/microsoft/previousversions/disablelocalpage": "T1490.000 - Inhibit System Recovery",# unix-logs, timeline
         "Message_|_startupitems": "T1037.002 - Logon Script (Mac)",# unix-logs, timeline
         "Message_|_startupparameters": "T1037.002 - Logon Script (Mac) | T1037.005 - Startup Items | T1547.011 - Plist Modification",# unix-logs, timeline
@@ -725,7 +725,7 @@ def doTransform(transformsconf):
         "Registry_|_nt/dnsclient": "T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay",# registry
         "Registry_|_panel/cpls": "T1218.002 - Control Panel",# registry
         "Registry_|_software/microsoft/netsh": "T1546.007 - Netsh Helper DLL",# registry
-        "Registry_|_software/microsoft/ole": "T1175.001 - Component Object Model",# registry
+        "Registry_|_software/microsoft/ole": "T1175.001 - Component Object Model Hijacking",# registry
         "Registry_|_software/policies/microsoft/previousversions/disablelocalpage": "T1490.000 - Inhibit System Recovery",# registry
         "Registry_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",# registry
         ## Spearphishing via Service sites - Facebook, Instagram etc.
@@ -817,8 +817,8 @@ def doTransform(transformsconf):
         "WinCommand_|_impersonateloggedonuser|logonuser|runas|setthreadtoken|impersonatenamedpipeclient": "T1134.001 - Token Impersonation/Theft",# memory, evt
         "WinCommand_|_installutil": "T1218.004 - InstallUtil",# memory, evt
         "WinCommand_|_invoke-psimage": "T1001.002 - Steganography",# memory, evt
-        "WinCommand_|_ipc%24|ipc\\$|ipc$": "T1021.002 - SMB/Windows Admin Shares | T1559.001 - Component Object Model | T1570.000 - Lateral Tool Transfer",# memory, evt
-        "WinCommand_|_itaskservice|itaskdefinition|itasksettings": "T1559.001 - Component Object Model",# memory, evt
+        "WinCommand_|_ipc%24|ipc\\$|ipc$": "T1021.002 - SMB/Windows Admin Shares | T1559.001 - Component Object Model Hijacking | T1570.000 - Lateral Tool Transfer",# memory, evt
+        "WinCommand_|_itaskservice|itaskdefinition|itasksettings": "T1559.001 - Component Object Model Hijacking",# memory, evt
         "WinCommand_|_libzip|zlib": "T1560.002 - Archive via Library",# memory, evt
         "WinCommand_|_loadlibrary": "T1055.001 - Dynamic-link Library Injection | T1055.002 - Portable Executable Injection | T1055.004 - Asynchronous Procedure Call | T1106.000 - Native API",# memory, evt
         "WinCommand_|_logonuser|runas|setthreadtoken": "T1134.003 - Make and Impersonate Token",# memory, evt
@@ -827,7 +827,7 @@ def doTransform(transformsconf):
         "WinCommand_|_lsof|route|dig ": "T1033.000 - System Owner/User Discovery | T1049.000 - System Network Connections Discovery",# memory, evt
         "WinCommand_|_mailboxexportrequest|x-ms-exchange-organization-autoforwarded|x-mailfwdby|x-forwarded-to|forwardingsmtpaddress": "T1114.003 - Email Forwarding Rule",# memory, evt
         "WinCommand_|_microphone": "T1123.000 - Audio Capture",# memory, evt
-        "WinCommand_|_microsoft\\.office\\.interop": "T1559.001 - Component Object Model",# memory, evt
+        "WinCommand_|_microsoft\\.office\\.interop": "T1559.001 - Component Object Model Hijacking",# memory, evt
         "WinCommand_|_mof|register-wmievent|wmiprvse|eventfilter|eventconsumer|filtertoconsumerbinding": "T1546.003 - Windows Management Instrumentation Event Subscription",# memory, evt
         "WinCommand_|_msbuild": "T1127.001 - MSBuild | T1569.002 - Service Execution",# memory, evt
         "WinCommand_|_mshta|alwaysinstallelevated": "T1218.005 - Mshta",# memory, evt

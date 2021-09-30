@@ -1,5 +1,4 @@
 #!/usr/bin/env python3 -tt
-
 def doLog(verbosity, outdir, entry, prnt):
     if "elrond_time,elrond_host,elrond_stage,elrond_log_entry" in entry:
         writemode = "w"

@@ -96,7 +96,8 @@ def doHTML(sd):
       # description
         t1200html.write("{}Adversaries may introduce computer accessories, computers, or networking hardware into a system or network that can be used as a vector to gain access.<br>".format(header))
         t1200html.write("While public references of usage by APT groups are scarce, many penetration testers leverage hardware additions for initial access.<br>")
-        t1200html.write("Commercial and open source products are leveraged with capabilities such as passive network tapping, man-in-the middle encryption breaking, keystroke injection, kernel memory reading via DMA, adding new wireless access to an existing network, and others.")      # information
+        t1200html.write("Commercial and open source products are leveraged with capabilities such as passive network tapping, man-in-the middle encryption breaking, keystroke injection, kernel memory reading via DMA, adding new wireless access to an existing network, and others.")
+      # information
         t1200html.write("{}T1200</td>\n        <td>".format(headings)) # id
         t1200html.write("Windows, macOS, Linux</td>\n        <td>") # platforms
         t1200html.write("Initial Access</td>\n        <td>") # tactics
@@ -105,16 +106,12 @@ def doHTML(sd):
         t1200html.write("{}DISPLAY</li>\n        <li>".format(iocs))
         t1200html.write("HID</li>\n        <li>")
         t1200html.write("PCI</li>\n        <li>")
-        t1200html.write("IDE</li>\n        <li>")
-        t1200html.write("ROOT</li>\n        <li>")
         t1200html.write("UMB</li>\n        <li>")
         t1200html.write("FDC</li>\n        <li>")
-        t1200html.write("IDE</li>\n        <li>")
         t1200html.write("SCSI</li>\n        <li>")
         t1200html.write("STORAGE</li>\n        <li>")
-        t1200html.write("USBSTOR</li>\n        <li>")
         t1200html.write("USB</li>\n        <li>")
-        t1200html.write("WpdBusEnumRoot")
+        t1200html.write("WpdBusEnumRoot</li>")
       # related techniques
         t1200html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1091 target=\"_blank\"\">T1091</a></td>\n        <td>".format(related))
         t1200html.write("Replication Through Removable Media")
@@ -137,7 +134,7 @@ def doHTML(sd):
         t1566html.write("T1566.001: Spearphishing Attachment<br>T1566.002: Spearphishing Link<br>T1566.003: Spearphishing via Service") # sub-techniques
       # indicator regex assignments
         t1566html.write("{}.msg</li>\n        <li>".format(iocs))
-        t1566html.write(".eml")
+        t1566html.write(".eml</li>")
       # related techniques
         t1566html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1078 target=\"_blank\"\">T1078</a></td>\n        <td>".format(related))
         t1566html.write("Valid Accounts")
@@ -172,16 +169,12 @@ def doHTML(sd):
         t1091html.write("{}DISPLAY</li>\n        <li>".format(iocs))
         t1091html.write("HID</li>\n        <li>")
         t1091html.write("PCI</li>\n        <li>")
-        t1091html.write("IDE</li>\n        <li>")
-        t1091html.write("ROOT</li>\n        <li>")
         t1091html.write("UMB</li>\n        <li>")
         t1091html.write("FDC</li>\n        <li>")
-        t1091html.write("IDE</li>\n        <li>")
         t1091html.write("SCSI</li>\n        <li>")
         t1091html.write("STORAGE</li>\n        <li>")
-        t1091html.write("USBSTOR</li>\n        <li>")
         t1091html.write("USB</li>\n        <li>")
-        t1091html.write("WpdBusEnumRoot")
+        t1091html.write("WpdBusEnumRoot</li>")
       # related techniques
         t1091html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1200 target=\"_blank\"\">T1200</a></td>\n        <td>".format(related))
         t1091html.write("Hardware Additions")
@@ -295,7 +288,7 @@ def doHTML(sd):
         t1059html.write("Start-Process</li>\n        <li>")
         t1059html.write("vbscript</li>\n        <li>")
         t1059html.write("wscript</li>\n        <li>")
-        t1059html.write("system.management.automation")
+        t1059html.write("system.management.automation</li>")
       # related techniques - unfinished MANY
         t1059html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1559 target=\"_blank\"\">T1559</a></td>\n        <td>".format(related))
         t1059html.write("Inter-Process Communication")
@@ -335,8 +328,10 @@ def doHTML(sd):
         t1609html.write("{}Adversaries may abuse a container administration service to execute commands within a container. A container administration service such as the Docker daemon, the Kubernetes API server, or the kubelet may allow remote management of containers within an environment.<br>".format(header))
         t1609html.write("In Docker, adversaries may specify an entrypoint during container deployment that executes a script or command, or they may use a command such as docker exec to execute a command within a running container.<br>")
         t1609html.write("In Kubernetes, if an adversary has sufficient permissions, they may gain remote execution in a container in the cluster via interaction with the Kubernetes API server, the kubelet, or by running a command such as kubectl exec.")
+      # indicator regex assignments
         t1609html.write("docker exec</li>\n        <li>")
-        t1609html.write("kubectl exec</li>")      # information
+        t1609html.write("kubectl exec</li>")
+      # information
         t1609html.write("{}T1609</td>\n        <td>".format(headings)) # id
         t1609html.write("Windows</td>\n        <td>") # platforms
         t1609html.write("Execution</td>\n        <td>") # tactics
@@ -355,8 +350,10 @@ def doHTML(sd):
       # description
         t1610html.write("{}Adversaries may deploy a container into an environment to facilitate execution or evade defenses. In some cases, adversaries may deploy a new container to execute processes associated with a particular image or deployment, such as processes that execute or download malware. In others, an adversary may deploy a new container configured without network rules, user limitations, etc. to bypass existing defenses within the environment.<br>".format(header))
         t1610html.write("Containers can be deployed by various means, such as via Docker's create and start APIs or via a web application such as the Kubernetes dashboard or Kubeflow. Adversaries may deploy containers based on retrieved or built malicious images or from benign images that download and execute malicious payloads at runtime.")
+      # indicator regex assignments
         t1610html.write("docker create</li>\n        <li>")
-        t1610html.write("docker start</li>")      # information
+        t1610html.write("docker start</li>")
+      # information
         t1610html.write("{}T1610</td>\n        <td>".format(headings)) # id
         t1610html.write("Containers</td>\n        <td>") # platforms
         t1610html.write("Execution</td>\n        <td>") # tactics
@@ -388,11 +385,13 @@ def doHTML(sd):
         t1203html.write(".xls</li>\n        <li>")
         t1203html.write(".ppt</li>\n        <li>")
         t1203html.write(".pdf</li>\n        <li>")
+        t1203html.write(".msg</li>\n        <li>")
+        t1203html.write(".eml</li>\n        <li>")
         t1203html.write("WinWord</li>\n        <li>")
         t1203html.write("Excel</li>\n        <li>")
         t1203html.write("PowerPnt</li>\n        <li>")
         t1203html.write("Acrobat</li>\n        <li>")
-        t1203html.write("Acrord32")
+        t1203html.write("Acrord32</li>")
       # related techniques
         t1203html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1189 target=\"_blank\"\">T1189</a></td>\n        <td>".format(related))
         t1203html.write("Drive-by Compromise")
@@ -419,6 +418,8 @@ def doHTML(sd):
         t1559html.write(".xlsm</li>\n        <li>")
         t1559html.write(".pptm</li>\n        <li>")
         t1559html.write("IPC$")
+        ## itaskservice|itaskdefinition|itasksettings
+        ## microsoft\\.office\\.interop
       # related techniques
         t1559html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1059 target=\"_blank\"\">T1059</a></td>\n        <td>".format(related))
         t1559html.write("Command and Scripting Interpreter")
@@ -455,48 +456,48 @@ def doHTML(sd):
       # indicator regex assignments
         t1106html.write("{}PowerShell</li>\n        <li>".format(iocs))
         t1106html.write("cmd.exe</li>\n        <li>")
-        t1106html.write("contentsOfDirectoryAtPath")
-        t1106html.write("pathExtension")
-        t1106html.write("compare")
-        t1106html.write("fork")
-        t1106html.write("CreateProcess")
-        t1106html.write("CreateRemoteThread")
-        t1106html.write("LoadLibrary")
-        t1106html.write("ShellExecute")
-        t1106html.write("IsDebuggerPresent")
-        t1106html.write("OutputDebugString")
-        t1106html.write("SetLastError")
-        t1106html.write("HttpOpenRequestA")
-        t1106html.write("CreatePipe")
-        t1106html.write("GetUserNameW")
-        t1106html.write("CallWindowProc")
-        t1106html.write("EnumResourceTypesA")
-        t1106html.write("ConnectNamedPipe")
-        t1106html.write("WNetAddConnection2")
-        t1106html.write("ZwWriteVirtualMemory")
-        t1106html.write("ZwProtectVirtualMemory")
-        t1106html.write("ZwQueueApcThread")
-        t1106html.write("NtResumeThread")
-        t1106html.write("TerminateProcess")
-        t1106html.write("GetModuleFileName")
-        t1106html.write("lstrcat")
-        t1106html.write("CreateFile")
-        t1106html.write("ReadFile")
-        t1106html.write("GetProcessById")
-        t1106html.write("WriteFile")
-        t1106html.write("CloseHandle")
-        t1106html.write("GetCurrentHwProfile")
-        t1106html.write("GetProcAddress")
-        t1106html.write("FindNextUrlCacheEntryA")
-        t1106html.write("FindFirstUrlCacheEntryA")
-        t1106html.write("GetWindowsDirectoryW")
-        t1106html.write("MoveFileEx")
-        t1106html.write("NtQueryInformationProcess")
-        t1106html.write("RegEnumKeyW")
-        t1106html.write("SetThreadContext")
-        t1106html.write("VirtualAlloc")
-        t1106html.write("WinExec")
-        t1106html.write("WriteProcessMemory")
+        t1106html.write("contentsOfDirectoryAtPath</li>\n        <li>")
+        t1106html.write("pathExtension</li>\n        <li>")
+        t1106html.write("compare</li>\n        <li>")
+        t1106html.write("fork</li>\n        <li>")
+        t1106html.write("CreateProcess</li>\n        <li>")
+        t1106html.write("CreateRemoteThread</li>\n        <li>")
+        t1106html.write("LoadLibrary</li>\n        <li>")
+        t1106html.write("ShellExecute</li>\n        <li>")
+        t1106html.write("IsDebuggerPresent</li>\n        <li>")
+        t1106html.write("OutputDebugString</li>\n        <li>")
+        t1106html.write("SetLastError</li>\n        <li>")
+        t1106html.write("HttpOpenRequestA</li>\n        <li>")
+        t1106html.write("CreatePipe</li>\n        <li>")
+        t1106html.write("GetUserNameW</li>\n        <li>")
+        t1106html.write("CallWindowProc</li>\n        <li>")
+        t1106html.write("EnumResourceTypesA</li>\n        <li>")
+        t1106html.write("ConnectNamedPipe</li>\n        <li>")
+        t1106html.write("WNetAddConnection2</li>\n        <li>")
+        t1106html.write("ZwWriteVirtualMemory</li>\n        <li>")
+        t1106html.write("ZwProtectVirtualMemory</li>\n        <li>")
+        t1106html.write("ZwQueueApcThread</li>\n        <li>")
+        t1106html.write("NtResumeThread</li>\n        <li>")
+        t1106html.write("TerminateProcess</li>\n        <li>")
+        t1106html.write("GetModuleFileName</li>\n        <li>")
+        t1106html.write("lstrcat</li>\n        <li>")
+        t1106html.write("CreateFile</li>\n        <li>")
+        t1106html.write("ReadFile</li>\n        <li>")
+        t1106html.write("GetProcessById</li>\n        <li>")
+        t1106html.write("WriteFile</li>\n        <li>")
+        t1106html.write("CloseHandle</li>\n        <li>")
+        t1106html.write("GetCurrentHwProfile</li>\n        <li>")
+        t1106html.write("GetProcAddress</li>\n        <li>")
+        t1106html.write("FindNextUrlCacheEntryA</li>\n        <li>")
+        t1106html.write("FindFirstUrlCacheEntryA</li>\n        <li>")
+        t1106html.write("GetWindowsDirectoryW</li>\n        <li>")
+        t1106html.write("MoveFileEx</li>\n        <li>")
+        t1106html.write("NtQueryInformationProcess</li>\n        <li>")
+        t1106html.write("RegEnumKeyW</li>\n        <li>")
+        t1106html.write("SetThreadContext</li>\n        <li>")
+        t1106html.write("VirtualAlloc</li>\n        <li>")
+        t1106html.write("WinExec</li>\n        <li>")
+        t1106html.write("WriteProcessMemory</li>")
       # related techniques
         t1106html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1059 target=\"_blank\"\">T1059</a></td>\n        <td>".format(related))
         t1106html.write("Command and Scripting Interpreter")
@@ -522,6 +523,7 @@ def doHTML(sd):
         t1053html.write("{}schtask</li>\n        <li>".format(iocs))
         t1053html.write("at</li>\n        <li>")
         t1053html.write(".job")
+        ## timer
       # related techniques
         t1053html.write("{}-</td>\n        <td>".format(related))
         t1053html.write("-")
@@ -603,7 +605,7 @@ def doHTML(sd):
         t1569html.write("sc</li>\n        <li>")
         t1569html.write("MSBuild</li>\n        <li>")
         t1569html.write(".service</li>\n        <li>")
-        t1569html.write("launchctl")
+        t1569html.write("launchctl</li>")
       # related techniques
         t1569html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1543 target=\"_blank\"\">T1543</a></td>\n        <td>".format(related))
         t1569html.write("Create or Modify System Process")
@@ -643,7 +645,7 @@ def doHTML(sd):
         t1204html.write(".pptm</li>\n        <li>")
         t1204html.write(".pdf</li>\n        <li>")
         t1204html.write(".msg</li>\n        <li>")
-        t1204html.write(".eml")
+        t1204html.write(".eml</li>")
       # related techniques
         t1204html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1566 target=\"_blank\"\">T1566</a></td>\n        <td>".format(related))
         t1204html.write("Phishing")
@@ -674,7 +676,7 @@ def doHTML(sd):
         t1047html.write("{}Ports: 135</li>\n        <li>".format(iocs))
         t1047html.write("wmic</li>\n        <li>")
         t1047html.write("Invoke-Wmi</li>\n        <li>")
-        t1047html.write("msxsl")
+        t1047html.write("msxsl</li>")
       # related techniques
         t1047html.write("{}-</td>\n        <td>".format(related))
         t1047html.write("-")
@@ -697,7 +699,7 @@ def doHTML(sd):
       # indicator regex assignments
         t1098html.write("{}authorized_keys</li>\n        <li>".format(iocs))
         t1098html.write("sshd_config</li>\n        <li>")
-        t1098html.write("ssh-keygen")
+        t1098html.write("ssh-keygen</li>")
       # related techniques
         t1098html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t0078 target=\"_blank\"\">T0078</a></td>\n        <td>".format(related))
         t1098html.write("Valid Accounts")
@@ -728,7 +730,7 @@ def doHTML(sd):
         t1197html.write("bits</li>\n        <li>")
         t1197html.write("setnotifyflags</li>\n        <li>")
         t1197html.write("setnotifycmdline</li>\n        <li>")
-        t1197html.write("transfer")
+        t1197html.write("transfer</li>")
       # related techniques
         t1197html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1559 target=\"_blank\"\">T1559</a></td>\n        <td>".format(related))
         t1197html.write("Inter-Process Communication: Component Object Model")
@@ -767,50 +769,51 @@ def doHTML(sd):
         t1547html.write("failure</li>\n        <li>")
         t1547html.write("lsass</li>\n        <li>")
         t1547html.write(".lnk</li>\n        <li>")
-        t1547html.write("Authentication Packages")
-        t1547html.write("Print Processors")
-        t1547html.write("CurrentControlSet/Control/Lsa")
-        t1547html.write("CurrentControlSet/Control/Print/Monitors")
-        t1547html.write("CurrentControlSet/Control/Session Manager")
-        t1547html.write("CurrentControlSet/Services/W32Time/TimeProviders")
-        t1547html.write("CurrentVersion/Image File Execution Options")
-        t1547html.write("CurrentVersion/WinLogon/Notify")
-        t1547html.write("CurrentVersion/WinLogon/UserInit")
-        t1547html.write("CurrentVersion/WinLogon/Shell")
-        t1547html.write("Manager/SafeDllSearchMode")
+        t1547html.write("Authentication Packages</li>\n        <li>")
+        t1547html.write("Print Processors</li>\n        <li>")
+        t1547html.write("Active Setup/Installed Components</li>\n        <li>")
+        t1547html.write("CurrentControlSet/Control/Lsa</li>\n        <li>")
+        t1547html.write("CurrentControlSet/Control/Print/Monitors</li>\n        <li>")
+        t1547html.write("CurrentControlSet/Control/Session Manager</li>\n        <li>")
+        t1547html.write("CurrentControlSet/Services/W32Time/TimeProviders</li>\n        <li>")
+        t1547html.write("CurrentVersion/Image File Execution Options</li>\n        <li>")
+        t1547html.write("CurrentVersion/WinLogon/Notify</li>\n        <li>")
+        t1547html.write("CurrentVersion/WinLogon/UserInit</li>\n        <li>")
+        t1547html.write("CurrentVersion/WinLogon/Shell</li>\n        <li>")
+        t1547html.write("Manager/SafeDllSearchMode</li>\n        <li>")
         t1547html.write("Security/Policy/Secrets</li>\n        <li>")
-        t1547html.write("emond")
-        t1547html.write("lc_load_weak_dylib")
-        t1547html.write("rpath")
-        t1547html.write("loader_path")
-        t1547html.write("executable_path")
-        t1547html.write("ottol")
-        t1547html.write("LD_PRELOAD")
-        t1547html.write("DYLD_INSERT_LIBRARIES")
-        t1547html.write("export")
-        t1547html.write("setenv")
-        t1547html.write("putenv")
-        t1547html.write("os.environ")
-        t1547html.write("ld.so.preload")
-        t1547html.write("dlopen")
-        t1547html.write("mmap")
-        t1547html.write("failure")
-        t1547html.write("modprobe")
-        t1547html.write("insmod")
-        t1547html.write("lsmod")
-        t1547html.write("rmmod")
-        t1547html.write("modinfo")
-        t1547html.write("kextload")
-        t1547html.write("kextunload")
-        t1547html.write("autostart")
-        t1547html.write("xdg")
-        t1547html.write("autostart")
-        t1547html.write("loginitems")
-        t1547html.write("loginwindow")
-        t1547html.write("SMLoginItemSetEnabled")
-        t1547html.write("uielement")
-        t1547html.write("quarantine")
-        t1547html.write("startupparameters")
+        t1547html.write("emond</li>\n        <li>")
+        t1547html.write("lc_load_weak_dylib</li>\n        <li>")
+        t1547html.write("rpath</li>\n        <li>")
+        t1547html.write("loader_path</li>\n        <li>")
+        t1547html.write("executable_path</li>\n        <li>")
+        t1547html.write("ottol</li>\n        <li>")
+        t1547html.write("LD_PRELOAD</li>\n        <li>")
+        t1547html.write("DYLD_INSERT_LIBRARIES</li>\n        <li>")
+        t1547html.write("export</li>\n        <li>")
+        t1547html.write("setenv</li>\n        <li>")
+        t1547html.write("putenv</li>\n        <li>")
+        t1547html.write("os.environ</li>\n        <li>")
+        t1547html.write("ld.so.preload</li>\n        <li>")
+        t1547html.write("dlopen</li>\n        <li>")
+        t1547html.write("mmap</li>\n        <li>")
+        t1547html.write("failure</li>\n        <li>")
+        t1547html.write("modprobe</li>\n        <li>")
+        t1547html.write("insmod</li>\n        <li>")
+        t1547html.write("lsmod</li>\n        <li>")
+        t1547html.write("rmmod</li>\n        <li>")
+        t1547html.write("modinfo</li>\n        <li>")
+        t1547html.write("kextload</li>\n        <li>")
+        t1547html.write("kextunload</li>\n        <li>")
+        t1547html.write("autostart</li>\n        <li>")
+        t1547html.write("xdg</li>\n        <li>")
+        t1547html.write("autostart</li>\n        <li>")
+        t1547html.write("loginitems</li>\n        <li>")
+        t1547html.write("loginwindow</li>\n        <li>")
+        t1547html.write("SMLoginItemSetEnabled</li>\n        <li>")
+        t1547html.write("uielement</li>\n        <li>")
+        t1547html.write("quarantine</li>\n        <li>")
+        t1547html.write("startupparameters</li>")
       # related techniques
         t1547html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1037 target=\"_blank\"\">T1037</a></td>\n        <td>".format(related))
         t1547html.write("Boot or Logon Initialization Scripts")
@@ -834,7 +837,7 @@ def doHTML(sd):
         t1037html.write("init.d</li>\n        <li>")
         t1037html.write("rc.local</li>\n        <li>")
         t1037html.write("rc.common</li>\n        <li>")
-        t1037html.write("Environment/UserInitMprLogonScript")
+        t1037html.write("Environment/UserInitMprLogonScript</li>")
       # related techniques
         t1037html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1555 target=\"_blank\"\">T1555</a></td>\n        <td>".format(related))
         t1037html.write("Credentials from Password Stores: Credentials from Web Browsers")
@@ -863,7 +866,7 @@ def doHTML(sd):
         t1176html.write("-") # sub-techniques
       # indicator regex assignments
         t1176html.write("{}.mobileconfig</li>\n        <li>".format(iocs))
-        t1176html.write("profiles")
+        t1176html.write("profiles</li>")
       # related techniques
         t1176html.write("{}T1554</td>\n        <td>".format(related))
         t1176html.write("-")
@@ -908,7 +911,7 @@ def doHTML(sd):
         t1136html.write("{}net.exe user /add</li>\n        <li>".format(iocs))
         t1136html.write("net.exe user /domain</li>\n        <li>")
         t1136html.write("net1.exe user /add</li>\n        <li>")
-        t1136html.write("net1.exe user /domain")
+        t1136html.write("net1.exe user /domain</li>")
       # related techniques
         t1136html.write("{}-</a></td>\n        <td>".format(related))
         t1136html.write("-")
@@ -937,9 +940,9 @@ def doHTML(sd):
         t1543html.write("sc.exe</li>\n        <li>")
         t1543html.write("WinExec</li>\n        <li>")
         t1543html.write(".services</li>\n        <li>")
-        t1543html.write("LaunchAgent")
-        t1543html.write("LaunchDaemon")
-        t1543html.write("systemctl")
+        t1543html.write("LaunchAgent</li>\n        <li>")
+        t1543html.write("LaunchDaemon</li>\n        <li>")
+        t1543html.write("systemctl</li>")
       # related techniques
         t1543html.write("{}-</a></td>\n        <td>".format(related))
         t1543html.write("-")
@@ -985,25 +988,25 @@ def doHTML(sd):
         t1546html.write(".mof</li>\n        <li>")
         t1546html.write("debug only this process</li>\n        <li>")
         t1546html.write("debug process</li>\n        <li>")
-        t1546html.write("CurrentControlSet/Control/Session Manager")
-        t1546html.write("CurrentVersion/AppCompatFlags/InstalledSDB")
-        t1546html.write("CurrentVersion/Explorer/FileExts")
-        t1546html.write("CurrentVersion/Image File Execution Options")
-        t1546html.write("CurrentVersion/Windows")
+        t1546html.write("CurrentControlSet/Control/Session Manager</li>\n        <li>")
+        t1546html.write("CurrentVersion/AppCompatFlags/InstalledSDB</li>\n        <li>")
+        t1546html.write("CurrentVersion/Explorer/FileExts</li>\n        <li>")
+        t1546html.write("CurrentVersion/Image File Execution Options</li>\n        <li>")
+        t1546html.write("CurrentVersion/Windows</li>\n        <li>")
         t1546html.write("Software/Microsoft/Netsh</li>\n        <li>")
         t1546html.write("emond</li>\n        <li>")
-        t1546html.write("lc_code_signature")
-        t1546html.write("lc_load_dylib")
-        t1546html.write("profile\\.d")
-        t1546html.write("bash_profile")
-        t1546html.write("bashrc")
-        t1546html.write("bash_login")
-        t1546html.write("bash_logout")
-        t1546html.write("trap")
-        t1546html.write("zshrc")
-        t1546html.write("zshenv")
-        t1546html.write("zlogout")
-        t1546html.write("zlogin")
+        t1546html.write("lc_code_signature</li>\n        <li>")
+        t1546html.write("lc_load_dylib</li>\n        <li>")
+        t1546html.write("profile\\.d</li>\n        <li>")
+        t1546html.write("bash_profile</li>\n        <li>")
+        t1546html.write("bashrc</li>\n        <li>")
+        t1546html.write("bash_login</li>\n        <li>")
+        t1546html.write("bash_logout</li>\n        <li>")
+        t1546html.write("trap</li>\n        <li>")
+        t1546html.write("zshrc</li>\n        <li>")
+        t1546html.write("zshenv</li>\n        <li>")
+        t1546html.write("zlogout</li>\n        <li>")
+        t1546html.write("zlogin</li>")
       # related techniques
         t1546html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1222 target=\"_blank\"\">T1222</a></td>\n        <td>".format(related))
         t1546html.write("File and Directory Permissions Modification")
@@ -1027,8 +1030,8 @@ def doHTML(sd):
         t1574html.write("net.exe use</li>\n        <li>")
         t1574html.write("net1.exe use</li>\n        <li>")
         t1574html.write("CurrentControlSet/Services/</li>\n        <li>")
-        t1574html.write("LC_CODE_SIGNATURE")
-        t1574html.write("LC_LOAD_DYLIB")
+        t1574html.write("LC_CODE_SIGNATURE</li>\n        <li>")
+        t1574html.write("LC_LOAD_DYLIB</li>")
       # related techniques
         t1574html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1548 target=\"_blank\"\">T1548.002</a></td>\n        <td>".format(related))
         t1574html.write("Abuse Elevation Control Mechanism: Bypass User Account Control")
@@ -1089,9 +1092,9 @@ def doHTML(sd):
         t1556html.write("{}OpenProcess</li>\n        <li>".format(iocs))
         t1556html.write("lsass</li>\n        <li>")
         t1556html.write("CurrentControlSet/Control/Lsa</li>\n        <li>")
-        t1556html.write("pam_unix.so")
-        t1556html.write("passwd")
-        t1556html.write("shadow")
+        t1556html.write("pam_unix.so</li>\n        <li>")
+        t1556html.write("etc/passwd</li>\n        <li>")
+        t1556html.write("etc/shadow</li>")
       # related techniques
         t1556html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1078 target=\"_blank\"\">T1078</a></td>\n        <td>".format(related))
         t1556html.write("Valid Accounts")
@@ -1120,8 +1123,8 @@ def doHTML(sd):
         t1137html.write("{}.docm</li>\n        <li>".format(iocs))
         t1137html.write(".xlsm</li>\n        <li>")
         t1137html.write("pptm</li>\n        <li>")
-        t1137html.write("Normal.dotm")
-        t1137html.write("PERSONAL.xlsb")
+        t1137html.write("Normal.dotm</li>\n        <li>")
+        t1137html.write("PERSONAL.xlsb</li>")
       # related techniques
         t1137html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1203 target=\"_blank\"\">T1203</a></td>\n        <td>".format(related))
         t1137html.write("Exploitation for Client Execution")
@@ -1220,17 +1223,17 @@ def doHTML(sd):
         t1548html.write("{}eventvwr.exe</li>\n        <li>".format(iocs))
         t1548html.write("sdclt.exe</li>\n        <li>")
         t1548html.write("CurrentVersion/App Paths</li>\n        <li>")
-        t1548html.write("Software/Classes/ms-settings/shell/open/command")
-        t1548html.write("CurrentVersion/App Paths")
-        t1548html.write("Software/Classes/mscfile/shell/open/command")
+        t1548html.write("Software/Classes/ms-settings/shell/open/command</li>\n        <li>")
+        t1548html.write("CurrentVersion/App Paths</li>\n        <li>")
+        t1548html.write("Software/Classes/mscfile/shell/open/command</li>\n        <li>")
         t1548html.write("Software/Classes/exefile/shell/runas/command/isolatedcommand</li>\n        <li>")
-        t1548html.write("AuthorizationExecuteWithPrivileges")
-        t1548html.write("security_authtrampoline")
-        t1548html.write("chmod")
-        t1548html.write("kill")
-        t1548html.write("sudo")
-        t1548html.write("timestamp_timeout")
-        t1548html.write("tty_tickets")
+        t1548html.write("AuthorizationExecuteWithPrivileges</li>\n        <li>")
+        t1548html.write("security_authtrampoline</li>\n        <li>")
+        t1548html.write("chmod</li>\n        <li>")
+        t1548html.write("kill</li>\n        <li>")
+        t1548html.write("sudo</li>\n        <li>")
+        t1548html.write("timestamp_timeout</li>\n        <li>")
+        t1548html.write("tty_tickets</li>")
       # related techniques
         t1548html.write("{}-</a></td>\n        <td>".format(related))
         t1548html.write("-")
@@ -1269,7 +1272,7 @@ def doHTML(sd):
         t1134html.write("SetThreadToken</li>\n        <li>")
         t1134html.write("ImpersonateNamedPipeClient</li>\n        <li>")
         t1134html.write("UpdateProcThreadAttribute</li>\n        <li>")
-        t1134html.write("LogonUser")
+        t1134html.write("LogonUser</li>")
       # related techniques
         t1134html.write("{}--</a></td>\n        <td>".format(related))
         t1134html.write("-")
@@ -1296,7 +1299,7 @@ def doHTML(sd):
         t1484html.write("{}Event IDs: 307, 510, 4672, 4704, 5136, 5137, 5138, 5139, 5141</li>\n        <li>".format(iocs))
         t1484html.write("GptTmpl.inf</li>\n        <li>")
         t1484html.write("ScheduledTasks.xml</li>\n        <li>")
-        t1484html.write("New-GPOImmediateTask")
+        t1484html.write("New-GPOImmediateTask</li>")
       # related techniques
         t1484html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1053 target=\"_blank\"\">T1053</a></td>\n        <td>".format(related))
         t1484html.write("Scheduled Task/Job")
@@ -1382,29 +1385,29 @@ def doHTML(sd):
         t1055html.write("Privilege Escalation, Defense Evasion</td>\n        <td>") # tactics
         t1055html.write("T1574.001: Dynamic-link Library Injection<br>T1574.002: Portable Execution Injection<br>T1574.003: Thread Execution Hijacking<br>T1574.004: Asynchronous Procedure Call<br>T1574.005: Thread Local Storage<br>T1574.008: Ptrace System Calls<br>T1574.009: Proc Memory<br>T1574.011: Extra Windows Memory Injection<br>T1574.012: Process Hollowing<br>T1574.013: Process Doppelganging<br>T1574.014: VDSO Hijacking") # sub-techniques
       # indicator regex assignments
-        t1055html.write("{}Evant IDs: 17, 18</li>\n        <li>".format(iocs))
-        t1055html.write("CreateFileTransacted")
-        t1055html.write("CreateTransaction")
-        t1055html.write("NtCreateThreadEx")
-        t1055html.write("NtUnmapViewOfSection")
-        t1055html.write("RollbackTransaction")
-        t1055html.write("VirtualProtectEx")
-        t1055html.write("CreateRemoteThread")
-        t1055html.write("GetWindowLong")
-        t1055html.write("SetWindowLong")
-        t1055html.write("LoadLibrary")
-        t1055html.write("NtUnmapViewOfSection")
-        t1055html.write("NtQueueApcThread")
-        t1055html.write("QueueUserApc")
-        t1055html.write("ResumeThread")
-        t1055html.write("SetThreadContext")
-        t1055html.write("SuspendThread")
-        t1055html.write("VirtualAlloc")
+        t1055html.write("{}Event IDs: 17, 18</li>\n        <li>".format(iocs))
+        t1055html.write("CreateFileTransacted</li>\n        <li>")
+        t1055html.write("CreateTransaction</li>\n        <li>")
+        t1055html.write("NtCreateThreadEx</li>\n        <li>")
+        t1055html.write("NtUnmapViewOfSection</li>\n        <li>")
+        t1055html.write("RollbackTransaction</li>\n        <li>")
+        t1055html.write("VirtualProtectEx</li>\n        <li>")
+        t1055html.write("CreateRemoteThread</li>\n        <li>")
+        t1055html.write("GetWindowLong</li>\n        <li>")
+        t1055html.write("SetWindowLong</li>\n        <li>")
+        t1055html.write("LoadLibrary</li>\n        <li>")
+        t1055html.write("NtUnmapViewOfSection</li>\n        <li>")
+        t1055html.write("NtQueueApcThread</li>\n        <li>")
+        t1055html.write("QueueUserApc</li>\n        <li>")
+        t1055html.write("ResumeThread</li>\n        <li>")
+        t1055html.write("SetThreadContext</li>\n        <li>")
+        t1055html.write("SuspendThread</li>\n        <li>")
+        t1055html.write("VirtualAlloc</li>\n        <li>")
         t1055html.write("ZwUnmapViewOfSection</li>\n        <li>")
         t1055html.write("malloc</li>\n        <li>")
-        t1055html.write("ptrace_setregs")
-        t1055html.write("ptrace_poketext")
-        t1055html.write("ptrace_pokedata")
+        t1055html.write("ptrace_setregs</li>\n        <li>")
+        t1055html.write("ptrace_poketext</li>\n        <li>")
+        t1055html.write("ptrace_pokedata</li>")
       # related techniques
         t1055html.write("{}-</a></td>\n        <td>".format(related))
         t1055html.write("-")
@@ -1454,7 +1457,7 @@ def doHTML(sd):
       # indicator regex assignments
         t1140html.write("{}certutil</li>\n        <li>".format(iocs))
         t1140html.write("-decode</li>\n        <li>")
-        t1140html.write("openssl")
+        t1140html.write("openssl</li>")
       # related techniques
         t1140html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1027 target=\"_blank\"\">T1027</a></td>\n        <td>".format(related))
         t1140html.write("Obfuscated Files or Information")
@@ -1547,7 +1550,7 @@ def doHTML(sd):
         t1222html.write("attrib</li>\n        <li>")
         t1222html.write("chmod</li>\n        <li>")
         t1222html.write("chown</li>\n        <li>")
-        t1222html.write("chgrp")
+        t1222html.write("chgrp</li>")
       # related
         t1222html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1546 target=\"_blank\"\">T1546.008</a></td>\n        <td>".format(insert))
         t1222html.write("Event Triggered Execution: Accessibility Features")
@@ -1591,10 +1594,10 @@ def doHTML(sd):
         t1564html.write("zwseteafile</li>\n        <li>")
         t1564html.write("stream</li>\n        <li>")
         t1564html.write(":ads</li>\n        <li>")
-        t1564html.write("LoginWindow")
-        t1564html.write("Hide500Users")
-        t1564html.write("UniqueID")
-        t1564html.write("UIElement")
+        t1564html.write("LoginWindow</li>\n        <li>")
+        t1564html.write("Hide500Users</li>\n        <li>")
+        t1564html.write("UniqueID</li>\n        <li>")
+        t1564html.write("UIElement</li>")
       # related techniques
         t1564html.write("{}-</a></td>\n        <td>".format(related))
         t1564html.write("-")
@@ -1623,9 +1626,9 @@ def doHTML(sd):
         t1562html.write("Set-EtwTraceProvider</li>\n        <li>")
         t1562html.write("ZwOpenProcess</li>\n        <li>")
         t1562html.write("GetExtendedTcpTable</li>\n        <li>")
-        t1562html.write("HISTCONTROL")
-        t1562html.write("HISTFILE")
-        t1562html.write("kill")
+        t1562html.write("HISTCONTROL</li>\n        <li>")
+        t1562html.write("HISTFILE</li>\n        <li>")
+        t1562html.write("kill</li>")
       # related techniques
         t1562html.write("{}-</a></td>\n        <td>".format(related))
         t1562html.write("-")
@@ -1660,7 +1663,7 @@ def doHTML(sd):
         t1070html.write("OpenEventLog ClearEventLog</li>\n        <li>")
         t1070html.write("net.exe use</li>\n        <li>")
         t1070html.write("net1.exe use</li>\n        <li>")
-        t1070html.write("/var/log")
+        t1070html.write("/var/log</li>")
       # related techniques
         t1070html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1552 target=\"_blank\"\">T1552</a></td>\n        <td>".format(related))
         t1070html.write("Unsecured Credentials: Bash History")
@@ -1724,7 +1727,7 @@ def doHTML(sd):
         t1036html.write("connhst</li>\n        <li>")
         t1036html.write("iexplorer</li>\n        <li>")
         t1036html.write("iexploror</li>\n        <li>")
-        t1036html.write("iexplorar")
+        t1036html.write("iexplorar</li>")
       # related techniques
         t1036html.write("{}-</a></td>\n        <td>".format(related))
         t1036html.write("-")
@@ -1772,7 +1775,7 @@ def doHTML(sd):
       # indicator regex assignments
         t1112html.write("{}autoruns</li>\n        <li>".format(iocs))
         t1112html.write("regdelnull</li>\n        <li>")
-        t1112html.write("reg.exe")
+        t1112html.write("reg.exe</li>")
       # related techniques
         t1112html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1078 target=\"_blank\"\">T1078</a></td>\n        <td>".format(related))
         t1112html.write("Valid Accounts")
@@ -1785,11 +1788,13 @@ def doHTML(sd):
       # description
         t1601html.write("{}Adversaries may make changes to the operating system of embedded network devices to weaken defenses and provide new capabilities for themselves. On such devices, the operating systems are typically monolithic and most of the device functionality and capabilities are contained within a single file.<br>".format(header))
         t1601html.write("To change the operating system, the adversary typically only needs to affect this one file, replacing or modifying it. This can either be done live in memory during system runtime for immediate effect, or in storage to implement the change on the next boot of the network device.")
-        t1601html.write("{}-".format(iocs))      # information
+      # information
         t1601html.write("{}T1601</td>\n        <td>".format(headings)) # id
         t1601html.write("Containers</td>\n        <td>") # platforms
         t1601html.write("Defense Evasion</td>\n        <td>") # tactics
-        t1601html.write("T1601.001: Patch System ImageT1601.002: Downgrade System Image<br>") # sub-techniques
+        t1601html.write("T1601.001: Patch System Image<br>T1601.002: Downgrade System Image<br>") # sub-techniques
+      # indicator regex assignments
+        t1601html.write("{}-".format(iocs))
       # related techniques
         t1601html.write("{}-</a></td>\n        <td>".format(related))
         t1601html.write("-")
@@ -1821,7 +1826,6 @@ def doHTML(sd):
       # related techniques
         t1599html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1090 target=\"_blank\"\">T1090</a></td>\n        <td>".format(related))
         t1599html.write("Multi-hop Proxy")
-      # related techniques
         t1599html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1020 target=\"_blank\"\">T1020</a></td>\n        <td>".format(insert))
         t1599html.write("Traffic Duplication")
       # mitigations
@@ -1851,7 +1855,7 @@ def doHTML(sd):
         t1027html.write("{}csc.exe</li>\n        <li>".format(iocs))
         t1027html.write("gcc</li>\n        <li>")
         t1027html.write("MinGW</li>\n        <li>")
-        t1027html.write("FileRecvWriteRand")
+        t1027html.write("FileRecvWriteRand</li>")
       # related techniques
         t1027html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1140 target=\"_blank\"\">T1140</a></td>\n        <td>".format(related))
         t1027html.write("Deobfuscate/Decode Files or Information")
@@ -1869,13 +1873,14 @@ def doHTML(sd):
         t1207html.write("This technique may bypass system logging and security monitors such as security information and event management (SIEM) products (since actions taken on a rogue DC may not be reported to these sensors).<br>")
         t1207html.write("The technique may also be used to alter and delete replication and other associated metadata to obstruct forensic analysis.<br>")
         t1207html.write("Adversaries may also utilize this technique to perform SID-History Injection and/or manipulate AD objects (such as accounts, access control lists, schemas) to establish backdoors for Persistence.")
-      # indicator regex assignments
-        t1207html.write("{}lsadump</li>\n        <li>".format(iocs))
-        t1207html.write("DCShadow")      # information
+      # information
         t1207html.write("{}T1207</td>\n        <td>".format(headings)) # id
         t1207html.write("Windows</td>\n        <td>") # platforms
         t1207html.write("Defense Evasion</td>\n        <td>") # tactics
         t1207html.write("-")
+      # indicator regex assignments
+        t1207html.write("{}lsadump</li>\n        <li>".format(iocs))
+        t1207html.write("DCShadow</li>")
       # related techniques
         t1207html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1134 target=\"_blank\"\">T1134</a></td>\n        <td>".format(related))
         t1207html.write("SID-History Injection")
@@ -1933,7 +1938,7 @@ def doHTML(sd):
         t1218html.write("DllEntryPoint</li>\n        <li>")
         t1218html.write("Control_RunDLL</li>\n        <li>")
         t1218html.write("ControlRunDLLAsUser</li>\n        <li>")
-        t1218html.write("panel/cpls")
+        t1218html.write("panel/cpls</li>")
       # related techniques
         t1218html.write("{}-</a></td>\n        <td>".format(related))
         t1218html.write("-")
@@ -1957,7 +1962,7 @@ def doHTML(sd):
         t1216html.write("T1216.001: PubPrn") # sub-techniques
       # indicator regex assignments
         t1216html.write("{}PubPrn</li>\n        <li>".format(iocs))
-        t1216html.write("cscript.exe")
+        t1216html.write("cscript.exe</li>")
       # related techniques
         t1216html.write("{}-</a></td>\n        <td>".format(related))
         t1216html.write("-")
@@ -1989,9 +1994,9 @@ def doHTML(sd):
         t1553html.write("requiresigned</li>\n        <li>")
         t1553html.write("testsigning</li>\n        <li>")
         t1553html.write("curl</li>\n        <li>")
-        t1553html.write("com.apple.quarantine")
-        t1553html.write("xattr")
-        t1553html.write("xttr")
+        t1553html.write("com.apple.quarantine</li>\n        <li>")
+        t1553html.write("xattr</li>\n        <li>")
+        t1553html.write("xttr</li>")
       # related techniques
         t1553html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1222 target=\"_blank\"\">T1222</a></td>\n        <td>".format(related))
         t1553html.write("File and Directory Permissions Modification")
@@ -2022,7 +2027,7 @@ def doHTML(sd):
       # indicator regex assignments
         t1221html.write("{}.docx</li>\n        <li>".format(iocs))
         t1221html.write(".xlsx</li>\n        <li>")
-        t1221html.write(".pptx")
+        t1221html.write(".pptx</li>")
       # related techniques
         t1221html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1566 target=\"_blank\"\">T1566</a></td>\n        <td>".format(related))
         t1221html.write("Phishing")
@@ -2075,7 +2080,7 @@ def doHTML(sd):
       # indicator regex assignments
         t1550html.write("{}Event IDs: 4768, 4769</li>\n        <li>".format(iocs))
         t1550html.write("DCSync</li>\n        <li>")
-        t1550html.write("duo-sid")
+        t1550html.write("duo-sid</li>")
       # related techniques
         t1550html.write("{}-</a></td>\n        <td>".format(related))
         t1550html.write("-")
@@ -2120,11 +2125,11 @@ def doHTML(sd):
         t1497html.write("{}vpcext</li>\n        <li>".format(iocs))
         t1497html.write("vmtoolsd</li>\n        <li>")
         t1497html.write("MSAcpi_ThermalZoneTemperature</li>\n        <li>")
-        t1497html.write("is_debugging")
-        t1497html.write("sysctl")
-        t1497html.write("ptrace")
-        t1497html.write("time")
-        t1497html.write("sleep")
+        t1497html.write("is_debugging</li>\n        <li>")
+        t1497html.write("sysctl</li>\n        <li>")
+        t1497html.write("ptrace</li>\n        <li>")
+        t1497html.write("time</li>\n        <li>")
+        t1497html.write("sleep</li>")
       # related techniques
         t1497html.write("{}-</a></td>\n        <td>".format(related))
         t1497html.write("-")
@@ -2163,7 +2168,7 @@ def doHTML(sd):
       # indicator regex assignments
         t1220html.write("{}MSXML</li>\n        <li>".format(iocs))
         t1220html.write("wmic</li>\n        <li>")
-        t1220html.write("Invoke-Wmi")
+        t1220html.write("Invoke-Wmi</li>")
       # related techniques
         t1220html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1127 target=\"_blank\"\">T1127</a></td>\n        <td>".format(related))
         t1220html.write("Trusted Developer Utilities Proxy Execution")
@@ -2185,7 +2190,7 @@ def doHTML(sd):
         t1110html.write("T1110.001: Password Guessing<br>T1110.002: Password Cracking<br>T1110.003: Password Spraying<br>T1110.004: Credentials Stuffing") # sub-techniques
       # indicator regex assignments
         t1110html.write("{}Ports: 139, 22, 23, 389, 88, 1433, 1521, 3306, 445, 80, 443, </li>\n        <li>".format(iocs))
-        t1110html.write("Event IDs: 4625, 4648, 4771")
+        t1110html.write("Event IDs: 4625, 4648, 4771</li>")
       # related techniques
         t1110html.write("{}-</a></td>\n        <td>".format(related))
         t1110html.write("-")
@@ -2223,7 +2228,7 @@ def doHTML(sd):
         t1555html.write("login</li>\n        <li>")
         t1555html.write("store</li>\n        <li>")
         t1555html.write("secure</li>\n        <li>")
-        t1555html.write("credentials")
+        t1555html.write("credentials</li>")
       # related techniques
         t1555html.write("{}-</a></td>\n        <td>".format(related))
         t1555html.write("-")
@@ -2298,7 +2303,7 @@ def doHTML(sd):
       # indicator regex assignments
         t1606html.write("{}NotOnOrAfter</li>\n        <li>".format(iocs))
         t1606html.write("AccessTokenLifetime</li>\n        <li>")
-        t1606html.write("LifetimeTokenPolicy")
+        t1606html.write("LifetimeTokenPolicy</li>")
       # related techniques
         t1606html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1539 target=\"_blank\"\">T1539</a></td>\n        <td>".format(related))
         t1606html.write("Steal Web Session Cookie")
@@ -2330,16 +2335,12 @@ def doHTML(sd):
         t1056html.write("{}DISPLAY</li>\n        <li>".format(iocs))
         t1056html.write("HID</li>\n        <li>")
         t1056html.write("PCI</li>\n        <li>")
-        t1056html.write("IDE</li>\n        <li>")
-        t1056html.write("ROOT</li>\n        <li>")
         t1056html.write("UMB</li>\n        <li>")
         t1056html.write("FDC</li>\n        <li>")
-        t1056html.write("IDE</li>\n        <li>")
         t1056html.write("SCSI</li>\n        <li>")
         t1056html.write("STORAGE</li>\n        <li>")
-        t1056html.write("USBSTOR</li>\n        <li>")
         t1056html.write("USB</li>\n        <li>")
-        t1056html.write("WpdBusEnumRoot")
+        t1056html.write("WpdBusEnumRoot</li>")
       # related techniques
         t1056html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1059 target=\"_blank\"\">T1059</a></td>\n        <td>".format(related))
         t1056html.write("Command and Scripting Interpreter")
@@ -2360,7 +2361,7 @@ def doHTML(sd):
         t1557html.write("{}Ports: 137, 5355</li>\n        <li>".format(iocs))
         t1557html.write("Event IDs: 4657, 7045</li>\n        <li>")
         t1557html.write("EnableMulticast</li>\n        <li>")
-        t1557html.write("NT/DNSClient")
+        t1557html.write("NT/DNSClient</li>")
       # related techniques
         t1557html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1040 target=\"_blank\"\">T1040</a></td>\n        <td>".format(related))
         t1557html.write("Network Sniffing")
@@ -2434,7 +2435,7 @@ def doHTML(sd):
         t1003html.write("/security/policy/secrets</li>\n        <li>")
         t1003html.write("manager/safedllsearchmode</li>\n        <li>")
         t1003html.write("passwd</li>\n        <li>")
-        t1003html.write("shadow")
+        t1003html.write("shadow</li>")
       # related techniques
         t1003html.write("{}--</a></td>\n        <td>".format(related))
         t1003html.write("-")
@@ -2557,6 +2558,7 @@ def doHTML(sd):
         t1111html.write("{}User Training</td>\n        <td>".format(mitigations))
         t1111html.write("Remove smart cards when not in use.{}".format(footer))
     with open(sd+"t1552.html", "w") as t1552html:
+      # description
         t1552html.write("Adversaries may search compromised systems to find and obtain insecurely stored credentials. These credentials can be stored and/or misplaced in many locations on a system, including plaintext files (e.g. Bash History), operating system or application-specific repositories (e.g. Credentials in Registry), or other specialized files/artifacts (e.g. Private Keys).")
       # information
         t1552html.write("{}T1552</td>\n        <td>".format(headings)) # id
@@ -2587,9 +2589,9 @@ def doHTML(sd):
         t1552html.write("secure</li>\n        <li>")
         t1552html.write("credentials</li>\n        <li>")
         t1552html.write("security</li>\n        <li>")
-        t1552html.write("bash_history")
-        t1552html.write("history")
-        t1552html.write("HISTFILE")
+        t1552html.write("bash_history</li>\n        <li>")
+        t1552html.write("history</li>\n        <li>")
+        t1552html.write("HISTFILE</li>")
       # related techniques
         t1552html.write("{}-</a></td>\n        <td>".format(related))
         t1552html.write("-")
@@ -2626,10 +2628,10 @@ def doHTML(sd):
       # indicator regex assignments
         t1087html.write("{}Get-GlobalAddressList</li>\n        <li>".format(iocs))
         t1087html.write("CurrentVersion\Policies\CredUI\EnumerateAdministrators</li>\n        <li>")
-        t1087html.write("dscacheutil")
-        t1087html.write("ldapsearch")
-        t1087html.write("passwd")
-        t1087html.write("shadow")
+        t1087html.write("dscacheutil</li>\n        <li>")
+        t1087html.write("ldapsearch</li>\n        <li>")
+        t1087html.write("passwd</li>\n        <li>")
+        t1087html.write("shadow</li>")
       # related techniques
         t1087html.write("{}-</a></td>\n        <td>".format(related))
         t1087html.write("-")
@@ -2763,7 +2765,7 @@ def doHTML(sd):
         t1482html.write("Get-NetDomainTrust</li>\n        <li>")
         t1482html.write("Get-NetForestTrust</li>\n        <li>")
         t1482html.write("nltest</li>\n        <li>")
-        t1482html.write("dsquery")
+        t1482html.write("dsquery</li>")
       # related techniques
         t1482html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1134 target=\"_blank\"\">T1134</a></td>\n        <td>".format(related))
         t1482html.write("Access Token Manipulation: SID-History Injection")
@@ -2791,7 +2793,7 @@ def doHTML(sd):
         t1083html.write("tree</li>\n        <li>")
         t1083html.write("ls</li>\n        <li>")
         t1083html.write("find</li>\n        <li>")
-        t1083html.write("locate")
+        t1083html.write("locate</li>")
       # related techniques
         t1083html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1106 target=\"_blank\"\">T1106</a></td>\n        <td>".format(related))
         t1083html.write("Native API")
@@ -2834,7 +2836,7 @@ def doHTML(sd):
         t1135html.write("net1.exe share</li>\n        <li>")
         t1135html.write("net.exe view</li>\n        <li>")
         t1135html.write("net1.exe view</li>\n        <li>")
-        t1135html.write("netsh")
+        t1135html.write("netsh</li>")
       # related techniques
         t1135html.write("{}--</a></td>\n        <td>".format(related))
         t1135html.write("-")
@@ -2856,9 +2858,9 @@ def doHTML(sd):
         t1201html.write("net1.exe accounts</li>\n        <li>")
         t1201html.write("Get-AdDefaultDomainPasswordPolicy</li>\n        <li>")
         t1201html.write("chage</li>\n        <li>")
-        t1201html.write("common-password")
-        t1201html.write("pwpolicy")
-        t1201html.write("getaccountpolicies")
+        t1201html.write("common-password</li>\n        <li>")
+        t1201html.write("pwpolicy</li>\n        <li>")
+        t1201html.write("getaccountpolicies</li>")
       # related techniques
         t1201html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1110 target=\"_blank\"\">T1110</a></td>\n        <td>".format(related))
         t1201html.write("Brute Force")
@@ -2876,7 +2878,7 @@ def doHTML(sd):
         t1120html.write("-") # sub-techniques
       # indicator regex assignments
         t1120html.write("{}fsutil</li>\n        <li>".format(iocs))
-        t1120html.write("fsinfo")
+        t1120html.write("fsinfo</li>")
       # related techniques
         t1120html.write("{}-</a></td>\n        <td>".format(related))
         t1120html.write("-")
@@ -2884,6 +2886,7 @@ def doHTML(sd):
         t1120html.write("{}-</td>\n        <td>".format(mitigations))
         t1120html.write("This type of attack technique cannot be easily mitigated with preventive controls since it is based on the abuse of system features.{}".format(footer))
     with open(sd+"t1069.html", "w") as t1069html:
+      # description
         t1069html.write("Adversaries may attempt to find group and permission settings. This information can help adversaries determine which user accounts and groups are available, the membership of users in particular groups, and which users and groups have elevated permissions.")
       # information
         t1069html.write("{}T1069</td>\n        <td>".format(headings)) # id
@@ -2894,7 +2897,7 @@ def doHTML(sd):
         t1069html.write("{}dscacheutil</li>\n        <li>".format(iocs))
         t1069html.write("ldapsearch</li>\n        <li>")
         t1069html.write("dscl</li>\n        <li>")
-        t1069html.write("group")
+        t1069html.write("group</li>")
       # related techniques
         t1069html.write("{}-</a></td>\n        <td>".format(related))
         t1069html.write("-")
@@ -2913,7 +2916,7 @@ def doHTML(sd):
       # indicator regex assignments
         t1057html.write("{}Get-Process</li>\n        <li>".format(iocs))
         t1057html.write("CreateToolhelp32Snapshot</li>\n        <li>")
-        t1057html.write("ps")
+        t1057html.write("ps</li>")
       # related techniques
         t1057html.write("<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1059 target=\"_blank\"\">T1059</a></td>\n        <td>")
         t1057html.write("Command and Scripting Interpreter: PowerShell")
@@ -2964,7 +2967,7 @@ def doHTML(sd):
         t1018html.write("traceroute</li>\n        <li>")
         t1018html.write("etc/host</li>\n        <li>")
         t1018html.write("etc/hosts</li>\n        <li>")
-        t1018html.write("bonjour")
+        t1018html.write("bonjour</li>")
       # related techniques
         t1018html.write("{}-</a></td>\n        <td>".format(related))
         t1018html.write("-")
@@ -2983,7 +2986,7 @@ def doHTML(sd):
         t1518html.write("T1518.001: Security Software Discovery") # sub-techniques
       # indicator regex assignments
         t1518html.write("{}netsh</li>\n        <li>".format(iocs))
-        t1518html.write("tasklist")
+        t1518html.write("tasklist</li>")
       # related techniques
         t1518html.write("<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1068 target=\"_blank\"\">T1068</a></td>\n        <td>")
         t1518html.write("Exploitation for Privilege Escalation")
@@ -3043,7 +3046,7 @@ def doHTML(sd):
         t1016html.write("traceroute</li>\n        <li>")
         t1016html.write("etc/host</li>\n        <li>")
         t1016html.write("etc/hosts</li>\n        <li>")
-        t1016html.write("bonjour")
+        t1016html.write("bonjour</li>")
       # related techniques
         t1016html.write("{}-</a></td>\n        <td>".format(related))
         t1016html.write("-")
@@ -3054,7 +3057,7 @@ def doHTML(sd):
       # description
         t1049html.write("{}Adversaries may attempt to get a listing of network connections to or from the compromised system they are currently accessing or from remote systems by querying for information over the network.<br>".format(header))
         t1049html.write("An adversary who gains access to a system that is part of a cloud-based environment may map out Virtual Private Clouds or Virtual Networks in order to determine what systems and services are connected<br>")
-        t1049html.write("The actions performed are likely the same types of discovery techniques depending on the operating system, but the resulting information may include details about the networked cloud environment relevant to the adversary's goals. Cloud providers may have different ways in which their virtual networks operate.<br>")
+        t1049html.write("The actions performed are likely the same types of discovery techniques depending on the operating system, but the resulting information may include details about the networked cloud environment relEvent to the adversary's goals. Cloud providers may have different ways in which their virtual networks operate.<br>")
         t1049html.write("Utilities and commands that acquire this information include netstat, \"net use,\" and \"net session\" with Net. In Mac and Linux, netstat and lsof can be used to list current connections. who -a and w can be used to show which users are currently logged in, similar to \"net session\".")
       # information
         t1049html.write("{}T1049</td>\n        <td>".format(headings)) # id
@@ -3068,7 +3071,7 @@ def doHTML(sd):
         t1049html.write("net1 session</li>\n        <li>")
         t1049html.write("netsh</li>\n        <li>")
         t1049html.write("lsof</li>\n        <li>")
-        t1049html.write("who")
+        t1049html.write("who</li>")
       # related techniques
         t1049html.write("{}-</a></td>\n        <td>".format(related))
         t1049html.write("-")
@@ -3096,7 +3099,7 @@ def doHTML(sd):
         t1033html.write("systeminfo</li>\n        <li>")
         t1033html.write("whoami</li>\n        <li>")
         t1033html.write("NetUser-GetInfo</li>\n        <li>")
-        t1033html.write("ifconfig")
+        t1033html.write("ifconfig</li>")
       # related techniques
         t1033html.write("<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1003 target=\"_blank\"\">T1003</a></td>\n        <td>")
         t1033html.write("OS Credential Dumping")
@@ -3118,7 +3121,7 @@ def doHTML(sd):
         t1007html.write("net start</li>\n        <li>")
         t1007html.write("net1 start</li>\n        <li>")
         t1007html.write("net stop</li>\n        <li>")
-        t1007html.write("net1 stop")
+        t1007html.write("net1 stop</li>")
       # related techniques
         t1007html.write("{}-</a></td>\n        <td>".format(related))
         t1007html.write("-")
@@ -3137,7 +3140,7 @@ def doHTML(sd):
         t1124html.write("-") # sub-techniques
       # indicator regex assignments
         t1124html.write("{}net time</li>\n        <li>".format(iocs))
-        t1124html.write("net1 time")
+        t1124html.write("net1 time</li>")
       # related techniques
         t1124html.write("<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1053 target=\"_blank\"\">T1053</a></td>\n        <td>")
         t1124html.write("Scheduled Task/Job")
@@ -3224,16 +3227,12 @@ def doHTML(sd):
         t1570html.write("DISPLAY</li>\n        <li>")
         t1570html.write("HID</li>\n        <li>")
         t1570html.write("PCI</li>\n        <li>")
-        t1570html.write("IDE</li>\n        <li>")
-        t1570html.write("ROOT</li>\n        <li>")
         t1570html.write("UMB</li>\n        <li>")
         t1570html.write("FDC</li>\n        <li>")
-        t1570html.write("IDE</li>\n        <li>")
         t1570html.write("SCSI</li>\n        <li>")
         t1570html.write("STORAGE</li>\n        <li>")
-        t1570html.write("USBSTOR</li>\n        <li>")
         t1570html.write("USB</li>\n        <li>")
-        t1570html.write("WpdBusEnumRoot")
+        t1570html.write("WpdBusEnumRoot</li>")
       # related techniques
         t1570html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1021 target=\"_blank\"\">T1021</a></td>\n        <td>".format(related))
         t1570html.write("Remote Services: SMB/Windows Admin Shares")
@@ -3286,7 +3285,7 @@ def doHTML(sd):
         t1021html.write("winrm</li>\n        <li>")
         t1021html.write("ADMIN$</li>\n        <li>")
         t1021html.write("C$</li>\n        <li>")
-        t1021html.write("IPC$")
+        t1021html.write("IPC$</li>")
       # related techniques
         t1021html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1563 target=\"_blank\"\">T1563</a></td>\n        <td>".format(related))
         t1021html.write("Remote Service Session Hijacking")
@@ -3346,7 +3345,7 @@ def doHTML(sd):
         t1560html.write("libzip</li>\n        <li>")
         t1560html.write("zlib</li>\n        <li>")
         t1560html.write("rarfile</li>\n        <li>")
-        t1560html.write("bzip2")
+        t1560html.write("bzip2</li>")
       # related techniques
         t1560html.write("{}-</a></td>\n        <td>".format(related))
         t1560html.write("-")
@@ -3367,7 +3366,7 @@ def doHTML(sd):
         t1123html.write(".wav</li>\n        <li>")
         t1123html.write(".aac</li>\n        <li>")
         t1123html.write(".m4a</li>\n        <li>")
-        t1123html.write("microphone")
+        t1123html.write("microphone</li>")
       # related techniques
         t1123html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1106 target=\"_blank\"\">T1106</a></td>\n        <td>".format(related))
         t1123html.write("Native API")
@@ -3409,7 +3408,7 @@ def doHTML(sd):
         t1115html.write("-") # sub-techniques
       # indicator regex assignments
         t1115html.write("{}clipboard</li>\n        <li>".format(iocs))
-        t1115html.write("pbpaste")
+        t1115html.write("pbpaste</li>")
       # related techniques
         t1115html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1106 target=\"_blank\"\">T1106</a></td>\n        <td>".format(related))
         t1115html.write("Native API")
@@ -3546,16 +3545,12 @@ def doHTML(sd):
         t1025html.write("{}DISPLAY</li>\n        <li>".format(iocs))
         t1025html.write("HID</li>\n        <li>")
         t1025html.write("PCI</li>\n        <li>")
-        t1025html.write("IDE</li>\n        <li>")
-        t1025html.write("ROOT</li>\n        <li>")
         t1025html.write("UMB</li>\n        <li>")
         t1025html.write("FDC</li>\n        <li>")
-        t1025html.write("IDE</li>\n        <li>")
         t1025html.write("SCSI</li>\n        <li>")
         t1025html.write("STORAGE</li>\n        <li>")
-        t1025html.write("USBSTOR</li>\n        <li>")
         t1025html.write("USB</li>\n        <li>")
-        t1025html.write("WpdBusEnumRoot")
+        t1025html.write("WpdBusEnumRoot</li>")
       # related techniques
         t1025html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1119 target=\"_blank\"\">T1119</a></td>\n        <td>".format(related))
         t1025html.write("Automated Collection")
@@ -3567,12 +3562,13 @@ def doHTML(sd):
         t1074html.write("{}Adversaries may stage collected data in a central location or directory prior to Exfiltration. Data may be kept in separate files or combined into one file through techniques such as Archive Collected Data. Interactive command shells may be used, and common functionality within cmd and bash may be used to copy data into a staging location.<br>".format(header))
         t1074html.write("In cloud environments, adversaries may stage data within a particular instance or virtual machine before exfiltration. An adversary may Create Cloud Instance and stage data in that instance.<br>")
         t1074html.write("Adversaries may choose to stage data from a victim network in a centralized location prior to Exfiltration to minimize the number of connections made to their C2 server and better evade detection.")
-      # indicator regex assignments
-        t1074html.write("{}-".format(iocs))      # information
+      # information
         t1074html.write("{}T1074</td>\n        <td>".format(headings)) # id
         t1074html.write("Windows, macOS, Linux, AWS, Azure, GCP</td>\n        <td>") # platforms
         t1074html.write("Collection</td>\n        <td>") # tactics
         t1074html.write("T1074.001: Local Data Staging<br>T1074.002: Remote Data Staging")
+      # indicator regex assignments
+        t1074html.write("{}-".format(iocs))
       # related techniques
         t1074html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1560 target=\"_blank\"\">T1560</a></td>\n        <td>".format(related))
         t1074html.write("Archive Collected Data")
@@ -3594,11 +3590,11 @@ def doHTML(sd):
         t1114html.write(".pst</li>\n        <li>")
         t1114html.write(".msg</li>\n        <li>")
         t1114html.write(".eml</li>\n        <li>")
-        t1114html.write("*MailboxExportEequest")
-        t1114html.write("X-MS-Exchange-Organization-AutoForwarded")
-        t1114html.write("X-MailFwdBy")
-        t1114html.write("X-Forwarded-To")
-        t1114html.write("ForwardingSMTPAddress")
+        t1114html.write("*MailboxExportEequest</li>\n        <li>")
+        t1114html.write("X-MS-Exchange-Organization-AutoForwarded</li>\n        <li>")
+        t1114html.write("X-MailFwdBy</li>\n        <li>")
+        t1114html.write("X-Forwarded-To</li>\n        <li>")
+        t1114html.write("ForwardingSMTPAddress</li>")
       # related techniques
         t1114html.write("{}-</a></td>\n        <td>".format(related))
         t1114html.write("-")
@@ -3643,7 +3639,7 @@ def doHTML(sd):
       # indicator regex assignments
         t1113html.write("{}CopyFromScreen</li>\n        <li>".format(iocs))
         t1113html.write("xwd</li>\n        <li>")
-        t1113html.write("screencapture")
+        t1113html.write("screencapture</li>")
       # related techniques
         t1113html.write("{}-</a></td>\n        <td>".format(related))
         t1113html.write("-")
@@ -3669,8 +3665,7 @@ def doHTML(sd):
         t1125html.write("mpg</li>\n        <li>")
         t1125html.write("mpeg</li>\n        <li>")
         t1125html.write("m4v</li>\n        <li>")
-        t1125html.write("flv</li>\n        <li>")
-        t1125html.write("")
+        t1125html.write("flv</li>")
       # related techniques
         t1125html.write("{}-</a></td>\n        <td>".format(related))
         t1125html.write("-")
@@ -3729,7 +3724,7 @@ def doHTML(sd):
         t1132html.write("unicode</li>\n        <li>")
         t1132html.write("HEX</li>\n        <li>")
         t1132html.write("base64</li>\n        <li>")
-        t1132html.write("MIME")
+        t1132html.write("MIME</li>")
       # related techniques
         t1132html.write("{}-</a></td>\n        <td>".format(related))
         t1132html.write("-")
@@ -3826,7 +3821,7 @@ def doHTML(sd):
       # indicator regex assignments
         t1105html.write("{}scp</li>\n        <li>".format(iocs))
         t1105html.write("rsync</li>\n        <li>")
-        t1105html.write("sftp")
+        t1105html.write("sftp</li>")
       # related techniques
         t1105html.write("{}-</a></td>\n        <td>".format(related))
         t1105html.write("-")
@@ -3932,7 +3927,7 @@ def doHTML(sd):
         t1090html.write("T1090.001: Internal Proxy<br>T1090.002: External Proxy<br>T1090.003: Multi-hop Proxy<br>T1090.004: Domain Fronting") # sub-techniques
       # indicator regex assignments
         t1090html.write("{}netsh</li>\n        <li>".format(iocs))
-        t1090html.write("portopening")
+        t1090html.write("portopening</li>")
       # related techniques
         t1090html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1572 target=\"_blank\"\">T1572</a></td>\n        <td>".format(related))
         t1090html.write("Protocol Tunneling")
@@ -3955,8 +3950,7 @@ def doHTML(sd):
         t1219html.write("Command &amp; Control</td>\n        <td>") # tactics
         t1219html.write("-") # sub-techniques
       # indicator regex assignments
-        t1219html.write("{}Ports: 5800, 5895, 5900, 5938, 5984, 5986, 8200</li>\n        <li>".format(iocs))
-        t1219html.write("")
+        t1219html.write("{}Ports: 5800, 5895, 5900, 5938, 5984, 5986, 8200".format(iocs))
       # related techniques
         t1219html.write("{}-</a></td>\n        <td>".format(related))
         t1219html.write("-")
@@ -3992,12 +3986,13 @@ def doHTML(sd):
       # description
         t1020html.write("{}Adversaries may exfiltrate data, such as sensitive documents, through the use of automated processing after being gathered during Collection.<br>".format(header))
         t1020html.write("When automated exfiltration is used, other exfiltration techniques likely apply as well to transfer the information out of the network, such as Exfiltration Over C2 Channel and Exfiltration Over Alternative Protocol.")
-      # indicator regex assignments
-        t1020html.write("{}-".format(iocs))      # information
+      # information
         t1020html.write("{}T1030</td>\n        <td>".format(headings)) # id
         t1020html.write("Windows, macOS, Linux</td>\n        <td>") # platforms
         t1020html.write("Exfiltration</td>\n        <td>") # tactics
         t1020html.write("T1020.001: Traffic Duplication")
+      # indicator regex assignments
+        t1020html.write("{}-".format(iocs))
       # related techniques
         t1020html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1041 target=\"_blank\"\">T1041</a></td>\n        <td>".format(related))
         t1020html.write("Exfiltration Over C2 Channel")
@@ -4090,16 +4085,12 @@ def doHTML(sd):
         t1052html.write("{}DISPLAY</li>\n        <li>".format(iocs))
         t1052html.write("HID</li>\n        <li>")
         t1052html.write("PCI</li>\n        <li>")
-        t1052html.write("IDE</li>\n        <li>")
-        t1052html.write("ROOT</li>\n        <li>")
         t1052html.write("UMB</li>\n        <li>")
         t1052html.write("FDC</li>\n        <li>")
-        t1052html.write("IDE</li>\n        <li>")
         t1052html.write("SCSI</li>\n        <li>")
         t1052html.write("STORAGE</li>\n        <li>")
-        t1052html.write("USBSTOR</li>\n        <li>")
         t1052html.write("USB</li>\n        <li>")
-        t1052html.write("WpdBusEnumRoot")
+        t1052html.write("WpdBusEnumRoot</li>")
       # related techniques
         t1052html.write("{}-</a></td>\n        <td>".format(related))
         t1052html.write("-")
@@ -4125,7 +4116,7 @@ def doHTML(sd):
         t1567html.write("bitbucket</li>\n        <li>")
         t1567html.write("dropbox</li>\n        <li>")
         t1567html.write("onedrive</li>\n        <li>")
-        t1567html.write("4shared")
+        t1567html.write("4shared</li>")
       # related techniques
         t1567html.write("{}-</a></td>\n        <td>".format(related))
         t1567html.write("-")
@@ -4135,12 +4126,13 @@ def doHTML(sd):
     with open(sd+"t1029.html", "w") as t1029html:
       # description
         t1029html.write("{}Adversaries may steal data by exfiltrating it over an existing command and control channel. Stolen data is encoded into the normal communications channel using the same protocol as command and control communications.".format(header))
-      # indicator regex assignments
-        t1029html.write("{}-".format(iocs))      # information
+      # information
         t1029html.write("{}T1029</td>\n        <td>".format(headings)) # id
         t1029html.write("Windows, macOS, Linux</td>\n        <td>") # platforms
         t1029html.write("Exfiltration</td>\n        <td>") # tactics
         t1029html.write("-")
+      # indicator regex assignments
+        t1029html.write("{}-".format(iocs))
       # related techniques
         t1029html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1041 target=\"_blank\"\">T1041</a></td>\n        <td>".format(related))
         t1029html.write("Exfiltration Over C2 Channel")
@@ -4168,10 +4160,10 @@ def doHTML(sd):
         t1537html.write("cloudrive</li>\n        <li>")
         t1537html.write("dropbox</li>\n        <li>")
         t1537html.write("drive\\.google</li>\n        <li>")
-        t1537html.write("fileshare</li>\n        <li>")
         t1537html.write("mediafire</li>\n        <li>")
         t1537html.write("zippyshare</li>\n        <li>")
-        t1537html.write("megaupload")
+        t1537html.write("megaupload</li>\n        <li>")
+        t1537html.write("4shared</li>")
       # related techniques
         t1537html.write("{}-</a></td>\n        <td>".format(related))
         t1537html.write("-")
@@ -4215,7 +4207,7 @@ def doHTML(sd):
         t1485html.write("{}del</li>\n        <li>".format(iocs))
         t1485html.write("rm</li>\n        <li>")
         t1485html.write("/delete</li>\n        <li>")
-        t1485html.write("sdelete")
+        t1485html.write("sdelete</li>")
       # related techniques
         t1485html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1561 target=\"_blank\"\">T1561</a></td>\n        <td>".format(related))
         t1485html.write("Disk Wipe: Disk Content Wipe")
@@ -4382,7 +4374,7 @@ def doHTML(sd):
         t1490html.write("{}vssadmin</li>\n        <li>".format(iocs))
         t1490html.write("wbadmin</li>\n        <li>")
         t1490html.write("shadows</li>\n        <li>")
-        t1490html.write("shadowcopy")
+        t1490html.write("shadowcopy</li>")
       # related techniques
         t1490html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1485 target=\"_blank\"\">T1485</a></td>\n        <td>".format(related))
         t1490html.write("Data Destruction")
@@ -4450,7 +4442,7 @@ def doHTML(sd):
         t1489html.write("MSExchangeIs</li>\n        <li>")
         t1489html.write("ChangeServiceConfigW</li>\n        <li>")
         t1489html.write("net stop</li>\n        <li>")
-        t1489html.write("net1 stop")
+        t1489html.write("net1 stop</li>")
       # related techniques
         t1489html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1485 target=\"_blank\"\">T1485</a></td>\n        <td>".format(related))
         t1489html.write("Data Destruction")
@@ -4470,14 +4462,15 @@ def doHTML(sd):
         t1529html.write("{}Adversaries may shutdown/reboot systems to interrupt access to, or aid in the destruction of, those systems. Operating systems may contain commands to initiate a shutdown/reboot of a machine.<br>".format(header))
         t1529html.write("In some cases, these commands may also be used to initiate a shutdown/reboot of a remote computer. Shutting down or rebooting systems may disrupt access to computer resources for legitimate users.<br>")
         t1529html.write("Adversaries may attempt to shutdown/reboot a system after impacting it in other ways, such as Disk Structure Wipe or Inhibit System Recovery, to hasten the intended effects on system availability.")
-      # indicator regex assignments
-        t1529html.write("{}Event IDs: 1074, 6006</li>\n        <li>".format(iocs))
-        t1529html.write("shutdown</li>\n        <li>")
-        t1529html.write("halt")      # information
+      # information
         t1529html.write("{}T1529</td>\n        <td>".format(headings)) # id
         t1529html.write("Windows, macOS, Linux</td>\n        <td>") # platforms
         t1529html.write("Impact</td>\n        <td>") # tactics
         t1529html.write("-")
+      # indicator regex assignments
+        t1529html.write("{}Event IDs: 1074, 6006</li>\n        <li>".format(iocs))
+        t1529html.write("shutdown</li>\n        <li>")
+        t1529html.write("halt</li>")
       # related techniques
         t1529html.write("{}<a href=\"http://127.0.0.1:8000/en-US/app/elrond/t1561 target=\"_blank\"\">T1561</a></td>\n        <td>".format(related))
         t1529html.write("Disk Structure Wipe")
