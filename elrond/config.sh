@@ -10,8 +10,8 @@ sleep 2
 printf "\n\n  Installing & configuring volatility3 and dependancies...\n"
 # installing volatility3
 sleep 5
-sudo apt install mlocate build-essential checkinstall libgdbm-dev libreadline-dev libsqlite3-dev libbz2-dev libattr1-dev libncursesw5-dev libssl-dev tk-dev libc6-dev libffi-dev zlib1g-dev cmake cmake-curses-gui liblzma-dev john -y --fix-missing
-sudo apt install libnss3-dev -y --fix-missing
+sudo apt install build-essential libreadline-dev libncursesw5-dev libssl-dev libc6-dev libffi-dev zlib1g-dev -y --fix-missing
+sudo apt-get install mlocate checkinstall libgdbm-dev libreadline-dev libnss3-dev libsqlite3-dev libbz2-dev libattr1-dev tk-dev cmake cmake-curses-gui liblzma-dev john -y --fix-missing
 git clone https://github.com/volatilityfoundation/volatility3.git
 sudo mv volatility3/ /usr/local/lib/python3.8/dist-packages
 sudo chmod -R 755 /usr/local/lib/python3.8/dist-packages/volatility3/
@@ -47,7 +47,7 @@ sleep 5
 cd /tmp
 curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 sudo apt-get install nodejs yarn -y
-sudo npm install -g npm@7.19.1
+sudo npm install -g npm@7.19.1 # npm install -g npm@8.3.0
 sudo npm install -g @angular/cli
 sudo npm install -g pm2
 git clone https://github.com/mitre-attack/attack-navigator.git
