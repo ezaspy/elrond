@@ -26,8 +26,7 @@ Copy VMware-<version_number>.tar.gz -> ~/Downloads<br>
 `cd elrond/`<br><br>
 
 ### SIFT 20.04
-`sudo chmod u+x elrond_env.sh`<br>
-`sudo ./elrond_env.sh`<br>
+`./make.sh`<br>
 **ENTER**<br>
 **Y ENTER**<br>
 Enter the keys in the following order: **&darr; &darr; c g ENTER**<br><br>

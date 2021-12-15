@@ -1,5 +1,7 @@
 #!/bin/bash
-sudo mv ../elrond/elrond/ /opt/elrond
+sudo mv ../elrond /opt/elrond
+sudo mv ../LICENSE /opt/elrond
+sudo mv ../README.md /opt/elrond
 sudo chmod -R 744 /opt/elrond/
 export PATH=$PATH:/opt/elrond
 sudo chmod +x /opt/elrond/config.sh

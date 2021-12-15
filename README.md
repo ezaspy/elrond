@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <p align="center">
   <a href="https://github.com/ezaspy/elrond">
-    <img src="images/logo_trans_big.png" alt="Logo" width="400" height="400">
+    <img src="elrond/images/logo_trans_big.png" alt="Logo" width="400" height="400">
   </a>
   <p align="center">
     Accelerating the collection, processing, analysis and outputting of digital forensic artefacts.
