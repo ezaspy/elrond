@@ -13,9 +13,9 @@
     <img src="https://img.shields.io/github/issues/markdown-templates/markdown-snippets.svg" alt="Issues">
     </a>
     <a href="https://github.com/ezaspy/elrond/network/members">
-    <img src="https://img.shields.io/github/forks/markdown-templates/markdown-snippets.svg" alt="Forks">
+    <img src="https://img.shields.io/github/forks/ezaspy/elrond" alt="Forks">
     <a href="https://github.com/ezaspy/elrond/stargazers">
-    <img src="https://img.shields.io/github/stars/markdown-templates/markdown-snippets.svg" alt="Stars">
+    <img src="https://img.shields.io/github/stars/ezaspy/elrond" alt="Stars">
     </a>
     <a href="https://www.python.org">
     <img src="https://img.shields.io/badge/language-python-yellow" alt="Python">
