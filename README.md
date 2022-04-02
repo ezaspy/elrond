@@ -7,21 +7,24 @@
     Accelerating the collection, processing, analysis and outputting of digital forensic artefacts.
     <br><br>
     <a href="https://mit-license.org">
-    <img src="https://img.shields.io/github/license/ezaspy/elrond" alt="License: MIT">
+      <img src="https://img.shields.io/github/license/ezaspy/elrond" alt="License: MIT">
     </a>
     <a href="https://github.com/ezaspy/elrond/issues">
-    <img src="https://img.shields.io/github/issues/ezaspy/elrond" alt="Issues">
+      <img src="https://img.shields.io/github/issues/ezaspy/elrond" alt="Issues">
     </a>
     <a href="https://github.com/ezaspy/elrond/network/members">
-    <img src="https://img.shields.io/github/forks/ezaspy/elrond" alt="Forks">
+      <img src="https://img.shields.io/github/forks/ezaspy/elrond" alt="Forks">
     <a href="https://github.com/ezaspy/elrond/stargazers">
-    <img src="https://img.shields.io/github/stars/ezaspy/elrond" alt="Stars">
+      <img src="https://img.shields.io/github/stars/ezaspy/elrond" alt="Stars">
     </a>
     <a href="https://www.python.org">
-    <img src="https://img.shields.io/badge/language-python-yellow" alt="Python">
+      <img src="https://img.shields.io/badge/language-python-yellow" alt="Python">
     </a>
-    <img src="https://img.shields.io/badge/subject-DFIR-red" alt="Subject">
-    <img src="https://img.shields.io/github/last-commit/ezaspy/elrond" alt="Last Commit">
+      <img src="https://img.shields.io/badge/subject-DFIR-red" alt="Subject">
+      <img src="https://img.shields.io/github/last-commit/ezaspy/elrond" alt="Last Commit">
+    </a>
+    <a href="https://github.com/psf/black">
+      <img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg">
     </a>
     <br><br>
   </p>
