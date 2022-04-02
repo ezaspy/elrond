@@ -7,10 +7,10 @@
     Accelerating the collection, processing, analysis and outputting of digital forensic artefacts.
     <br><br>
     <a href="https://mit-license.org">
-    <img src="https://img.shields.io/badge/license-MIT-black.svg" alt="License: MIT">
+    <img src="https://img.shields.io/github/license/ezaspy/elrond" alt="License: MIT">
     </a>
     <a href="https://github.com/ezaspy/elrond/issues">
-    <img src="https://img.shields.io/github/issues/markdown-templates/markdown-snippets.svg" alt="Issues">
+    <img src="https://img.shields.io/github/issues/ezaspy/elrond" alt="Issues">
     </a>
     <a href="https://github.com/ezaspy/elrond/network/members">
     <img src="https://img.shields.io/github/forks/ezaspy/elrond" alt="Forks">
