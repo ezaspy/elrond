@@ -525,6 +525,7 @@ def main(
             volchoice,
             vssmem,
             memtimeline,
+            stage,
         )
     for emem in ot.items():  # Adding memory images to processed images
         if "memory" in str(emem):

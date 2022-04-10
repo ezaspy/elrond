@@ -6,9 +6,10 @@ import sys
 import time
 from collections import OrderedDict
 from datetime import datetime
-from urllib.request import urlopen
 from zipfile import ZipFile
+from zipfile import BadZipFile
 
+from rivendell.analysing.keywords import prepare_keywords
 from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 from rivendell.collecting.linux import collect_linux_artefacts
@@ -47,7 +48,7 @@ def collect_artefacts(
     volchoice,
     vssmem,
     memtimeline,
-    search_keywords,
+    stage,
 ):
     shdws = []
     if not volatility and len(imgs) <= 0:
@@ -83,10 +84,16 @@ def collect_artefacts(
             pass
         imgs = OrderedDict(sorted(imgs.items(), key=lambda x: x[1]))
         if nsrl:
-            print("    Collecting NSRL hashes for comparison...")
-            with ZipFile("/opt/elrond/elrond/tools/.rds_modernm.zip") as nsrlzip:
-                nsrlzip.extractall()
-            print("     Done.\n")
+            nsrlfilepath = "/opt/elrond/elrond/tools/rds_modernm/NSRLFile.txt"
+            if not os.path.exists(nsrlfilepath):
+                print(
+                    "\n     It looks like {} doesn't exist.\n     If you wish to utilise the NSRL hash database, re-run the elrond/tools/scripts/init.sh script and try again.\n\n".format(
+                        nsrlfilepath
+                    )
+                )
+                sys.exit()
+            else:
+                pass
         else:
             pass
         if not superquick and not quick and not hashcollected:
@@ -278,7 +285,7 @@ def collect_artefacts(
         else:
             pass
         if keywords:
-            search_keywords(verbosity, output_directory, imgs, keywords)
+            prepare_keywords(verbosity, output_directory, imgs, keywords, stage)
             flags.append("3keyword searching")
             time.sleep(1)
         else:

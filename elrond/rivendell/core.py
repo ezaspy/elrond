@@ -5,7 +5,7 @@ import time
 from datetime import datetime
 
 from rivendell.analysing.analysis import analyse_artefacts
-from rivendell.analysing.keywords import search_keywords
+from rivendell.analysing.keywords import prepare_keywords
 from rivendell.audit import write_audit_log_entry
 from rivendell.collecting.collect import collect_artefacts
 from rivendell.collecting.reorganise import reorganise_artefacts
@@ -45,6 +45,7 @@ def collect_process_kw_analysis_timelining(
     volchoice,
     vssmem,
     memtimeline,
+    stage,
 ):
     if collect:
         collect_artefacts(
@@ -74,7 +75,7 @@ def collect_process_kw_analysis_timelining(
             volchoice,
             vssmem,
             memtimeline,
-            search_keywords,
+            stage,
         )
     else:
         reorganise_artefacts()
@@ -115,7 +116,7 @@ def collect_process_kw_analysis_timelining(
                     each.split("::")[0],
                     output_directory + each.split("::")[0] + "/artefacts/",
                 )
-                search_keywords(verbosity, output_directory, img, mnt)
+                prepare_keywords(verbosity, output_directory, imgs, keywords, stage)
             if "keyword searching" not in str(flags):
                 flags.append("3keyword searching")
             else:
