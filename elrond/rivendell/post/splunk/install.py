@@ -165,7 +165,7 @@ def install_splunk_stack(
 
 
 def configure_splunk_stack(
-    verbosity, output_directory, case, imgs, volatility, analysis, timeline, navigator
+    verbosity, output_directory, case, imgs, volatility, analysis, timeline
 ):
     splunkdebpath = (
         "/opt/elrond/elrond/tools/"  # prompt for cutom location if it doesn't exist
@@ -192,7 +192,7 @@ def configure_splunk_stack(
     )
     time.sleep(1)
     for eachfile in os.listdir(splunkdebpath):
-        if eachfile.startswith("splunk"):
+        if eachfile.startswith(".splunk") and eachfile.endswith(".deb"):
             splunkdeb = splunkdebpath + eachfile
         else:
             pass

@@ -1,6 +1,6 @@
 #!/bin/bash
 sudo apt install mlocate build-essential john -y --fix-missing
-wget https://s3.amazonaws.com/rds.nsrl.nist.gov/RDS/current/rds_modernm.zip > /opt/elrond/elrond/tools/rds_modernm.zip
+wget https://s3.amazonaws.com/rds.nsrl.nist.gov/RDS/current/rds_modernm.zip > /opt/elrond/elrond/tools/.rds_modernm.zip
 updatedb
 # configuring elrond
 clear

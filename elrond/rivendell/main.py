@@ -631,7 +631,6 @@ def main(
                 volatility,
                 analysis,
                 timeline,
-                navigator,
             )
             flags.append("6splunk")
             print(

@@ -84,12 +84,8 @@ def collect_artefacts(
         imgs = OrderedDict(sorted(imgs.items(), key=lambda x: x[1]))
         if nsrl:
             print("    Collecting NSRL hashes for comparison...")
-            with ZipFile("/opt/elrond/elrond/tools/rds_modernm.zip") as nsrlzip:
+            with ZipFile("/opt/elrond/elrond/tools/.rds_modernm.zip") as nsrlzip:
                 nsrlzip.extractall()
-            if os.path.exists("/opt/elrond/elrond/tools/rds_modernm.zip.zip"):
-                os.remove("/opt/elrond/elrond/tools/rds_modernm.zip.zip")
-            else:
-                pass
             print("     Done.\n")
         else:
             pass
