@@ -8,7 +8,7 @@ import time
 from collections import OrderedDict
 from datetime import datetime
 
-from rivendell import collect_process_kw_analysis_timelining
+from rivendell.core import collect_process_kw_analysis_timelining
 from rivendell.audit import write_audit_log_entry
 from rivendell.identify import identify_disk_image
 from rivendell.identify import identify_memory_image
