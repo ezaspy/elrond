@@ -611,14 +611,12 @@ def main(
                     )
                 else:
                     pass
-                if os.path.exists(
-                    output_directory + img.split("::")[0] + "/collected/"
-                ):
+                if os.path.exists(output_directory + img.split("::")[0] + "/files/"):
                     collect_metadata(
                         verbosity,
                         output_directory,
                         img,
-                        output_directory + img.split("::")[0] + "/collected/",
+                        output_directory + img.split("::")[0] + "/files/",
                         stage,
                         sha256,
                         nsrl,

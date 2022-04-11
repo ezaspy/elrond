@@ -459,14 +459,6 @@ def collect_artefacts(
                 )
             else:
                 pass
-            entry, prnt = "{},{},{},files\n".format(
-                datetime.now().isoformat(), vssimage.replace("'", ""), stage
-            ), " -> {} -> {} files for {}".format(
-                datetime.now().isoformat().replace("T", " "),
-                stage.replace(",", " &"),
-                vssimage,
-            )
-            write_audit_log_entry(verbosity, output_directory, entry, prnt)
             for recroot, _, recfiles in os.walk(mnt):
                 for recfile in recfiles:
                     if collectfiles and recover:
@@ -513,14 +505,6 @@ def collect_artefacts(
             pass
         if carving:
             print("\n     Performing file carving for {}...".format(vssimage))
-            entry, prnt = "{},{},{},commenced\n".format(
-                datetime.now().isoformat(), vssimage.replace("'", ""), "carving"
-            ), " -> {} -> {} artefacts for {}".format(
-                datetime.now().isoformat().replace("T", " "),
-                "carving",
-                vssimage,
-            )
-            write_audit_log_entry(verbosity, output_directory, entry, prnt)
             subprocess.Popen(
                 [
                     "foremost",

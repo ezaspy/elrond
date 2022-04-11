@@ -31,9 +31,9 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
         or recfile.endswith(".vdi")
     ):
         try:
-            os.stat(output_directory + img.split("::")[0] + "/collected/")
+            os.stat(output_directory + img.split("::")[0] + "/files/")
         except:
-            os.makedirs(output_directory + img.split("::")[0] + "/collected/")
+            os.makedirs(output_directory + img.split("::")[0] + "/files/")
         if (
             recfile.startswith(".")
             and recfile != ".localized"
@@ -41,9 +41,9 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
             and recfile != ".CFUserTextEncoding"
         ):
             try:
-                os.stat(output_directory + img.split("::")[0] + "/collected/hidden")
+                os.stat(output_directory + img.split("::")[0] + "/files/hidden")
             except:
-                os.makedirs(output_directory + img.split("::")[0] + "/collected/hidden")
+                os.makedirs(output_directory + img.split("::")[0] + "/files/hidden")
             try:
                 (entry, prnt,) = "{},{},{},hidden file '{}'\n".format(
                     datetime.now().isoformat(),
@@ -61,7 +61,7 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
                     os.path.join(recroot, recfile),
                     output_directory
                     + img.split("::")[0]
-                    + "/collected/hidden/"
+                    + "/files/hidden/"
                     + recfile[1:],
                 )
             except:
@@ -78,11 +78,9 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
             or recfile.endswith("pptm")
         ):
             try:
-                os.stat(output_directory + img.split("::")[0] + "/collected/documents")
+                os.stat(output_directory + img.split("::")[0] + "/files/documents")
             except:
-                os.makedirs(
-                    output_directory + img.split("::")[0] + "/collected/documents"
-                )
+                os.makedirs(output_directory + img.split("::")[0] + "/files/documents")
             try:
                 (entry, prnt,) = "{},{},{},document file '{}'\n".format(
                     datetime.now().isoformat(),
@@ -98,7 +96,7 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
                 shutil.copy2(
                     os.path.join(recroot, recfile),
-                    output_directory + img.split("::")[0] + "/collected/documents",
+                    output_directory + img.split("::")[0] + "/files/documents",
                 )
             except:
                 pass
@@ -113,11 +111,9 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
             or recfile.endswith("arj")
         ):
             try:
-                os.stat(output_directory + img.split("::")[0] + "/collected/archives")
+                os.stat(output_directory + img.split("::")[0] + "/files/archives")
             except:
-                os.makedirs(
-                    output_directory + img.split("::")[0] + "/collected/archives"
-                )
+                os.makedirs(output_directory + img.split("::")[0] + "/files/archives")
             try:
                 (entry, prnt,) = "{},{},{},archive file '{}'\n".format(
                     datetime.now().isoformat(),
@@ -133,7 +129,7 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
                 shutil.copy2(
                     os.path.join(recroot, recfile),
-                    output_directory + img.split("::")[0] + "/collected/archives",
+                    output_directory + img.split("::")[0] + "/files/archives",
                 )
             except:
                 pass
@@ -146,12 +142,10 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
             or recfile.endswith("vdi")
         ):
             try:
-                os.stat(
-                    output_directory + img.split("::")[0] + "/collected/vm_software"
-                )
+                os.stat(output_directory + img.split("::")[0] + "/files/vm_software")
             except:
                 os.makedirs(
-                    output_directory + img.split("::")[0] + "/collected/vm_software"
+                    output_directory + img.split("::")[0] + "/files/vm_software"
                 )
             try:
                 (entry, prnt,) = "{},{},{},virtual file '{}'\n".format(
@@ -168,7 +162,7 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
                 shutil.copy2(
                     os.path.join(recroot, recfile),
-                    output_directory + img.split("::")[0] + "/collected/vm_software",
+                    output_directory + img.split("::")[0] + "/files/vm_software",
                 )
             except:
                 pass

@@ -7,6 +7,9 @@ from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
+import sys
+
+
 def search_keywords(
     verbosity, output_directory, img, mnt, keywords, kwsfilelist, vssimage, vsstext
 ):
@@ -25,9 +28,13 @@ def search_keywords(
                 print("     Searching for keyword '{}'...".format(eachkeyword.strip()))
             else:
                 pass
+            print(kwsfilelist)
+            time.sleep(30)
             for kwfile in kwsfilelist:
                 with open(kwfile, "r") as kwsfile:
                     kwlno = 0
+                    if "stark" in kwfile or "Fury" in kwfile:
+                        print(kwfile)
                     try:
                         for eachline in kwsfile:
                             if eachkeyword.lower().strip() in eachline.lower().strip():
@@ -103,7 +110,7 @@ def prepare_keywords(verbosity, output_directory, imgs, keywords, stage):
             "\n\n  -> \033[1;36mCommencing Keyword Searching Phase...\033[1;m\n  ----------------------------------------"
         )
         time.sleep(1)
-        for each in imgs:
+        """for each in imgs:
             img, mnt = [each, imgs[each]]
             stage = "keyword searching"
             if "vss" in img.split("::")[1]:
@@ -163,21 +170,41 @@ def prepare_keywords(verbosity, output_directory, imgs, keywords, stage):
         print(
             "  ----------------------------------------\n  -> Completed Keyword Searching Phase.\n"
         )
-        time.sleep(1)
+        time.sleep(1)"""
     else:
         for each in imgs:
-            img, mnt = (
-                each.split("::")[0],
-                output_directory + each.split("::")[0] + "/artefacts/",
-            )
-            kwsfilelist = build_keyword_list(mnt)
-            search_keywords(
-                verbosity,
-                output_directory,
-                img,
-                mnt,
-                keywords,
-                kwsfilelist,
-                img,
-                "",
-            )
+            if os.path.exists(
+                os.path.join(output_directory, each.split("::")[0], "artefacts")
+            ):
+                mnt = os.path.join(output_directory, each.split("::")[0], "artefacts")
+                search_keywords(
+                    verbosity,
+                    output_directory,
+                    each.split("::")[0],
+                    mnt,
+                    keywords,
+                    kwsfilelist,
+                    each.split("::")[0],
+                    "",
+                )
+            else:
+                pass
+            if os.path.exists(
+                os.path.join(output_directory, each.split("::")[0], "files")
+            ):
+                mnt = os.path.join(output_directory, each.split("::")[0], "files")
+                # for office documents and archives - extract and then build keyword search list
+                kwsfilelist = build_keyword_list(mnt)
+                search_keywords(
+                    verbosity,
+                    output_directory,
+                    each.split("::")[0],
+                    mnt,
+                    keywords,
+                    kwsfilelist,
+                    each.split("::")[0],
+                    "",
+                )
+            else:
+                pass
+        sys.exit()
