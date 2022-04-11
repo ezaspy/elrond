@@ -11,7 +11,7 @@ import sys
 
 
 def search_keywords(
-    verbosity, output_directory, img, mnt, keywords, kwsfilelist, vssimage, vsstext
+    verbosity, output_directory, img, keywords, kwsfilelist, vssimage, vsstext
 ):
     if not os.path.exists(output_directory + img.split("::")[0] + "/analysis/"):
         os.mkdir(output_directory + img.split("::")[0] + "/analysis/")
@@ -28,13 +28,9 @@ def search_keywords(
                 print("     Searching for keyword '{}'...".format(eachkeyword.strip()))
             else:
                 pass
-            print(kwsfilelist)
-            time.sleep(30)
             for kwfile in kwsfilelist:
                 with open(kwfile, "r") as kwsfile:
                     kwlno = 0
-                    if "stark" in kwfile or "Fury" in kwfile:
-                        print(kwfile)
                     try:
                         for eachline in kwsfile:
                             if eachkeyword.lower().strip() in eachline.lower().strip():
@@ -110,7 +106,7 @@ def prepare_keywords(verbosity, output_directory, imgs, keywords, stage):
             "\n\n  -> \033[1;36mCommencing Keyword Searching Phase...\033[1;m\n  ----------------------------------------"
         )
         time.sleep(1)
-        """for each in imgs:
+        for each in imgs:
             img, mnt = [each, imgs[each]]
             stage = "keyword searching"
             if "vss" in img.split("::")[1]:
@@ -151,7 +147,6 @@ def prepare_keywords(verbosity, output_directory, imgs, keywords, stage):
                 verbosity,
                 output_directory,
                 img,
-                mnt,
                 keywords,
                 kwsfilelist,
                 vssimage,
@@ -170,18 +165,18 @@ def prepare_keywords(verbosity, output_directory, imgs, keywords, stage):
         print(
             "  ----------------------------------------\n  -> Completed Keyword Searching Phase.\n"
         )
-        time.sleep(1)"""
+        time.sleep(1)
     else:
         for each in imgs:
             if os.path.exists(
                 os.path.join(output_directory, each.split("::")[0], "artefacts")
             ):
                 mnt = os.path.join(output_directory, each.split("::")[0], "artefacts")
+                kwsfilelist = build_keyword_list(mnt)
                 search_keywords(
                     verbosity,
                     output_directory,
                     each.split("::")[0],
-                    mnt,
                     keywords,
                     kwsfilelist,
                     each.split("::")[0],
@@ -191,15 +186,13 @@ def prepare_keywords(verbosity, output_directory, imgs, keywords, stage):
                 pass
             if os.path.exists(
                 os.path.join(output_directory, each.split("::")[0], "files")
-            ):
+            ):  # for office documents and archives - extract and then build keyword search list
                 mnt = os.path.join(output_directory, each.split("::")[0], "files")
-                # for office documents and archives - extract and then build keyword search list
                 kwsfilelist = build_keyword_list(mnt)
                 search_keywords(
                     verbosity,
                     output_directory,
                     each.split("::")[0],
-                    mnt,
                     keywords,
                     kwsfilelist,
                     each.split("::")[0],
@@ -207,4 +200,3 @@ def prepare_keywords(verbosity, output_directory, imgs, keywords, stage):
                 )
             else:
                 pass
-        sys.exit()
