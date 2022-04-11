@@ -9,6 +9,7 @@ from rivendell.analysing.ioc_extract import extract_iocs
 
 def compare_iocs(
     output_directory,
+    verbosity,
     img,
     stage,
     iocfiles,
@@ -152,6 +153,7 @@ def compare_iocs(
                                                                 extract_iocs(
                                                                     iocfiletimes,
                                                                     output_directory,
+                                                                    verbosity,
                                                                     img,
                                                                     stage,
                                                                     iocfile,
@@ -169,6 +171,7 @@ def compare_iocs(
                                                                 extract_iocs(
                                                                     iocfiletimes,
                                                                     output_directory,
+                                                                    verbosity,
                                                                     img,
                                                                     stage,
                                                                     iocfile,
@@ -193,6 +196,7 @@ def compare_iocs(
                                                     extract_iocs(
                                                         iocfiletimes,
                                                         output_directory,
+                                                        verbosity,
                                                         img,
                                                         stage,
                                                         iocfile,
@@ -211,6 +215,7 @@ def compare_iocs(
                                                     extract_iocs(
                                                         iocfiletimes,
                                                         output_directory,
+                                                        verbosity,
                                                         img,
                                                         stage,
                                                         iocfile,

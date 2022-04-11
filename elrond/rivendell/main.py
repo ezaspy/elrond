@@ -546,6 +546,10 @@ def main(
     ]
     if len(imgs) > 0:  # Post-processing metadata, Splunk, Elastic, Archive, Deletion
         if not superquick or hashcollected:
+            print(
+                "\n\n  -> \033[1;36mCommencing Metadata phase for proccessed artefacts...\033[1;m\n  ----------------------------------------"
+            )
+            time.sleep(1)
             if process and analysis:
                 insert = "collected, processed & analysed"
             elif process:
@@ -554,8 +558,8 @@ def main(
                 insert = "collected"
             for img in allimgs:
                 print(
-                    "\n    Collecting metadata from {} artefacts for '{}'...".format(
-                        insert, img.split("::")[0]
+                    "\n    Collecting metadata from processed artefacts for '{}'...".format(
+                        img.split("::")[0]
                     )
                 )
                 collect_metadata(
@@ -621,6 +625,15 @@ def main(
                     )
                 else:
                     pass
+                print(
+                    "\n    Completed collection of metadata from processed artefacts for '{}'...".format(
+                        img.split("::")[0]
+                    )
+                )
+            print(
+                "  ----------------------------------------\n  -> Completed Metadata phase for proccessed artefacts.\n"
+            )
+            time.sleep(1)
         else:
             pass
         if splunk:

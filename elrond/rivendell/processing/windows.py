@@ -281,7 +281,6 @@ def process_registry_user(
     jsondict,
     jsonlist,
     cwd,
-    regjsonlist,
 ):
     regusr, regart = artefact.split("/")[-1].split("+")
     regjsonlist = []

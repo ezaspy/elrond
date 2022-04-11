@@ -206,7 +206,9 @@ def analyse_artefacts(
                 "'"
                 + img.split("::")[0]
                 + "' ("
-                + img.split("::")[1].split("_")[1].replace("vss", "volume shadow copy #")
+                + img.split("::")[1]
+                .split("_")[1]
+                .replace("vss", "volume shadow copy #")
                 + ")",
             )
         else:
@@ -243,17 +245,28 @@ def analyse_artefacts(
                     ):  # 10MB
                         if (
                             os.path.join(root, f) != "/mnt/elrond_mount/hiberfil.sys"
-                            and os.path.join(root, f) != "/mnt/elrond_mount/pagefile.sys"
-                            and os.path.join(root, f) != "/mnt/elrond_mount1/hiberfil.sys"
-                            and os.path.join(root, f) != "/mnt/elrond_mount1/pagefile.sys"
-                            and os.path.join(root, f) != "/mnt/elrond_mount2/hiberfil.sys"
-                            and os.path.join(root, f) != "/mnt/elrond_mount2/pagefile.sys"
-                            and os.path.join(root, f) != "/mnt/elrond_mount3/hiberfil.sys"
-                            and os.path.join(root, f) != "/mnt/elrond_mount3/pagefile.sys"
-                            and os.path.join(root, f) != "/mnt/elrond_mount4/hiberfil.sys"
-                            and os.path.join(root, f) != "/mnt/elrond_mount4/pagefile.sys"
-                            and os.path.join(root, f) != "/mnt/elrond_mount5/hiberfil.sys"
-                            and os.path.join(root, f) != "/mnt/elrond_mount5/pagefile.sys"
+                            and os.path.join(root, f)
+                            != "/mnt/elrond_mount/pagefile.sys"
+                            and os.path.join(root, f)
+                            != "/mnt/elrond_mount1/hiberfil.sys"
+                            and os.path.join(root, f)
+                            != "/mnt/elrond_mount1/pagefile.sys"
+                            and os.path.join(root, f)
+                            != "/mnt/elrond_mount2/hiberfil.sys"
+                            and os.path.join(root, f)
+                            != "/mnt/elrond_mount2/pagefile.sys"
+                            and os.path.join(root, f)
+                            != "/mnt/elrond_mount3/hiberfil.sys"
+                            and os.path.join(root, f)
+                            != "/mnt/elrond_mount3/pagefile.sys"
+                            and os.path.join(root, f)
+                            != "/mnt/elrond_mount4/hiberfil.sys"
+                            and os.path.join(root, f)
+                            != "/mnt/elrond_mount4/pagefile.sys"
+                            and os.path.join(root, f)
+                            != "/mnt/elrond_mount5/hiberfil.sys"
+                            and os.path.join(root, f)
+                            != "/mnt/elrond_mount5/pagefile.sys"
                         ) and (
                             "." in f
                             and (
@@ -452,7 +465,9 @@ def analyse_artefacts(
                     else:
                         pass
                 elif (
-                    "vss" not in atftd and ar.endswith("cooked/") and f.endswith("MFT.csv")
+                    "vss" not in atftd
+                    and ar.endswith("cooked/")
+                    and f.endswith("MFT.csv")
                 ):
                     analyse_disk_images(vssimage, ar, f, anysd, img, stage)
                 else:
@@ -506,6 +521,7 @@ def analyse_artefacts(
             pass
         compare_iocs(
             output_directory,
+            verbosity,
             img,
             stage,
             iocfiles,

@@ -108,21 +108,18 @@ def collect_process_kw_analysis_timelining(
             sys.exit()
         else:
             print(
-                "\n\n  -> \033[1;36mCommencing Keyword Searching Phase for Proccessed Artefacts...\033[1;m\n  ----------------------------------------"
+                "\n\n  -> \033[1;36mCommencing Keyword Searching phase for proccessed artefacts...\033[1;m\n  ----------------------------------------"
             )
             time.sleep(1)
-            for each in imgs:
-                img, mnt = (
-                    each.split("::")[0],
-                    output_directory + each.split("::")[0] + "/artefacts/",
-                )
-                prepare_keywords(verbosity, output_directory, imgs, keywords, stage)
+            prepare_keywords(
+                verbosity, output_directory, imgs, keywords, "keyword searching"
+            )
             if "keyword searching" not in str(flags):
                 flags.append("3keyword searching")
             else:
                 pass
             print(
-                "  ----------------------------------------\n  -> Completed Keyword Searching Phase.\n"
+                "  ----------------------------------------\n  -> Completed Keyword Searching phase for proccessed artefacts.\n"
             )
             time.sleep(1)
     else:

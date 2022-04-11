@@ -3,7 +3,6 @@ import json
 import os
 import plistlib
 import re
-import subprocess
 from datetime import datetime
 
 from rivendell.audit import print_done
@@ -68,7 +67,7 @@ def process_plist(
                 vssimage,
             )
             write_audit_log_entry(verbosity, output_directory, entry, prnt)
-            pliststr = format_plist_extractions(artefact, plistdata)
+            pliststr = format_plist_extractions(plistdata)
             if (
                 '"Program"' in pliststr
                 and '"ProgramArguments"' in pliststr
