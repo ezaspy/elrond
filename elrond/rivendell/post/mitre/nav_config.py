@@ -25,7 +25,7 @@ def configure_navigator(case, splunkuser, splunkpswd):
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-    ).communicate()  # outstanding - need to prompt for creds if Splunk is already installed - splunkuser, splunkpswd
+    ).communicate()
     time.sleep(30)
     jobid = re.findall(r"<sid>(?P<sid>[^<]+)</sid>", str(apiout[0]))
     searchout, foundtechniques = (

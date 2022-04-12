@@ -70,7 +70,7 @@ parser.add_argument(
 parser.add_argument(
     "-F",
     "--collectfiles",
-    help="Collect files-of-interest from disk including documents, archives and Virtual Machine files",
+    help="Collect files-of-interest from disk including binaries, documents, archives, scripts and virtual machine files",
     action="store_const",
     const=True,
     default=False,

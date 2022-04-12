@@ -9,6 +9,8 @@ from rivendell.audit import write_audit_log_entry
 def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, recfile):
     if (
         recfile.startswith(".")
+        or recfile.endswith(".exe")
+        or recfile.endswith(".dll")
         or recfile.endswith(".elf")
         or recfile.endswith(".docx")
         or recfile.endswith(".doc")
@@ -19,6 +21,7 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
         or recfile.endswith(".pptx")
         or recfile.endswith(".ppt")
         or recfile.endswith(".pptm")
+        or recfile.endswith(".pdf")
         or recfile.endswith(".zip")
         or recfile.endswith(".rar")
         or recfile.endswith(".7z")
@@ -28,7 +31,9 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
         or recfile.endswith(".vmware")
         or recfile.endswith(".vmdk")
         or recfile.endswith(".vmx")
-        or recfile.endswith(".vdi")
+        or recfile.endswith(".ps1")
+        or recfile.endswith(".py")
+        or recfile.endswith(".vba")
     ):
         try:
             os.stat(output_directory + img.split("::")[0] + "/files/")
@@ -66,7 +71,35 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
                 )
             except:
                 pass
-        if (
+        elif (
+            recfile.endswith(".exe")
+            or recfile.endswith(".dll")
+            or recfile.endswith(".elf")
+        ):
+            try:
+                os.stat(output_directory + img.split("::")[0] + "/files/binaries")
+            except:
+                os.makedirs(output_directory + img.split("::")[0] + "/files/binaries")
+            try:
+                (entry, prnt,) = "{},{},{},document file '{}'\n".format(
+                    datetime.now().isoformat(),
+                    img.split("::")[0],
+                    stage,
+                    recfile,
+                ), " -> {} -> {} document file '{}' for {}".format(
+                    datetime.now().isoformat().replace("T", " "),
+                    stage.replace(",", " &"),
+                    recfile,
+                    vssimage,
+                )
+                write_audit_log_entry(verbosity, output_directory, entry, prnt)
+                shutil.copy2(
+                    os.path.join(recroot, recfile),
+                    output_directory + img.split("::")[0] + "/files/binaries",
+                )
+            except:
+                pass
+        elif (
             recfile.endswith("docx")
             or recfile.endswith("doc")
             or recfile.endswith("docm")
@@ -76,6 +109,7 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
             or recfile.endswith("pptx")
             or recfile.endswith("ppt")
             or recfile.endswith("pptm")
+            or recfile.endswith(".pdf")
         ):
             try:
                 os.stat(output_directory + img.split("::")[0] + "/files/documents")
@@ -100,9 +134,7 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
                 )
             except:
                 pass
-        else:
-            pass
-        if (
+        elif (
             recfile.endswith("zip")
             or recfile.endswith("rar")
             or recfile.endswith("7z")
@@ -133,19 +165,45 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
                 )
             except:
                 pass
-        else:
-            pass
-        if (
+        elif (
+            recfile.endswith("ps1") or recfile.endswith("py") or recfile.endswith("vba")
+        ):
+            try:
+                os.stat(output_directory + img.split("::")[0] + "/files/scripts")
+            except:
+                os.makedirs(output_directory + img.split("::")[0] + "/files/scripts")
+            try:
+                (entry, prnt,) = "{},{},{},archive file '{}'\n".format(
+                    datetime.now().isoformat(),
+                    img.split("::")[0],
+                    stage,
+                    recfile,
+                ), " -> {} -> {} archive file '{}' for {}".format(
+                    datetime.now().isoformat().replace("T", " "),
+                    stage.replace(",", " &"),
+                    recfile,
+                    vssimage,
+                )
+                write_audit_log_entry(verbosity, output_directory, entry, prnt)
+                shutil.copy2(
+                    os.path.join(recroot, recfile),
+                    output_directory + img.split("::")[0] + "/files/scripts",
+                )
+            except:
+                pass
+        elif (
             recfile.endswith("vmware")
             or recfile.endswith("vmdk")
             or recfile.endswith("vmx")
             or recfile.endswith("vdi")
         ):
             try:
-                os.stat(output_directory + img.split("::")[0] + "/files/vm_software")
+                os.stat(
+                    output_directory + img.split("::")[0] + "/files/virtual_machines"
+                )
             except:
                 os.makedirs(
-                    output_directory + img.split("::")[0] + "/files/vm_software"
+                    output_directory + img.split("::")[0] + "/files/virtual_machines"
                 )
             try:
                 (entry, prnt,) = "{},{},{},virtual file '{}'\n".format(
@@ -162,7 +220,7 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
                 shutil.copy2(
                     os.path.join(recroot, recfile),
-                    output_directory + img.split("::")[0] + "/files/vm_software",
+                    output_directory + img.split("::")[0] + "/files/virtual_machines",
                 )
             except:
                 pass

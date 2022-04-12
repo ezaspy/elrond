@@ -172,6 +172,10 @@ def main(
     )
     if len(directory) > 1:
         od = directory[1]
+        if not od.endswith("/"):
+            od = od + "/"
+        else:
+            pass
         if not os.path.isdir(od):
             if not auto:
                 make_od = input(
@@ -186,7 +190,7 @@ def main(
                     os.makedirs(od)
                     print(
                         "  '{}' has been created successfully.\n".format(
-                            os.path.realpath(od)
+                            os.path.realpath(os.path.dirname(od) + "/")
                         )
                     )
                 except PermissionError:

@@ -45,17 +45,7 @@ def process_artefacts(
     jsondict = {}
     jsonlist = []
     if img.split("::")[0] in artefact:
-        if artefact.endswith("$MFT") and not os.path.exists(
-            output_directory
-            + img.split("::")[0]
-            + "/artefacts/cooked"
-            + vssartefact
-            + "MFT.csv"
-        ):
-            process_mft(
-                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
-            )
-        elif artefact.endswith("setupapi.dev.log") and not os.path.exists(
+        if artefact.endswith("setupapi.dev.log") and not os.path.exists(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
@@ -63,119 +53,6 @@ def process_artefacts(
             + "usb.log.json"
         ):
             process_usb(
-                verbosity,
-                vssimage,
-                output_directory,
-                img,
-                vssartefact,
-                stage,
-                artefact,
-                jsondict,
-                jsonlist,
-            )
-        elif artefact.endswith(".SYSTEM") and not os.path.exists(
-            output_directory
-            + img.split("::")[0]
-            + "/artefacts/cooked"
-            + vssartefact
-            + "ShimCache.csv"
-        ):
-            process_shimcache(
-                verbosity, vssimage, output_directory, img, vssartefact, stage
-            )
-        elif (
-            artefact.endswith("SAM")
-            or artefact.endswith("SECURITY")
-            or artefact.endswith("SOFTWARE")
-            or artefact.endswith("SYSTEM")
-            and not artefact.endswith(".SYSTEM")
-        ):
-            process_registry_system(
-                verbosity,
-                vssimage,
-                output_directory,
-                img,
-                vssartefact,
-                stage,
-                artefact,
-                jsondict,
-                jsonlist,
-                cwd,
-            )
-        elif artefact.endswith("+NTUSER.DAT") or artefact.endswith("+UsrClass.dat"):
-            process_registry_user(
-                verbosity,
-                vssimage,
-                output_directory,
-                img,
-                vssartefact,
-                stage,
-                artefact,
-                jsondict,
-                jsonlist,
-                cwd,
-            )
-        elif artefact.endswith(".evtx"):
-            process_evtx(
-                verbosity,
-                vssimage,
-                output_directory,
-                img,
-                vssartefact,
-                stage,
-                artefact,
-                jsondict,
-                jsonlist,
-            )
-        elif artefact.endswith("-ms") and "+" in artefact:
-            process_jumplists(
-                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
-            )
-        elif artefact.endswith(".plist"):
-            process_plist(
-                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
-            )
-        elif artefact.endswith("bash_history"):
-            process_bash_history(
-                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
-            )
-        elif artefact.endswith(".emlx"):
-            process_email(
-                verbosity,
-                vssimage,
-                output_directory,
-                img,
-                vssartefact,
-                stage,
-                artefact,
-                jsondict,
-                jsonlist,
-            )
-        elif artefact.endswith("/group"):
-            process_group(
-                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
-            )
-        elif (
-            artefact.endswith("log") or artefact.endswith("log.1")
-        ) and "/logs/" in artefact:  # missing - year in DateTime field
-            process_logs(
-                verbosity,
-                vssimage,
-                output_directory,
-                img,
-                vssartefact,
-                stage,
-                artefact,
-                jsondict,
-                jsonlist,
-            )
-        elif (
-            artefact.endswith(".service")
-            or artefact.endswith(".target")
-            or artefact.endswith(".socket")
-            or artefact.endswith(".timer")
-        ):
-            process_service(
                 verbosity,
                 vssimage,
                 output_directory,
