@@ -218,7 +218,7 @@ def configure_splunk_stack(
         ).communicate()
     except:
         pass
-    print(splunkuser, splunkpswd)
+    print(splunkuser, splunkpswd) # for testing when Splunk is already installed
     with open(
         "/" + postpath + "splunk/etc/system/default/limits.conf"
     ) as limitsconfread:
@@ -293,7 +293,7 @@ def configure_splunk_stack(
                 )
         else:
             pass
-    print(splunkuser, splunkpswd)
+    print(splunkuser, splunkpswd) # for testing when Splunk is already installed
     ingest_splunk_data(
         verbosity,
         output_directory,
@@ -347,7 +347,7 @@ def configure_splunk_stack(
                 ).communicate()
         else:
             pass
-    print(splunkuser, splunkpswd)
+    print(splunkuser, splunkpswd) # for testing when Splunk is already installed
     os.chdir("/" + postpath + "splunk/etc/apps/")
     subprocess.Popen(
         ["chmod", "-R", "755", "elrond/"],
@@ -369,7 +369,7 @@ def configure_splunk_stack(
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ).communicate()
-    print(splunkuser, splunkpswd)
+    print(splunkuser, splunkpswd) # for testing when Splunk is already installed
     print()
     print("   Splunk Web is available at:            127.0.0.1:8000")
     os.chdir(pwd)

@@ -443,7 +443,7 @@ def identify_pre_process_artefacts(
         print()
     else:
         pass
-    flags.append("2processing")
+    flags.append("02processing")
     os.chdir(cwd)
     print(
         "  ----------------------------------------\n  -> Completed Processing Phase.\n"

@@ -149,7 +149,7 @@ def collect_artefacts(
                 )
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
                 print("  -> Completed Metadata Phase for {}.\n".format(metaimage))
-                flags.append("0metadata")
+                flags.append("00metadata")
             print(
                 "\n  -> Completed Metadata Phase.\n  ----------------------------------------\n"
             )
@@ -277,7 +277,7 @@ def collect_artefacts(
                 )
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
                 print("  -> Completed Metadata Phase for {}.\n".format(metaimage))
-                flags.append("0metadata")
+                flags.append("00metadata")
             print(
                 "  ----------------------------------------\n  -> Completed Metadata Phase.\n"
             )
@@ -286,7 +286,7 @@ def collect_artefacts(
             pass
         if keywords:
             prepare_keywords(verbosity, output_directory, imgs, keywords, stage)
-            flags.append("3keyword searching")
+            flags.append("03keyword searching")
             time.sleep(1)
         else:
             pass
@@ -341,7 +341,7 @@ def collect_artefacts(
                 vssmem,
                 memtimeline,
             )
-            flags.append("2processing")
+            flags.append("02processing")
             os.chdir(cwd)
         else:  # Collection
             try:
@@ -574,7 +574,7 @@ def collect_artefacts(
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
         print()
-    flags.append("1collection")
+    flags.append("01collection")
     print(
         "  ----------------------------------------\n  -> Completed Collection Phase.\n"
     )

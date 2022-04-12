@@ -11,7 +11,7 @@ import sys
 
 
 def search_keywords(
-    verbosity, output_directory, img, keywords, kwsfilelist, vssimage, vsstext
+    verbosity, output_directory, img, keywords, kwsfilelist, vssimage, insert
 ):
     if not os.path.exists(output_directory + img.split("::")[0] + "/analysis/"):
         os.mkdir(output_directory + img.split("::")[0] + "/analysis/")
@@ -25,7 +25,11 @@ def search_keywords(
     with open(keywords[0], "r") as keywordsfile:
         for eachkeyword in keywordsfile:
             if verbosity != "":
-                print("     Searching for keyword '{}'...".format(eachkeyword.strip()))
+                print(
+                    "     Searching for keyword '{}' from {}...".format(
+                        eachkeyword.strip(), insert
+                    )
+                )
             else:
                 pass
             for kwfile in kwsfilelist:
@@ -149,7 +153,7 @@ def prepare_keywords(verbosity, output_directory, imgs, keywords, stage):
                 keywords,
                 kwsfilelist,
                 vssimage,
-                vsstext,
+                vssimage,
             )
             print("  -> Completed Keyword Searching Phase for {}".format(vssimage))
             entry, prnt = "{},{},{},completed\n".format(
@@ -180,6 +184,7 @@ def prepare_keywords(verbosity, output_directory, imgs, keywords, stage):
                     kwsfilelist,
                     each.split("::")[0],
                     "",
+                    "'collected artefacts'",
                 )
             else:
                 pass
@@ -196,6 +201,7 @@ def prepare_keywords(verbosity, output_directory, imgs, keywords, stage):
                     kwsfilelist,
                     each.split("::")[0],
                     "",
+                    "'collected files'",
                 )
             else:
                 pass

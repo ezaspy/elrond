@@ -11,7 +11,7 @@ from rivendell.post.mitre.nav_json import create_attack_navigator_json
 def configure_navigator(case, splunkuser, splunkpswd):
     print()
     print(
-        "     Mapping available artefacts to MITRE ATT&CK® navigator, please stand by..."
+        "   Mapping available artefacts to MITRE ATT&CK® navigator, please stand by..."
     )
     apiout = subprocess.Popen(
         [
@@ -59,7 +59,7 @@ def configure_navigator(case, splunkuser, splunkpswd):
     )
     if len(subtechniques) > 0:
         print(
-            "       Evidence of {} MITRE ATT&CK® techniques identified.".format(
+            "    Evidence of {} MITRE ATT&CK® techniques identified.".format(
                 str(len(subtechniques))
             )
         )

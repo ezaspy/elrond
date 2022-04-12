@@ -115,7 +115,7 @@ def collect_process_kw_analysis_timelining(
                 verbosity, output_directory, imgs, keywords, "keyword searching"
             )
             if "keyword searching" not in str(flags):
-                flags.append("3keyword searching")
+                flags.append("03keyword searching")
             else:
                 pass
             print(
@@ -150,7 +150,7 @@ def collect_process_kw_analysis_timelining(
             print(
                 "  -> Analysis could not be conducted as there are no artefacts processed (-P), please try again.\n"
             )
-        flags.append("4analysis")
+        flags.append("04analysis")
         print(
             "  ----------------------------------------\n  -> Completed Analysis Phase.\n"
         )
@@ -236,7 +236,7 @@ def collect_process_kw_analysis_timelining(
                 )
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
                 print()
-            flags.append("5timelining")
+            flags.append("05timelining")
             print(
                 "  ----------------------------------------\n  -> Completed Timelining Phase.\n"
             )

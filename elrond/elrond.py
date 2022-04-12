@@ -76,6 +76,14 @@ parser.add_argument(
     default=False,
 )
 parser.add_argument(
+    "-G",
+    "--sigma",
+    help="Build SIGMA signatures based on the original images, artefacts and/or files collected",
+    action="store_const",
+    const=True,
+    default=False,
+)
+parser.add_argument(
     "-H",
     "--nsrl",
     help="Compare hashes against known-goods from NSRL database; connection to Internet required",
@@ -228,6 +236,14 @@ parser.add_argument(
     default=False,
 )
 parser.add_argument(
+    "-Y",
+    "--yara",
+    help="Build YARA signatures based on the original images, artefacts and/or files collected",
+    action="store_const",
+    const=True,
+    default=False,
+)
+parser.add_argument(
     "-Z",
     "--archive",
     help="Archive raw data after processing",
@@ -246,6 +262,7 @@ vss = args.vss
 delete = args.delete
 elastic = args.elastic
 collectfiles = args.collectfiles
+sigma = args.sigma
 nsrl = args.nsrl
 extractiocs = args.extractiocs
 imageinfo = args.imageinfo
@@ -266,6 +283,7 @@ memorytimeline = args.memorytimeline
 userprofiles = args.userprofiles
 veryverbose = args.veryverbose
 verbose = args.verbose
+yara = args.yara
 archive = args.archive
 
 d = directory[0]
@@ -411,6 +429,7 @@ if __name__ == "__main__":
         delete,
         elastic,
         collectfiles,
+        sigma,
         nsrl,
         extractiocs,
         imageinfo,
@@ -431,6 +450,7 @@ if __name__ == "__main__":
         userprofiles,
         veryverbose,
         verbose,
+        yara,
         archive,
         d,
         cwd,

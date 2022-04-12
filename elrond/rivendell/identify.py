@@ -111,7 +111,7 @@ def identify_memory_image(
             memoryplatform = "Linux memory"
         ot[f + "::" + memoryplatform] = d
         print()
-        flags.append("2processing")
+        flags.append("02processing")
         os.chdir(cwd)
     else:
         print("    OK. '{}' will not be processed.\n".format(f))

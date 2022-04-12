@@ -19,25 +19,32 @@ def ingest_splunk_data(
 ):
     for img in imgs:
         if "vss" in img.split("::")[1]:
-            vssimage = (
-                "'"
-                + img.split("::")[0]
-                + "' ("
-                + img.split("::")[1]
-                .split("_")[1]
-                .replace("vss", "volume shadow copy #")
-                + ")"
+            vssimage, vsstext = "'" + img.split("::")[0] + "' (" + img.split("::")[
+                1
+            ].split("_")[1].replace(
+                "vss", "volume shadow copy #"
+            ) + ")", " from " + img.split(
+                "::"
+            )[
+                1
+            ].split(
+                "_"
+            )[
+                1
+            ].replace(
+                "vss", "volume shadow copy #"
             )
         else:
-            vssimage = "'" + img.split("::")[0] + "'"
+            vssimage, vsstext = "'" + img.split("::")[0] + "'", ""
         print()
-        print("     Indexing artefacts into Splunk for '{}'...".format(vssimage))
-        entry, prnt = "{},{},{},indexing\n".format(
-            datetime.now().isoformat(), vssimage, stage
-        ), " -> {} -> indexing artfacts into {} for '{}'".format(
+        print("     Indexing artefacts into Splunk for {}...".format(vssimage))
+        entry, prnt = "{},{}{},{},indexing\n".format(
+            datetime.now().isoformat(), img.split("::")[0], vsstext, stage
+        ), " -> {} -> indexing artfacts into {} for {}{}".format(
             datetime.now().isoformat().replace("T", " "),
             stage,
             vssimage,
+            vsstext,
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
         with open(
@@ -376,10 +383,10 @@ def ingest_splunk_data(
         else:
             pass
         print_done(verbosity)
-        print("     Splunk indexing completed for '{}'".format(vssimage))
+        print("     Splunk indexing completed for {}".format(vssimage))
         entry, prnt = "{},{},{},completed\n".format(
             datetime.now().isoformat(), vssimage, stage
-        ), " -> {} -> indexed artfacts into {} for '{}'".format(
+        ), " -> {} -> indexed artfacts into {} for {}".format(
             datetime.now().isoformat().replace("T", " "),
             stage,
             vssimage,

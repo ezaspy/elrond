@@ -1,6 +1,7 @@
 #!/usr/bin/env python3 -tt
 import os
 import random
+import re
 import shutil
 import subprocess
 import sys
@@ -19,7 +20,9 @@ from rivendell.post.clean import archive_artefacts
 from rivendell.post.clean import delete_artefacts
 from rivendell.post.elastic.config import configure_elastic_stack
 from rivendell.post.mitre.nav_config import configure_navigator
+from rivendell.post.sigma.build import write_sigma_signatures
 from rivendell.post.splunk.install import configure_splunk_stack
+from rivendell.post.yara.build import write_yara_signatures
 
 
 def main(
@@ -32,6 +35,7 @@ def main(
     delete,
     elastic,
     collectfiles,
+    sigma,
     nsrl,
     extractiocs,
     imageinfo,
@@ -52,6 +56,7 @@ def main(
     userprofiles,
     veryverbose,
     verbose,
+    yara,
     archive,
     d,
     cwd,
@@ -644,7 +649,7 @@ def main(
                 analysis,
                 timeline,
             )
-            flags.append("6splunk")
+            flags.append("06splunk")
             print(
                 "  ----------------------------------------\n  -> Completed Splunk Phase.\n"
             )
@@ -658,9 +663,31 @@ def main(
             print(
                 "   Kibana is available at:            127.0.0.1:5601"
             )  # adjust if custom location
-            flags.append("7elastic")
+            flags.append("07elastic")
             print(
                 "  ----------------------------------------\n  -> Completed Elastic Phase.\n"
+            )
+            time.sleep(1)
+        else:
+            pass
+        if sigma:
+            write_sigma_signatures(
+                verbosity, output_directory, case, imgs, volatility, analysis, timeline
+            )
+            flags.append("08sigma")
+            print(
+                "  ----------------------------------------\n  -> Completed SIGMA Phase.\n"
+            )
+            time.sleep(1)
+        else:
+            pass
+        if yara:
+            write_yara_signatures(
+                verbosity, output_directory, case, imgs, volatility, analysis, timeline
+            )
+            flags.append("09yara")
+            print(
+                "  ----------------------------------------\n  -> Completed YARA Phase.\n"
             )
             time.sleep(1)
         else:
@@ -670,12 +697,15 @@ def main(
                 "\n\n  -> \033[1;36mBuilding ATT&CK® Navigator...\033[1;m\n  ----------------------------------------"
             )
             time.sleep(1)
-            configure_navigator(
-                case, splunkuser, splunkpswd
-            )  # outstanding - check for installation of attack navigator
+            configure_navigator(case, splunkuser, splunkpswd)
             print(
-                "   ATT&CK® Navigator is available at:     127.0.0.1/attack-navigator\n"
+                "\n   ATT&CK® Navigator is available at:     127.0.0.1/attack-navigator\n"
             )
+            flags.append("10navigator")
+            print(
+                "  ----------------------------------------\n  -> Completed ATT&CK® Navigator Phase.\n"
+            )
+            time.sleep(1)
         else:
             pass
         if archive or delete:
@@ -683,12 +713,12 @@ def main(
                 if "vss" not in img and "vss" not in mntlocation:
                     if archive:
                         archive_artefacts(verbosity, output_directory)
-                        flags.append("8archiving")
+                        flags.append("11archiving")
                     else:
                         pass
                     if delete:
                         delete_artefacts(verbosity, output_directory)
-                        flags.append("9deletion")
+                        flags.append("12deletion")
                     else:
                         pass
                 else:
@@ -770,13 +800,14 @@ def main(
         else:
             timetaken = "{} second.".format(str(secs))
     if vss:
-        for eachimg, _ in allimgs.items():
+        for eachimg, _ in imgs.items():
             if (
                 "Windows" in eachimg.split("::")[1]
                 and (
                     ".E01" in eachimg.split("::")[0] or ".e01" in eachimg.split("::")[0]
                 )
                 and "memory" not in eachimg.split("::")[1]
+                and "_vss" not in eachimg.split("::")[1]
             ):
                 inspectedvss = input(
                     "\n\n  ----------------------------------------\n   Have you reviewed the Volume Shadow Copies for '{}'? Y/n [Y] ".format(
@@ -803,23 +834,11 @@ def main(
     )
     time.sleep(1)
     if len(flags) > 0:
-        doneimgs, flags = [], str(sorted(set(flags)))[3:-2].title().replace(
-            "', '", ", "
-        ).replace("0", "").replace("1", "").replace("2", "").replace("3", "").replace(
-            "4", ""
-        ).replace(
-            "5", ""
-        ).replace(
-            "6", ""
-        ).replace(
-            "7", ""
-        ).replace(
-            "8", ""
-        ).replace(
-            "9", ""
+        doneimgs, sortedflags = [], re.sub(
+            r"', '\d{2}", r", ", str(sorted(set(flags))).title()[4:-2]
         )
-        if ", " in flags:
-            flags = flags.split(", ")
+        if ", " in sortedflags:
+            flags = sortedflags.split(", ")
             lastflag = " and " + flags[-1]
             flags.pop()
             flags = (
@@ -828,7 +847,7 @@ def main(
         else:
             pass
         if len(allimgs) > 0:
-            print("      {} completed for...".format(flags))
+            print("      {} phases completed for...".format(flags))
             for eachimg in allimgs:
                 doneimgs.append(eachimg.split("::")[0].split("/")[-1])
         else:
@@ -836,10 +855,6 @@ def main(
     else:
         pass
     unmount_images(elrond_mount, ewf_mount)
-    if os.path.exists("rds_modernm") and os.path.isdir("rds_modernm"):
-        shutil.rmtree("rds_modernm")
-    else:
-        pass
     for eachimg, _ in allimgs.items():
         for doneroot, donedirs, donefiles in os.walk(
             output_directory + str(eachimg.split("::")[0]).split("/")[-1]

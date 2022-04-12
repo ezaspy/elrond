@@ -718,7 +718,7 @@ def reorganise_artefacts():
                 else:
                     print("    OK. '{}' will not be processed.\n".format(f))
         imgs = allimgs.copy()
-    flags.append("1reorganised")
+    flags.append("01reorganised")
     print(
         "  ----------------------------------------\n  -> Completed Identification Phase.\n"
     )
