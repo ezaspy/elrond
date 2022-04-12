@@ -1,7 +1,5 @@
 #!/usr/bin/env python3 -tt
 import os
-import re
-import subprocess
 from datetime import datetime
 
 from rivendell.audit import print_done
@@ -20,16 +18,26 @@ def ingest_splunk_data(
     timeline,
 ):
     for img in imgs:
+        if "vss" in img.split("::")[1]:
+            vssimage = (
+                "'"
+                + img.split("::")[0]
+                + "' ("
+                + img.split("::")[1]
+                .split("_")[1]
+                .replace("vss", "volume shadow copy #")
+                + ")"
+            )
+        else:
+            vssimage = "'" + img.split("::")[0] + "'"
         print()
-        print(
-            "     Indexing artefacts into Splunk for '{}'...".format(img.split("::")[0])
-        )
+        print("     Indexing artefacts into Splunk for '{}'...".format(vssimage))
         entry, prnt = "{},{},{},indexing\n".format(
-            datetime.now().isoformat(), img.split("::")[0], stage
+            datetime.now().isoformat(), vssimage, stage
         ), " -> {} -> indexing artfacts into {} for '{}'".format(
             datetime.now().isoformat().replace("T", " "),
             stage,
-            img.split("::")[0],
+            vssimage,
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
         with open(
@@ -268,7 +276,7 @@ def ingest_splunk_data(
                 else:
                     pass
                 if timeline:
-                    for timeroot, timedirs, timefiles in os.walk(
+                    for timeroot, _, timefiles in os.walk(
                         os.path.realpath(
                             output_directory + img.split("::")[0] + "/artefacts/"
                         )
@@ -368,12 +376,12 @@ def ingest_splunk_data(
         else:
             pass
         print_done(verbosity)
-        print("     Splunk indexing completed for '{}'".format(img.split("::")[0]))
+        print("     Splunk indexing completed for '{}'".format(vssimage))
         entry, prnt = "{},{},{},completed\n".format(
-            datetime.now().isoformat(), img.split("::")[0], stage
+            datetime.now().isoformat(), vssimage, stage
         ), " -> {} -> indexed artfacts into {} for '{}'".format(
             datetime.now().isoformat().replace("T", " "),
             stage,
-            img.split("::")[0],
+            vssimage,
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)

@@ -37,19 +37,18 @@ def search_keywords(
                                 (
                                     entry,
                                     prnt,
-                                ) = "{},{},keyword {} identified on line {},{}\n".format(
+                                ) = "{},{},keyword identified,{} (line {}) found in {}\n".format(
                                     datetime.now().isoformat(),
                                     vssimage,
                                     eachkeyword.strip(),
                                     kwlno,
                                     kwfile.split("/")[-1],
-                                ), " -> {} -> identified keyword '{}' on line {} in '{}' for {}{}".format(
+                                ), " -> {} -> identified keyword '{}' on line {} in '{}' for {}".format(
                                     datetime.now().isoformat().replace("T", " "),
                                     eachkeyword.strip(),
                                     kwlno,
                                     kwfile.split("/")[-1],
                                     vssimage,
-                                    vsstext,
                                 )
                                 write_audit_log_entry(
                                     verbosity, output_directory, entry, prnt

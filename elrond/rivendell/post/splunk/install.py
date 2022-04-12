@@ -200,6 +200,11 @@ def configure_splunk_stack(
         postpath = str(
             re.findall(r"\/(.*)splunk\/etc\/splunk.version", str(splkproc)[2:-3])[0]
         )
+        print("     Splunk is already installed.")
+        splunkuser, splunkpswd = input(
+            "       Please provide your Splunk admin username: "
+        ), getpass.getpass("       Please provide your Splunk admin password: ")
+        # validate credentials by logging into Splunk in the background
     else:
         print("     Splunk is not installed, please stand by...")
         splunkuser, splunkpswd = install_splunk_stack(
@@ -213,6 +218,7 @@ def configure_splunk_stack(
         ).communicate()
     except:
         pass
+    print(splunkuser, splunkpswd)
     with open(
         "/" + postpath + "splunk/etc/system/default/limits.conf"
     ) as limitsconfread:
@@ -287,6 +293,7 @@ def configure_splunk_stack(
                 )
         else:
             pass
+    print(splunkuser, splunkpswd)
     ingest_splunk_data(
         verbosity,
         output_directory,
@@ -340,6 +347,7 @@ def configure_splunk_stack(
                 ).communicate()
         else:
             pass
+    print(splunkuser, splunkpswd)
     os.chdir("/" + postpath + "splunk/etc/apps/")
     subprocess.Popen(
         ["chmod", "-R", "755", "elrond/"],
@@ -352,23 +360,17 @@ def configure_splunk_stack(
         stderr=subprocess.PIPE,
     ).communicate()
     subprocess.Popen(
-        ["/" + postpath + "splunk/bin/./splunk", "start"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    ).communicate()
-    subprocess.Popen(
         ["sudo", "/bin/systemctl", "enable", "splunk.service"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ).communicate()
     subprocess.Popen(
-        ["/" + postpath + "splunk/bin/./splunk", "restart"],
+        ["/" + postpath + "splunk/bin/./splunk", "start"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ).communicate()
+    print(splunkuser, splunkpswd)
     print()
-    print(
-        "   Splunk Web is available at:            127.0.0.1:8000"
-    )  # adjust if custom location
+    print("   Splunk Web is available at:            127.0.0.1:8000")
     os.chdir(pwd)
     return splunkuser, splunkpswd
