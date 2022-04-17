@@ -456,14 +456,58 @@ def identify_pre_process_artefacts(
             stage,
             cwd,
             imgs,
-            vssimage,
-            artefact,
-            vssmem,
-            volatility,
-            volchoice,
-            vss,
-            memtimeline,
         )
+
+    for img in imgs:  # Identifying carved files for processing
+        if not img.split("::")[1].endswith(
+            "memory"
+        ):  # Identifying artefacts for processing
+            for each in os.listdir(output_directory):
+                if each + "/" == output_directory or each == img.split("::")[0]:
+                    for eachdir in os.listdir(
+                        os.path.realpath(output_directory + each + "/artefacts/carved")
+                    ):
+                        if (
+                            "vss" in eachdir
+                            and os.path.isdir(
+                                os.path.realpath(
+                                    output_directory
+                                    + each
+                                    + "/artefacts/carved/"
+                                    + eachdir
+                                )
+                            )
+                            and not os.path.exists(
+                                output_directory
+                                + img.split("::")[0]
+                                + "/artefacts/cooked/"
+                                + eachdir
+                            )
+                        ):
+                            os.makedirs(
+                                output_directory
+                                + img.split("::")[0]
+                                + "/artefacts/cooked/"
+                                + eachdir
+                            )
+                        elif not os.path.exists(
+                            output_directory + img.split("::")[0] + "/artefacts/cooked/"
+                        ):
+                            os.makedirs(
+                                output_directory
+                                + img.split("::")[0]
+                                + "/artefacts/cooked/"
+                            )
+                        else:
+                            pass
+                    plist.append(output_directory + each)
+                else:
+                    pass
+            try:
+                os.remove(".temp.log")
+            except:
+                pass
+
         print("  -> Completed Processing Phase for {}".format(vssimage))
         entry, prnt = "{},{},{},completed\n".format(
             datetime.now().isoformat(), vssimage.replace("'", ""), stage
