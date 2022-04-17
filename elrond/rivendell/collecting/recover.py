@@ -74,47 +74,52 @@ def collect_recover_files(
             stage.title().replace(",", " &"), vssimage
         )
     )
-    yestoall = input(
-        "     Do you wish to collect all or some files (binaries, documents, archives, scripts, virtual machine, email) from {}?\n      [A]ll  [S]ome\t[A]ll ".format(
-            vssimage
-        )
-    )
-    if yestoall == "S":
-        yestobins = input(
-            "     Do you wish to collect binary files from {}? Y/n [Y] ".format(
+    if collectfiles:
+        yestoall = input(
+            "     Do you wish to collect all or some files (binaries, documents, archives, scripts, virtual machine, email) from {}?\n      [A]ll  [S]ome\t[A]ll ".format(
                 vssimage
             )
         )
-        yestodocs = input(
-            "     Do you wish to collect document files from {}? Y/n [Y] ".format(
-                vssimage
+        if yestoall == "S":
+            yestobins = input(
+                "     Do you wish to collect binary files from {}? Y/n [Y] ".format(
+                    vssimage
+                )
             )
-        )
-        yestoarcs = input(
-            "     Do you wish to collect archive files from {}? Y/n [Y] ".format(
-                vssimage
+            yestodocs = input(
+                "     Do you wish to collect document files from {}? Y/n [Y] ".format(
+                    vssimage
+                )
             )
-        )
-        yestoscrs = input(
-            "     Do you wish to collect scripts from {}? Y/n [Y] ".format(vssimage)
-        )
-        yestovmws = input(
-            "     Do you wish to collect virtual machine files from {}? Y/n [Y] ".format(
-                vssimage
+            yestoarcs = input(
+                "     Do you wish to collect archive files from {}? Y/n [Y] ".format(
+                    vssimage
+                )
             )
-        )
-        yestoemls = input(
-            "     Do you wish to collect email files from {}? Y/n [Y] ".format(vssimage)
-        )
+            yestoscrs = input(
+                "     Do you wish to collect scripts from {}? Y/n [Y] ".format(vssimage)
+            )
+            yestovmws = input(
+                "     Do you wish to collect virtual machine files from {}? Y/n [Y] ".format(
+                    vssimage
+                )
+            )
+            yestoemls = input(
+                "     Do you wish to collect email files from {}? Y/n [Y] ".format(
+                    vssimage
+                )
+            )
+        else:
+            yestobins, yestodocs, yestoarcs, yestoscrs, yestovmws, yestoemls = (
+                "Y",
+                "Y",
+                "Y",
+                "Y",
+                "Y",
+                "Y",
+            )
     else:
-        yestobins, yestodocs, yestoarcs, yestoscrs, yestovmws, yestoemls = (
-            "Y",
-            "Y",
-            "Y",
-            "Y",
-            "Y",
-            "Y",
-        )
+        pass
     for recroot, _, recfiles in os.walk(mnt):
         increment = 1
         for recfile in recfiles:
