@@ -41,6 +41,7 @@ def collect_process_kw_analysis_timelining(
     output_directory,
     verbosity,
     f,
+    allimgs,
     imgs,
     path,
     volchoice,
@@ -80,7 +81,9 @@ def collect_process_kw_analysis_timelining(
             stage,
         )
     else:
-        reorganise_artefacts()
+        reorganise_artefacts(
+            output_directory, verbosity, allimgs, flags, auto, volatility
+        )
     if process:
         identify_pre_process_artefacts(
             output_directory,

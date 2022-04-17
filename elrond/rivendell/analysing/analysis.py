@@ -7,7 +7,6 @@ from datetime import datetime
 
 from rivendell.audit import write_audit_log_entry
 from rivendell.analysing.ioc_compare import compare_iocs
-from rivendell.analysing.ioc_extract import extract_iocs
 
 
 def analyse_artefacts(

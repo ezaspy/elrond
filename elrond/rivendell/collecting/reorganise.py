@@ -1,19 +1,21 @@
 #!/usr/bin/env python3 -tt
 import os
 import shutil
+import sys
+import time
 from datetime import datetime
 
 from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
-def reorganise_artefacts():
+def reorganise_artefacts(output_directory, verbosity, allimgs, flags, auto, volatility):
     reorgedfiles = [""]
     for eachdir in os.listdir(output_directory):
         shutil.rmtree(output_directory + "/" + eachdir)
 
     def doReorganise(
-        verbosity, stage, allimgs, d, output_directory, f
+        verbosity, allimgs, d, output_directory, f
     ):  # reorganise artefacts
         def doCopy(source, destination):
             try:
@@ -40,7 +42,7 @@ def reorganise_artefacts():
                 dest = os.path.join(output_directory, img, "artefacts/raw/")
                 for imgroot, _, imgfiles in os.walk(os.path.join(root, img)):
                     for eachfile in imgfiles:
-                        for eachreorg in reorgedfiles:
+                        for _ in reorgedfiles:
                             if img in os.path.join(imgroot, eachfile) and os.path.join(
                                 imgroot, eachfile
                             ) not in str(reorgedfiles):
@@ -703,7 +705,7 @@ def reorganise_artefacts():
         )
         sys.exit()
     else:  # confirm reorganisation
-        for root, dirs, files in os.walk(d):
+        for _, dirs, _ in os.walk(d):
             for f in dirs:
                 if not auto:
                     wtr = input("    Do you wish to process: '{}'? Y/n [Y] ".format(f))
@@ -714,7 +716,7 @@ def reorganise_artefacts():
                         os.makedirs(output_directory + f)
                     else:
                         pass
-                    doReorganise(verbosity, stage, allimgs, d, output_directory, f)
+                    doReorganise(verbosity, allimgs, d, output_directory, f)
                 else:
                     print("    OK. '{}' will not be processed.\n".format(f))
         imgs = allimgs.copy()

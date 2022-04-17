@@ -530,6 +530,7 @@ def main(
             output_directory,
             verbosity,
             f,
+            allimgs,
             imgs,
             path,
             volchoice,
