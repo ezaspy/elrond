@@ -75,7 +75,7 @@ def collect_recover_files(
         )
     )
     yestoall = input(
-        "     Do you wish to collect all or some files (binaries, documents, archives, scripts, virtual machine files, email files) from {}?\n      [A]ll  [S]ome\t[A]ll ".format(
+        "     Do you wish to collect all or some files (binaries, documents, archives, scripts, virtual machine, email) from {}?\n      [A]ll  [S]ome\t[A]ll ".format(
             vssimage
         )
     )
