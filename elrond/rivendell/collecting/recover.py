@@ -13,7 +13,7 @@ from rivendell.collecting.files import recover_files
 
 def carve_files(output_directory, verbosity, d, artefact_directory, img, vssimage):
     print(
-        "\n    \033[1;33mRecovering files using file carving from {}...\033[1;m".format(
+        "\n    \033[1;33mCarving files from unallocated space for {}...\033[1;m".format(
             vssimage
         )
     )
@@ -56,7 +56,7 @@ def carve_files(output_directory, verbosity, d, artefact_directory, img, vssimag
     )
     write_audit_log_entry(verbosity, output_directory, entry, prnt)
     print(
-        "\n    \033[1;33mCarved all available files from {}\n\033[1;m".format(vssimage)
+        "\n    \033[1;33mCarved all available files for {}\n\033[1;m".format(vssimage)
     )
 
 
