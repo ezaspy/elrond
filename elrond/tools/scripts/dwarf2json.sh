@@ -5,5 +5,6 @@ sudo tar -C /usr/local -xzf go1.15.10.linux-amd64.tar.gz
 sudo rm -rf go1.15.10.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
 sudo git clone https://github.com/ezaspy/dwarf2json.git
+sudo updatedb
 clear
 sleep 2

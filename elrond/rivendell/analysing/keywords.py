@@ -7,9 +7,6 @@ from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
-import sys
-
-
 def search_keywords(
     verbosity, output_directory, img, keywords, kwsfilelist, vssimage, insert
 ):
@@ -80,6 +77,53 @@ def search_keywords(
                             kwlno += 1
                     except:
                         pass
+                with open(kwfile, "r", encoding="ISO-8859-1") as kwsfile:
+                    kwlno = 0
+                    try:
+                        for eachline in kwsfile:
+                            if eachkeyword.lower().strip() in eachline.lower().strip():
+                                (
+                                    entry,
+                                    prnt,
+                                ) = "{},{},keyword identified,{} (line {}) found in {}\n".format(
+                                    datetime.now().isoformat(),
+                                    vssimage,
+                                    eachkeyword.strip(),
+                                    kwlno,
+                                    kwfile.split("/")[-1],
+                                ), " -> {} -> identified keyword '{}' on line {} in '{}' for {}".format(
+                                    datetime.now().isoformat().replace("T", " "),
+                                    eachkeyword.strip(),
+                                    kwlno,
+                                    kwfile.split("/")[-1],
+                                    vssimage,
+                                )
+                                write_audit_log_entry(
+                                    verbosity, output_directory, entry, prnt
+                                )
+                                with open(
+                                    output_directory
+                                    + img.split("::")[0]
+                                    + "/analysis/KeywordMatches.csv",
+                                    "a",
+                                ) as kwmatchesfile:
+                                    kwmatchesfile.write(
+                                        vssimage.strip("'")
+                                        + ","
+                                        + eachkeyword.strip()
+                                        + ","
+                                        + kwfile
+                                        + ","
+                                        + str(kwlno)
+                                        + ","
+                                        + eachline.strip()
+                                        + "\n"
+                                    )
+                            else:
+                                pass
+                            kwlno += 1
+                    except:
+                        pass
             print_done(verbosity)
 
 
@@ -94,6 +138,19 @@ def build_keyword_list(mnt):
                     and not os.path.islink(os.path.join(kwsr, kwsfile))  # 100MB
                 ):
                     with open(os.path.join(kwsr, kwsfile), "r") as filetest:
+                        filetest.readline()
+                        kwsfilelist.append(os.path.join(kwsr, kwsfile))
+                else:
+                    pass
+            except:
+                pass
+            try:
+                if (
+                    os.stat(os.path.join(kwsr, kwsfile)).st_size > 0
+                    and os.stat(os.path.join(kwsr, kwsfile)).st_size < 100000000
+                    and not os.path.islink(os.path.join(kwsr, kwsfile))  # 100MB
+                ):
+                    with open(os.path.join(kwsr, kwsfile), "r", encoding="ISO-8859-1") as filetest:
                         filetest.readline()
                         kwsfilelist.append(os.path.join(kwsr, kwsfile))
                 else:

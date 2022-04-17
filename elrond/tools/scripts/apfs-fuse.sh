@@ -12,5 +12,6 @@ cd build
 sudo cmake ..
 sudo ccmake .
 sudo make
+sudo updatedb
 clear
 sleep 2

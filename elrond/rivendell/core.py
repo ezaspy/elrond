@@ -14,6 +14,7 @@ from rivendell.processing.timeline import create_plaso_timeline
 
 
 def collect_process_kw_analysis_timelining(
+    auto,
     collect,
     process,
     analysis,
@@ -49,6 +50,7 @@ def collect_process_kw_analysis_timelining(
 ):
     if collect:
         collect_artefacts(
+            auto,
             vss,
             collectfiles,
             nsrl,

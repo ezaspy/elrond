@@ -417,7 +417,7 @@ def process_jumplists(
             + "jumplists.csv",
             "a",
         ) as jumplistcsv:
-            jumplistcsv.write("Device, Account, JumplistID, JumplistType\n")
+            jumplistcsv.write("Device,Account,JumplistID,JumplistType\n")
     else:
         with open(
             output_directory
@@ -471,6 +471,50 @@ def process_jumplists(
                 print_done(verbosity)
             else:
                 pass
+
+
+def process_outlook(verbosity, vssimage, output_directory, img, vssartefact, stage, artefact):
+    if verbosity != "":
+        print(
+            "     Processing Outlook file '{}' ({}) for {}...".format(
+                artefact.split("/")[-1],
+                artefact.split("/")[-2],
+                vssimage,
+            )
+        )
+    else:
+        pass
+    (entry, prnt,) = "{},{},{},'{}' ({}) outlook file\n".format(
+        datetime.now().isoformat(),
+        vssimage.replace("'", ""),
+        stage,
+        artefact.split("/")[-1],
+        artefact.split("/")[-2],
+    ), " -> {} -> {} outlook file '{}' ({}) for {}".format(
+        datetime.now().isoformat().replace("T", " "),
+        stage,
+        artefact.split("/")[-1],
+        artefact.split("/")[-2],
+        vssimage,
+    )
+    write_audit_log_entry(verbosity, output_directory, entry, prnt)
+    if not os.path.exists(os.path.join(artefact.split(".pst")[0])):
+        subprocess.Popen(
+            [
+                "sudo",
+                "readpst",
+                artefact,
+                "-D",
+                "-S",
+                "-o",
+                "/".join(os.path.join(artefact.split(".pst")[0]).split("/")[:-1])
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate()
+    else:
+        pass
+    print_done(verbosity)
 
 
 def process_hiberfil(
@@ -593,3 +637,13 @@ def process_pagefile(
         print_done(verbosity)
     else:
         pass
+
+
+# sudo readpst -o -D -j 4 -r -u -w -m
+# pip install libpff-python
+#  import pypff
+#  pst = pypff.file()
+#  pst.open("MyPst.pst")
+#  pst.close()
+
+# https://stackoverflow.com/questions/69905319/how-to-parse-read-outlook-pst-files-with-python

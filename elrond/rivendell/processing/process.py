@@ -1,6 +1,7 @@
 #!/usr/bin/env python3 -tt
 import os
 import re
+import subprocess
 import time
 from datetime import datetime
 
@@ -17,6 +18,7 @@ from rivendell.processing.windows import process_evtx
 from rivendell.processing.windows import process_hiberfil
 from rivendell.processing.windows import process_jumplists
 from rivendell.processing.windows import process_mft
+from rivendell.processing.windows import process_outlook
 from rivendell.processing.windows import process_pagefile
 from rivendell.processing.windows import (
     process_registry_system,
@@ -63,6 +65,139 @@ def process_artefacts(
                 jsondict,
                 jsonlist,
             )
+        elif artefact.endswith("$MFT") and not os.path.exists(
+            output_directory
+            + img.split("::")[0]
+            + "/artefacts/cooked"
+            + vssartefact
+            + "MFT.csv"
+        ):
+            process_mft(
+                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+            )
+        elif artefact.endswith(".SYSTEM") and not os.path.exists(
+            output_directory
+            + img.split("::")[0]
+            + "/artefacts/cooked"
+            + vssartefact
+            + "ShimCache.csv"
+        ):
+            process_shimcache(
+                verbosity, vssimage, output_directory, img, vssartefact, stage
+            )
+        elif (
+            artefact.endswith("SAM")
+            or artefact.endswith("SECURITY")
+            or artefact.endswith("SOFTWARE")
+            or artefact.endswith("SYSTEM")
+            and not artefact.endswith(".SYSTEM")
+        ):
+            process_registry_system(
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vssartefact,
+                stage,
+                artefact,
+                jsondict,
+                jsonlist,
+                cwd,
+            )
+        elif artefact.endswith("+NTUSER.DAT") or artefact.endswith("+UsrClass.dat"):
+            process_registry_user(
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vssartefact,
+                stage,
+                artefact,
+                jsondict,
+                jsonlist,
+                cwd,
+            )
+        elif artefact.endswith(".evtx"):
+            process_evtx(
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vssartefact,
+                stage,
+                artefact,
+                jsondict,
+                jsonlist,
+            )
+        elif artefact.endswith("-ms") and "+" in artefact:
+            process_jumplists(
+                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+            )
+        elif artefact.endswith(".pst"):
+            process_outlook(
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vssartefact,
+                stage,
+                artefact,
+            )
+        elif artefact.endswith(".plist"):
+            process_plist(
+                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+            )
+        elif artefact.endswith("bash_history"):
+            process_bash_history(
+                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+            )
+        elif artefact.endswith(".emlx"):
+            process_email(
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vssartefact,
+                stage,
+                artefact,
+                jsondict,
+                jsonlist,
+            )
+        elif artefact.endswith("/group"):
+            process_group(
+                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+            )
+        elif (
+            artefact.endswith("log") or artefact.endswith("log.1")
+        ) and "/logs/" in artefact:  # missing - year in DateTime field
+            process_logs(
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vssartefact,
+                stage,
+                artefact,
+                jsondict,
+                jsonlist,
+            )
+        elif (
+            artefact.endswith(".service")
+            or artefact.endswith(".target")
+            or artefact.endswith(".socket")
+            or artefact.endswith(".timer")
+        ):
+            process_service(
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vssartefact,
+                stage,
+                artefact,
+                jsondict,
+                jsonlist,
+            )
         elif artefact.endswith("index.dat") and os.stat(artefact).st_size > 32768:
             process_browser_index(
                 verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
@@ -74,7 +209,7 @@ def process_artefacts(
             )
             or (artefact.endswith("History.db") and "safari" in artefact)
             or ("places.sqlite" in artefact and "firefox" in artefact)
-        ):  # outstanding - evidence of browser downloads
+        ):
             process_browser(
                 verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
             )
@@ -308,6 +443,7 @@ def identify_pre_process_artefacts(
                     )
                 else:
                     pass
+            # Process carved files inc. OST/PST files etc.
         else:
             pass
         print("  -> Completed Processing Phase for {}".format(vssimage))

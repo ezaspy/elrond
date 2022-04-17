@@ -18,5 +18,6 @@ ng build
 sudo cp -r dist/ /var/www/html/
 sudo mv /var/www/html/dist/ /var/www/html/attack-navigator/
 sudo service apache2 restart
+sudo updatedb
 clear
 sleep 2

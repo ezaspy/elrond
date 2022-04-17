@@ -16,5 +16,6 @@ sudo apt update
 sudo apt install kibana
 sudo /bin/systemctl daemon-reload
 sudo systemctl enable kibana.service
+sudo updatedb
 clear
 sleep 2

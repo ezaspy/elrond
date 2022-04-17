@@ -503,6 +503,7 @@ def main(
         collect or process
     ):  # Collection/Reorganisation, Processing, Keyword Searching, Analysis & Timelining
         collect_process_kw_analysis_timelining(
+            auto,
             collect,
             process,
             analysis,

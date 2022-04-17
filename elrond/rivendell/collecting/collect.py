@@ -1,27 +1,25 @@
 #!/usr/bin/env python3 -tt
 import os
 import shutil
-import subprocess
 import sys
 import time
 from collections import OrderedDict
 from datetime import datetime
-from zipfile import ZipFile
-from zipfile import BadZipFile
 
 from rivendell.analysing.keywords import prepare_keywords
 from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
+from rivendell.collecting.recover import carve_files
+from rivendell.collecting.recover import collect_recover_files
 from rivendell.collecting.linux import collect_linux_artefacts
 from rivendell.collecting.mac import collect_mac_artefacts
-from rivendell.collecting.recover import collect_files
-from rivendell.collecting.recover import recover_files
 from rivendell.collecting.windows import collect_windows_artefacts
 from rivendell.meta import collect_metadata
 from rivendell.processing.memory import process_memory
 
 
 def collect_artefacts(
+    auto,
     vss,
     collectfiles,
     nsrl,
@@ -445,108 +443,11 @@ def collect_artefacts(
                 else:
                     pass
         if collectfiles or recover:
-            if collectfiles and recover:
-                stage = "collecting & recovering"
-            elif collectfiles:
-                stage = "collecting"
-            else:
-                stage = "recovering"
-            if verbosity != "":
-                print(
-                    "\n     {} files for {}...".format(
-                        stage.title().replace(",", " &"), vssimage
-                    )
-                )
-            else:
-                pass
-            for recroot, _, recfiles in os.walk(mnt):
-                for recfile in recfiles:
-                    if collectfiles and recover:
-                        collect_files(
-                            output_directory,
-                            verbosity,
-                            stage,
-                            img,
-                            vssimage,
-                            recroot,
-                            recfile,
-                        )
-                        recover_files(
-                            output_directory,
-                            verbosity,
-                            stage,
-                            img,
-                            vssimage,
-                            recroot,
-                            recfile,
-                        )
-                    elif collectfiles:
-                        collect_files(
-                            output_directory,
-                            verbosity,
-                            stage,
-                            img,
-                            vssimage,
-                            recroot,
-                            recfile,
-                        )
-                    else:
-                        recover_files(
-                            output_directory,
-                            verbosity,
-                            stage,
-                            img,
-                            vssimage,
-                            recroot,
-                            recfile,
-                        )
-            print_done(verbosity)
+            collect_recover_files(output_directory, verbosity, mnt, img, vssimage, collectfiles, recover, auto)
         else:
             pass
         if carving:
-            print("\n     Performing file carving for {}...".format(vssimage))
-            subprocess.Popen(
-                [
-                    "foremost",
-                    d + img.split("::")[0],
-                    "-o",
-                    artefact_directory + "/carved",
-                ],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            ).communicate()
-            if os.path.exists(artefact_directory + "/carved/audit.txt"):
-                os.remove(artefact_directory + "/carved/audit.txt")
-            else:
-                pass
-            for eachdir in os.listdir(artefact_directory + "/carved"):
-                for eachfile in os.listdir(artefact_directory + "/carved/" + eachdir):
-                    print(
-                        "     Successfully carved '{}' from {}".format(
-                            eachfile, vssimage
-                        )
-                    )
-                    entry, prnt = "{},{},{},'{}'\n".format(
-                        datetime.now().isoformat(),
-                        vssimage.replace("'", ""),
-                        "carving",
-                        eachfile,
-                    ), " -> {} -> {} artefact '{}' for {}".format(
-                        datetime.now().isoformat().replace("T", " "),
-                        "carved",
-                        eachfile,
-                        vssimage,
-                    )
-                    write_audit_log_entry(verbosity, output_directory, entry, prnt)
-            print_done(verbosity)
-            entry, prnt = "{},{},{},commenced\n".format(
-                datetime.now().isoformat(), vssimage.replace("'", ""), "carving"
-            ), " -> {} -> {} artefacts for {}".format(
-                datetime.now().isoformat().replace("T", " "),
-                "carving",
-                vssimage,
-            )
-            write_audit_log_entry(verbosity, output_directory, entry, prnt)
+            carve_files(output_directory, verbosity, d, artefact_directory, img, vssimage)
         else:
             pass
         if symlinks and verbose:

@@ -9,5 +9,6 @@ printf "\n [+] Running initialization script for elrond...\n\n"
 sudo chmod -R 744 /opt/elrond/
 export PATH=$PATH:/opt/elrond
 sudo chmod +x /opt/elrond/elrond.py
+sudo updatedb
 clear
 sleep 2

@@ -235,18 +235,18 @@ def windows_users(
             if len(mail_dirs) > 0:
                 if verbosity != "":
                     print(
-                        "     Collecting mail artefacts for '{}' for {}...".format(
+                        "     Collecting Outlook artefacts for '{}' for {}...".format(
                             each, vssimage
                         )
                     )
                 else:
                     pass
-                (entry, prnt,) = "{},{},{},'{}' mail artefacts\n".format(
+                (entry, prnt,) = "{},{},{},'{}' outlook artefacts\n".format(
                     datetime.now().isoformat(),
                     img.split("::")[0],
                     stage,
                     each,
-                ), " -> {} -> {} mail artefacts for '{}'{} for '{}'".format(
+                ), " -> {} -> {} outlook artefacts for '{}'{} for '{}'".format(
                     datetime.now().isoformat().replace("T", " "),
                     stage,
                     each,

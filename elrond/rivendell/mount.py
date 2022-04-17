@@ -62,7 +62,7 @@ def mount_images(
     quotes,
     removeimgs,
 ):
-    def collect_ewfinfo(path, mntpath, mpath):
+    def collect_ewfinfo(path, mpath):
         ewfinfo = list(
             re.findall(
                 r"ewfinfo[^\\]+\\n\\n.*Acquisition\sdate\:\\t(?P<aquisition_date>[^\\]+)\\n.*Operating\ssystem\sused\:\\t(?P<os_used>[^\\]+)\\n.*Sectors\sper\schunk\:\\t(?P<sector_chunks>[^\\]+)\\n.*Bytes\sper\ssector\:\\t(?P<bps>[^\\]+)\\n\\tNumber\sof\ssectors\:\\t(?P<nos>[^\\]+)\\n\\tMedia\ssize\:\\t\\t(?P<media_size>[^\\]+)\\n",
@@ -117,6 +117,39 @@ def mount_images(
             pass
 
     def mount_vmdk_image(mpath, mntpath, f, allimgs):
+        def apfs_error():
+            if (
+                input(
+                    "  apfs-fuse and associated libraries are not installed. This is required for macOS disk images.\n   Continue? Y/n [Y] "
+                )
+                == "n"
+            ):
+                print(
+                    "\n  Please run https://github.com/ezaspy/elrond/elrond/tools/scripts/apfs-fuse.sh and try again.\n\n"
+                )
+                if os.path.exists("/usr/local/bin/apfs"):
+                    shutil.rmtree("/usr/local/bin/apfs")
+                else:
+                    pass
+                sys.exit()
+            else:
+                apfs = ""
+            return apfs
+
+        apfsexists = str(
+            subprocess.Popen(
+                [
+                    "locate",
+                    "apfs",
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).communicate()[0]
+        )
+        if not "/usr/local/bin/apfs" in apfsexists:
+            apfs = apfs_error()
+        else:
+            pass
         try:
             apfs = str(
                 subprocess.Popen(
@@ -132,22 +165,7 @@ def mount_images(
                 ).communicate()[1]
             )
         except:
-            if (
-                input(
-                    "  apfs-fuse and associated libraries are not installed. This is required for macOS disk images.\n   Continue? Y/n [Y] "
-                )
-                == "n"
-            ):
-                print(
-                    "\n  Please visit https://github.com/ezaspy/apfs-fuse and try again.\n\n"
-                )
-                if os.path.exists("/usr/local/bin/apfs"):
-                    shutil.rmtree("/usr/local/bin/apfs")
-                else:
-                    pass
-                sys.exit()
-            else:
-                apfs = ""
+            apfs = apfs_error()
         if apfs != "":
             offset_out = re.findall(
                 r"\\n[\w\-\.\/]+.(?:raw|dd|img)\d[\ \*]+(?P<offset>\d+)[\w\d\.\ \*]+\s+(?:Linux|Microsoft\ basic\ data|HPFS[\S]+|NTFS[\S]+|exFAT[\S]+)",
@@ -309,7 +327,7 @@ def mount_images(
                 ).communicate()[1],
             )
             if imageinfo:
-                collect_ewfinfo(path, mntpath, mpath)
+                collect_ewfinfo(path, mpath)
             else:
                 pass
             allimgs[f] = mntpath
@@ -500,8 +518,8 @@ def mount_images(
             elif "DOS/MBR boot sector" in imgformat and f.endswith(".raw"):
                 if auto != True:
                     vmdkow = input(
-                        "  '{}' already exists, do you wish to overwrite this file? Y/n [Y] ".format(
-                            mpath.split("/")[-1] + ".raw"
+                        "  '{}' has already been converted, do you wish to overwrite this file? Y/n [Y] ".format(
+                            mpath.split("/")[-1]
                         )
                     )
                 else:

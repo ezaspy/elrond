@@ -7,5 +7,6 @@ git clone https://github.com/volatilityfoundation/volatility3.git
 sudo mv volatility3/ /usr/local/lib/python3.8/dist-packages
 sudo chmod -R 755 /usr/local/lib/python3.8/dist-packages/volatility3/
 sudo chown -R root:root /usr/local/lib/python3.8/dist-packages/volatility3/
+sudo updatedb
 clear
 sleep 2
