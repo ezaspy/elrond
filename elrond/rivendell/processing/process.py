@@ -27,9 +27,6 @@ from rivendell.processing.windows import process_shimcache
 from rivendell.processing.windows import process_usb
 
 
-import sys
-
-
 def process_artefacts(
     output_directory,
     verbosity,
@@ -259,10 +256,69 @@ def identify_pre_process_artefacts(
     volchoice,
     vss,
     memtimeline,
+    carving,
 ):
+    def identify_artefacts_to_process(img, process_list):
+        for each in process_list:
+            for root, _, files in os.walk(each):
+                for f in files:  # Identifying artefacts for processing
+                    if img.split("::")[0] in root:
+                        if (
+                            f.endswith("MFT")
+                            or f.endswith("LogFile")
+                            or f.endswith("UsnJrnl")
+                            or f.endswith("ObjId")
+                            or f.endswith("Reparse")
+                            or f.endswith("SAM")
+                            or f.endswith("SECURITY")
+                            or f.endswith("SOFTWARE")
+                            or f.endswith("SYSTEM")
+                            or f.endswith("NTUSER.DAT")
+                            or f.endswith("UsrClass.dat")
+                            or f.endswith(".evtx")
+                            or f.endswith("setupapi.dev.log")
+                            or f.endswith("hiberfil.sys")
+                            or f.endswith("MEMORY.DMP")
+                            or f.endswith("pagefile.sys")
+                            or f.endswith("swapfile.sys")
+                            or f.endswith("-ms")
+                            or f.endswith(".pf")
+                            or f.endswith(".db")
+                            or f.endswith(".bcf")
+                            or f.endswith(".hve")
+                            or "/S-1-5-21-" in root + "/" + f
+                            or f.endswith("+bash_aliases")
+                            or f.endswith("+bash_history")
+                            or f.endswith("+bash_logout")
+                            or f.endswith("+bashrc")
+                            or f.endswith("crontab")
+                            or f.endswith("hosts")
+                            or f.endswith("group")
+                            or f.endswith("passwd")
+                            or f.endswith("shadow")
+                            or f.endswith("log")
+                            or "log.1" in f
+                            or "__audit_" in f
+                            or "+audit_" in f
+                            or f.endswith(".plist")
+                            or f.endswith(".conf")
+                            or f.split("/")[-1].startswith("job.")
+                            or f.endswith(".service")
+                            or f.endswith(".target")
+                            or f.endswith(".socket")
+                            or "/raw/mail" in root + "/" + f
+                            or "/raw/browsers" in root + "/" + f
+                            or "/carved/" in root
+                        ):
+                            artefacts_list.append(each + ": " + root + "/" + f)
+                        else:
+                            pass
+                    else:
+                        pass
+        return artefacts_list
 
     stage = "processing"
-    plist, atfts = [], []
+    process_list, artefacts_list = [], []
     print(
         "\n\n  -> \033[1;36mCommencing Processing Phase...\033[1;m\n  ----------------------------------------"
     )
@@ -309,69 +365,17 @@ def identify_pre_process_artefacts(
                             )
                         else:
                             pass
-                    plist.append(output_directory + each)
+                    process_list.append(output_directory + each + "/artefacts/raw/")
                 else:
                     pass
             try:
                 os.remove(".temp.log")
             except:
                 pass
-            for each in plist:  # Identifying artefacts for processing
-                for root, _, files in os.walk(each):
-                    for f in files:  # Identifying artefacts for processing
-                        if img.split("::")[0] in root:
-                            if (
-                                f.endswith("MFT")
-                                or f.endswith("LogFile")
-                                or f.endswith("UsnJrnl")
-                                or f.endswith("ObjId")
-                                or f.endswith("Reparse")
-                                or f.endswith("SAM")
-                                or f.endswith("SECURITY")
-                                or f.endswith("SOFTWARE")
-                                or f.endswith("SYSTEM")
-                                or f.endswith("NTUSER.DAT")
-                                or f.endswith("UsrClass.dat")
-                                or f.endswith(".evtx")
-                                or f.endswith("setupapi.dev.log")
-                                or f.endswith("hiberfil.sys")
-                                or f.endswith("MEMORY.DMP")
-                                or f.endswith("pagefile.sys")
-                                or f.endswith("swapfile.sys")
-                                or f.endswith("-ms")
-                                or f.endswith(".pf")
-                                or f.endswith(".db")
-                                or f.endswith(".bcf")
-                                or f.endswith(".hve")
-                                or "/S-1-5-21-" in root + "/" + f
-                                or f.endswith("+bash_aliases")
-                                or f.endswith("+bash_history")
-                                or f.endswith("+bash_logout")
-                                or f.endswith("+bashrc")
-                                or f.endswith("crontab")
-                                or f.endswith("hosts")
-                                or f.endswith("group")
-                                or f.endswith("passwd")
-                                or f.endswith("shadow")
-                                or f.endswith("log")
-                                or "log.1" in f
-                                or "__audit_" in f
-                                or "+audit_" in f
-                                or f.endswith(".plist")
-                                or f.endswith(".conf")
-                                or f.split("/")[-1].startswith("job.")
-                                or f.endswith(".service")
-                                or f.endswith(".target")
-                                or f.endswith(".socket")
-                                or "/raw/mail" in root + "/" + f
-                                or "/raw/browsers" in root + "/" + f
-                            ):
-                                atfts.append(each + ": " + root + "/" + f)
-                            else:
-                                pass
-                        else:
-                            pass
-            if len(atfts) == 0:
+            artefacts_list = identify_artefacts_to_process(
+                img, process_list
+            )  # Identifying artefacts for processing
+            if len(artefacts_list) == 0:
                 print("    No artefacts were collected.\n    Please try again.\n\n")
             else:
                 pass
@@ -394,7 +398,7 @@ def identify_pre_process_artefacts(
                 datetime.now().isoformat().replace("T", " "), stage, vssimage
             )
             write_audit_log_entry(verbosity, output_directory, entry, prnt)
-            for each in atfts:
+            for each in artefacts_list:
                 ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
                 artefact = str(ia[0][1])
                 if (
@@ -445,69 +449,49 @@ def identify_pre_process_artefacts(
                     )
                 else:
                     pass
+            if carving:
+                print(
+                    "\n      \033[1;33m{} carved files for {}...\033[1;m".format(
+                        stage.title(), vssimage
+                    )
+                )
+                process_list.clear()
+                if os.path.exists(
+                    os.path.join(output_directory + img.split("::")[0] + "/carved/")
+                ):
+                    process_list.append(
+                        os.path.join(output_directory + img.split("::")[0] + "/carved/")
+                    )
+                artefacts_list.clear()
+                artefacts_list = identify_artefacts_to_process(img, process_list)
+                for each in artefacts_list:
+                    ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
+                    artefact = str(ia[0][1])
+                    vssmem = process_artefacts(
+                        output_directory,
+                        verbosity,
+                        volatility,
+                        d,
+                        stage,
+                        cwd,
+                        img,
+                        vssimage,
+                        "/",
+                        artefact,
+                        vssmem,
+                        volchoice,
+                        vss,
+                        memtimeline,
+                    )
+                print(
+                    "       \033[1;33mProcessed carved files for {}\n\033[1;m".format(
+                        vssimage
+                    )
+                )
+            else:
+                pass
         else:
             pass
-        # Process carved files inc. OST/PST files etc.
-        print(
-            output_directory,
-            verbosity,
-            d,
-            flags,
-            stage,
-            cwd,
-            imgs,
-        )
-
-    for img in imgs:  # Identifying carved files for processing
-        if not img.split("::")[1].endswith(
-            "memory"
-        ):  # Identifying artefacts for processing
-            for each in os.listdir(output_directory):
-                if each + "/" == output_directory or each == img.split("::")[0]:
-                    for eachdir in os.listdir(
-                        os.path.realpath(output_directory + each + "/artefacts/carved")
-                    ):
-                        if (
-                            "vss" in eachdir
-                            and os.path.isdir(
-                                os.path.realpath(
-                                    output_directory
-                                    + each
-                                    + "/artefacts/carved/"
-                                    + eachdir
-                                )
-                            )
-                            and not os.path.exists(
-                                output_directory
-                                + img.split("::")[0]
-                                + "/artefacts/cooked/"
-                                + eachdir
-                            )
-                        ):
-                            os.makedirs(
-                                output_directory
-                                + img.split("::")[0]
-                                + "/artefacts/cooked/"
-                                + eachdir
-                            )
-                        elif not os.path.exists(
-                            output_directory + img.split("::")[0] + "/artefacts/cooked/"
-                        ):
-                            os.makedirs(
-                                output_directory
-                                + img.split("::")[0]
-                                + "/artefacts/cooked/"
-                            )
-                        else:
-                            pass
-                    plist.append(output_directory + each)
-                else:
-                    pass
-            try:
-                os.remove(".temp.log")
-            except:
-                pass
-
         print("  -> Completed Processing Phase for {}".format(vssimage))
         entry, prnt = "{},{},{},completed\n".format(
             datetime.now().isoformat(), vssimage.replace("'", ""), stage
@@ -516,7 +500,6 @@ def identify_pre_process_artefacts(
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
         print()
-        sys.exit()
     else:
         pass
     flags.append("02processing")

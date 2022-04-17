@@ -2,6 +2,7 @@
 import os
 import re
 import subprocess
+import time
 from datetime import datetime
 from zipfile import ZipFile
 
@@ -13,7 +14,7 @@ from rivendell.collecting.files import recover_files
 
 def carve_files(output_directory, verbosity, d, artefact_directory, img, vssimage):
     print(
-        "\n    \033[1;33mCarving files from unallocated space for {}...\033[1;m".format(
+        "\n      \033[1;33mCarving files from unallocated space, from {}...\033[1;m".format(
             vssimage
         )
     )
@@ -46,17 +47,20 @@ def carve_files(output_directory, verbosity, d, artefact_directory, img, vssimag
                 vssimage,
             )
             write_audit_log_entry(verbosity, output_directory, entry, prnt)
+            time.sleep(0.5)
     print_done(verbosity)
     entry, prnt = "{},{},{},completed\n".format(
         datetime.now().isoformat(), vssimage.replace("'", ""), "carving"
-    ), " -> {} -> {} artefacts for {}".format(
+    ), " -> {} -> {} artefacts from {}".format(
         datetime.now().isoformat().replace("T", " "),
         "carved",
         vssimage,
     )
     write_audit_log_entry(verbosity, output_directory, entry, prnt)
     print(
-        "\n    \033[1;33mCarved all available files for {}\n\033[1;m".format(vssimage)
+        "       \033[1;33mCarved all available files, from {}\n\033[1;m".format(
+            vssimage
+        )
     )
 
 
@@ -345,7 +349,7 @@ def collect_recover_files(
     else:
         pass
     print(
-        "\n      \033[1;33mFinished {} files from {}\033[1;m\n".format(
+        "       \033[1;33mFinished {} files from {}\033[1;m\n".format(
             stage.replace(",", " &"), vssimage
         )
     )

@@ -639,3 +639,13 @@ def process_pagefile(
         print_done(verbosity)
     else:
         pass
+
+
+# sudo readpst -o -D -j 4 -r -u -w -m
+# pip install libpff-python
+#  import pypff
+#  pst = pypff.file()
+#  pst.open("MyPst.pst")
+#  pst.close()
+
+# https://stackoverflow.com/questions/69905319/how-to-parse-read-outlook-pst-files-with-python

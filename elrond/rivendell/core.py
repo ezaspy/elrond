@@ -97,6 +97,7 @@ def collect_process_kw_analysis_timelining(
             volchoice,
             vss,
             memtimeline,
+            carving,
         )
     else:
         pass

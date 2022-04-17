@@ -447,7 +447,7 @@ def collect_artefacts(
         else:
             pass
         if carving:
-            carve_files(output_directory, verbosity, d, artefact_directory, img, vssimage)
+            carve_files(output_directory, verbosity, d, output_directory + img.split("::")[0], img, vssimage)
         else:
             pass
         if symlinks and verbose:
