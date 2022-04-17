@@ -1,7 +1,6 @@
 #!/usr/bin/env python3 -tt
 import os
 import re
-import subprocess
 import time
 from datetime import datetime
 
@@ -26,6 +25,9 @@ from rivendell.processing.windows import (
 from rivendell.processing.windows import process_registry_user
 from rivendell.processing.windows import process_shimcache
 from rivendell.processing.windows import process_usb
+
+
+import sys
 
 
 def process_artefacts(
@@ -443,9 +445,25 @@ def identify_pre_process_artefacts(
                     )
                 else:
                     pass
-            # Process carved files inc. OST/PST files etc.
         else:
             pass
+        # Process carved files inc. OST/PST files etc.
+        print(
+            output_directory,
+            verbosity,
+            d,
+            flags,
+            stage,
+            cwd,
+            imgs,
+            vssimage,
+            artefact,
+            vssmem,
+            volatility,
+            volchoice,
+            vss,
+            memtimeline,
+        )
         print("  -> Completed Processing Phase for {}".format(vssimage))
         entry, prnt = "{},{},{},completed\n".format(
             datetime.now().isoformat(), vssimage.replace("'", ""), stage
@@ -454,6 +472,7 @@ def identify_pre_process_artefacts(
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
         print()
+        sys.exit()
     else:
         pass
     flags.append("02processing")

@@ -8,19 +8,21 @@ from rivendell.audit import write_audit_log_entry
 
 
 def search_keywords(
-    verbosity, output_directory, img, keywords, kwsfilelist, vssimage, insert
+    verbosity, output_directory, img, keywords, keywords_target_list, vssimage, insert
 ):
     if not os.path.exists(output_directory + img.split("::")[0] + "/analysis/"):
         os.mkdir(output_directory + img.split("::")[0] + "/analysis/")
         with open(
             output_directory + img.split("::")[0] + "/analysis/KeywordMatches.csv",
             "a",
-        ) as kwmatchesfile:
-            kwmatchesfile.write("elrond_host,Keyword,Filename,LineNumber,LineEntry\n")
+        ) as keyword_matches_results_file:
+            keyword_matches_results_file.write(
+                "elrond_host,Keyword,Filename,LineNumber,LineEntry\n"
+            )
     else:
         pass
-    with open(keywords[0], "r") as keywordsfile:
-        for eachkeyword in keywordsfile:
+    with open(keywords[0], "r") as keywords_source_file:
+        for eachkeyword in keywords_source_file:
             if verbosity != "":
                 print(
                     "     Searching for keyword '{}' from {}...".format(
@@ -29,11 +31,11 @@ def search_keywords(
                 )
             else:
                 pass
-            for kwfile in kwsfilelist:
-                with open(kwfile, "r") as kwsfile:
-                    kwlno = 0
+            for keywords_target_file in keywords_target_list:
+                with open(keywords_target_file, "r") as keyword_search_fileile:
+                    keyword_line_number = 0
                     try:
-                        for eachline in kwsfile:
+                        for eachline in keyword_search_fileile:
                             if eachkeyword.lower().strip() in eachline.lower().strip():
                                 (
                                     entry,
@@ -42,13 +44,13 @@ def search_keywords(
                                     datetime.now().isoformat(),
                                     vssimage,
                                     eachkeyword.strip(),
-                                    kwlno,
-                                    kwfile.split("/")[-1],
+                                    keyword_line_number,
+                                    keywords_target_file.split("/")[-1],
                                 ), " -> {} -> identified keyword '{}' on line {} in '{}' for {}".format(
                                     datetime.now().isoformat().replace("T", " "),
                                     eachkeyword.strip(),
-                                    kwlno,
-                                    kwfile.split("/")[-1],
+                                    keyword_line_number,
+                                    keywords_target_file.split("/")[-1],
                                     vssimage,
                                 )
                                 write_audit_log_entry(
@@ -59,28 +61,30 @@ def search_keywords(
                                     + img.split("::")[0]
                                     + "/analysis/KeywordMatches.csv",
                                     "a",
-                                ) as kwmatchesfile:
-                                    kwmatchesfile.write(
+                                ) as keyword_matches_results_file:
+                                    keyword_matches_results_file.write(
                                         vssimage.strip("'")
                                         + ","
                                         + eachkeyword.strip()
                                         + ","
-                                        + kwfile
+                                        + keywords_target_file
                                         + ","
-                                        + str(kwlno)
+                                        + str(keyword_line_number)
                                         + ","
                                         + eachline.strip()
                                         + "\n"
                                     )
                             else:
                                 pass
-                            kwlno += 1
+                            keyword_line_number += 1
                     except:
                         pass
-                with open(kwfile, "r", encoding="ISO-8859-1") as kwsfile:
-                    kwlno = 0
+                with open(
+                    keywords_target_file, "r", encoding="ISO-8859-1"
+                ) as keyword_search_fileile:
+                    keyword_line_number = 0
                     try:
-                        for eachline in kwsfile:
+                        for eachline in keyword_search_fileile:
                             if eachkeyword.lower().strip() in eachline.lower().strip():
                                 (
                                     entry,
@@ -89,13 +93,13 @@ def search_keywords(
                                     datetime.now().isoformat(),
                                     vssimage,
                                     eachkeyword.strip(),
-                                    kwlno,
-                                    kwfile.split("/")[-1],
+                                    keyword_line_number,
+                                    keywords_target_file.split("/")[-1],
                                 ), " -> {} -> identified keyword '{}' on line {} in '{}' for {}".format(
                                     datetime.now().isoformat().replace("T", " "),
                                     eachkeyword.strip(),
-                                    kwlno,
-                                    kwfile.split("/")[-1],
+                                    keyword_line_number,
+                                    keywords_target_file.split("/")[-1],
                                     vssimage,
                                 )
                                 write_audit_log_entry(
@@ -106,58 +110,84 @@ def search_keywords(
                                     + img.split("::")[0]
                                     + "/analysis/KeywordMatches.csv",
                                     "a",
-                                ) as kwmatchesfile:
-                                    kwmatchesfile.write(
+                                ) as keyword_matches_results_file:
+                                    keyword_matches_results_file.write(
                                         vssimage.strip("'")
                                         + ","
                                         + eachkeyword.strip()
                                         + ","
-                                        + kwfile
+                                        + keywords_target_file
                                         + ","
-                                        + str(kwlno)
+                                        + str(keyword_line_number)
                                         + ","
                                         + eachline.strip()
                                         + "\n"
                                     )
                             else:
                                 pass
-                            kwlno += 1
+                            keyword_line_number += 1
                     except:
                         pass
             print_done(verbosity)
 
 
 def build_keyword_list(mnt):
-    kwsfilelist = []
-    for kwsr, _, kwsf in os.walk(mnt):
-        for kwsfile in kwsf:
+    keywords_target_list = []
+    for keyword_search_root, _, keyword_search_file in os.walk(mnt):
+        for keyword_search_fileile in keyword_search_file:
             try:
                 if (
-                    os.stat(os.path.join(kwsr, kwsfile)).st_size > 0
-                    and os.stat(os.path.join(kwsr, kwsfile)).st_size < 100000000
-                    and not os.path.islink(os.path.join(kwsr, kwsfile))  # 100MB
+                    os.stat(
+                        os.path.join(keyword_search_root, keyword_search_fileile)
+                    ).st_size
+                    > 0
+                    and os.stat(
+                        os.path.join(keyword_search_root, keyword_search_fileile)
+                    ).st_size
+                    < 100000000
+                    and not os.path.islink(
+                        os.path.join(keyword_search_root, keyword_search_fileile)
+                    )  # 100MB
                 ):
-                    with open(os.path.join(kwsr, kwsfile), "r") as filetest:
+                    with open(
+                        os.path.join(keyword_search_root, keyword_search_fileile), "r"
+                    ) as filetest:
                         filetest.readline()
-                        kwsfilelist.append(os.path.join(kwsr, kwsfile))
+                        keywords_target_list.append(
+                            os.path.join(keyword_search_root, keyword_search_fileile)
+                        )
                 else:
                     pass
             except:
                 pass
             try:
                 if (
-                    os.stat(os.path.join(kwsr, kwsfile)).st_size > 0
-                    and os.stat(os.path.join(kwsr, kwsfile)).st_size < 100000000
-                    and not os.path.islink(os.path.join(kwsr, kwsfile))  # 100MB
+                    os.stat(
+                        os.path.join(keyword_search_root, keyword_search_fileile)
+                    ).st_size
+                    > 0
+                    and os.stat(
+                        os.path.join(keyword_search_root, keyword_search_fileile)
+                    ).st_size
+                    < 100000000
+                    and not os.path.islink(
+                        os.path.join(keyword_search_root, keyword_search_fileile)
+                    )  # 100MB
                 ):
-                    with open(os.path.join(kwsr, kwsfile), "r", encoding="ISO-8859-1") as filetest:
+                    with open(
+                        os.path.join(keyword_search_root, keyword_search_fileile),
+                        "r",
+                        encoding="ISO-8859-1",
+                    ) as filetest:
                         filetest.readline()
-                        kwsfilelist.append(os.path.join(kwsr, kwsfile))
+                        keywords_target_list.append(
+                            os.path.join(keyword_search_root, keyword_search_fileile)
+                        )
                 else:
                     pass
             except:
                 pass
-    return kwsfilelist
+    return keywords_target_list
 
 
 def prepare_keywords(verbosity, output_directory, imgs, keywords, stage):
@@ -201,14 +231,14 @@ def prepare_keywords(verbosity, output_directory, imgs, keywords, stage):
                     vssimage
                 )
             )
-            kwsfilelist = build_keyword_list(mnt)
+            keywords_target_list = build_keyword_list(mnt)
             print_done(verbosity)
             search_keywords(
                 verbosity,
                 output_directory,
                 img,
                 keywords,
-                kwsfilelist,
+                keywords_target_list,
                 vssimage,
                 vssimage,
             )
@@ -232,13 +262,13 @@ def prepare_keywords(verbosity, output_directory, imgs, keywords, stage):
                 os.path.join(output_directory, each.split("::")[0], "artefacts")
             ):
                 mnt = os.path.join(output_directory, each.split("::")[0], "artefacts")
-                kwsfilelist = build_keyword_list(mnt)
+                keywords_target_list = build_keyword_list(mnt)
                 search_keywords(
                     verbosity,
                     output_directory,
                     each.split("::")[0],
                     keywords,
-                    kwsfilelist,
+                    keywords_target_list,
                     each.split("::")[0],
                     "",
                     "'collected artefacts'",
@@ -249,13 +279,13 @@ def prepare_keywords(verbosity, output_directory, imgs, keywords, stage):
                 os.path.join(output_directory, each.split("::")[0], "files")
             ):  # for office documents and archives - extract and then build keyword search list
                 mnt = os.path.join(output_directory, each.split("::")[0], "files")
-                kwsfilelist = build_keyword_list(mnt)
+                keywords_target_list = build_keyword_list(mnt)
                 search_keywords(
                     verbosity,
                     output_directory,
                     each.split("::")[0],
                     keywords,
-                    kwsfilelist,
+                    keywords_target_list,
                     each.split("::")[0],
                     "",
                     "'collected files'",

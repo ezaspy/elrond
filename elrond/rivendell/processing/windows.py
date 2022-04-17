@@ -473,7 +473,9 @@ def process_jumplists(
                 pass
 
 
-def process_outlook(verbosity, vssimage, output_directory, img, vssartefact, stage, artefact):
+def process_outlook(
+    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+):
     if verbosity != "":
         print(
             "     Processing Outlook file '{}' ({}) for {}...".format(
@@ -507,7 +509,7 @@ def process_outlook(verbosity, vssimage, output_directory, img, vssartefact, sta
                 "-D",
                 "-S",
                 "-o",
-                "/".join(os.path.join(artefact.split(".pst")[0]).split("/")[:-1])
+                "/".join(os.path.join(artefact.split(".pst")[0]).split("/")[:-1]),
             ],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -637,13 +639,3 @@ def process_pagefile(
         print_done(verbosity)
     else:
         pass
-
-
-# sudo readpst -o -D -j 4 -r -u -w -m
-# pip install libpff-python
-#  import pypff
-#  pst = pypff.file()
-#  pst.open("MyPst.pst")
-#  pst.close()
-
-# https://stackoverflow.com/questions/69905319/how-to-parse-read-outlook-pst-files-with-python

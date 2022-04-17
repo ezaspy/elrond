@@ -15,9 +15,23 @@ def multiple_files(source, destination, increment):
         increment += 1
 
 
-def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, recfile, increment, yestobins, yestodocs, yestoarcs, yestoscrs, yestovmws, yestoemls,
+def collect_files(
+    output_directory,
+    verbosity,
+    stage,
+    img,
+    vssimage,
+    recroot,
+    recfile,
+    increment,
+    yestobins,
+    yestodocs,
+    yestoarcs,
+    yestoscrs,
+    yestovmws,
+    yestoemls,
 ):
-    """if (
+    if (
         recfile.startswith(".")
         or recfile.endswith(".exe")
         or recfile.endswith(".dll")
@@ -53,12 +67,6 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
         or recfile.endswith(".ost")
         or recfile.endswith(".pst")
         or recfile.endswith(".eml")
-    ):"""
-    if (
-        recfile.startswith(".")
-        or recfile.endswith(".ost")
-        or recfile.endswith(".pst")
-        or recfile.endswith(".eml")
     ):
         try:
             os.stat(output_directory + img.split("::")[0] + "/files/")
@@ -87,12 +95,29 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
                     vssimage,
                 )
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
-                if os.path.exists(output_directory + img.split("::")[0] + "/files/hidden/" + recfile[1:]):
-                    multiple_files(os.path.join(recroot, recfile), output_directory + img.split("::")[0] + "/files/hidden/" + recfile[1:] + "." + str(increment), increment)
+                if os.path.exists(
+                    output_directory
+                    + img.split("::")[0]
+                    + "/files/hidden/"
+                    + recfile[1:]
+                ):
+                    multiple_files(
+                        os.path.join(recroot, recfile),
+                        output_directory
+                        + img.split("::")[0]
+                        + "/files/hidden/"
+                        + recfile[1:]
+                        + "."
+                        + str(increment),
+                        increment,
+                    )
                 else:
                     shutil.copy2(
                         os.path.join(recroot, recfile),
-                        output_directory + img.split("::")[0] + "/files/hidden/" + recfile[1:],
+                        output_directory
+                        + img.split("::")[0]
+                        + "/files/hidden/"
+                        + recfile[1:],
                     )
             except:
                 pass
@@ -118,30 +143,44 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
                 vssimage,
             )
             write_audit_log_entry(verbosity, output_directory, entry, prnt)
-            if os.path.exists(output_directory + img.split("::")[0] + "/files/binaries/" + recfile):
-                multiple_files(os.path.join(recroot, recfile), output_directory + img.split("::")[0] + "/files/binaries/" + recfile, increment)
+            if os.path.exists(
+                output_directory + img.split("::")[0] + "/files/binaries/" + recfile
+            ):
+                multiple_files(
+                    os.path.join(recroot, recfile),
+                    output_directory
+                    + img.split("::")[0]
+                    + "/files/binaries/"
+                    + recfile,
+                    increment,
+                )
             else:
                 shutil.copy2(
                     os.path.join(recroot, recfile),
                     output_directory + img.split("::")[0] + "/files/binaries",
                 )
-        elif yestodocs != "n" and (
-            recfile.endswith(".docx")
-            or recfile.endswith(".doc")
-            or recfile.endswith(".docm")
-            or recfile.endswith(".xlsx")
-            or recfile.endswith(".xls")
-            or recfile.endswith(".xlsm")
-            or recfile.endswith(".pptx")
-            or recfile.endswith(".ppt")
-            or recfile.endswith(".pptm")
-            or recfile.endswith(".pdf")
-            or recfile.endswith(".rtf")
-            or recfile.endswith(".ott")
-            or recfile.endswith(".odt")
-            or recfile.endswith(".ods")
-            or recfile.endswith(".odg")
-        ) and not recfile.endswith("eula.rtf") and not recfile.endswith("license.rtf"):
+        elif (
+            yestodocs != "n"
+            and (
+                recfile.endswith(".docx")
+                or recfile.endswith(".doc")
+                or recfile.endswith(".docm")
+                or recfile.endswith(".xlsx")
+                or recfile.endswith(".xls")
+                or recfile.endswith(".xlsm")
+                or recfile.endswith(".pptx")
+                or recfile.endswith(".ppt")
+                or recfile.endswith(".pptm")
+                or recfile.endswith(".pdf")
+                or recfile.endswith(".rtf")
+                or recfile.endswith(".ott")
+                or recfile.endswith(".odt")
+                or recfile.endswith(".ods")
+                or recfile.endswith(".odg")
+            )
+            and not recfile.endswith("eula.rtf")
+            and not recfile.endswith("license.rtf")
+        ):
             try:
                 os.stat(output_directory + img.split("::")[0] + "/files/documents")
             except:
@@ -159,8 +198,22 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
                     vssimage,
                 )
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
-                if os.path.exists(output_directory + img.split("::")[0] + "/files/documents/" + recfile):
-                    multiple_files(os.path.join(recroot, recfile), output_directory + img.split("::")[0] + "/files/documents/" + recfile + "." + str(increment), increment)
+                if os.path.exists(
+                    output_directory
+                    + img.split("::")[0]
+                    + "/files/documents/"
+                    + recfile
+                ):
+                    multiple_files(
+                        os.path.join(recroot, recfile),
+                        output_directory
+                        + img.split("::")[0]
+                        + "/files/documents/"
+                        + recfile
+                        + "."
+                        + str(increment),
+                        increment,
+                    )
                 else:
                     shutil.copy2(
                         os.path.join(recroot, recfile),
@@ -194,8 +247,19 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
                     vssimage,
                 )
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
-                if os.path.exists(output_directory + img.split("::")[0] + "/files/archives/" + recfile):
-                    multiple_files(os.path.join(recroot, recfile), output_directory + img.split("::")[0] + "/files/archives/" + recfile + "." + str(increment), increment)
+                if os.path.exists(
+                    output_directory + img.split("::")[0] + "/files/archives/" + recfile
+                ):
+                    multiple_files(
+                        os.path.join(recroot, recfile),
+                        output_directory
+                        + img.split("::")[0]
+                        + "/files/archives/"
+                        + recfile
+                        + "."
+                        + str(increment),
+                        increment,
+                    )
                 else:
                     shutil.copy2(
                         os.path.join(recroot, recfile),
@@ -204,7 +268,22 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
             except:
                 pass
         elif yestoscrs != "n" and (
-            recfile.endswith(".ps1") or recfile.endswith(".py") or recfile.endswith(".rpy") or recfile.endswith(".bat") or recfile.endswith(".wbf") or recfile.endswith(".vba") or recfile.endswith(".vb") or recfile.endswith(".vbscript") or recfile.endswith(".js") or recfile.endswith(".c") or recfile.endswith(".o") or recfile.endswith(".cpp") or recfile.endswith(".cc") or recfile.endswith(".pl") or recfile.endswith(".go") or recfile.endswith(".php")
+            recfile.endswith(".ps1")
+            or recfile.endswith(".py")
+            or recfile.endswith(".rpy")
+            or recfile.endswith(".bat")
+            or recfile.endswith(".wbf")
+            or recfile.endswith(".vba")
+            or recfile.endswith(".vb")
+            or recfile.endswith(".vbscript")
+            or recfile.endswith(".js")
+            or recfile.endswith(".c")
+            or recfile.endswith(".o")
+            or recfile.endswith(".cpp")
+            or recfile.endswith(".cc")
+            or recfile.endswith(".pl")
+            or recfile.endswith(".go")
+            or recfile.endswith(".php")
         ):
             try:
                 os.stat(output_directory + img.split("::")[0] + "/files/scripts")
@@ -223,8 +302,19 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
                     vssimage,
                 )
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
-                if os.path.exists(output_directory + img.split("::")[0] + "/files/scripts/" + recfile):
-                    multiple_files(os.path.join(recroot, recfile), output_directory + img.split("::")[0] + "/files/scripts/" + recfile + "." + str(increment), increment)
+                if os.path.exists(
+                    output_directory + img.split("::")[0] + "/files/scripts/" + recfile
+                ):
+                    multiple_files(
+                        os.path.join(recroot, recfile),
+                        output_directory
+                        + img.split("::")[0]
+                        + "/files/scripts/"
+                        + recfile
+                        + "."
+                        + str(increment),
+                        increment,
+                    )
                 else:
                     shutil.copy2(
                         os.path.join(recroot, recfile),
@@ -259,12 +349,28 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
                     vssimage,
                 )
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
-                if os.path.exists(output_directory + img.split("::")[0] + "/files/virtual_machines/" + recfile):
-                    multiple_files(os.path.join(recroot, recfile), output_directory + img.split("::")[0] + "/files/virtual_machines/" + recfile + "." + str(increment), increment)
+                if os.path.exists(
+                    output_directory
+                    + img.split("::")[0]
+                    + "/files/virtual_machines/"
+                    + recfile
+                ):
+                    multiple_files(
+                        os.path.join(recroot, recfile),
+                        output_directory
+                        + img.split("::")[0]
+                        + "/files/virtual_machines/"
+                        + recfile
+                        + "."
+                        + str(increment),
+                        increment,
+                    )
                 else:
                     shutil.copy2(
                         os.path.join(recroot, recfile),
-                        output_directory + img.split("::")[0] + "/files/virtual_machines",
+                        output_directory
+                        + img.split("::")[0]
+                        + "/files/virtual_machines",
                     )
             except:
                 pass
@@ -274,13 +380,9 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
             or recfile.endswith(".eml")
         ):
             try:
-                os.stat(
-                    output_directory + img.split("::")[0] + "/files/mail"
-                )
+                os.stat(output_directory + img.split("::")[0] + "/files/mail")
             except:
-                os.makedirs(
-                    output_directory + img.split("::")[0] + "/files/mail"
-                )
+                os.makedirs(output_directory + img.split("::")[0] + "/files/mail")
             try:
                 (entry, prnt,) = "{},{},{},mail file '{}'\n".format(
                     datetime.now().isoformat(),
@@ -294,8 +396,19 @@ def collect_files(output_directory, verbosity, stage, img, vssimage, recroot, re
                     vssimage,
                 )
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
-                if os.path.exists(output_directory + img.split("::")[0] + "/files/mail/" + recfile):
-                    multiple_files(os.path.join(recroot, recfile), output_directory + img.split("::")[0] + "/files/mail/" + recfile + "." + str(increment), increment)
+                if os.path.exists(
+                    output_directory + img.split("::")[0] + "/files/mail/" + recfile
+                ):
+                    multiple_files(
+                        os.path.join(recroot, recfile),
+                        output_directory
+                        + img.split("::")[0]
+                        + "/files/mail/"
+                        + recfile
+                        + "."
+                        + str(increment),
+                        increment,
+                    )
                 else:
                     shutil.copy2(
                         os.path.join(recroot, recfile),
@@ -318,10 +431,16 @@ def recover_files(output_directory, verbosity, stage, img, vssimage, recroot, re
                 os.path.join(output_directory, img.split("::")[0]) + "/recovered"
             )
         try:
-            os.stat(os.path.join(output_directory, img.split("::")[0]) + "/recovered/" + recroot.split("/")[-1])
+            os.stat(
+                os.path.join(output_directory, img.split("::")[0])
+                + "/recovered/"
+                + recroot.split("/")[-1]
+            )
         except:
             os.makedirs(
-                os.path.join(output_directory, img.split("::")[0]) + "/recovered/" + recroot.split("/")[-1]
+                os.path.join(output_directory, img.split("::")[0])
+                + "/recovered/"
+                + recroot.split("/")[-1]
             )
         try:
             shutil.copy2(
