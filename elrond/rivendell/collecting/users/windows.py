@@ -549,6 +549,74 @@ def windows_users(
                     pass
             else:
                 pass
+            if os.path.exists(item + each + "/AppData/Local/Mozilla/Firefox/Profiles/"):
+                if (
+                    len(
+                        os.listdir(
+                            item + each + "/AppData/Local/Mozilla/Firefox/Profiles/"
+                        )
+                    )
+                    > 0
+                ):
+                    if verbosity != "":
+                        print(
+                            "     Collecting Mozilla Firefox browser artefacts for '{}' for {}...".format(
+                                each, vssimage
+                            )
+                        )
+                    else:
+                        pass
+                    (entry, prnt,) = "{},{},{},Mozilla Firefox artefacts\n".format(
+                        datetime.now().isoformat(),
+                        img.split("::")[0],
+                        stage,
+                    ), " -> {} -> {} Mozilla Firefox artefacts{} for '{}'".format(
+                        datetime.now().isoformat().replace("T", " "),
+                        stage,
+                        vsstext.replace(
+                            "vss",
+                            "volume shadow copy #",
+                        ),
+                        img.split("::")[0],
+                    )
+                    write_audit_log_entry(
+                        verbosity,
+                        output_directory,
+                        entry,
+                        prnt,
+                    )
+                    for every in os.listdir(
+                        item + each + "/AppData/Local/Mozilla/Firefox/Profiles/"
+                    ):
+                        try:
+                            os.stat(bwsrdest + each + "/firefox/")
+                        except:
+                            os.makedirs(bwsrdest + each + "/firefox/")
+                        try:
+                            if os.path.exists(
+                                item
+                                + each
+                                + "/AppData/Local/Mozilla/Firefox/Profiles/"
+                                + every
+                                + "/places.sqlite"
+                            ):
+                                shutil.copy2(
+                                    item
+                                    + each
+                                    + "/AppData/Local/Mozilla/Firefox/Profiles/"
+                                    + every
+                                    + "/places.sqlite",
+                                    bwsrdest + each + "/firefox/",
+                                )
+                            else:
+                                pass
+                        except:
+                            pass
+                    print_done(verbosity)
+                else:
+                    pass
+            else:
+                pass
         else:
             pass
     if userprofiles:

@@ -389,7 +389,7 @@ def linux_users(
                     os.makedirs(bwsrdest + each + "/firefox/")
                 if verbosity != "":
                     print(
-                        "     Collecting Firefox browser artefacts for '{}' for {}...".format(
+                        "     Collecting Mozilla Firefox browser artefacts for '{}' for {}...".format(
                             each, vssimage
                         )
                     )
@@ -404,12 +404,12 @@ def linux_users(
                                 (
                                     entry,
                                     prnt,
-                                ) = "{},{},{},'{}' Firefox browser artefacts\n".format(
+                                ) = "{},{},{},'{}' Mozilla Firefox browser artefacts\n".format(
                                     datetime.now().isoformat(),
                                     img.split("::")[0],
                                     stage,
                                     each,
-                                ), " -> {} -> {} '{}' Firefox browser artefacts{} for '{}'".format(
+                                ), " -> {} -> {} '{}' Mozilla Firefox browser artefacts{} for '{}'".format(
                                     datetime.now().isoformat().replace("T", " "),
                                     stage,
                                     each,
@@ -434,6 +434,82 @@ def linux_users(
                                     + "/places.sqlite",
                                     bwsrdest + each + "/firefox/",
                                 )
+                                shutil.copy2(
+                                    item
+                                    + "/"
+                                    + each
+                                    + "/.mozilla/firefox/"
+                                    + defaultdir
+                                    + "/downloads.sqlite",
+                                    bwsrdest + each + "/firefox/",
+                                )
+                            except:
+                                pass
+                        else:
+                            pass
+                    print_done(verbosity)
+                else:
+                    pass
+                try:
+                    os.stat(bwsrdest + each + "/chrome/")
+                except:
+                    os.makedirs(bwsrdest + each + "/chrome/")
+                if verbosity != "":
+                    print(
+                        "     Collecting Google Chrome browser artefacts for '{}' for {}...".format(
+                            each, vssimage
+                        )
+                    )
+                else:
+                    pass
+                if os.path.exists(item + "/" + each + "/.config/google-chrome"):
+                    for defaultdir in os.listdir(
+                        item + "/" + each + "/.config/google-chrome"
+                    ):
+                        if defaultdir == "Default":
+                            try:
+                                (
+                                    entry,
+                                    prnt,
+                                ) = "{},{},{},'{}' Google Chrome browser artefacts\n".format(
+                                    datetime.now().isoformat(),
+                                    img.split("::")[0],
+                                    stage,
+                                    each,
+                                ), " -> {} -> {} '{}' Google Chrome browser artefacts{} for '{}'".format(
+                                    datetime.now().isoformat().replace("T", " "),
+                                    stage,
+                                    each,
+                                    vsstext.replace(
+                                        "vss",
+                                        "volume shadow copy #",
+                                    ),
+                                    img.split("::")[0],
+                                )
+                                write_audit_log_entry(
+                                    verbosity,
+                                    output_directory,
+                                    entry,
+                                    prnt,
+                                )
+                                shutil.copy2(
+                                    item
+                                    + "/"
+                                    + each
+                                    + "/.config/google-chrome"
+                                    + defaultdir
+                                    + "/History",
+                                    bwsrdest + each + "/chrome/",
+                                )
+                                shutil.copy2(
+                                    item
+                                    + "/"
+                                    + each
+                                    + "/.config/google-chrome"
+                                    + defaultdir
+                                    + "/History",
+                                    bwsrdest + each + "/chrome/",
+                                )
                             except:
                                 pass
                         else:
@@ -443,6 +519,84 @@ def linux_users(
                     pass
             else:
                 pass
+
+            if os.path.exists(
+                item + each + "/Library/Application Support/Google/Chrome/Default/"
+            ):
+                if (
+                    len(
+                        os.listdir(
+                            item
+                            + each
+                            + "/Library/Application Support/Google/Chrome/Default/"
+                        )
+                    )
+                    > 0
+                ):
+                    if verbosity != "":
+                        print(
+                            "     Collecting Google Chrome browser artefacts for '{}' for {}...".format(
+                                each, vssimage
+                            )
+                        )
+                    else:
+                        pass
+                    (entry, prnt,) = "{},{},{},Google Chrome artefacts\n".format(
+                        datetime.now().isoformat(),
+                        img.split("::")[0],
+                        stage,
+                    ), " -> {} -> {} Google Chrome artefacts{} for '{}'".format(
+                        datetime.now().isoformat().replace("T", " "),
+                        stage,
+                        vsstext.replace(
+                            "vss",
+                            "volume shadow copy #",
+                        ),
+                        img.split("::")[0],
+                    )
+                    write_audit_log_entry(
+                        verbosity,
+                        output_directory,
+                        entry,
+                        prnt,
+                    )
+                    for every in os.listdir(
+                        item
+                        + each
+                        + "/Library/Application Support/Google/Chrome/Default/"
+                    ):
+                        try:
+                            os.stat(bwsrdest + each + "/chrome/")
+                        except:
+                            os.makedirs(bwsrdest + each + "/chrome/")
+                        try:
+                            if every == "History":
+                                shutil.copy2(
+                                    item
+                                    + each
+                                    + "/Library/Application Support/Google/Chrome/Default/"
+                                    + every,
+                                    bwsrdest + each + "/chrome/",
+                                )
+                            elif every == "Local Storage":
+                                shutil.copytree(
+                                    item
+                                    + each
+                                    + "/Library/Application Support/Google/Chrome/Default/"
+                                    + every,
+                                    bwsrdest + each + "/chrome/Local Settings",
+                                    symlinks=symlinkvalue,
+                                )
+                            else:
+                                pass
+                        except:
+                            pass
+                    print_done(verbosity)
+                else:
+                    pass
+            else:
+                pass
+
             if userprofiles:
                 try:
                     os.stat(userdest)

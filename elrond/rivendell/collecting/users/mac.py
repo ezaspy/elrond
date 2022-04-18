@@ -118,7 +118,9 @@ def mac_users(
                 print_done(verbosity)
             else:
                 pass
-            if os.path.exists(item + "/" + each + "/Library/Preferences/"):
+            if os.path.exists(
+                item + "/" + each + "/Library/Preferences/"
+            ) or os.path.exists(item + "/" + each + "/Library/Safari/"):
                 if not os.path.exists(dest + "plists"):
                     os.makedirs(dest + "plists")
                 else:
@@ -152,12 +154,41 @@ def mac_users(
                             entry,
                             prnt,
                         )
-                        # if eachplist.endswith("com.apple.scheduler.plist") or eachplist.endswith("com.apple.ServicesMenu.Services.plist") or eachplist.endswith("com.apple.Safari.plist") or eachplist.endswith("com.apple.proactive.PersonalizationPortrait.plist") or eachplist.endswith("com.apple.preferences.extensions.ShareMenu.plist") or eachplist.endswith("com.apple.preferences.extensions.ServicesWithUI.plist") or eachplist.endswith("com.apple.parsecd.plist") or eachplist.endswith("com.apple.notificationcenterui.plist") or eachplist.endswith("com.apple.ncprefs.plist") or eachplist.endswith("com.apple.imessage.bag.plist") or eachplist.endswith("com.apple.HIToolbox.plist") or eachplist.endswith("com.apple.finder.plist") or eachplist.endswith("com.apple.facetime.bag.plist") or eachplist.endswith("com.apple.dock.plist"):
                         shutil.copy2(
                             item + each + "/Library/Preferences/" + eachplist,
                             dest + "plists/" + each + "+" + eachplist,
                         )
                     except:
+                        pass
+                for eachplist in os.listdir(item + each + "/Library/Safari/"):
+                    if eachplist.endswith(".plist"):
+                        try:
+                            (entry, prnt,) = "{},{},{},'{}' ({})\n".format(
+                                datetime.now().isoformat(),
+                                img.split("::")[0],
+                                stage,
+                                eachplist,
+                                each,
+                            ), " -> {} -> {} '{}' ({}) for '{}'".format(
+                                datetime.now().isoformat().replace("T", " "),
+                                stage,
+                                eachplist,
+                                each,
+                                img.split("::")[0],
+                            )
+                            write_audit_log_entry(
+                                verbosity,
+                                output_directory,
+                                entry,
+                                prnt,
+                            )
+                            shutil.copy2(
+                                item + each + "/Library/Safari/" + eachplist,
+                                dest + "plists/" + each + "+" + eachplist,
+                            )
+                        except:
+                            pass
+                    else:
                         pass
                 print_done(verbosity)
             else:
@@ -417,14 +448,10 @@ def mac_users(
                 else:
                     pass
                 try:
-                    (
-                        entry,
-                        prnt,
-                    ) = "{},{},{},{} '{}' Safari browser artefacts\n".format(
+                    (entry, prnt,) = "{},{},{},'{}' Safari browser artefacts\n".format(
                         datetime.now().isoformat(),
                         img.split("::")[0],
                         stage,
-                        "USER",
                         each,
                     ), " -> {} -> {} '{}' Safari browser artefacts{} for '{}'".format(
                         datetime.now().isoformat().replace("T", " "),
@@ -452,14 +479,14 @@ def mac_users(
             else:
                 pass
             if os.path.exists(
-                item + each + "/AppData/Local/Google/Chrome/User Data/Default/"
+                item + each + "/Library/Application Support/Google/Chrome/Default/"
             ):
                 if (
                     len(
                         os.listdir(
                             item
                             + each
-                            + "/AppData/Local/Google/Chrome/User Data/Default/"
+                            + "/Library/Application Support/Google/Chrome/Default/"
                         )
                     )
                     > 0
@@ -492,28 +519,30 @@ def mac_users(
                         prnt,
                     )
                     for every in os.listdir(
-                        item + each + "/AppData/Local/Google/Chrome/User Data/Default/"
+                        item
+                        + each
+                        + "/Library/Application Support/Google/Chrome/Default/"
                     ):
                         try:
-                            os.stat(dest + each + "/chrome/")
+                            os.stat(bwsrdest + each + "/chrome/")
                         except:
-                            os.makedirs(dest + each + "/chrome/")
+                            os.makedirs(bwsrdest + each + "/chrome/")
                         try:
                             if every == "History":
                                 shutil.copy2(
                                     item
                                     + each
-                                    + "/AppData/Local/Google/Chrome/User Data/Default/"
+                                    + "/Library/Application Support/Google/Chrome/Default/"
                                     + every,
-                                    dest + each + "/chrome/",
+                                    bwsrdest + each + "/chrome/",
                                 )
                             elif every == "Local Storage":
                                 shutil.copytree(
                                     item
                                     + each
-                                    + "/AppData/Local/Google/Chrome/User Data/Default/"
+                                    + "/Library/Application Support/Google/Chrome/Default/"
                                     + every,
-                                    dest + each + "/chrome/Local Settings",
+                                    bwsrdest + each + "/chrome/Local Settings",
                                     symlinks=symlinkvalue,
                                 )
                             else:
@@ -523,6 +552,88 @@ def mac_users(
                     print_done(verbosity)
                 else:
                     pass
+            else:
+                pass
+            if os.path.exists(
+                item + each + "/Library/Application Support/Firefox/Profiles/"
+            ):
+                if (
+                    len(
+                        os.listdir(
+                            item + each + "/AppData/Local/Mozilla/Firefox/Profiles/"
+                        )
+                    )
+                    > 0
+                ):
+                    try:
+                        os.stat(bwsrdest + each + "/firefox/")
+                    except:
+                        os.makedirs(bwsrdest + each + "/firefox/")
+                    if verbosity != "":
+                        print(
+                            "     Collecting Mozilla Firefox browser artefacts for '{}' for {}...".format(
+                                each, vssimage
+                            )
+                        )
+                    else:
+                        pass
+                    try:
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' Mozilla Firefox browser artefacts\n".format(
+                            datetime.now().isoformat(),
+                            img.split("::")[0],
+                            stage,
+                            each,
+                        ), " -> {} -> {} '{}' Mozilla Firefox browser artefacts{} for '{}'".format(
+                            datetime.now().isoformat().replace("T", " "),
+                            stage,
+                            each,
+                            vsstext.replace(
+                                "vss",
+                                "volume shadow copy #",
+                            ),
+                            img.split("::")[0],
+                        )
+                        write_audit_log_entry(
+                            verbosity,
+                            output_directory,
+                            entry,
+                            prnt,
+                        )
+                        for every in os.listdir(
+                            item
+                            + each
+                            + "/Library/Application Support/Firefox/Profiles/"
+                        ):
+                            try:
+                                os.stat(bwsrdest + each + "/firefox/")
+                            except:
+                                os.makedirs(bwsrdest + each + "/firefox/")
+                            try:
+                                if os.path.exists(
+                                    item
+                                    + each
+                                    + "/Library/Application Support/Firefox/Profiles/"
+                                    + every
+                                    + "/places.sqlite"
+                                ):
+                                    shutil.copy2(
+                                        item
+                                        + each
+                                        + "/Library/Application Support/Firefox/Profiles/"
+                                        + every
+                                        + "/places.sqlite",
+                                        bwsrdest + each + "/firefox/",
+                                    )
+                                else:
+                                    pass
+                            except:
+                                pass
+                    except:
+                        pass
+                print_done(verbosity)
             else:
                 pass
             if userprofiles:

@@ -168,7 +168,7 @@ def collect_mac_artefacts(
             or item == mnt + "/Library/LaunchAgents"
             or item == mnt + "/Library/LaunchDaemons"
             or item == mnt + "/Library/StartupItems"
-            or item == mnt + "/System/1Library/Preferences"
+            or item == mnt + "/System/Library/Preferences"
             or item == mnt + "/System/Library/LaunchAgents"
             or item == mnt + "/System/Library/LaunchDaemons"
             or item == mnt + "/System/Library/StartupItems"
@@ -228,7 +228,6 @@ def collect_mac_artefacts(
                             )
                         else:
                             prefix = item.split("/")[-1].lower() + "+"
-                        # if each.endswith("com.apple.scheduler.plist") or each.endswith("com.apple.ServicesMenu.Services.plist") or each.endswith("com.apple.Safari.plist") or each.endswith("com.apple.proactive.PersonalizationPortrait.plist") or each.endswith("com.apple.preferences.extensions.ShareMenu.plist") or each.endswith("com.apple.preferences.extensions.ServicesWithUI.plist") or each.endswith("com.apple.parsecd.plist") or each.endswith("com.apple.notificationcenterui.plist") or each.endswith("com.apple.ncprefs.plist") or each.endswith("com.apple.imessage.bag.plist") or each.endswith("com.apple.HIToolbox.plist") or each.endswith("com.apple.finder.plist") or each.endswith("com.apple.facetime.bag.plist") or each.endswith("com.apple.dock.plist"):
                         shutil.copy2(
                             item + "/" + each,
                             dest + "plists/" + prefix + each,
