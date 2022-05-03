@@ -133,8 +133,9 @@ If you wish to add more false positive IOCs to prevent unwanted extractions, jus
 
 ## Roadmap
 
+- YARA 'module'
 - ELK/Elastic 'module'
-- Live 'module'
+- SIGMA 'module'
 
 <br>See the [open issues](https://github.com/ezaspy/elrond/issues) for a list of proposed features (and known issues).<br><br><br>
 
