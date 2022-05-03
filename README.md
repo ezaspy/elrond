@@ -133,7 +133,6 @@ If you wish to add more false positive IOCs to prevent unwanted extractions, jus
 
 ## Roadmap
 
-- YARA 'module'
 - ELK/Elastic 'module'
 - SIGMA 'module'
 
