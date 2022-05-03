@@ -5,7 +5,7 @@ from datetime import datetime
 
 from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
-from rivendell.collecting.users.windows import windows_users
+from rivendell.collect.users.windows import windows_users
 
 
 def collect_windows_artefacts(
@@ -44,7 +44,7 @@ def collect_windows_artefacts(
                 img.split("::")[0],
                 stage,
                 item.split("/")[-1],
-            ), " -> {} -> {} '{}'{} for '{}'".format(
+            ), " -> {} -> {} '{}'{} from '{}'".format(
                 datetime.now().isoformat().replace("T", " "),
                 stage,
                 item.split("/")[-1],
@@ -68,7 +68,7 @@ def collect_windows_artefacts(
                 datetime.now().isoformat(),
                 img.split("::")[0],
                 stage,
-            ), " -> {} -> {} 'setupapi.dev.log'{} for '{}'".format(
+            ), " -> {} -> {} 'setupapi.dev.log'{} from '{}'".format(
                 datetime.now().isoformat().replace("T", " "),
                 stage,
                 vsstext.replace("vss", "volume shadow copy #"),
@@ -99,7 +99,7 @@ def collect_windows_artefacts(
                 img.split("::")[0],
                 stage,
                 item.split("/")[-1],
-            ), " -> {} -> {} '{}'{} for '{}'".format(
+            ), " -> {} -> {} '{}'{} from '{}'".format(
                 datetime.now().isoformat().replace("T", " "),
                 stage,
                 item.split("/")[-1],
@@ -165,7 +165,7 @@ def collect_windows_artefacts(
                             img.split("::")[0],
                             stage,
                             each,
-                        ), " -> {} -> {} registry hive '{}'{} for '{}'".format(
+                        ), " -> {} -> {} registry hive '{}'{} from '{}'".format(
                             datetime.now().isoformat().replace("T", " "),
                             stage,
                             each,
@@ -211,7 +211,7 @@ def collect_windows_artefacts(
                         img.split("::")[0],
                         stage,
                         each,
-                    ), " -> {} -> {} event log '{}'{} for '{}'".format(
+                    ), " -> {} -> {} event log '{}'{} from '{}'".format(
                         datetime.now().isoformat().replace("T", " "),
                         stage,
                         each,
@@ -257,7 +257,7 @@ def collect_windows_artefacts(
                     img.split("::")[0],
                     stage,
                     each,
-                ), " -> {} -> {} deleted artefacts for profile '{}'{} for '{}'".format(
+                ), " -> {} -> {} deleted artefacts for profile '{}'{} from '{}'".format(
                     datetime.now().isoformat().replace("T", " "),
                     stage,
                     each,
@@ -288,7 +288,7 @@ def collect_windows_artefacts(
                         img.split("::")[0],
                         stage,
                         each,
-                    ), " -> {} -> {} prefetch file '{}'{} for '{}'".format(
+                    ), " -> {} -> {} prefetch file '{}'{} from '{}'".format(
                         datetime.now().isoformat().replace("T", " "),
                         stage,
                         each,
@@ -346,7 +346,7 @@ def collect_windows_artefacts(
                                 vssimage,
                                 stage,
                                 each,
-                            ), " -> {} -> {} '{}' memory file for {}".format(
+                            ), " -> {} -> {} '{}' memory file from {}".format(
                                 datetime.now().isoformat().replace("T", " "),
                                 stage,
                                 each,

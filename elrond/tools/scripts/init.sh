@@ -1,11 +1,9 @@
 #!/bin/bash
-sudo apt install mlocate build-essential john -y --fix-missing
-wget https://s3.amazonaws.com/rds.nsrl.nist.gov/RDS/current/rds_modernm.zip > /opt/elrond/elrond/tools/.rds_modernm.zip
-unzip /opt/elrond/elrond/tools/.rds_modernm.zip -d /opt/elrond/elrond/tools/
-updatedb
-# configuring elrond
 clear
 printf "\n [+] Running initialization script for elrond...\n\n"
+sudo apt install mlocate build-essential yara john -y --fix-missing
+updatedb
+# configuring elrond
 sudo chmod -R 744 /opt/elrond/
 export PATH=$PATH:/opt/elrond
 sudo chmod +x /opt/elrond/elrond.py

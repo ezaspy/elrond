@@ -9,11 +9,10 @@ import time
 from collections import OrderedDict
 from datetime import datetime
 
-from rivendell.core import collect_process_kw_analysis_timelining
+from rivendell.core import collect_process_keyword_analysis_timeline
 from rivendell.audit import write_audit_log_entry
-from rivendell.identify import identify_disk_image
 from rivendell.identify import identify_memory_image
-from rivendell.meta import collect_metadata
+from rivendell.meta import extract_metadata
 from rivendell.mount import mount_images
 from rivendell.mount import unmount_images
 from rivendell.post.clean import archive_artefacts
@@ -22,7 +21,7 @@ from rivendell.post.elastic.config import configure_elastic_stack
 from rivendell.post.mitre.nav_config import configure_navigator
 from rivendell.post.sigma.build import write_sigma_signatures
 from rivendell.post.splunk.install import configure_splunk_stack
-from rivendell.post.yara.build import write_yara_signatures
+from rivendell.post.yara import run_yara_signatures
 
 
 def main(
@@ -48,7 +47,6 @@ def main(
     superquick,
     quick,
     recover,
-    carving,
     splunk,
     symlinks,
     timeline,
@@ -70,15 +68,17 @@ def main(
     quotes,
     asciitext,
 ):
+    subprocess.Popen(["clear"])
+    time.sleep(2)
     if not collect and not process:
         if volatility and not process:
             print(
-                "\n  If you are just processing memory images, you must invoke the process flag (-P) with the memory flag (-M).\n  Please try again.\n\n"
+                "\n  If you are just processing memory images, you must invoke the process flag (-P) with the memory flag (-M).\n  Please try again.\n\n\n\n"
             )
             sys.exit()
         else:
             print(
-                "\n  If you have previously collected artefacts but which to process them, you must invoke the process flag (-P) without the collect flag (-C).\n  Please try again.\n\n"
+                "\n  If you have previously collected artefacts but which to process them, you must invoke the process flag (-P) without the collect flag (-C).\n  Please try again.\n\n\n\n"
             )
             sys.exit()
     else:
@@ -88,7 +88,6 @@ def main(
         or collectfiles
         or imageinfo
         or recover
-        or carving
         or symlinks
         or timeline
         or userprofiles
@@ -101,8 +100,6 @@ def main(
             collectand = "imageinfo flag (-I)"
         elif not collect and recover:
             collectand = "recover flag (-R)"
-        elif not collect and carving:
-            collectand = "carving flag (-r)"
         elif not collect and symlinks:
             collectand = "symlinks flag (-s)"
         elif not collect and timeline:
@@ -112,7 +109,7 @@ def main(
         else:
             pass
         print(
-            "\n\n  In order to use the {}, you must also invoke the collect flag (-C). Please try again.\n\n".format(
+            "\n\n  In order to use the {}, you must also invoke the collect flag (-C). Please try again.\n\n\n\n".format(
                 collectand
             )
         )
@@ -121,41 +118,47 @@ def main(
         pass
     if analysis and not process:
         print(
-            "\n\n You cannot provide the Analysis Flag (-A) without provided the Processing Flag (-P). Please try again.\n"
+            "\n\n You cannot provide the Analysis Flag (-A) without provided the Processing Flag (-P). Please try again.\n\n\n\n"
         )
         sys.exit()
     else:
         pass
     if not hashcollected and nsrl and (superquick or quick):
         print(
-            "\n\n In order to use the NSRL Flag (-H), you must either provide the hashcollected Flag (-o) - with or without the Superquick (-Q) and Quick Flags (-q).\n  Or, if not using the hashcollected Flag (-o), remove the Superquick (-Q) and Quick Flags (-q) altogether. Please try again.\n"
+            "\n\n In order to use the NSRL Flag (-H), you must either provide the hashcollected Flag (-o) - with or without the Superquick (-Q) and Quick Flags (-q).\n  Or, if not using the hashcollected Flag (-o), remove the Superquick (-Q) and Quick Flags (-q) altogether. Please try again.\n\n\n\n"
         )
         sys.exit()
+    else:
+        pass
+    if yara:
+        if not os.path.isdir(yara[0]):
+            print(
+                "\n\n '{}' is not a valid directory or does not exist. Please try again.\n\n\n\n".format(
+                    yara[0]
+                )
+            )
+            sys.exit()
     else:
         pass
     if navigator and not splunk:
         print(
-            "\n\n You cannot provide the Navigator Flag (-N) without providing the Splunk Flag (-S). Please try again.\n"
+            "\n\n You cannot provide the Navigator Flag (-N) without providing the Splunk Flag (-S). Please try again.\n\n\n\n"
         )
         sys.exit()
     else:
         pass
-    subprocess.Popen(["clear"])
-    time.sleep(2)
     if lotr:
         print(random.choice(asciitext))
-        input("\n\n\n\n\n\n\n\n\n\n     Press Enter to continue... ")
+        input("\n\n\n\n\n\n     Press Enter to continue... ")
         subprocess.Popen(["clear"])
-        print(
-            "||                                ..........',:clooddddoolc:;''...   .......  .....'..'''||\n||                             ........'',;:clodxkkkkkkkkkxoc;,'............   ......''''||\n||                         ......',;,,;;:lddxxdxxxxxkkkkOOOkxdl:;'....... ...  ..........||\n||                      .....',;;;::;;:cloddoooodxxkkOOOOOOOOkkkxdolc;'...     ..........||\n||                  .....''',;;;;::c::;:ccllllodxxxxxxk0K000000OOkkkkxo:,'..     ........||\n||                ........',;,,;,,;:llclooooddxkkkxolokkxdk0Oxdxxdodddl:::,....  ........||\n||                ..........'''',,;;:cllddxkkOOOO00xox000KXX0xoolcccodocc:,'''......''''.||\n||               ...''....'''''.',;:coddxxkOOOOOOO0OxkO00K00Okdl:,'',;,';:cc;'.''....''..||\n||              ..........''''''';:cloxxkkkOOOOOO000KXXKKK00Okdol:,'..''...;:c'...''.....||\n||            ...'''''....',,;;;;;:cloxkkOOOOOOOO000KKKKKK00Okdooc;'...''....';,. .'''...||\n||            ..',,,,;;;;;;:::::::ccldxkkOOOOOOOO00KKKKKKK0OOxolc:;'....'.......'..','...||\n||            ..',,,;;;;;:::::::::clodkkOOOOOOOO0000KKKKKK00Okdl:;,'........... .........||\n||             .',;;;;::::::::::::cldxkkOOOOO0000000KKKXXKKKK0kdc;,''. ........    .....'||\n||             .',;;;:ccllcc::::cclodxkkkkkkOO000OOOO0KKKKKKKK0Oxc,'..   .......  ... .;;||\n||             ..,,;;:cllllc:::ccllodxxxxxxxxxxxdodxkO0KKKXKKKK0Oo;...    ......';:oo;...||\n||             ..',;;:cllllc::cclllooddollc:::cldxOO0000KKKKKKKK0x:'..    .....,codxkx:. ||\n||             .',,;;::cclll::clllllc::,'''',:oxOO0000000KKKKKKKKkl,...   .....,;;:okOd'.||\n||             ...',;::::clcc:::c:;,''..'''',,;:cldxkO0000KKKXKKKOo:...   ...'.,,;:cdkk;.||\n||            .......',;;:::::::::;;;,'''.......,:ccldxkO0KKXXXK0Odc'.    ...',;;:cldOk;.||\n||             .....  .....';clddxdlc;,,'',,,'',:loxOOOO00KKXXXKOkdc'........',,;;:lxOd' ||\n||              ...    .....;cok00Oxdoc;,,,,,,;:cldkO0000KKKKXK0Okoc,......'..',,;:okOc. ||\n||                ......','';ldOKKK0Okoc::::::ccloxkO0000KXXXKKOkdo:,..',..'..',;:lxko.. ||\n||                 ....'',',:lx0XXXXKK0kxoccccloodkOOOOO00KKKK0kxdl:'...'.....';ldkko'  .||\n||                 ..''',,,;cxOKXXXXXXXK0OxxdoooodxkkOOO000000Okxdl;'.........,:dOOd'   .||\n||                 ...',,,,:ok0KXXXXKXXXK000OkkkxdxxkkOOO00OOOOkxoc;'.........';oko'     ||\n||                 .,,,,,,;cok0KKKXK00000OOOOOOOOkkkkOOOOOOOOOkxdoc;,.........';l:..     ||\n||                 .,,,,,,;cdO000KKK00K0OdddxkkOOOOOOOO000OOOkxddl:;'...... ..';c;.      ||\n||                 .',,,,,,:lxkOxxxdoxO0OxllloxkkOOOO00000OOOkxdol:;'.....  ..':o:.      ||\n||                  .',,,,''',:lllllccdkOxdoooodxkOOO00000OOkxdolc:,'.....  ..,cxc.      ||\n||                   .''',,'...,:cdkxxkkkkxxxxddxkOO00000OOOkxdolc;,......  ..,oko'      ||\n||                   ...',,,''';::ldxxxxxkkkkkkkxxxkOO000OOOkxolc:;'......  ..;xkd,      ||\n||                    ..'',,'',:c;:ldxxxxkkOOkkkkkxxkOOOOOkkkdlc:;,'.....   ..:xkk:.     ||\n||                     ..''',,,:c::cllloooddddoodxkkkOOOOkkxxol:;,,'''...   ..ckOkl.   ..||\n||                      .''',,,,,,,;;;::cloolllcclodxkOOOkxddlc:;,,,;,..    ..:xxdc'..;ld||\n||                      ..''..''',;:cloodxkkkkkkxdooodxxkxddolc;,,;:c:..    .';lollodkkkx||\n||                       ..'''',,;;:cclloooddddxxddooodxxdddol:;;::clc,.  ...';ldkkkkkxoc||\n||                       .....',,;;;;;;::cccclloooooodxxxxdolc:::cclc:;......'coxkOkxoc;'||\n||                    ...''....',,,;;;;::clccclllllloodxxdolc::::c:::;;'.....,ldxxxdl:,..||\n|| .':lcc;,''',,;:cllloddxko:'..'',;::ccloddddoodoooooooolc:;;;;;;,;;;;,.....:oddooc;,.. ||\n||.:xO0KKK00OOOOOOOOOOkkkkO00Odc,',;:cccloddxxxxddooolcc:;;;,,,'',;:::cc:...'collcc;'..  ||\n||'lxO0KKKKKK0000000000OkOO00000kl:;;::::cllooddddoolc:;;,,,''',,;::clool,...;:cc:;'.. ..||\n||;lxO0KXXXXKKKK0000000OOO0KXKOkOOkdoc;;;;:::cclllc:::;,,''.',;::::cllooc.   .'::,...... ||\n||:ok0KKKKKKKKKKKKKKKK0OO0KXXNXOxdkOOkdlc;;,,,,,,,,,,,'''..',:ccccclooo:..    .,'......  ||\n||cdkO00KKKKKKKKKK0000OO0KXKKXNX0dldxkkOkxl:,.............',:cccclool:,..'.  .''......   ||\n||cdxkOOOO0KKKKKKK0O0K0kkKXXK00XNKd::clodxoc,.............':cccllooo;. ......,,'......   ||\n||coxxk00OkxxxxkkOOO0KK0kk0XXKOOKKKxlcloddol;. .......'''',:ccloooooc'.......'''.....    ||\n||loodk000Oxc'',,,cdk0KXKkk0KX0xxOO00kdol:'...........'''':ccloooololc;'....''......    .||\n||loodxOOxl,.......,cdO0K0kxOKXOooxO00x;... ...........'',cclloollllllc:..'''..'..       ||\n||loxkkO0x;..........,cx0K0dok0Kkccdk00k:...........'..',:llllolllllllc:..',,'','.       ||\n||oxkO000d;,,,,,'''...,cdO0xcok00l';cdO00l.............';llllloollloolc;..',,''..        ||\n\n\n"
-        )
         time.sleep(2)
     else:
         pass
-    starttime, ot, imgs, d, vssmem = (
+    starttime, ot, imgs, foundimgs, d, vssmem = (
         datetime.now().isoformat(),
         {},
         {},
+        [],
         directory[0],
         "",
     )
@@ -170,6 +173,45 @@ def main(
             random.choice(quotes)
         )
     )
+    if collectfiles:
+        if collectfiles != True:
+            if len(collectfiles) > 0:
+                if not collectfiles.startswith(
+                    "include:"
+                ) and not collectfiles.startswith("exclude:"):
+                    print(
+                        "\n  [-F --collectfiles] - if providing an inclusion or exclusion list, the optional argument must start with 'include:' or 'exclude:' respectively\n   The correct syntax is: [include/exclude]:/path/to/inclusion_or_exclusion.list\n  Please try again.\n\n"
+                    )
+                    sys.exit()
+                else:
+                    pass
+                if not os.path.exists(collectfiles[8:]):
+                    print(
+                        "\n  [-F --collectfiles] - '{}' does not exist and/or is an invalid file, please try again.\n\n".format(
+                            collectfiles[8:]
+                        )
+                    )
+                    sys.exit()
+                else:
+                    pass
+            else:
+                pass
+        else:
+            pass
+    else:
+        pass
+    if yara:
+        if not os.path.exists(yara[0]):
+            print(
+                "\n  [-Y --yara] - '{}' does not exist and/or is an invalid directory, please try again.\n\n".format(
+                    yara[0]
+                )
+            )
+            sys.exit()
+        else:
+            pass
+    else:
+        pass
     if len(directory) > 1:
         od = directory[1]
         if not od.endswith("/"):
@@ -219,7 +261,7 @@ def main(
         output_directory = "./"
     if not os.path.isdir(d):
         print(
-            "\n  '{}' does not exist and/or is not a directory, please try again.\n\n".format(
+            "\n  [directory] - '{}' does not exist and/or is not a directory, please try again.\n\n".format(
                 d
             )
         )
@@ -265,8 +307,7 @@ def main(
     for root, _, files in os.walk(d):  # Mounting images
         for f in files:
             if os.path.exists(os.path.join(root, f)):  # Mounting images
-                stage, path, imgformat, fsize = (
-                    "mounting",
+                path, imgformat, fsize = (
                     os.path.join(root, f),
                     str(
                         subprocess.Popen(
@@ -280,142 +321,14 @@ def main(
                 if fsize > 10000:
                     if not os.path.isdir(output_directory + f):
                         os.mkdir(output_directory + f)
-                    else:
-                        pass
-                    if (
-                        "Expert Witness" in imgformat
-                        or "VMDK" in imgformat
-                        or ("VMware" and " disk image" in imgformat)
-                        or (
-                            "DOS/MBR boot sector" in imgformat
-                            and (
-                                f.endswith(".raw")
-                                or f.endswith(".dd")
-                                or f.endswith(".img")
-                            )
-                        )
-                    ):
-                        if not auto:
-                            wtm = input(
-                                "  Do you wish to mount '{}'? Y/n [Y] ".format(f)
-                            )
-                        else:
-                            wtm = "y"
-                        if wtm != "n":
-                            if not superquick and not quick:
-                                if not os.path.exists(
-                                    output_directory + f + "/meta.audit"
-                                ):
-                                    with open(
-                                        output_directory + f + "/meta.audit", "w"
-                                    ) as metaimglog:
-                                        metaimglog.write(
-                                            "Filename,SHA256,known-good,Entropy,Filesize,LastWriteTime,LastAccessTime,LastInodeChangeTime,Permissions,FileType\n"
-                                        )
-                                else:
-                                    pass
-                                if verbosity != "":
-                                    print(
-                                        "    Calculating SHA256 hash for '{}', please stand by...".format(
-                                            f
-                                        )
-                                    )
-                                else:
-                                    pass
-                                with open(path, "rb") as metaimg:
-                                    buffer = metaimg.read(262144)
-                                    while len(buffer) > 0:
-                                        sha256.update(buffer)
-                                        buffer = metaimg.read(262144)
-                                    metaentry = (
-                                        path
-                                        + ","
-                                        + sha256.hexdigest()
-                                        + ",unknown,N/A,N/A,N/A,N/A,N/A,N/A,N/A\n"
-                                    )
-                                with open(
-                                    output_directory + f + "/meta.audit", "a"
-                                ) as metaimglog:
-                                    metaimglog.write(metaentry)
-                                collect_metadata(
-                                    verbosity,
-                                    output_directory,
-                                    f,
-                                    path,
-                                    "metadata",
-                                    sha256,
-                                    nsrl,
-                                )
-                            else:
-                                pass
-                            entry, prnt = (
-                                "LastWriteTime,elrond_host,elrond_stage,elrond_log_entry\n",
-                                " -> {} -> created audit log file for '{}'".format(
-                                    datetime.now().isoformat().replace("T", " "), f
-                                ),
-                            )
-                            write_audit_log_entry(
-                                verbosity, output_directory, entry, prnt
-                            )
-                            print("   Attempting to mount '{}'...".format(f))
-                            entry, prnt = "{},{},{},commenced\n".format(
-                                datetime.now().isoformat(), f, stage
-                            ), " -> {} -> mounting '{}'".format(
-                                datetime.now().isoformat().replace("T", " "), f
-                            )
-                            write_audit_log_entry(
-                                verbosity, output_directory, entry, prnt
-                            )
-                            mount_images(
-                                d,
-                                auto,
-                                verbosity,
-                                output_directory,
-                                path,
-                                f,
-                                elrond_mount,
-                                ewf_mount,
-                                allimgs,
-                                imageinfo,
-                                imgformat,
-                                vss,
-                                "mounting",
-                                cwd,
-                                quotes,
-                                removeimgs,
-                            )
-                            entry, prnt = "{},{},{},completed\n".format(
-                                datetime.now().isoformat(), f, "mounting"
-                            ), " -> {} -> mounted '{}'".format(
-                                datetime.now().isoformat().replace("T", " "), f
-                            )
-                            write_audit_log_entry(
-                                verbosity, output_directory, entry, prnt
-                            )
-                        else:
-                            print("    OK. '{}' will not be mounted.\n".format(f))
-                        print()
-                    elif volatility and "data" in imgformat:
-                        allimgs[path.split("/")[-1]] = d
-                        identify_memory_image(
-                            verbosity,
-                            output_directory,
-                            flags,
-                            auto,
-                            superquick,
-                            quick,
-                            hashcollected,
-                            cwd,
-                            sha256,
-                            nsrl,
-                            f,
-                            ot,
-                            d,
-                            path,
-                            volchoice,
-                            vss,
-                            vssmem,
-                            memtimeline,
+                        foundimgs.append(
+                            os.path.join(root, f)
+                            + "||"
+                            + root
+                            + "||"
+                            + f
+                            + "||"
+                            + imgformat
                         )
                     else:
                         pass
@@ -423,67 +336,149 @@ def main(
                     pass
             else:
                 pass
-    for rmimg in removeimgs:
-        del allimgs[rmimg]
-    allimgs = OrderedDict(sorted(allimgs.items(), key=lambda x: x[1]))
-    if len(allimgs) > 0:  # Identifying Platform
-        identify_disk_image(allimgs, ot)
-    else:
-        pass
-    if len(ot) > 0:
-        for osplatform, location in ot.items():
-            if osplatform.endswith("memory"):
-                print(
-                    "   Identified '{}' as {} image.".format(
-                        osplatform.split("::")[0], osplatform.split("::")[1]
+    for foundimg in foundimgs:
+        stage = "mounting"
+        path, root, f, imgformat = foundimg.split("||")
+        if (
+            "Expert Witness" in imgformat
+            or "VMDK" in imgformat
+            or ("VMware" and " disk image" in imgformat)
+            or (
+                "DOS/MBR boot sector" in imgformat
+                and (f.endswith(".raw") or f.endswith(".dd") or f.endswith(".img"))
+            )
+        ):
+            time.sleep(2)
+            if not auto:
+                wtm = input("  Do you wish to mount '{}'? Y/n [Y] ".format(f))
+            else:
+                wtm = "y"
+            if wtm != "n":
+                if not superquick and not quick:
+                    if not os.path.exists(output_directory + f + "/meta.audit"):
+                        with open(
+                            output_directory + f + "/meta.audit", "w"
+                        ) as metaimglog:
+                            metaimglog.write(
+                                "Filename,SHA256,known-good,Entropy,Filesize,LastWriteTime,LastAccessTime,LastInodeChangeTime,Permissions,FileType\n"
+                            )
+                    else:
+                        pass
+                    if verbosity != "":
+                        print(
+                            "    Calculating SHA256 hash for '{}', please stand by...".format(
+                                f
+                            )
+                        )
+                    else:
+                        pass
+                    with open(path, "rb") as metaimg:
+                        buffer = metaimg.read(262144)
+                        while len(buffer) > 0:
+                            sha256.update(buffer)
+                            buffer = metaimg.read(262144)
+                        metaentry = (
+                            path
+                            + ","
+                            + sha256.hexdigest()
+                            + ",unknown,N/A,N/A,N/A,N/A,N/A,N/A,N/A\n"
+                        )
+                    with open(output_directory + f + "/meta.audit", "a") as metaimglog:
+                        metaimglog.write(metaentry)
+                    extract_metadata(
+                        verbosity,
+                        output_directory,
+                        f,
+                        path,
+                        "metadata",
+                        sha256,
+                        nsrl,
                     )
+                else:
+                    pass
+                entry, prnt = (
+                    "LastWriteTime,elrond_host,elrond_stage,elrond_log_entry\n",
+                    " -> {} -> created audit log file for '{}'".format(
+                        datetime.now().isoformat().replace("T", " "), f
+                    ),
                 )
-                entry, prnt = "{},{},identified platform,{} ({})\n".format(
-                    datetime.now().isoformat(),
-                    osplatform.split("::")[0],
-                    osplatform.split("::")[1],
-                    location,
-                ), " -> {} -> identified '{}' as a {} image".format(
-                    datetime.now().isoformat().replace("T", " "),
-                    osplatform.split("::")[0],
-                    osplatform.split("::")[1],
+                write_audit_log_entry(verbosity, output_directory, entry, prnt)
+                print("   Attempting to mount '{}'...".format(f))
+                entry, prnt = "{},{},{},commenced\n".format(
+                    datetime.now().isoformat(), f, stage
+                ), " -> {} -> mounting '{}'".format(
+                    datetime.now().isoformat().replace("T", " "), f
+                )
+                write_audit_log_entry(verbosity, output_directory, entry, prnt)
+                allimgs = mount_images(
+                    d,
+                    auto,
+                    verbosity,
+                    output_directory,
+                    path,
+                    f,
+                    elrond_mount,
+                    ewf_mount,
+                    allimgs,
+                    imageinfo,
+                    imgformat,
+                    vss,
+                    "mounting",
+                    cwd,
+                    quotes,
+                    removeimgs,
+                )
+                entry, prnt = "{},{},{},completed\n".format(
+                    datetime.now().isoformat(), f, "mounting"
+                ), " -> {} -> mounted '{}'".format(
+                    datetime.now().isoformat().replace("T", " "), f
                 )
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
             else:
-                print(
-                    "   Identified '{}' as '{}'.".format(
-                        osplatform.split("::")[0], osplatform.split("::")[1]
-                    )
-                )
-                entry, prnt = "{},{},identified platform,{} ({})\n".format(
-                    datetime.now().isoformat(),
-                    osplatform.split("::")[0],
-                    osplatform.split("::")[1],
-                    location,
-                ), " -> {} -> identified platform of '{}' for '{}'".format(
-                    datetime.now().isoformat().replace("T", " "),
-                    osplatform.split("::")[1],
-                    osplatform.split("::")[0],
-                )
-                write_audit_log_entry(verbosity, output_directory, entry, prnt)
-            time.sleep(1)
+                print("    OK. '{}' will not be mounted.\n".format(f))
+            allimgs = {**allimgs, **ot}
+            print()
+        elif volatility and "data" in imgformat:
+            ot = identify_memory_image(
+                verbosity,
+                output_directory,
+                flags,
+                auto,
+                superquick,
+                quick,
+                hashcollected,
+                cwd,
+                sha256,
+                nsrl,
+                f,
+                ot,
+                d,
+                path,
+                volchoice,
+                vss,
+                vssmem,
+                memtimeline,
+            )
+            allimgs = {**allimgs, **ot}
+            print()
+        else:
+            pass
+    for rmimg in removeimgs:
+        del allimgs[rmimg]
+    allimgs = OrderedDict(sorted(allimgs.items(), key=lambda x: x[1]))
+    if len(allimgs) > 0:
+        for (
+            image_name,
+            image_location,
+        ) in allimgs.items():  # populating just a 'disk image' dictionary
+            if "::" in image_name and "::memory_" not in image_name:
+                imgs[image_name] = image_location
+            else:
+                pass
+        time.sleep(1)
         print(
             "  ----------------------------------------\n  -> Completed Identification Phase.\n"
         )
-        for eachdisk in ot.items():
-            edisk = str(eachdisk)
-            if (
-                "E01" in edisk
-                or "e01" in edisk
-                or "VMDK" in edisk
-                or "vmdk" in edisk
-                or ".dd::Linux" in edisk
-            ):  # Identifying disk images
-                for imgtype, imgpath in ot.items():
-                    if "memory" not in imgtype:
-                        imgs[imgtype] = imgpath
-                    else:
-                        pass
     else:
         if not auto:
             nodisks = input(
@@ -502,7 +497,7 @@ def main(
     if (
         collect or process
     ):  # Collection/Reorganisation, Processing, Keyword Searching, Analysis & Timelining
-        collect_process_kw_analysis_timelining(
+        collect_process_keyword_analysis_timeline(
             auto,
             collect,
             process,
@@ -518,7 +513,6 @@ def main(
             superquick,
             quick,
             recover,
-            carving,
             symlinks,
             userprofiles,
             verbose,
@@ -538,42 +532,33 @@ def main(
             memtimeline,
             stage,
         )
-    for emem in ot.items():  # Adding memory images to processed images
-        if "memory" in str(emem):
-            for imgtype, imgpath in allimgs.items():
-                if "memory" in imgtype:
-                    imgs[imgtype] = imgpath
-                else:
-                    pass
-        else:
-            pass
-    imgs, elrond_mount = OrderedDict(sorted(imgs.items(), key=lambda x: x[1])), [
-        "/mnt/elrond_mount",
-        "/mnt/elrond_mount1",
-        "/mnt/elrond_mount2",
-        "/mnt/elrond_mount3",
-        "/mnt/elrond_mount4",
-        "/mnt/elrond_mount5",
-    ]
-    if len(imgs) > 0:  # Post-processing metadata, Splunk, Elastic, Archive, Deletion
+    allimgs, imgs, elrond_mount = (
+        OrderedDict(sorted(allimgs.items(), key=lambda x: x[1])),
+        OrderedDict(sorted(imgs.items(), key=lambda x: x[1])),
+        [
+            "/mnt/elrond_mount",
+            "/mnt/elrond_mount1",
+            "/mnt/elrond_mount2",
+            "/mnt/elrond_mount3",
+            "/mnt/elrond_mount4",
+            "/mnt/elrond_mount5",
+        ],
+    )
+    if (
+        len(allimgs) > 0
+    ):  # Post-processing metadata, YARA, Splunk, Elastic, SIGMA, Archive, Deletion
         if not superquick or hashcollected:
             print(
                 "\n\n  -> \033[1;36mCommencing Metadata phase for proccessed artefacts...\033[1;m\n  ----------------------------------------"
             )
             time.sleep(1)
-            if process and analysis:
-                insert = "collected, processed & analysed"
-            elif process:
-                insert = "collected & processed"
-            else:
-                insert = "collected"
             for img in allimgs:
                 print(
                     "\n    Collecting metadata from processed artefacts for '{}'...".format(
                         img.split("::")[0]
                     )
                 )
-                collect_metadata(
+                extract_metadata(
                     verbosity,
                     output_directory,
                     img,
@@ -585,7 +570,7 @@ def main(
                 if os.path.exists(
                     output_directory + img.split("::")[0] + "/artefacts/cooked/"
                 ):
-                    collect_metadata(
+                    extract_metadata(
                         verbosity,
                         output_directory,
                         img,
@@ -599,7 +584,7 @@ def main(
                 if os.path.exists(
                     output_directory + img.split("::")[0] + "/artefacts/carved/"
                 ):
-                    collect_metadata(
+                    extract_metadata(
                         verbosity,
                         output_directory,
                         img,
@@ -611,7 +596,7 @@ def main(
                 else:
                     pass
                 if os.path.exists(output_directory + img.split("::")[0] + "/analysis/"):
-                    collect_metadata(
+                    extract_metadata(
                         verbosity,
                         output_directory,
                         img,
@@ -623,11 +608,26 @@ def main(
                 else:
                     pass
                 if os.path.exists(output_directory + img.split("::")[0] + "/files/"):
-                    collect_metadata(
+                    extract_metadata(
                         verbosity,
                         output_directory,
                         img,
                         output_directory + img.split("::")[0] + "/files/",
+                        stage,
+                        sha256,
+                        nsrl,
+                    )
+                else:
+                    pass
+                if (
+                    os.path.exists(output_directory + img.split("::")[0])
+                    and "memory_" in img.split("::")[1]
+                ):
+                    extract_metadata(
+                        verbosity,
+                        output_directory,
+                        img,
+                        output_directory + img.split("::")[0],
                         stage,
                         sha256,
                         nsrl,
@@ -645,17 +645,52 @@ def main(
             time.sleep(1)
         else:
             pass
+        if yara:
+            if not auto:
+                yes_yara = input(
+                    "  Do you wish to conduct Yara analysis for '{}'? Y/n [Y] ".format(
+                        img.split("::")[0]
+                    )
+                )
+            else:
+                pass
+            if auto or yes_yara != "n":
+                print(
+                    "\n\n  -> \033[1;36mCommencing Yara Phase...\033[1;m\n  ----------------------------------------"
+                )
+                time.sleep(1)
+                yara_files = []
+                for yroot, _, yfiles in os.walk(yara[0]):
+                    for yfile in yfiles:
+                        if yfile.endswith(".yara"):
+                            yara_files.append(os.path.join(yroot, yfile))
+                        else:
+                            pass
+                for img, loc in imgs.items():
+                    run_yara_signatures(
+                        verbosity, output_directory, img, loc, collectfiles, yara_files
+                    )
+                flags.append("06yara")
+                print(
+                    "  ----------------------------------------\n  -> Completed Yara Phase.\n"
+                )
+                time.sleep(1)
+            else:
+                pass
+        else:
+            pass
         if splunk:
             splunkuser, splunkpswd = configure_splunk_stack(
                 verbosity,
                 output_directory,
                 case,
-                imgs,
+                allimgs,
                 volatility,
                 analysis,
                 timeline,
+                yara,
             )
-            flags.append("06splunk")
+            flags.append("07splunk")
             print(
                 "  ----------------------------------------\n  -> Completed Splunk Phase.\n"
             )
@@ -664,12 +699,19 @@ def main(
             pass
         if elastic:
             configure_elastic_stack(
-                verbosity, output_directory, case, imgs, volatility, analysis, timeline
+                verbosity,
+                output_directory,
+                case,
+                allimgs,
+                volatility,
+                analysis,
+                timeline,
+                yara,
             )
             print(
                 "   Kibana is available at:            127.0.0.1:5601"
             )  # adjust if custom location
-            flags.append("07elastic")
+            flags.append("08elastic")
             print(
                 "  ----------------------------------------\n  -> Completed Elastic Phase.\n"
             )
@@ -678,22 +720,18 @@ def main(
             pass
         if sigma:
             write_sigma_signatures(
-                verbosity, output_directory, case, imgs, volatility, analysis, timeline
+                verbosity,
+                output_directory,
+                case,
+                allimgs,
+                volatility,
+                analysis,
+                timeline,
+                yara,
             )
-            flags.append("08sigma")
+            flags.append("09sigma")
             print(
                 "  ----------------------------------------\n  -> Completed SIGMA Phase.\n"
-            )
-            time.sleep(1)
-        else:
-            pass
-        if yara:
-            write_yara_signatures(
-                verbosity, output_directory, case, imgs, volatility, analysis, timeline
-            )
-            flags.append("09yara")
-            print(
-                "  ----------------------------------------\n  -> Completed YARA Phase.\n"
             )
             time.sleep(1)
         else:
@@ -812,7 +850,7 @@ def main(
                 and (
                     ".E01" in eachimg.split("::")[0] or ".e01" in eachimg.split("::")[0]
                 )
-                and "memory" not in eachimg.split("::")[1]
+                and "memory_" not in eachimg.split("::")[1]
                 and "_vss" not in eachimg.split("::")[1]
             ):
                 inspectedvss = input(
@@ -844,6 +882,7 @@ def main(
             r"', '\d{2}", r", ", str(sorted(set(flags))).title()[4:-2]
         )
         if ", " in sortedflags:
+            more_than_one_phase = "phases"
             flags = sortedflags.split(", ")
             lastflag = " and " + flags[-1]
             flags.pop()
@@ -851,15 +890,17 @@ def main(
                 str(flags).replace("[", "").replace("]", "").replace("'", "") + lastflag
             )
         else:
-            pass
+            flags = str(flags)[4:-2].title()
+            more_than_one_phase = "phase"
         if len(allimgs) > 0:
-            print("      {} phases completed for...".format(flags))
+            print("      {} {} completed for...".format(flags, more_than_one_phase))
             for eachimg in allimgs:
                 doneimgs.append(eachimg.split("::")[0].split("/")[-1])
         else:
             pass
     else:
         pass
+    doneimgs = sorted(list(set(doneimgs)))
     unmount_images(elrond_mount, ewf_mount)
     for eachimg, _ in allimgs.items():
         for doneroot, donedirs, donefiles in os.walk(

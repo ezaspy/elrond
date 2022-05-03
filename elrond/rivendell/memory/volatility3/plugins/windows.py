@@ -663,7 +663,7 @@ def windows_vol3(
                     jsonlist.append(json.dumps(jsondict))
     elif (
         plugin == "windows.registry.hivescan.HiveScan"
-    ):  # outstanding (no artefacts available)
+    ):  # in-development (no artefacts available during testing)
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 pass
@@ -702,7 +702,7 @@ def windows_vol3(
                     jsonlist.append(json.dumps(jsondict))
     elif (
         plugin == "windows.registry.userassist.UserAssist"
-    ):  # outstanding (no artefacts available)
+    ):  # in-development (no artefacts available during testing)
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 pass

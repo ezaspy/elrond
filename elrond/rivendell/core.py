@@ -4,16 +4,16 @@ import sys
 import time
 from datetime import datetime
 
-from rivendell.analysing.analysis import analyse_artefacts
-from rivendell.analysing.keywords import prepare_keywords
+from rivendell.analysis.analysis import analyse_artefacts
+from rivendell.analysis.keywords import prepare_keywords
 from rivendell.audit import write_audit_log_entry
-from rivendell.collecting.collect import collect_artefacts
-from rivendell.collecting.reorganise import reorganise_artefacts
-from rivendell.processing.process import identify_pre_process_artefacts
-from rivendell.processing.timeline import create_plaso_timeline
+from rivendell.collect.collect import collect_artefacts
+from rivendell.collect.reorganise import reorganise_artefacts
+from rivendell.process.process import identify_pre_process_artefacts
+from rivendell.process.timeline import create_plaso_timeline
 
 
-def collect_process_kw_analysis_timelining(
+def collect_process_keyword_analysis_timeline(
     auto,
     collect,
     process,
@@ -29,7 +29,6 @@ def collect_process_kw_analysis_timelining(
     superquick,
     quick,
     recover,
-    carving,
     symlinks,
     userprofiles,
     verbose,
@@ -61,7 +60,6 @@ def collect_process_kw_analysis_timelining(
             superquick,
             quick,
             recover,
-            carving,
             symlinks,
             userprofiles,
             verbose,
@@ -81,7 +79,7 @@ def collect_process_kw_analysis_timelining(
             stage,
         )
     else:
-        reorganise_artefacts(
+        imgs = reorganise_artefacts(
             output_directory, verbosity, allimgs, flags, auto, volatility
         )
     if process:
@@ -100,7 +98,7 @@ def collect_process_kw_analysis_timelining(
             volchoice,
             vss,
             memtimeline,
-            carving,
+            collectfiles,
         )
     else:
         pass
@@ -118,12 +116,14 @@ def collect_process_kw_analysis_timelining(
             )
             time.sleep(1)
             prepare_keywords(
-                verbosity, output_directory, imgs, keywords, "keyword searching"
+                verbosity,
+                output_directory,
+                auto,
+                flags,
+                imgs,
+                keywords,
+                "keyword searching",
             )
-            if "keyword searching" not in str(flags):
-                flags.append("03keyword searching")
-            else:
-                pass
             print(
                 "  ----------------------------------------\n  -> Completed Keyword Searching phase for proccessed artefacts.\n"
             )
@@ -143,6 +143,18 @@ def collect_process_kw_analysis_timelining(
             )
             time.sleep(1)
             for img, mnt in imgs.items():
+                if "vss" in img.split("::")[1]:
+                    vssimage = (
+                        "'"
+                        + img.split("::")[0]
+                        + "' ("
+                        + img.split("::")[1]
+                        .split("_")[1]
+                        .replace("vss", "volume shadow copy #")
+                        + ")"
+                    )
+                else:
+                    vssimage = "'" + img.split("::")[0] + "'"
                 analyse_artefacts(
                     verbosity,
                     output_directory,
@@ -150,7 +162,7 @@ def collect_process_kw_analysis_timelining(
                     mnt,
                     analysis,
                     extractiocs,
-                    img,
+                    vssimage,
                 )
         else:
             print(

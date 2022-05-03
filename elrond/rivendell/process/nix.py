@@ -6,7 +6,7 @@ from datetime import datetime
 
 from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
-from rivendell.processing.extractions.mail import (
+from rivendell.process.extractions.mail import (
     extract_email_artefacts,
 )
 
@@ -27,7 +27,7 @@ def process_bash_history(
         vssimage.replace("'", ""),
         stage,
         artefact.split("/")[-1].split("+")[0],
-    ), " -> {} -> {} bash_history ({}) file for {}".format(
+    ), " -> {} -> {} bash_history ({}) file from {}".format(
         datetime.now().isoformat().replace("T", " "),
         stage,
         artefact.split("/")[-1].split("+")[0],
@@ -137,7 +137,7 @@ def process_email(
         stage,
         artefact.split("/")[-1],
         artefact.split("/")[-2],
-    ), " -> {} -> {} Mail artefact '{}' ({}) for {}".format(
+    ), " -> {} -> {} Mail artefact '{}' ({}) from {}".format(
         datetime.now().isoformat().replace("T", " "),
         stage,
         artefact.split("/")[-1],
@@ -317,7 +317,7 @@ def process_group(
         pass
     entry, prnt = "{},{},{},group file\n".format(
         datetime.now().isoformat(), vssimage.replace("'", ""), stage
-    ), " -> {} -> {} group file for {}".format(
+    ), " -> {} -> {} group file from {}".format(
         datetime.now().isoformat().replace("T", " "),
         stage,
         vssimage,
@@ -437,7 +437,7 @@ def process_logs(
                     vssimage.replace("'", ""),
                     stage,
                     artefact.split("/")[-1].split("+")[-1],
-                ), " -> {} -> {} file '{}' for {}".format(
+                ), " -> {} -> {} file '{}' from {}".format(
                     datetime.now().isoformat().replace("T", " "),
                     stage,
                     artefact.split("/")[-1].split("+")[-1],
@@ -843,7 +843,7 @@ def process_service(
                 vssimage.replace("'", ""),
                 stage,
                 artefact.split("/")[-1].split("+")[-1],
-            ), " -> {} -> {} service file '{}' for {}".format(
+            ), " -> {} -> {} service file '{}' from {}".format(
                 datetime.now().isoformat().replace("T", " "),
                 stage,
                 artefact.split("/")[-1].split("+")[-1],

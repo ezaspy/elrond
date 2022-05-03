@@ -300,11 +300,9 @@ def process_memory(
             )
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
-        print(output_directory)
         extract_memory_artefacts(
             verbosity,
             output_directory,
-            stage,
             volchoice,
             volprefix,
             artefact,

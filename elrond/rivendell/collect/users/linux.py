@@ -382,7 +382,7 @@ def linux_users(
                         else:
                             pass
                 print_done(verbosity)
-            if not each.startswith("."):
+            if os.path.exists(item + "/" + each + "/.mozilla/firefox"):
                 try:
                     os.stat(bwsrdest + each + "/firefox/")
                 except:
@@ -395,11 +395,11 @@ def linux_users(
                     )
                 else:
                     pass
-                if os.path.exists(item + "/" + each + "/.mozilla/firefox"):
+                if not each.startswith("."):
                     for defaultdir in os.listdir(
                         item + "/" + each + "/.mozilla/firefox"
                     ):
-                        if ".default" in defaultdir:
+                        if ".default" in defaultdir and ".default-" not in defaultdir:
                             try:
                                 (
                                     entry,
@@ -450,19 +450,19 @@ def linux_users(
                     print_done(verbosity)
                 else:
                     pass
-                try:
-                    os.stat(bwsrdest + each + "/chrome/")
-                except:
-                    os.makedirs(bwsrdest + each + "/chrome/")
-                if verbosity != "":
-                    print(
-                        "     Collecting Google Chrome browser artefacts for '{}' for {}...".format(
-                            each, vssimage
-                        )
-                    )
-                else:
-                    pass
                 if os.path.exists(item + "/" + each + "/.config/google-chrome"):
+                    try:
+                        os.stat(bwsrdest + each + "/chrome/")
+                    except:
+                        os.makedirs(bwsrdest + each + "/chrome/")
+                    if verbosity != "":
+                        print(
+                            "     Collecting Google Chrome browser artefacts for '{}' for {}...".format(
+                                each, vssimage
+                            )
+                        )
+                    else:
+                        pass
                     for defaultdir in os.listdir(
                         item + "/" + each + "/.config/google-chrome"
                     ):
@@ -519,7 +519,6 @@ def linux_users(
                     pass
             else:
                 pass
-
             if os.path.exists(
                 item + each + "/Library/Application Support/Google/Chrome/Default/"
             ):
@@ -596,7 +595,6 @@ def linux_users(
                     pass
             else:
                 pass
-
             if userprofiles:
                 try:
                     os.stat(userdest)

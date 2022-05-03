@@ -5,7 +5,9 @@ from datetime import datetime
 
 from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
-from rivendell.collecting.users.mac import mac_users
+from rivendell.collect.users.mac import mac_users
+
+import time
 
 
 def collect_mac_artefacts(
@@ -42,7 +44,7 @@ def collect_mac_artefacts(
                 img.split("::")[0],
                 stage,
                 item,
-            ), " -> {} -> {} '/etc/{}' file for '{}'".format(
+            ), " -> {} -> {} '/etc/{}' file from '{}'".format(
                 datetime.now().isoformat().replace("T", " "),
                 stage,
                 item.split("/")[-1],
@@ -65,7 +67,7 @@ def collect_mac_artefacts(
                 datetime.now().isoformat(),
                 img.split("::")[0],
                 stage,
-            ), " -> {} -> {} '/etc/hosts' for '{}'".format(
+            ), " -> {} -> {} '/etc/hosts' from '{}'".format(
                 datetime.now().isoformat().replace("T", " "),
                 stage,
                 img.split("::")[0],
@@ -88,7 +90,7 @@ def collect_mac_artefacts(
                 img.split("::")[0],
                 stage,
                 item,
-            ), " -> {} -> {} '{}'{} for '{}'".format(
+            ), " -> {} -> {} '{}'{} from '{}'".format(
                 datetime.now().isoformat().replace("T", " "),
                 stage,
                 item,
@@ -138,7 +140,7 @@ def collect_mac_artefacts(
                         img.split("::")[0],
                         stage,
                         each,
-                    ), " -> {} -> {} log '{}' for '{}'".format(
+                    ), " -> {} -> {} log '{}' from '{}'".format(
                         datetime.now().isoformat().replace("T", " "),
                         stage,
                         each,
@@ -207,7 +209,7 @@ def collect_mac_artefacts(
                             img.split("::")[0],
                             stage,
                             each,
-                        ), " -> {} -> {} plist '{}' for '{}'".format(
+                        ), " -> {} -> {} plist '{}' from '{}'".format(
                             datetime.now().isoformat().replace("T", " "),
                             stage,
                             each,
@@ -257,7 +259,7 @@ def collect_mac_artefacts(
                         img.split("::")[0],
                         stage,
                         each,
-                    ), " -> {} -> {} trash file '{}'{} for '{}'".format(
+                    ), " -> {} -> {} trash file '{}'{} from '{}'".format(
                         datetime.now().isoformat().replace("T", " "),
                         stage,
                         each,
@@ -294,7 +296,7 @@ def collect_mac_artefacts(
                             img.split("::")[0],
                             stage,
                             each,
-                        ), " -> {} -> {} tmp file '{}'{} for '{}'".format(
+                        ), " -> {} -> {} tmp file '{}'{} from '{}'".format(
                             datetime.now().isoformat().replace("T", " "),
                             stage,
                             each,
@@ -323,7 +325,7 @@ def collect_mac_artefacts(
                             img.split("::")[0],
                             stage,
                             each,
-                        ), " -> {} -> {} tmp directory '{}'{} for '{}'".format(
+                        ), " -> {} -> {} tmp directory '{}'{} from '{}'".format(
                             datetime.now().isoformat().replace("T", " "),
                             stage,
                             each,
@@ -382,7 +384,7 @@ def collect_mac_artefacts(
                                 img.split("::")[0],
                                 stage,
                                 each,
-                            ), " -> {} -> {} '{}'{} for '{}'".format(
+                            ), " -> {} -> {} '{}'{} from '{}'".format(
                                 datetime.now().isoformat().replace("T", " "),
                                 stage,
                                 each,

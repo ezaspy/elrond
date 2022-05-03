@@ -20,6 +20,19 @@ parser.add_argument(
     help="Search for keywords throughout image and artefacts based on provided Keyword File",
 )
 parser.add_argument(
+    "-Y",
+    "--yara",
+    nargs=1,
+    help="Run Yara signatures against all files on disk image or just collected files",
+)
+parser.add_argument(
+    "-F",
+    "--collectfiles",
+    nargs="?",
+    help="Collect files from disk including binaries, documents, scripts etc.; Optional: Provide an inclusion/exclusion file",
+    const=True,
+)
+parser.add_argument(
     "-A",
     "--analysis",
     help="Conduct 'automated forensic analysis' for disk artefacts; Extended Attributes; Alternate Data Streams; Timestomping",
@@ -63,14 +76,6 @@ parser.add_argument(
     "-E",
     "--elastic",
     help="Output data and index into local Elastic instance",
-    action="store_const",
-    const=True,
-    default=False,
-)
-parser.add_argument(
-    "-F",
-    "--collectfiles",
-    help="Collect files-of-interest from disk including binaries, documents, archives, scripts and virtual machine files",
     action="store_const",
     const=True,
     default=False,
@@ -172,14 +177,6 @@ parser.add_argument(
     default=False,
 )
 parser.add_argument(
-    "-r",
-    "--carving",
-    help="Perform file carving for files in unallocated space",
-    action="store_const",
-    const=True,
-    default=False,
-)
-parser.add_argument(
     "-S",
     "--splunk",
     help="Output data and index into local Splunk instance",
@@ -236,14 +233,6 @@ parser.add_argument(
     default=False,
 )
 parser.add_argument(
-    "-Y",
-    "--yara",
-    help="Build YARA signatures based on the original images, artefacts and/or files collected",
-    action="store_const",
-    const=True,
-    default=False,
-)
-parser.add_argument(
     "-Z",
     "--archive",
     help="Archive raw data after processing",
@@ -275,7 +264,6 @@ process = args.process
 superquick = args.superquick
 quick = args.quick
 recover = args.recover
-carving = args.carving
 splunk = args.splunk
 symlinks = args.symlinks
 timeline = args.timeline
@@ -356,7 +344,7 @@ quotes = [
     "I think there is more to this hobbit, than meets the eye.",
     "You are full of surprises Master Baggins.",
     "One ring to rule them all, one ring to find them.\n     One ring to bring them all, and in the darkness bind them.",
-    "The world is changed.\n     I feel it in the water. I feel it in the earth.\n     I smell it in the air.",
+    "The world is changed.\n     I feel it in the water.\n     I feel it in the earth.\n     I smell it in the air.",
     "Who knows? Have patience. Go where you must go, and hope!",
     "All we have to decide is what to do with the time that is given us.",
     "Deeds will not be less valiant because they are unpraised.",
@@ -415,6 +403,7 @@ asciitext = [
     "\n\n        \033[1;36mWelcome to Minas Tirith\n\n\n      |||            _.'   _      _.-. |        | |--\n     \\|||         _.'    -    _.-'  _|-|       -| |__\n      ||;-,    _.'   '-  _.-'' _.-''|  |-'      | `._\n     -'| / \\_,' _    _.-'   _.' |   |  |    -|  |\n     ----|,`   |  _.'   _.-' | ,| ,'| _| |      |_   \n        _:  _   ,'   .-'    _|/ \\ | | -|  _|_   | '\n       | |    ,'  .-'     , )|)-( |_|  |-       |    -\n     -   |  ,'  ,'(   `  /_\\||`.'   |- |   -|_  |\n     ___-| /  ,'   )     `.'||.-| _ | ||        | '-'\n     __( |;  /    / ,-    | ||  |/ \\|_ | _|    -|    \n       | :  ; ,-.-)       | ||  || ||  |   |_   |    _\n      _| | :/` _..\\  `-.  | ||__||_|;--;--------:  ,'`\n       | | |,-'  _/       |,-/\\_|  /__/__________\\::::\n       |-| |   ,' \\, ` ___|||||-|  |  |  _|_     ||___\n     _ | | | ,'   (   ;   :'''' /| ||_|       _  ||---\n     - | | |/     ;  /     :   : | |  |   _|_    ||---\n       | | |      |,'______|-..| | |_||      |  _||---\n       | | |      ||_      |   | | |_ |  -      -|----   \n     _|| | |      ;|-:  _  |   | |,|- |-   _|  _ |--,'\n       | | |______\\| |,' `.|`-.| |:|  | _|    |  |,','\n       |-| | ~   ~|| ||__|||! !| | ;--;----__---,','|\n       | | |,._,~_|:.||-'|||! !| |/__/____/\\_\\,','|\\|\n     -.| | ;     _.-'|| - ||`.!| ||  |    ||_|,'| | |,\n      || ;'|_,-''    -    - `.`| ||  | ___|| ||\\| |,',\n     , | | |    -     -     -  ) '|__||\\  || | \\|,','\n       ; | | -     -      -      |\\    \\\\ || |_,',' \n      /| | ;    -     -           \\\\    \\\\|| |','\n     / | |/                        \\\\    \\|| |' SSt\033[1;m",
     "\n\n        \033[1;36mWelcome to Bag End\n\n\n                        . .:.:.:.:. .:\\     /:. .:.:.:.:. ,\n                   .-._  `..:.:. . .:.:`- -':.:. . .:.:.,'  _.-.\n                  .:.:.`-._`-._..-''_...---..._``-.._.-'_.-'.:.:.\n               .:.:. . .:_.`' _..-''._________,``-.._ `.._:. . .:.:.\n            .:.:. . . ,-'_.-''      ||_-(O)-_||      ``-._`-. . . .:.:.\n           .:. . . .,'_.'           '---------'           `._`.. . . .:.\n         :.:. . . ,','               _________               `.`. . . .:.:\n        `.:.:. .,','            _.-''_________``-._            `._.     _.'\n      -._  `._./ /            ,'_.-'' ,       ``-._`.          ,' '`:..'  _.-\n     .:.:`-.._' /           ,','                   `.`.       /'  '  \\\\.-':.:.\n     :.:. . ./ /          ,','               ,       `.`.    / '  '  '\\\\. .:.: \n    :.:. . ./ /          / /    ,                      \\ \\  :  '  '  ' \\\\. .:.:\n    .:. . ./ /          / /            ,          ,     \\ \\ :  '  '  ' '::. .:.\n    :. . .: :    o     / /                               \\ ;'  '  '  ' ':: . .:\n    .:. . | |   /_\\   : :     ,                      ,    : '  '  '  ' ' :: .:.\n    :. . .| |  ((<))  | |,          ,       ,             |\\'__',-._.' ' ||. .:\n    .:.:. | |   `-'   | |---....____                      | ,---\\/--/  ' ||:.:.\n    ------| |         : :    ,.     ```--..._   ,         |''  '  '  ' ' ||----\n    _...--. |  ,       \\ \\             ,.    `-._     ,  /: '  '  '  ' ' ;;..._\n    :.:. .| | -O-       \\ \\    ,.                `._    / /:'  '  '  ' ':: .:.:\n    .:. . | |_(`__       \\ \\                        `. / / :'  '  '  ' ';;. .:.\n    :. . .<' (_)  `>      `.`.          ,.    ,.     ,','   \\  '  '  ' ;;. . .:\n    .:. . |):-.--'(         `.`-._  ,.           _,-','      \\ '  '  '//| . .:.\n    :. . .;)()(__)(___________`-._`-.._______..-'_.-'_________\\'  '  //_:. . .:\n    .:.:,' \\/\\/--\\/--------------------------------------------`._',;'`. `.:.:.\n    :.,' ,' ,'  ,'  /   /   /   ,-------------------.   \\   \\   \\  `. `.`. `..:\n    ,' ,'  '   /   /   /   /   //                   \\\\   \\   \\   \\   \\  ` `.SSt\033[1;m",
     "\n\n\n\n\n                                                \033[1;36m_______________________\n       _______________________-------------------                       `\\\n     /:--__                                                              |\n    ||< > |                                   ___________________________/\n    | \\__/_________________-------------------                         |\n    |                                                                  |\n     |                       THE LORD OF THE RINGS                      |\n     |                                                                  |\n     |      Three Rings for the Elven-kings under the sky,              |\n      |        Seven for the Dwarf-lords in their halls of stone,        |\n      |      Nine for Mortal Men doomed to die.                          |\n      |        One for the Dark Lord on his dark throne,                  |\n      |      In the Land of Mordor where the Shadows lie.                 |\n       |       One Ring to rule them all, One Ring to find them,          |\n       |       One Ring to bring them all and in the darkness bind them   |\n       |     In the Land of Mordor where the Shadows lie.                |\n      |                                              ____________________|_\n      |  ___________________-------------------------                      `\\\n      |/`--_                                                                 |\n      ||[ ]||                                            ___________________/\n       \\===/___________________--------------------------\033[1;m",
+    "\n\n    ||                                ..........',:clooddddoolc:;''...   .......  .....'..'''||\n    ||                             ........'',;:clodxkkkkkkkkkxoc;,'............   ......''''||\n    ||                         ......',;,,;;:lddxxdxxxxxkkkkOOOkxdl:;'....... ...  ..........||\n    ||                      .....',;;;::;;:cloddoooodxxkkOOOOOOOOkkkxdolc;'...     ..........||\n    ||                  .....''',;;;;::c::;:ccllllodxxxxxxk0K000000OOkkkkxo:,'..     ........||\n    ||                ........',;,,;,,;:llclooooddxkkkxolokkxdk0Oxdxxdodddl:::,....  ........||\n    ||                ..........'''',,;;:cllddxkkOOOO00xox000KXX0xoolcccodocc:,'''......''''.||\n    ||               ...''....'''''.',;:coddxxkOOOOOOO0OxkO00K00Okdl:,'',;,';:cc;'.''....''..||\n    ||              ..........''''''';:cloxxkkkOOOOOO000KXXKKK00Okdol:,'..''...;:c'...''.....||\n    ||            ...'''''....',,;;;;;:cloxkkOOOOOOOO000KKKKKK00Okdooc;'...''....';,. .'''...||\n    ||            ..',,,,;;;;;;:::::::ccldxkkOOOOOOOO00KKKKKKK0OOxolc:;'....'.......'..','...||\n    ||            ..',,,;;;;;:::::::::clodkkOOOOOOOO0000KKKKKK00Okdl:;,'........... .........||\n    ||             .',;;;;::::::::::::cldxkkOOOOO0000000KKKXXKKKK0kdc;,''. ........    .....'||\n    ||             .',;;;:ccllcc::::cclodxkkkkkkOO000OOOO0KKKKKKKK0Oxc,'..   .......  ... .;;||\n    ||             ..,,;;:cllllc:::ccllodxxxxxxxxxxxdodxkO0KKKXKKKK0Oo;...    ......';:oo;...||\n    ||             ..',;;:cllllc::cclllooddollc:::cldxOO0000KKKKKKKK0x:'..    .....,codxkx:. ||\n    ||             .',,;;::cclll::clllllc::,'''',:oxOO0000000KKKKKKKKkl,...   .....,;;:okOd'.||\n    ||             ...',;::::clcc:::c:;,''..'''',,;:cldxkO0000KKKXKKKOo:...   ...'.,,;:cdkk;.||\n    ||            .......',;;:::::::::;;;,'''.......,:ccldxkO0KKXXXK0Odc'.    ...',;;:cldOk;.||\n    ||             .....  .....';clddxdlc;,,'',,,'',:loxOOOO00KKXXXKOkdc'........',,;;:lxOd' ||\n    ||              ...    .....;cok00Oxdoc;,,,,,,;:cldkO0000KKKKXK0Okoc,......'..',,;:okOc. ||\n    ||                ......','';ldOKKK0Okoc::::::ccloxkO0000KXXXKKOkdo:,..',..'..',;:lxko.. ||\n    ||                 ....'',',:lx0XXXXKK0kxoccccloodkOOOOO00KKKK0kxdl:'...'.....';ldkko'  .||\n    ||                 ..''',,,;cxOKXXXXXXXK0OxxdoooodxkkOOO000000Okxdl;'.........,:dOOd'   .||\n    ||                 ...',,,,:ok0KXXXXKXXXK000OkkkxdxxkkOOO00OOOOkxoc;'.........';oko'     ||\n    ||                 .,,,,,,;cok0KKKXK00000OOOOOOOOkkkkOOOOOOOOOkxdoc;,.........';l:..     ||\n    ||                 .,,,,,,;cdO000KKK00K0OdddxkkOOOOOOOO000OOOkxddl:;'...... ..';c;.      ||\n    ||                 .',,,,,,:lxkOxxxdoxO0OxllloxkkOOOO00000OOOkxdol:;'.....  ..':o:.      ||\n    ||                  .',,,,''',:lllllccdkOxdoooodxkOOO00000OOkxdolc:,'.....  ..,cxc.      ||\n    ||                   .''',,'...,:cdkxxkkkkxxxxddxkOO00000OOOkxdolc;,......  ..,oko'      ||\n    ||                   ...',,,''';::ldxxxxxkkkkkkkxxxkOO000OOOkxolc:;'......  ..;xkd,      ||\n    ||                    ..'',,'',:c;:ldxxxxkkOOkkkkkxxkOOOOOkkkdlc:;,'.....   ..:xkk:.     ||\n    ||                     ..''',,,:c::cllloooddddoodxkkkOOOOkkxxol:;,,'''...   ..ckOkl.   ..||\n    ||                      .''',,,,,,,;;;::cloolllcclodxkOOOkxddlc:;,,,;,..    ..:xxdc'..;ld||\n    ||                      ..''..''',;:cloodxkkkkkkxdooodxxkxddolc;,,;:c:..    .';lollodkkkx||\n    ||                       ..'''',,;;:cclloooddddxxddooodxxdddol:;;::clc,.  ...';ldkkkkkxoc||\n    ||                       .....',,;;;;;;::cccclloooooodxxxxdolc:::cclc:;......'coxkOkxoc;'||\n    ||                    ...''....',,,;;;;::clccclllllloodxxdolc::::c:::;;'.....,ldxxxdl:,..||\n    || .':lcc;,''',,;:cllloddxko:'..'',;::ccloddddoodoooooooolc:;;;;;;,;;;;,.....:oddooc;,.. ||\n    ||.:xO0KKK00OOOOOOOOOOkkkkO00Odc,',;:cccloddxxxxddooolcc:;;;,,,'',;:::cc:...'collcc;'..  ||\n    ||'lxO0KKKKKK0000000000OkOO00000kl:;;::::cllooddddoolc:;;,,,''',,;::clool,...;:cc:;'.. ..||\n    ||;lxO0KXXXXKKKK0000000OOO0KXKOkOOkdoc;;;;:::cclllc:::;,,''.',;::::cllooc.   .'::,...... ||\n    ||:ok0KKKKKKKKKKKKKKKK0OO0KXXNXOxdkOOkdlc;;,,,,,,,,,,,'''..',:ccccclooo:..    .,'......  ||\n    ||cdkO00KKKKKKKKKK0000OO0KXKKXNX0dldxkkOkxl:,.............',:cccclool:,..'.  .''......   ||\n    ||cdxkOOOO0KKKKKKK0O0K0kkKXXK00XNKd::clodxoc,.............':cccllooo;. ......,,'......   ||\n    ||coxxk00OkxxxxkkOOO0KK0kk0XXKOOKKKxlcloddol;. .......'''',:ccloooooc'.......'''.....    ||\n    ||loodk000Oxc'',,,cdk0KXKkk0KX0xxOO00kdol:'...........'''':ccloooololc;'....''......    .||\n    ||loodxOOxl,.......,cdO0K0kxOKXOooxO00x;... ...........'',cclloollllllc:..'''..'..       ||",
 ]
 
 
@@ -442,7 +431,6 @@ if __name__ == "__main__":
         superquick,
         quick,
         recover,
-        carving,
         splunk,
         symlinks,
         timeline,

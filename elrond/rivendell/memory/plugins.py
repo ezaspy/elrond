@@ -14,9 +14,7 @@ from rivendell.memory.volatility3.plugins.windows import windows_vol3
 
 def use_plugins(output_directory, artefact, volver, memext, mempath, profile, plugin):
     if not os.path.exists(output_directory + mempath + "/memory_" + plugin + ".json"):
-        with open(
-            output_directory + mempath + "/memory_" + plugin + ".json", "w"
-        ) as voljson:
+        with open(output_directory + mempath + "/" + plugin + ".json", "w") as voljson:
             (
                 jsondict,
                 voldict,

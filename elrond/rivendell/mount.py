@@ -9,6 +9,7 @@ import time
 from datetime import datetime
 
 from rivendell.audit import write_audit_log_entry
+from rivendell.identify import identify_disk_image
 
 
 def unmount_images(elrond_mount, ewf_mount):
@@ -62,6 +63,25 @@ def mount_images(
     quotes,
     removeimgs,
 ):
+    def apfs_error():
+        if (
+            input(
+                "  apfs-fuse and associated libraries are not installed. This is required for macOS disk images.\n   Continue? Y/n [Y] "
+            )
+            == "n"
+        ):
+            print(
+                "\n  Please run https://github.com/ezaspy/elrond/elrond/tools/scripts/apfs-fuse.sh and try again.\n\n"
+            )
+            if os.path.exists("/usr/local/bin/apfs"):
+                shutil.rmtree("/usr/local/bin/apfs")
+            else:
+                pass
+            sys.exit()
+        else:
+            apfs = ""
+        return apfs
+
     def collect_ewfinfo(path, mpath):
         ewfinfo = list(
             re.findall(
@@ -107,7 +127,7 @@ def mount_images(
         )
         os.chdir(cwd)
         conelrond = input(
-            "    Typically, the --information flag is used before forensic analysis commences.\n     Do you want to continue with the forensics analysis now? Y/n [Y] "
+            "    Typically, the --information flag is used before forensic analysis commences.\n     Do you want to continue with the forensic analysis? Y/n [Y] "
         )
         if conelrond == "n":
             unmount_images(elrond_mount, ewf_mount)
@@ -116,26 +136,7 @@ def mount_images(
         else:
             pass
 
-    def mount_vmdk_image(mpath, mntpath, f, allimgs):
-        def apfs_error():
-            if (
-                input(
-                    "  apfs-fuse and associated libraries are not installed. This is required for macOS disk images.\n   Continue? Y/n [Y] "
-                )
-                == "n"
-            ):
-                print(
-                    "\n  Please run https://github.com/ezaspy/elrond/elrond/tools/scripts/apfs-fuse.sh and try again.\n\n"
-                )
-                if os.path.exists("/usr/local/bin/apfs"):
-                    shutil.rmtree("/usr/local/bin/apfs")
-                else:
-                    pass
-                sys.exit()
-            else:
-                apfs = ""
-            return apfs
-
+    def mount_vmdk_image(verbosity, output_directory, mpath, mntpath, f, allimgs):
         apfsexists = str(
             subprocess.Popen(
                 [
@@ -197,8 +198,11 @@ def mount_images(
                     )
                     == "b''"
                 ):
+                    disk_image = identify_disk_image(
+                        verbosity, output_directory, f, mntpath
+                    )
+                    allimgs[disk_image] = mntpath
                     print("   Mounted '{}' successfully at '{}'".format(f, mntpath))
-                    allimgs[f] = mntpath
                 elif (
                     str(
                         subprocess.Popen(
@@ -218,8 +222,11 @@ def mount_images(
                     )
                     == "b''"
                 ):
+                    disk_image = identify_disk_image(
+                        verbosity, output_directory, f, mntpath
+                    )
+                    allimgs[disk_image] = mntpath
                     print("   Mounted '{}' successfully at '{}'".format(f, mntpath))
-                    allimgs[f] = mntpath
                 else:
                     print(
                         "   An error occured when mounting '{}'.\n    Perhaps this is a macOS-based image and requires apfs-fuse? Visit https://github.com/ezaspy/apfs-fuse and try again.\n   If this does not work, the disk may not be supported and/or may be corrupt? Feel free to raise an issue via https://github.com/ezaspy/elrond/issues".format(
@@ -244,8 +251,11 @@ def mount_images(
                     else:
                         pass
             else:
+                disk_image = identify_disk_image(
+                    verbosity, output_directory, f, mntpath
+                )
+                allimgs[disk_image] = mntpath
                 print("   Mounted '{}' successfully at '{}'".format(f, mntpath))
-                allimgs[f] = mntpath
         else:
             pass
 
@@ -288,7 +298,7 @@ def mount_images(
                     os.makedirs(ewf_mount[0])
                 except:
                     print(
-                        "\n    An error occured creating the '{}' directory for '{}'.\n    This scipt needs to be run as 'root' please try again...\n\n".format(
+                        "\n    An error occured creating the '{}' directory for '{}'.\n    This scipt needs to be run as 'root', please try again...\n\n".format(
                             ewf_mount[0], f.split("::")[0]
                         )
                     )
@@ -317,7 +327,7 @@ def mount_images(
                 )
             else:
                 pass
-            mntpath, mpath, err = (
+            mntpath, mpath, _ = (
                 elrond_mount[0],
                 ewf_mount[0],
                 subprocess.Popen(
@@ -327,10 +337,16 @@ def mount_images(
                 ).communicate()[1],
             )
             if imageinfo:
-                collect_ewfinfo(path, mpath)
+                try:
+                    collect_ewfinfo(path, mpath)
+                except:
+                    print(
+                        "  -> Information for '{}' could not be obtained".format(path)
+                    )
+                elrond_mount.pop(0)
+                ewf_mount.pop(0)
             else:
                 pass
-            allimgs[f] = mntpath
             mounterr = str(
                 subprocess.Popen(
                     [
@@ -345,10 +361,12 @@ def mount_images(
                 ).communicate()[1]
             )
             if mounterr == "b''":
-                if verbosity != "":
-                    print("   Mounted '{}' successfully at '{}'".format(f, mntpath))
-                else:
-                    pass
+                disk_image = identify_disk_image(
+                    verbosity, output_directory, f, mntpath
+                )
+                allimgs[disk_image] = mntpath
+                print("   Mounted '{}' successfully at '{}'".format(f, mntpath))
+                allimgs[f] = mntpath
                 if vss:
                     if verbosity != "":
                         print(
@@ -427,43 +445,54 @@ def mount_images(
                 "unknown filesystem type 'apfs'" in mounterr
                 or "wrong fs type" in mounterr
             ):
-                apfs = str(
-                    subprocess.Popen(
-                        [
-                            "/usr/local/bin/apfs-fuse/build/./apfs-fuse",
-                            "-o",
-                            "allow_other",
-                            mpath + "/ewf1",
-                            mntpath,
-                        ],
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
-                    ).communicate()[1]
-                )
-                if apfs == "b''":
-                    if verbosity != "":
-                        print("   Mounted '{}' successfully at '{}'".format(f, mntpath))
-                    else:
-                        pass
-                elif "mountpoint is not empty" in apfs:
-                    pass
-                else:
-                    if (
-                        input(
-                            "  apfs-fuse and associated libraries are not installed. This is required for macOS disk images.\n   Continue? Y/n [Y] "
-                        )
-                        == "n"
-                    ):
-                        print(
-                            "\n  Please visit https://github.com/ezaspy/apfs-fuse and try again.\n\n"
-                        )
-                        if os.path.exists("/usr/local/bin/apfs"):
-                            shutil.rmtree("/usr/local/bin/apfs")
+                try:
+                    apfs = str(
+                        subprocess.Popen(
+                            [
+                                "/usr/local/bin/apfs-fuse/build/./apfs-fuse",
+                                "-o",
+                                "allow_other",
+                                mpath + "/ewf1",
+                                mntpath,
+                            ],
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                        ).communicate()[1]
+                    )
+                    if apfs == "b''":
+                        if verbosity != "":
+                            disk_image = identify_disk_image(
+                                verbosity, output_directory, f, mntpath
+                            )
+                            allimgs[disk_image] = mntpath
+                            print(
+                                "   Mounted '{}' successfully at '{}'".format(
+                                    f, mntpath
+                                )
+                            )
                         else:
                             pass
-                        sys.exit()
+                    elif "mountpoint is not empty" in apfs:
+                        pass
                     else:
-                        apfs = ""
+                        if (
+                            input(
+                                "  apfs-fuse and associated libraries are not installed. This is required for macOS disk images.\n   Continue? Y/n [Y] "
+                            )
+                            == "n"
+                        ):
+                            print(
+                                "\n  Please visit https://github.com/ezaspy/apfs-fuse and try again.\n\n"
+                            )
+                            if os.path.exists("/usr/local/bin/apfs"):
+                                shutil.rmtree("/usr/local/bin/apfs")
+                            else:
+                                pass
+                            sys.exit()
+                        else:
+                            apfs = ""
+                except:
+                    apfs = apfs_error()
             elif "is already mounted." in mounterr:
                 pass
             else:
@@ -514,7 +543,9 @@ def mount_images(
                     "b''",
                 )
             if "DOS/MBR boot sector" in imgformat and f.endswith(".dd"):
-                mount_vmdk_image(mpath, mntpath, f, allimgs)
+                mount_vmdk_image(
+                    verbosity, output_directory, mpath, mntpath, f, allimgs
+                )
             elif "DOS/MBR boot sector" in imgformat and f.endswith(".raw"):
                 if auto != True:
                     vmdkow = input(
@@ -525,11 +556,18 @@ def mount_images(
                 else:
                     vmdkow = "n"
                 if vmdkow != "n":
-                    os.remove(mpath + ".raw")
+                    if os.path.exists(mpath + ".raw"):
+                        os.remove(mpath + ".raw")
+                    elif os.path.exists(mpath):
+                        os.remove(mpath)
+                    else:
+                        pass
                     doVMDKConvert(mpath)
                 else:
                     pass
-                mount_vmdk_image(mpath, mntpath, f, allimgs)
+                mount_vmdk_image(
+                    verbosity, output_directory, mpath, mntpath, f, allimgs
+                )
             else:
                 if not os.path.exists(mpath + ".raw"):
                     print(
@@ -549,7 +587,9 @@ def mount_images(
                         doVMDKConvert(mpath)
                     else:
                         pass
-                mount_vmdk_image(mpath + ".raw", mntpath, f, allimgs)
+                mount_vmdk_image(
+                    verbosity, output_directory, mpath + ".raw", mntpath, f, allimgs
+                )
         else:
             print(
                 "\n    '{}' may not be a valid image type.\n    Remember, this scipt needs to be run as 'root' and only accepts E01, VMDK & memory images.\n    If you believe you have a supported image type, it may be corrupted? Feel free to raise an issue via https://github.com/ezaspy/elrond/issues\n    Please try again...\n  ----------------------------------------\n\n".format(
@@ -562,3 +602,4 @@ def mount_images(
                 datetime.now().isoformat().replace("T", " "), stage, mpath
             )
             write_audit_log_entry(verbosity, output_directory, entry, prnt)
+    return allimgs

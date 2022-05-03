@@ -20,7 +20,7 @@ from rivendell.post.splunk.elrond_app.app import build_app_elrond
 from rivendell.post.splunk.ingest import ingest_splunk_data
 
 
-def create_splunk_index(verbosity, output_directory, case, stage, imgs, postpath):
+def create_splunk_index(verbosity, output_directory, case, stage, allimgs, postpath):
     indxq = input(
         "    Index {} already exists, would you like to overwrite the existing index or create a new index? [O]verwrite/[n]ew O ".format(
             case
@@ -36,18 +36,18 @@ def create_splunk_index(verbosity, output_directory, case, stage, imgs, postpath
         )
     else:
         case = input("    Name of new index: ").strip("\n")
-    for img in imgs:
+    for everyimg in allimgs:
         entry, prnt = "{},{},adding {} index {}, {}".format(
             datetime.now().isoformat(),
             stage,
             stage,
             case,
-            img.split("::")[0],
+            everyimg.split("::")[0],
         ), " -> {} -> adding {} index {} for '{}'".format(
             datetime.now().isoformat().replace("T", " "),
             stage,
             case,
-            img.split("::")[0],
+            everyimg.split("::")[0],
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
         splkindx = str(
@@ -66,7 +66,7 @@ def create_splunk_index(verbosity, output_directory, case, stage, imgs, postpath
             if len(splkindx[2:-1]) == 0:
                 print("    Splunk index '{}' already exists...".format(case))
                 create_splunk_index(
-                    verbosity, output_directory, case, stage, imgs, postpath
+                    verbosity, output_directory, case, stage, allimgs, postpath
                 )
             elif splkindx[2:-3] == 'Index "' + case + '" added.':
                 print("    Splunk index created for '{}'...".format(case))
@@ -79,12 +79,12 @@ def create_splunk_index(verbosity, output_directory, case, stage, imgs, postpath
                 )
             )
             create_splunk_index(
-                verbosity, output_directory, case, stage, imgs, postpath
+                verbosity, output_directory, case, stage, allimgs, postpath
             )
 
 
 def install_splunk_stack(
-    verbosity, output_directory, case, stage, imgs, splunkdeb, postpath
+    verbosity, output_directory, case, stage, allimgs, splunkdeb, postpath
 ):
     def doSplunkPSWD(reqpswd, postpath):
         try:
@@ -157,7 +157,7 @@ def install_splunk_stack(
             stderr=subprocess.PIPE,
         ).communicate()[0]
     ):
-        create_splunk_index(verbosity, output_directory, case, stage, imgs, postpath)
+        create_splunk_index(verbosity, output_directory, case, stage, allimgs, postpath)
     else:
         pass
     print("     Splunk installed successfully.")
@@ -165,7 +165,7 @@ def install_splunk_stack(
 
 
 def configure_splunk_stack(
-    verbosity, output_directory, case, imgs, volatility, analysis, timeline
+    verbosity, output_directory, case, allimgs, volatility, analysis, timeline, yara
 ):
     def request_splunk_creds():
         splunkuser, splunkpswd = input(
@@ -185,9 +185,7 @@ def configure_splunk_stack(
             stderr=subprocess.PIPE,
         ).communicate()
         if "Unauthorized" in str(testcreds)[3:-4] and "ERROR" in str(testcreds)[3:-4]:
-            print(
-                "\n     Invalid credentials. Please try again..."
-            )
+            print("\n     Invalid credentials. Please try again...")
             request_splunk_creds()
         else:
             pass
@@ -200,7 +198,7 @@ def configure_splunk_stack(
         stderr=subprocess.PIPE,
     ).communicate()[0]
     postpath = "opt/"
-    imgs = OrderedDict(sorted(imgs.items(), key=lambda x: x[1]))
+    allimgs = OrderedDict(sorted(allimgs.items(), key=lambda x: x[1]))
     pwd = os.getcwd()
     stage = "splunk"
     apps = {
@@ -229,7 +227,7 @@ def configure_splunk_stack(
     else:
         print("     Splunk is not installed, please stand by...")
         splunkuser, splunkpswd = install_splunk_stack(
-            verbosity, output_directory, case, stage, imgs, splunkdeb, postpath
+            verbosity, output_directory, case, stage, allimgs, splunkdeb, postpath
         )
     try:
         subprocess.Popen(
@@ -286,7 +284,7 @@ def configure_splunk_stack(
                 ).communicate()[0]
             ):
                 create_splunk_index(
-                    verbosity, output_directory, case, stage, imgs, postpath
+                    verbosity, output_directory, case, stage, allimgs, postpath
                 )
             else:
                 pass
@@ -318,11 +316,12 @@ def configure_splunk_stack(
         output_directory,
         case,
         stage,
-        imgs,
+        allimgs,
         postpath,
         volatility,
         analysis,
         timeline,
+        yara,
     )
     for appdir, apptar in apps.items():
         if not os.path.isdir("/" + postpath + "splunk/etc/apps/" + appdir):

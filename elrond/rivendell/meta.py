@@ -8,7 +8,7 @@ from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
-def collect_metadata(verbosity, output_directory, img, imgloc, stage, sha256, nsrl):
+def extract_metadata(verbosity, output_directory, img, imgloc, stage, sha256, nsrl):
     for hr, _, hf in os.walk(imgloc):
         for intgfile in hf:
             metaimg, metapath, unknowngoods = (
@@ -21,7 +21,7 @@ def collect_metadata(verbosity, output_directory, img, imgloc, stage, sha256, ns
                     output_directory + metaimg + "/meta.audit", "w"
                 ) as metaimglog:
                     metaimglog.write(
-                        "Filename,SHA256,known-good,Entropy,Filesize,LastWriteTime,LastAccessTime,LastInodeChangeTime,Permissions,FileType\n"
+                        "Filename,SHA256,NSRL,Entropy,Filesize,LastWriteTime,LastAccessTime,LastInodeChangeTime,Permissions,FileType\n"
                     )
             else:
                 pass
@@ -31,7 +31,15 @@ def collect_metadata(verbosity, output_directory, img, imgloc, stage, sha256, ns
                     isize = iinfo.st_size
                 except:
                     pass
-                if isize > 0 and not os.path.islink(metapath):
+                if (
+                    isize > 0
+                    and os.path.isfile(metapath)
+                    and not os.path.islink(metapath)
+                    and (
+                        ("Inbox" not in metapath)
+                        or ("Inbox" in metapath and "." in metapath.split("/")[-1])
+                    )
+                ):
                     if "_vss" in img and "/vss" in metapath:
                         if stage == "processing":
                             metaimage = (
@@ -73,14 +81,14 @@ def collect_metadata(verbosity, output_directory, img, imgloc, stage, sha256, ns
                                 sha256.update(buffer)
                                 buffer = metafile.read(262144)
                             metaentry = metaentry + sha256.hexdigest() + ","
-                        if nsrl:
+                        if nsrl and "/files/" in metapath:
                             entry, prnt = "{},{},{},{}: {}\n".format(
                                 datetime.now().isoformat(),
                                 metaimage.replace("'", ""),
                                 "metadata",
                                 metapath,
                                 metaentry.strip(),
-                            ), " -> {} -> hashing '{}' and comparing against known-goods for {}".format(
+                            ), " -> {} -> calculating SHA256 hash digest for '{}' and comparing against NSRL for {}".format(
                                 datetime.now().isoformat().replace("T", " "),
                                 intgfile,
                                 metaimage,

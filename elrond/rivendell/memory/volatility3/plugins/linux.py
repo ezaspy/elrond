@@ -37,13 +37,13 @@ def linux_vol3(
                     jsonlist.append(json.dumps(jsondict))
     elif (
         plugin == "linux.check_afinfo.Check_afinfo"
-    ):  # outstanding (no artefacts available)
+    ):  # in-development (no artefacts available during testing)
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 pass
     elif (
         plugin == "linux.check_creds.Check_creds"
-    ):  # outstanding (no artefacts available)
+    ):  # in-development (no artefacts available during testing)
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 pass
@@ -78,7 +78,7 @@ def linux_vol3(
                     jsonlist.append(json.dumps(jsondict))
     elif (
         plugin == "linux.check_modules.Check_modules"
-    ):  # outstanding (no artefacts available)
+    ):  # in-development (no artefacts available during testing)
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 pass
@@ -146,7 +146,7 @@ def linux_vol3(
                     jsonlist.append(json.dumps(jsondict))
     elif (
         plugin == "linux.keyboard_notifiers.Keyboard_notifiers"
-    ):  # outstanding (no artefacts available)
+    ):  # in-development (no artefacts available during testing)
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 pass
@@ -261,15 +261,21 @@ def linux_vol3(
                     datalist.append(json.dumps(datadict))
                     jsondict["Data"] = datalist
                     jsonlist.append(json.dumps(jsondict))
-    elif plugin == "linux.proc.Proc":  # outstanding (no artefacts available)
+    elif (
+        plugin == "linux.proc.Proc"
+    ):  # in-development (no artefacts available during testing)
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 pass
-    elif plugin == "linux.pslist.Pslist":  # outstanding (no artefacts available)
+    elif (
+        plugin == "linux.pslist.Pslist"
+    ):  # in-development (no artefacts available during testing)
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 pass
-    elif plugin == "linux.pstree.Pstree":  # outstanding (no artefacts available)
+    elif (
+        plugin == "linux.pstree.Pstree"
+    ):  # in-development (no artefacts available during testing)
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 pass

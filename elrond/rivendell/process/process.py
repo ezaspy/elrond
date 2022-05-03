@@ -5,26 +5,26 @@ import time
 from datetime import datetime
 
 from rivendell.audit import write_audit_log_entry
-from rivendell.processing.browser import process_browser_index
-from rivendell.processing.browser import process_browser
-from rivendell.processing.mac import process_plist
-from rivendell.processing.nix import process_bash_history
-from rivendell.processing.nix import process_email
-from rivendell.processing.nix import process_group
-from rivendell.processing.nix import process_logs
-from rivendell.processing.nix import process_service
-from rivendell.processing.windows import process_evtx
-from rivendell.processing.windows import process_hiberfil
-from rivendell.processing.windows import process_jumplists
-from rivendell.processing.windows import process_mft
-from rivendell.processing.windows import process_outlook
-from rivendell.processing.windows import process_pagefile
-from rivendell.processing.windows import (
+from rivendell.process.browser import process_browser_index
+from rivendell.process.browser import process_browser
+from rivendell.process.mac import process_plist
+from rivendell.process.nix import process_bash_history
+from rivendell.process.nix import process_email
+from rivendell.process.nix import process_group
+from rivendell.process.nix import process_logs
+from rivendell.process.nix import process_service
+from rivendell.process.windows import process_evtx
+from rivendell.process.windows import process_hiberfil
+from rivendell.process.windows import process_jumplists
+from rivendell.process.windows import process_mft
+from rivendell.process.windows import process_outlook
+from rivendell.process.windows import process_pagefile
+from rivendell.process.windows import (
     process_registry_system,
 )
-from rivendell.processing.windows import process_registry_user
-from rivendell.processing.windows import process_shimcache
-from rivendell.processing.windows import process_usb
+from rivendell.process.windows import process_registry_user
+from rivendell.process.windows import process_shimcache
+from rivendell.process.windows import process_usb
 
 
 def process_artefacts(
@@ -168,7 +168,7 @@ def process_artefacts(
             )
         elif (
             artefact.endswith("log") or artefact.endswith("log.1")
-        ) and "/logs/" in artefact:  # missing - year in DateTime field
+        ) and "/logs/" in artefact:  # no year in DateTime field
             process_logs(
                 verbosity,
                 vssimage,
@@ -256,7 +256,7 @@ def identify_pre_process_artefacts(
     volchoice,
     vss,
     memtimeline,
-    carving,
+    collectfiles,
 ):
     def identify_artefacts_to_process(img, process_list):
         for each in process_list:
@@ -449,45 +449,47 @@ def identify_pre_process_artefacts(
                     )
                 else:
                     pass
-            if carving:
-                print(
-                    "\n      \033[1;33m{} carved files for {}...\033[1;m".format(
-                        stage.title(), vssimage
-                    )
-                )
+            if collectfiles:
                 process_list.clear()
                 if os.path.exists(
                     os.path.join(output_directory + img.split("::")[0] + "/carved/")
                 ):
+                    print(
+                        "\n      \033[1;33m{} carved files for {}...\033[1;m".format(
+                            stage.title(), vssimage
+                        )
+                    )
                     process_list.append(
                         os.path.join(output_directory + img.split("::")[0] + "/carved/")
                     )
-                artefacts_list.clear()
-                artefacts_list = identify_artefacts_to_process(img, process_list)
-                for each in artefacts_list:
-                    ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
-                    artefact = str(ia[0][1])
-                    vssmem = process_artefacts(
-                        output_directory,
-                        verbosity,
-                        volatility,
-                        d,
-                        stage,
-                        cwd,
-                        img,
-                        vssimage,
-                        "/",
-                        artefact,
-                        vssmem,
-                        volchoice,
-                        vss,
-                        memtimeline,
+                    artefacts_list.clear()
+                    artefacts_list = identify_artefacts_to_process(img, process_list)
+                    for each in artefacts_list:
+                        ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
+                        artefact = str(ia[0][1])
+                        vssmem = process_artefacts(
+                            output_directory,
+                            verbosity,
+                            volatility,
+                            d,
+                            stage,
+                            cwd,
+                            img,
+                            vssimage,
+                            "/",
+                            artefact,
+                            vssmem,
+                            volchoice,
+                            vss,
+                            memtimeline,
+                        )
+                    print(
+                        "       \033[1;33mProcessed carved files for {}\n\033[1;m".format(
+                            vssimage
+                        )
                     )
-                print(
-                    "       \033[1;33mProcessed carved files for {}\n\033[1;m".format(
-                        vssimage
-                    )
-                )
+                else:
+                    pass
             else:
                 pass
         else:
@@ -502,7 +504,10 @@ def identify_pre_process_artefacts(
         print()
     else:
         pass
-    flags.append("02processing")
+    if "02processing" not in str(flags):
+        flags.append("02processing")
+    else:
+        pass
     os.chdir(cwd)
     print(
         "  ----------------------------------------\n  -> Completed Processing Phase.\n"

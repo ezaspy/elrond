@@ -3,36 +3,65 @@ import os
 from datetime import datetime
 
 from rivendell.audit import write_audit_log_entry
-from rivendell.meta import collect_metadata
-from rivendell.processing.memory import process_memory
+from rivendell.meta import extract_metadata
+from rivendell.process.memory import process_memory
 
 
-def identify_disk_image(allimgs, ot):
-    for i, m in allimgs.items():
-        if "vss" not in i and os.path.isdir(m):
-            if not m.endswith("/"):
-                m = m + "/"
+def identify_disk_image(verbosity, output_directory, disk_image, mount_location):
+    def print_identification(
+        verbosity, output_directory, disk_image, mount_location, osplatform
+    ):
+        print("   Identified platform of '{}' for '{}'.".format(osplatform, disk_image))
+        entry, prnt = "{},{},identified platform,{} ({})\n".format(
+            datetime.now().isoformat(),
+            osplatform,
+            disk_image,
+            mount_location,
+        ), " -> {} -> identified platform of '{}' for '{}'".format(
+            datetime.now().isoformat().replace("T", " "),
+            osplatform,
+            disk_image,
+        )
+        write_audit_log_entry(verbosity, output_directory, entry, prnt)
+
+    if not mount_location.endswith("/"):
+        mount_location = mount_location + "/"
+    else:
+        pass
+    if len(os.listdir(mount_location)) > 0:
+        if "Users" in str(os.listdir(mount_location)) and "MFTMirr" in str(
+            os.listdir(mount_location)
+        ):
+            if "MSOCache" in str(os.listdir(mount_location)):
+                print_identification(
+                    verbosity, output_directory, disk_image, mount_location, "Windows7"
+                )
+                disk_image = disk_image + "::Windows7"
             else:
-                pass
-            if len(os.listdir(m)) > 0:
-                if "Users" in str(os.listdir(m)) and "MFTMirr" in str(os.listdir(m)):
-                    if "MSOCache" in str(os.listdir(m)):
-                        ot[i + "::Windows7"] = m
-                    else:
-                        ot[i + "::Windows10"] = m
-                elif "root" in str(os.listdir(m)) and "media" in str(os.listdir(m)):
-                    ot[i + "::Linux"] = m
-                elif os.path.exists(m + "root"):
-                    if "Applications" in str(os.listdir(m + "root")):
-                        ot[i + "::macOS"] = m + "root"
-                    else:
-                        pass
-                else:
-                    pass
+                print_identification(
+                    verbosity, output_directory, disk_image, mount_location, "Windows10"
+                )
+                disk_image = disk_image + "::Windows10"
+        elif "root" in str(os.listdir(mount_location)) and "media" in str(
+            os.listdir(mount_location)
+        ):
+            print_identification(
+                verbosity, output_directory, disk_image, mount_location, "Linux"
+            )
+            disk_image = disk_image + "::Linux"
+        elif os.path.exists(mount_location + "root"):
+            if "Applications" in str(os.listdir(mount_location + "root")):
+                print_identification(
+                    verbosity, output_directory, disk_image, mount_location, "macOS"
+                )
+                disk_image = disk_image + "::macOS"
             else:
                 pass
         else:
             pass
+    else:
+        pass
+    return disk_image
 
 
 def identify_memory_image(
@@ -61,7 +90,7 @@ def identify_memory_image(
         wtm = "y"
     if wtm != "n":
         if not superquick and not quick and not hashcollected:
-            collect_metadata(
+            extract_metadata(
                 verbosity,
                 output_directory,
                 f,
@@ -77,13 +106,6 @@ def identify_memory_image(
             " -> {} -> created audit log file for '{}'".format(
                 datetime.now().isoformat().replace("T", " "), f
             ),
-        )
-        write_audit_log_entry(verbosity, output_directory, entry, prnt)
-        print("   Identifying '{}', please stand by...".format(f))
-        (entry, prnt,) = "{},{},identifying memory platform,{}\n".format(
-            datetime.now().isoformat(), f, f
-        ), " -> {} -> identifying memory platform for '{}'".format(
-            datetime.now().isoformat().replace("T", " "), f
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
         symbolprofile, vssmem = process_memory(
@@ -109,9 +131,18 @@ def identify_memory_image(
             memoryplatform = "macOS memory"
         else:
             memoryplatform = "Linux memory"
-        ot[f + "::" + memoryplatform] = d
-        print()
-        flags.append("02processing")
+        ot[
+            f
+            + "::"
+            + memoryplatform.replace(" ", "_").split("_")[1]
+            + "_"
+            + memoryplatform.replace(" ", "_").split("_")[0]
+        ] = d
+        if "02processing" not in str(flags):
+            flags.append("02processing")
+        else:
+            pass
         os.chdir(cwd)
     else:
         print("    OK. '{}' will not be processed.\n".format(f))
+    return ot

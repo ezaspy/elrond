@@ -1221,7 +1221,7 @@ def windows_vol(
                     else:
                         pass
                     jsonlist.append(json.dumps(jsondict))
-    elif plugin == "psscan":  # outstanding (no artefacts available)
+    elif plugin == "psscan":  # in-development (no artefacts available during testing)
         pass
     elif plugin == "pstree":
         for plugout in plugoutlist:

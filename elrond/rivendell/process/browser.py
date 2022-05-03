@@ -58,7 +58,7 @@ def process_browser_index(
                 stage,
                 artefact.split("/")[-1],
                 indexuser,
-            ), " -> {} -> {} browser artefact '{}' ({}) for {}".format(
+            ), " -> {} -> {} browser artefact '{}' ({}) from {}".format(
                 datetime.now().isoformat().replace("T", " "),
                 stage,
                 artefact.split("/")[-1],
@@ -341,7 +341,7 @@ def process_browser(
         artefact.split("/")[-1],
         artefact.split("/")[-3],
         artefact.split("/")[-2],
-    ), " -> {} -> {} {} browser artefact '{}' ({}) for {}".format(
+    ), " -> {} -> {} {} browser artefact '{}' ({}) from {}".format(
         datetime.now().isoformat().replace("T", " "),
         stage,
         artefact.split("/")[-2],

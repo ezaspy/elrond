@@ -6,12 +6,12 @@ from datetime import datetime
 
 from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
-from rivendell.processing.memory import process_memory
-from rivendell.processing.extractions.evtx import extract_evtx
-from rivendell.processing.extractions.registry.system import extract_registry_system
-from rivendell.processing.extractions.registry.users import extract_registry_users
-from rivendell.processing.extractions.shimcache import extract_shimcache
-from rivendell.processing.extractions.usb import extract_usb
+from rivendell.process.memory import process_memory
+from rivendell.process.extractions.evtx import extract_evtx
+from rivendell.process.extractions.registry.system import extract_registry_system
+from rivendell.process.extractions.registry.users import extract_registry_users
+from rivendell.process.extractions.shimcache import extract_shimcache
+from rivendell.process.extractions.usb import extract_usb
 
 
 def process_mft(
@@ -33,7 +33,7 @@ def process_mft(
             datetime.now().isoformat(),
             vssimage.replace("'", ""),
             stage,
-        ), " -> {} -> {} '$MFT' for {}".format(
+        ), " -> {} -> {} '$MFT' from {}".format(
             datetime.now().isoformat().replace("T", " "),
             stage,
             vssimage,
@@ -175,7 +175,7 @@ def process_usb(
         pass
     entry, prnt = "{},{},{},'setupapi.dev.log'\n".format(
         datetime.now().isoformat(), vssimage.replace("'", ""), stage
-    ), " -> {} -> {} 'setupapi.dev.log' for {}".format(
+    ), " -> {} -> {} 'setupapi.dev.log' from {}".format(
         datetime.now().isoformat().replace("T", " "),
         stage,
         vssimage,
@@ -248,7 +248,7 @@ def process_registry_system(
             vssimage.replace("'", ""),
             stage,
             artefact.split("/")[-1],
-        ), " -> {} -> {} registry hive '{}' for {}".format(
+        ), " -> {} -> {} registry hive '{}' from {}".format(
             datetime.now().isoformat().replace("T", " "),
             stage,
             artefact.split("/")[-1],
@@ -319,7 +319,7 @@ def process_registry_user(
             stage,
             regart,
             regusr,
-        ), " -> {} -> {} '{}' {} registry hive for {}".format(
+        ), " -> {} -> {} '{}' {} registry hive from {}".format(
             datetime.now().isoformat().replace("T", " "),
             stage,
             regusr,
@@ -450,7 +450,7 @@ def process_jumplists(
                     stage,
                     artefact.split("+")[1],
                     artefact.split("/")[-1].split("+")[0],
-                ), " -> {} -> {} jumplist file '{}' ({}) for {}".format(
+                ), " -> {} -> {} jumplist file '{}' ({}) from {}".format(
                     datetime.now().isoformat().replace("T", " "),
                     stage,
                     artefact.split("+")[1],
@@ -492,7 +492,7 @@ def process_outlook(
         stage,
         artefact.split("/")[-1],
         artefact.split("/")[-2],
-    ), " -> {} -> {} outlook file '{}' ({}) for {}".format(
+    ), " -> {} -> {} outlook file '{}' ({}) from {}".format(
         datetime.now().isoformat().replace("T", " "),
         stage,
         artefact.split("/")[-1],
@@ -605,7 +605,7 @@ def process_pagefile(
             datetime.now().isoformat(),
             vssimage,
             artefact.split("/")[-1],
-        ), " -> {} -> extracting strings from '{}' for {}".format(
+        ), " -> {} -> extracting strings from '{}' from {}".format(
             datetime.now().isoformat().replace("T", " "),
             artefact.split("/")[-1],
             vssimage,
@@ -631,7 +631,7 @@ def process_pagefile(
             datetime.now().isoformat(),
             vssimage,
             artefact.split("/")[-1],
-        ), " -> {} -> extraction of strings from '{}' completed for {}".format(
+        ), " -> {} -> extraction of strings from '{}' completed from {}".format(
             datetime.now().isoformat().replace("T", " "),
             artefact.split("/")[-1],
             vssimage,

@@ -60,8 +60,10 @@ elrond also provides additional features such as image and file hashing, metadat
 
 ## Prerequisites
 
-There are several software package required for using elrond but almost all of them are contained within the SANS SIFT Worksation virtual machine OVA. However, for the software which is not included, I have provided a script ([make.sh](https://github.com/ezaspy/elrond/make.sh)) which installs and configures the additional software which will be potentially required during running elrond (volatility3, apfs-fuse etc.).<br>
+There are several software package required for using elrond but almost all of them are contained within the SANS SIFT Worksation virtual machine OVA. However, for the software which is not included, I have provided a script ([make.sh](https://github.com/ezaspy/elrond/make.sh)) which installs and configures the additional software which will be potentially required during running elrond (volatility3, apfs-fuse etc.).
 To invoke the script, simply follow the instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md#configuration). **Please note, you will only need to run the make.sh script once, per SIFT instance**
+There is also an optional script, should you wish to utilise the NSRL database. To invoke, simply run [nsrl.sh](https://github.com/ezaspy/elrond/tools/scripts/nsrl.sh) from anywhere on the filesystem.
+Depending on your Interent connection speed, this may take a long time, so grab a tea or coffee...<br>
 
 - [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (20.04)
 - See [CONFIG.md](https://github.com/ezaspy/elrond/CONFIG.md) to install and configure the additional software for SIFT 20.04.
@@ -80,7 +82,7 @@ Alternatviely, if you prefer to install the packages yourself...<br>
 
 ## Usage
 
->`python3 elrond.py [-h] [-AaCcDFHIiMoPpQqRrSsTtUVvZ] <case_id> <directory> [<output_directory>] [-K] [<keyword_file>]`
+>`python3 elrond.py [-h] [-AaCcDEGHIiMoPpQqRrSsTtUVvZ] <case_id> <directory> [<output_directory>] -K [<keyword_file>] -Y [<directory_of_yara_rules>] -F [(include|exclude):<file_list>]`
 
 <br>
 
@@ -115,9 +117,17 @@ Automatically, super-quietly Collect, Process and conduct Keyword Searching (wit
 <br>
 
 ### Support
+See the [support file](https://github.com/ezaspy/elrond/SUPPORT.md) for a list of commands and additional third-party tools to help with preparing images or data for elrond.<br><br>
 
-Please note that if you are NOT using the -C flag (i.e. your artefacts have already been collected via another means, or using [gandalf](https://github.com/ezaspy/gandalf)). Please ensure your folder structure is as follows: `<path_to_hostname(s)>`/folder/`<hostname(s)>/<artefacts(s)>`<br><br>
-See the [support file](https://github.com/ezaspy/elrond/SUPPORT.md) for a list of commands and additional third-party tools to help with preparing images or data for elrond.<br><br><br>
+#### Reorganise
+If you are NOT using the `-C` flag (i.e. your artefacts have already been collected via another means, and not using [gandalf](https://github.com/ezaspy/gandalf)). Please ensure your folder structure is as follows: `.../<folder>/<hostname(s)>/<artefacts(s)>`<br>
+You'll want to point elrond at the `folder` location<br><br>
+
+#### IOC Extraction (`-I`)
+If you wish to add more false positive IOCs to prevent unwanted extractions, just append them to the [ioc_exclusions](https://github.com/ezaspy/elrond/blob/main/elrond/tools/ioc_exclusions) file
+<br><br><br>
+
+
 
 <!-- ROADMAP -->
 

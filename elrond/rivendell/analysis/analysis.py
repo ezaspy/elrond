@@ -6,7 +6,7 @@ import time
 from datetime import datetime
 
 from rivendell.audit import write_audit_log_entry
-from rivendell.analysing.ioc_compare import compare_iocs
+from rivendell.analysis.iocs import compare_iocs
 
 
 def analyse_artefacts(
@@ -324,6 +324,10 @@ def analyse_artefacts(
                                             str(file_hdr)[2:10] != "\\x4d\\x5a"
                                             and str(file_hdr)[2:10] != "MZ\\x90\\x"
                                             and str(file_hdr)[2:10] != "MZ\\x00\\x"
+                                            and str(file_hdr)[2:10] != "MZ\\x9f\\x"
+                                            and str(file_hdr)[2:9] != "DCH\\x01"
+                                            and str(file_hdr)[2:9] != "DCD\\x01"
+                                            and str(file_hdr)[2:9] != "DCN\\x01"
                                         )
                                     )
                                     or (
@@ -368,6 +372,7 @@ def analyse_artefacts(
                                     or (
                                         (f.endswith(".jar") or f.endswith(".zip"))
                                         and str(file_hdr)[2:10] != "\\x50\\x4b"
+                                        and str(file_hdr)[2:9] != "PK\\x03"
                                     )
                                     or (
                                         f.endswith(".rar")
@@ -380,6 +385,7 @@ def analyse_artefacts(
                                         (f.endswith(".jpg") or f.endswith(".jpeg"))
                                         and (str(file_hdr)[2:10] != "\\xff\\xd8")
                                         and str(file_hdr)[2:10] != "GIF89a\\x"
+                                        and str(file_hdr)[2:9] != "DCH\\x01"
                                     )
                                     or (
                                         f.endswith(".gif")
@@ -394,6 +400,7 @@ def analyse_artefacts(
                                         and (
                                             str(file_hdr)[2:10] != "\\x89\\x50"
                                             and str(file_hdr)[2:10] != "\\x89PNG\\"
+                                            and str(file_hdr)[2:10] != "\\xff\\xd8"
                                         )
                                     )
                                     or (
@@ -468,7 +475,7 @@ def analyse_artefacts(
                     and ar.endswith("cooked/")
                     and f.endswith("MFT.csv")
                 ):
-                    analyse_disk_images(vssimage, ar, f, anysd, img, stage)
+                    analyse_disk_images(stage, vssimage, ar, f, anysd)
                 else:
                     pass
     else:
@@ -477,12 +484,14 @@ def analyse_artefacts(
         iocfilelist, lineno, previous = [], 0, 0.0
         if verbosity != "":
             print(
-                "     Undertaking IOC extraction for '{}'...".format(img.split("::")[0])
+                "\n    \033[1;33mUndertaking IOC extraction for '{}'...\033[1;m".format(
+                    img.split("::")[0]
+                )
             )
         else:
             pass
         print(
-            "      Assessing readable files to extract IOCs from, for '{}'...".format(
+            "     Assessing readable files to extract IOCs from, for '{}'...".format(
                 img.split("::")[0]
             )
         )
@@ -500,6 +509,25 @@ def analyse_artefacts(
                         pass
                 except:
                     pass
+        if os.path.exists(
+            os.path.join(output_directory, img.split("::")[0], "artefacts")
+        ):
+            for root, _, files in os.walk(
+                os.path.join(output_directory, img.split("::")[0], "artefacts")
+            ):
+                for f in files:
+                    try:
+                        if (
+                            os.stat(os.path.join(root, f)).st_size > 0
+                            and os.stat(os.path.join(root, f)).st_size < 10000000
+                        ):  # 10MB
+                            with open(os.path.join(root, f), "r") as filetest:
+                                filetest.readline()
+                                iocfilelist.append(os.path.join(root, f))
+                        else:
+                            pass
+                    except:
+                        pass
         print("       Done.")
         iocfiles = list(set(iocfilelist))
         if not os.path.exists(anysd):
@@ -514,7 +542,7 @@ def analyse_artefacts(
                 "w",
             ) as ioccsv:
                 ioccsv.write(
-                    "CreationTime,LastAccessTime,LastWriteTime,Filename,IOC,IndicatorType,LineNumber,LineEntry,Resolvable\n"
+                    "CreationTime,LastAccessTime,LastWriteTime,Filename,IOC,IndicatorType,LineNumber,Resolvable\n"
                 )
         else:
             pass
@@ -523,6 +551,7 @@ def analyse_artefacts(
             verbosity,
             img,
             stage,
+            vssimage,
             iocfiles,
             lineno,
             previous,

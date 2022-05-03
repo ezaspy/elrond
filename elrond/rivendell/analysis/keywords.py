@@ -190,72 +190,83 @@ def build_keyword_list(mnt):
     return keywords_target_list
 
 
-def prepare_keywords(verbosity, output_directory, imgs, keywords, stage):
+def prepare_keywords(verbosity, output_directory, auto, imgs, flags, keywords, stage):
     if stage == "mounting":
-        print(
-            "\n\n  -> \033[1;36mCommencing Keyword Searching Phase...\033[1;m\n  ----------------------------------------"
-        )
-        time.sleep(1)
-        for each in imgs:
-            img, mnt = [each, imgs[each]]
-            stage = "keyword searching"
-            if "vss" in img.split("::")[1]:
-                vssimage, vsstext = (
-                    "'"
-                    + img.split("::")[0]
-                    + "' ("
-                    + img.split("::")[1]
-                    .split("_")[1]
-                    .replace("vss", "volume shadow copy #")
-                    + ")",
-                    " ("
-                    + img.split("::")[1]
-                    .split("_")[1]
-                    .replace("vss", "volume shadow copy #")
-                    + ")",
+        if not auto:
+            yes_kw = input(
+                "  Do you wish to conduct Keyword Searching for '{}'? Y/n [Y] ".format(
+                    img.split("::")[0]
                 )
-            else:
-                vssimage, vsstext = "'" + img.split("::")[0] + "'", ""
-            print("    Conducting Keyword Searching for {}...".format(vssimage))
-            entry, prnt = "{},{},{},commenced\n".format(
-                datetime.now().isoformat(), vssimage.replace("'", ""), stage
-            ), " -> {} -> {} commenced for '{}'{}".format(
-                datetime.now().isoformat().replace("T", " "),
-                stage,
-                img.split("::")[0],
-                vsstext,
             )
-            write_audit_log_entry(verbosity, output_directory, entry, prnt)
+        else:
+            pass
+        if auto or yes_kw != "n":
             print(
-                "     Assessing readable files in {} before searching for keywords...".format(
-                    vssimage
+                "\n\n  -> \033[1;36mCommencing Keyword Searching Phase...\033[1;m\n  ----------------------------------------"
+            )
+            time.sleep(1)
+            for each in imgs:
+                img, mnt = [each, imgs[each]]
+                stage = "keyword searching"
+                if "vss" in img.split("::")[1]:
+                    vssimage, vsstext = (
+                        "'"
+                        + img.split("::")[0]
+                        + "' ("
+                        + img.split("::")[1]
+                        .split("_")[1]
+                        .replace("vss", "volume shadow copy #")
+                        + ")",
+                        " ("
+                        + img.split("::")[1]
+                        .split("_")[1]
+                        .replace("vss", "volume shadow copy #")
+                        + ")",
+                    )
+                else:
+                    vssimage, vsstext = "'" + img.split("::")[0] + "'", ""
+                print("    Conducting Keyword Searching for {}...".format(vssimage))
+                entry, prnt = "{},{},{},commenced\n".format(
+                    datetime.now().isoformat(), vssimage.replace("'", ""), stage
+                ), " -> {} -> {} commenced for '{}'{}".format(
+                    datetime.now().isoformat().replace("T", " "),
+                    stage,
+                    img.split("::")[0],
+                    vsstext,
                 )
+                write_audit_log_entry(verbosity, output_directory, entry, prnt)
+                print(
+                    "     Assessing readable files in {} before searching for keywords...".format(
+                        vssimage
+                    )
+                )
+                keywords_target_list = build_keyword_list(mnt)
+                print_done(verbosity)
+                search_keywords(
+                    verbosity,
+                    output_directory,
+                    img,
+                    keywords,
+                    keywords_target_list,
+                    vssimage,
+                    vssimage,
+                )
+                print("  -> Completed Keyword Searching Phase for {}".format(vssimage))
+                entry, prnt = "{},{},{},completed\n".format(
+                    datetime.now().isoformat(),
+                    vssimage.replace("'", ""),
+                    "keyword searching",
+                ), " -> {} -> keyword searching completed for {}".format(
+                    datetime.now().isoformat().replace("T", " "), vssimage
+                )
+                write_audit_log_entry(verbosity, output_directory, entry, prnt)
+                print()
+            print(
+                "  ----------------------------------------\n  -> Completed Keyword Searching Phase.\n"
             )
-            keywords_target_list = build_keyword_list(mnt)
-            print_done(verbosity)
-            search_keywords(
-                verbosity,
-                output_directory,
-                img,
-                keywords,
-                keywords_target_list,
-                vssimage,
-                vssimage,
-            )
-            print("  -> Completed Keyword Searching Phase for {}".format(vssimage))
-            entry, prnt = "{},{},{},completed\n".format(
-                datetime.now().isoformat(),
-                vssimage.replace("'", ""),
-                "keyword searching",
-            ), " -> {} -> keyword searching completed for {}".format(
-                datetime.now().isoformat().replace("T", " "), vssimage
-            )
-            write_audit_log_entry(verbosity, output_directory, entry, prnt)
-            print()
-        print(
-            "  ----------------------------------------\n  -> Completed Keyword Searching Phase.\n"
-        )
-        time.sleep(1)
+            time.sleep(1)
+        else:
+            pass
     else:
         for each in imgs:
             if os.path.exists(
@@ -292,3 +303,7 @@ def prepare_keywords(verbosity, output_directory, imgs, keywords, stage):
                 )
             else:
                 pass
+    if "keyword searching" not in str(flags):
+        flags.append("03keyword searching")
+    else:
+        pass

@@ -5,19 +5,22 @@ from datetime import datetime
 from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
+import time
+
 
 def ingest_splunk_data(
     verbosity,
     output_directory,
     case,
     stage,
-    imgs,
+    allimgs,
     postpath,
     volatility,
     analysis,
     timeline,
+    yara,
 ):
-    for img in imgs:
+    for img in allimgs:
         if "vss" in img.split("::")[1]:
             vssimage, vsstext = "'" + img.split("::")[0] + "' (" + img.split("::")[
                 1
@@ -56,7 +59,7 @@ def ingest_splunk_data(
                 inputsconf.write("\n")
             else:
                 pass
-            if not img.split("::")[-1].endswith("memory"):
+            if not img.split("::")[-1].startswith("memory"):
                 for atftfile in os.listdir(
                     os.path.realpath(output_directory + img.split("::")[0])
                 ):
@@ -256,7 +259,7 @@ def ingest_splunk_data(
                         pass
                 else:
                     pass
-                if analysis:
+                if analysis or yara:
                     for atftroot, atftdirs, atftfiles in os.walk(
                         os.path.realpath(
                             output_directory + img.split("::")[0] + "/analysis/"
@@ -306,7 +309,7 @@ def ingest_splunk_data(
                                 pass
                 else:
                     pass
-            elif img.split("::")[-1].endswith("memory") and "memory_" in str(
+            elif img.split("::")[-1].startswith("memory") and "memory_" in str(
                 os.listdir(os.path.realpath(output_directory + img.split("::")[0]))
             ):
                 inputsconf.write(
@@ -352,21 +355,16 @@ def ingest_splunk_data(
                 or img.split("::")[0].endswith(".e01")
                 or img.split("::")[0].endswith(".VMDK.raw")
                 or img.split("::")[0].endswith(".vmdk.raw")
+                or img.split("::")[0].endswith(".dd.raw")
             ):
                 imgtype = "\ndisk = enabled"
             else:
                 imgtype = "\nmemory = enabled"
-            if img.split("::")[1].startswith("Windows") or img.split("::")[
-                1
-            ].startswith("windows"):
+            if "Windows" in img.split("::")[1]:
                 imgtype = imgtype + "\nWindows = enabled\n\n"
-            elif img.split("::")[1].startswith("Mac") or img.split("::")[1].startswith(
-                "mac"
-            ):
+            elif "mac" in img.split("::")[1] or "Mac" in img.split("::")[1]:
                 imgtype = imgtype + "\nmacOS = enabled\n\n"
-            elif img.split("::")[1].startswith("Linux") or img.split("::")[
-                1
-            ].startswith("linux"):
+            elif "Linux" in img.split("::")[1]:
                 imgtype = imgtype + "\nLinux = enabled\n\n"
             else:
                 pass

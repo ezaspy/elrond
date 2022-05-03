@@ -5,7 +5,7 @@ from datetime import datetime
 
 from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
-from rivendell.collecting.users.linux import linux_users
+from rivendell.collect.users.linux import linux_users
 
 
 def collect_linux_artefacts(
@@ -41,7 +41,7 @@ def collect_linux_artefacts(
                 img.split("::")[0],
                 stage,
                 item,
-            ), " -> {} -> {} '/etc/{}' file for '{}'".format(
+            ), " -> {} -> {} '/etc/{}' file from '{}'".format(
                 datetime.now().isoformat().replace("T", " "),
                 stage,
                 item.split("/")[-1],
@@ -64,7 +64,7 @@ def collect_linux_artefacts(
                 datetime.now().isoformat(),
                 img.split("::")[0],
                 stage,
-            ), " -> {} -> {} '/etc/hosts' for '{}'".format(
+            ), " -> {} -> {} '/etc/hosts' from '{}'".format(
                 datetime.now().isoformat().replace("T", " "),
                 stage,
                 img.split("::")[0],
@@ -87,7 +87,7 @@ def collect_linux_artefacts(
                 img.split("::")[0],
                 stage,
                 item,
-            ), " -> {} -> {} '{}'{} for '{}'".format(
+            ), " -> {} -> {} '{}'{} from '{}'".format(
                 datetime.now().isoformat().replace("T", " "),
                 stage,
                 item,
@@ -131,7 +131,7 @@ def collect_linux_artefacts(
                             img.split("::")[0],
                             stage,
                             each,
-                        ), " -> {} -> {} configuration file '{}'{} for '{}'".format(
+                        ), " -> {} -> {} configuration file '{}'{} from '{}'".format(
                             datetime.now().isoformat().replace("T", " "),
                             stage,
                             each,
@@ -180,7 +180,7 @@ def collect_linux_artefacts(
                         img.split("::")[0],
                         stage,
                         each,
-                    ), " -> {} -> {} log file '{}'{} for '{}'".format(
+                    ), " -> {} -> {} log file '{}'{} from '{}'".format(
                         datetime.now().isoformat().replace("T", " "),
                         stage,
                         each,
@@ -229,7 +229,7 @@ def collect_linux_artefacts(
                             img.split("::")[0],
                             stage,
                             each,
-                        ), " -> {} -> {} service file '{}'{} for '{}'".format(
+                        ), " -> {} -> {} service file '{}'{} from '{}'".format(
                             datetime.now().isoformat().replace("T", " "),
                             stage,
                             each,
@@ -279,7 +279,7 @@ def collect_linux_artefacts(
                             img.split("::")[0],
                             stage,
                             each,
-                        ), " -> {} -> {} job file '{}'{} for '{}'".format(
+                        ), " -> {} -> {} job file '{}'{} from '{}'".format(
                             datetime.now().isoformat().replace("T", " "),
                             stage,
                             each,
@@ -324,7 +324,7 @@ def collect_linux_artefacts(
                             img.split("::")[0],
                             stage,
                             each,
-                        ), " -> {} -> {} temp file '{}'{} for '{}'".format(
+                        ), " -> {} -> {} temp file '{}'{} from '{}'".format(
                             datetime.now().isoformat().replace("T", " "),
                             stage,
                             each,
@@ -353,7 +353,7 @@ def collect_linux_artefacts(
                             img.split("::")[0],
                             stage,
                             each,
-                        ), " -> {} -> {} /tmp directory '{}'{} for '{}'".format(
+                        ), " -> {} -> {} /tmp directory '{}'{} from '{}'".format(
                             datetime.now().isoformat().replace("T", " "),
                             stage,
                             each,
@@ -397,7 +397,7 @@ def collect_linux_artefacts(
                     img.split("::")[0],
                     stage,
                     item.split("/")[-1],
-                ), " -> {} -> {} '{}'{} bash files for '{}'".format(
+                ), " -> {} -> {} '{}'{} bash files from '{}'".format(
                     datetime.now().isoformat().replace("T", " "),
                     stage,
                     item.split("/")[-1],
@@ -446,7 +446,7 @@ def collect_linux_artefacts(
                                 img.split("::")[0],
                                 stage,
                                 keytype.split(".key")[1],
-                            ), " -> {} -> {} {} for profile 'root'{} for '{}'".format(
+                            ), " -> {} -> {} {} for profile 'root'{} from '{}'".format(
                                 datetime.now().isoformat().replace("T", " "),
                                 stage,
                                 keytype.split(".key")[1],
@@ -508,7 +508,7 @@ def collect_linux_artefacts(
                                 img.split("::")[0],
                                 stage,
                                 each,
-                            ), " -> {} -> {} '{}'{} for '{}'".format(
+                            ), " -> {} -> {} '{}'{} from '{}'".format(
                                 datetime.now().isoformat().replace("T", " "),
                                 stage,
                                 each,

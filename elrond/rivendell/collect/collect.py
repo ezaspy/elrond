@@ -6,16 +6,15 @@ import time
 from collections import OrderedDict
 from datetime import datetime
 
-from rivendell.analysing.keywords import prepare_keywords
+from rivendell.analysis.keywords import prepare_keywords
 from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
-from rivendell.collecting.recover import carve_files
-from rivendell.collecting.recover import collect_recover_files
-from rivendell.collecting.linux import collect_linux_artefacts
-from rivendell.collecting.mac import collect_mac_artefacts
-from rivendell.collecting.windows import collect_windows_artefacts
-from rivendell.meta import collect_metadata
-from rivendell.processing.memory import process_memory
+from rivendell.collect.linux import collect_linux_artefacts
+from rivendell.collect.mac import collect_mac_artefacts
+from rivendell.collect.files.select import select_files
+from rivendell.collect.windows import collect_windows_artefacts
+from rivendell.meta import extract_metadata
+from rivendell.process.memory import process_memory
 
 
 def collect_artefacts(
@@ -29,7 +28,6 @@ def collect_artefacts(
     superquick,
     quick,
     recover,
-    carving,
     symlinks,
     userprofiles,
     verbose,
@@ -48,7 +46,7 @@ def collect_artefacts(
     memtimeline,
     stage,
 ):
-    shdws = []
+    volume_shadow_copies = []
     if not volatility and len(imgs) <= 0:
         print(
             "  ----------------------------------------\n  No disk images exist in the provided directory.\n   If you are confident there are valid images in this directory, maybe try with the Memory flag (-M)?\n   Otherwise review the path location and ensure the images are supported by elrond.\n  ----------------------------------------\n\n\n"
@@ -62,7 +60,7 @@ def collect_artefacts(
                         for eachvss in sorted(
                             os.listdir("/mnt/shadow_mount/" + shdw + "/")
                         ):
-                            shdws.append(
+                            volume_shadow_copies.append(
                                 image
                                 + "||"
                                 + "/mnt/shadow_mount/"
@@ -72,7 +70,7 @@ def collect_artefacts(
                             )
                     else:
                         pass
-            for everyshdw in shdws:
+            for everyshdw in volume_shadow_copies:
                 imgs[
                     everyshdw.split("||")[0]
                     + "_"
@@ -82,14 +80,17 @@ def collect_artefacts(
             pass
         imgs = OrderedDict(sorted(imgs.items(), key=lambda x: x[1]))
         if nsrl:
-            nsrlfilepath = "/opt/elrond/elrond/tools/rds_modernm/NSRLFile.txt"
-            if not os.path.exists(nsrlfilepath):
-                print(
-                    "\n     It looks like {} doesn't exist.\n     If you wish to utilise the NSRL hash database, re-run the elrond/tools/scripts/init.sh script and try again.\n\n".format(
-                        nsrlfilepath
-                    )
+            if not os.path.exists("/opt/elrond/elrond/tools/rds_modernm/NSRLFile.txt"):
+                nsrlexit = input(
+                    "\n     It doesn't look like '/opt/elrond/elrond/tools/rds_modernm/NSRLFile.txt' exists.\n      Do you want to continue? Y/n [Y] "
                 )
-                sys.exit()
+                if nsrlexit == "n":
+                    print(
+                        "     If you wish to utilise the NSRL hash database, run the '.../elrond/tools/scripts/nsrl.sh' script, before running elrond and try again.\n\n"
+                    )
+                    sys.exit()
+                else:
+                    pass
             else:
                 pass
         else:
@@ -132,7 +133,7 @@ def collect_artefacts(
                     img.split("::")[0],
                 )
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
-                collect_metadata(
+                extract_metadata(
                     verbosity, output_directory, img, mnt, stage, sha256, nsrl
                 )
                 entry, prnt = "{},{},{},completed\n".format(
@@ -283,9 +284,9 @@ def collect_artefacts(
         else:
             pass
         if keywords:
-            prepare_keywords(verbosity, output_directory, imgs, keywords, stage)
-            flags.append("03keyword searching")
-            time.sleep(1)
+            prepare_keywords(
+                verbosity, output_directory, auto, flags, imgs, keywords, stage
+            )
         else:
             pass
     imgs, stage = (
@@ -322,7 +323,7 @@ def collect_artefacts(
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
         artefact_directory = output_directory + img.split("::")[0] + "/artefacts"
-        if volatility and img.split("::")[1].endswith("memory"):
+        if volatility and img.split("::")[1].startswith("memory"):
             if verbosity != "":
                 print("     Identifying profile for {}...".format(vssimage))
             else:
@@ -348,8 +349,7 @@ def collect_artefacts(
             except:
                 pass
             for system_artefact in system_artefacts:  # Collection
-                item, dest, vsstext = (
-                    mnt + system_artefact,
+                dest, vsstext = (
                     artefact_directory + "/raw/",
                     "",
                 )
@@ -358,6 +358,7 @@ def collect_artefacts(
                     and img.split("::")[1].startswith("Windows")
                     and "memory" not in img.split("::")[1]
                 ):  # Windows Collection
+                    item = mnt + system_artefact
                     if "vss" in item:
                         dest, vsstext = (
                             artefact_directory + "/raw/" + item.split("/")[4] + "/",
@@ -392,6 +393,7 @@ def collect_artefacts(
                     and img.split("::")[1] == "macOS"
                     and "memory" not in img.split("::")[1]
                 ):  # macOS Collection
+                    item = mnt + "/root" + system_artefact
                     if not os.path.exists(dest):
                         os.makedirs(dest)
                     else:
@@ -401,7 +403,7 @@ def collect_artefacts(
                             dest,
                             img,
                             item,
-                            mnt,
+                            mnt + "/root",
                             output_directory,
                             sha256,
                             stage,
@@ -419,6 +421,7 @@ def collect_artefacts(
                     and img.split("::")[1] == "Linux"
                     and "memory" not in img.split("::")[1]
                 ):  # Linux Collection
+                    item = mnt + system_artefact
                     if not os.path.exists(dest):
                         os.makedirs(dest)
                     else:
@@ -442,12 +445,28 @@ def collect_artefacts(
                         pass
                 else:
                     pass
-        if collectfiles or recover:
-            collect_recover_files(output_directory, verbosity, mnt, img, vssimage, collectfiles, recover, auto)
+        if not auto:
+            yes_collect_recover = input(
+                "  Do you wish to collect, recover and/or carve files from '{}'? Y/n [Y] ".format(
+                    img.split("::")[0]
+                )
+            )
         else:
             pass
-        if carving:
-            carve_files(output_directory, verbosity, d, output_directory + img.split("::")[0], img, vssimage)
+        if auto or yes_collect_recover != "n":
+            if collectfiles or recover:
+                select_files(
+                    output_directory,
+                    verbosity,
+                    d,
+                    mnt,
+                    img,
+                    vssimage,
+                    collectfiles,
+                    recover,
+                )
+            else:
+                pass
         else:
             pass
         if symlinks and verbose:

@@ -725,3 +725,4 @@ def reorganise_artefacts(output_directory, verbosity, allimgs, flags, auto, vola
         "  ----------------------------------------\n  -> Completed Identification Phase.\n"
     )
     time.sleep(1)
+    return imgs
