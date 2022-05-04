@@ -66,10 +66,22 @@ def compare_iocs(
                         if len(iocs) > 1:
                             for eachioc in iocs:
                                 if (
+                                    "<" not in eachioc
+                                    and ">" not in eachioc
+                                    and "/windows/" not in eachioc
+                                    and "/get/anytime-upgrade" not in eachioc
+                                    and eachioc != "0.0.0.000"
+                                    and eachioc != ""
+                                ) and (
                                     (len(eachioc) > 7 and "." in eachioc)
                                     or (len(eachioc) > 7 and ":" in eachioc)
                                     or (
                                         len(eachioc) > 100
+                                        and (
+                                            "+" in eachioc
+                                            or "/" in eachioc
+                                            or "=" in eachioc
+                                        )
                                         and len(
                                             eachioc.strip("/")
                                             .strip("+")
@@ -81,19 +93,7 @@ def compare_iocs(
                                             .strip("%")
                                         )
                                         != 172
-                                        and (
-                                            "+" in eachioc
-                                            or "/" in eachioc
-                                            or "=" in eachioc
-                                        )
                                     )
-                                ) and (
-                                    "<" not in eachioc
-                                    and ">" not in eachioc
-                                    and "/windows/" not in eachioc
-                                    and "/get/anytime-upgrade" not in eachioc
-                                    and eachioc != "0.0.0.000"
-                                    and eachioc != ""
                                 ):
                                     with open(
                                         "/opt/elrond/elrond/tools/ioc_exclusions"
@@ -261,7 +261,10 @@ def compare_iocs(
                                         matches.clear()
                                 else:
                                     pass
-                            if ioctype != "" and ioc_before.lower() != eachioc.split("@")[-1].lower():
+                            if (
+                                ioctype != ""
+                                and ioc_before.lower() != eachioc.split("@")[-1].lower()
+                            ):
                                 (
                                     entry,
                                     prnt,
