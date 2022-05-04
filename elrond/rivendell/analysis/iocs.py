@@ -259,38 +259,41 @@ def compare_iocs(
                                             pass
                                         match.clear()
                                         matches.clear()
+                                    if (
+                                        ioctype != ""
+                                        and ioc_before.lower()
+                                        != eachioc.split("@")[-1].lower()
+                                    ):
+                                        (
+                                            entry,
+                                            prnt,
+                                        ) = "{},{},{},IOC '{}' ({}) extracted from '{}'".format(
+                                            datetime.now().isoformat(),
+                                            img.split("::")[0],
+                                            stage,
+                                            eachioc.split("@")[-1],
+                                            ioctype.replace("_", " "),
+                                            iocfile.split(": ")[0],
+                                        ), " -> {} -> potential IOC '{}' ({}) extracted from '{}' for '{}'".format(
+                                            datetime.now()
+                                            .isoformat()
+                                            .replace("T", " "),
+                                            eachioc.split("@")[-1],
+                                            ioctype.replace("_", " "),
+                                            iocfile.split(": ")[0].split("/")[-1],
+                                            img.split("::")[0],
+                                        )
+                                        write_audit_log_entry(
+                                            verbosity,
+                                            output_directory,
+                                            entry,
+                                            prnt,
+                                        )
+                                        ioc_before = eachioc.split("@")[-1]
+                                    else:
+                                        pass
                                 else:
                                     pass
-                            if (
-                                ioctype != ""
-                                and ioc_before.lower() != eachioc.split("@")[-1].lower()
-                            ):
-                                (
-                                    entry,
-                                    prnt,
-                                ) = "{},{},{},IOC '{}' ({}) extracted from '{}'".format(
-                                    datetime.now().isoformat(),
-                                    img.split("::")[0],
-                                    stage,
-                                    eachioc.split("@")[-1],
-                                    ioctype.replace("_", " "),
-                                    iocfile.split(": ")[0],
-                                ), " -> {} -> potential IOC '{}' ({}) extracted from '{}' for '{}'".format(
-                                    datetime.now().isoformat().replace("T", " "),
-                                    eachioc.split("@")[-1],
-                                    ioctype.replace("_", " "),
-                                    iocfile.split(": ")[0].split("/")[-1],
-                                    img.split("::")[0],
-                                )
-                                write_audit_log_entry(
-                                    verbosity,
-                                    output_directory,
-                                    entry,
-                                    prnt,
-                                )
-                                ioc_before = eachioc.split("@")[-1]
-                            else:
-                                pass
                         else:
                             pass
                     else:
