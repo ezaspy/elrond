@@ -134,7 +134,9 @@ If you wish to add more false positive IOCs to prevent unwanted extractions, jus
 ## Roadmap
 
 - ELK/Elastic 'module'
+  -  The flag for invoking the creation of the elastic stack has been implemented but the ingestion of data has yet to be implemented.
 - SIGMA 'module'
+  -  The flag for SIGMA has not yet been implemented.
 
 <br>See the [open issues](https://github.com/ezaspy/elrond/issues) for a list of proposed features (and known issues).<br><br><br>
 
