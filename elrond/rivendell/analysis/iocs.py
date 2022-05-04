@@ -6,8 +6,6 @@ from datetime import datetime
 
 from rivendell.audit import write_audit_log_entry
 
-import sys
-
 
 def compare_iocs(
     output_directory,
@@ -94,6 +92,7 @@ def compare_iocs(
                                         "/windows/" not in eachioc
                                         and "/get/anytime-upgrade" not in eachioc
                                     )
+                                    and eachioc != "0.0.0.000"
                                 ):
                                     with open(
                                         "/opt/elrond/elrond/tools/ioc_exclusions"
@@ -195,7 +194,15 @@ def compare_iocs(
                                                     if domainorip != "":
                                                         ioctype = "domain"
                                                     else:
+                                                        pass
+                                                for domainorip in re.findall(
+                                                    r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$",
+                                                    eachioc.split("@")[-1],
+                                                ):
+                                                    if domainorip != "":
                                                         ioctype = "IPv4_address"
+                                                    else:
+                                                        pass
                                             elif (
                                                 len(eachioc) > 7
                                                 and ":" in eachioc
