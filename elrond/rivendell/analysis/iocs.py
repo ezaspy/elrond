@@ -58,10 +58,11 @@ def compare_iocs(
                     lineno = 0
                 except:
                     pass
+            ioc_before = ""
             for line, indicators in lines_iocs.items():
                 if len(indicators) > 0:
                     if len(indicators[0]) > 0:
-                        iocs = list(set(indicators[0]))
+                        iocs, ioctype = list(set(indicators[0])), ""
                         if len(iocs) > 1:
                             for eachioc in iocs:
                                 if (
@@ -93,6 +94,7 @@ def compare_iocs(
                                         and "/get/anytime-upgrade" not in eachioc
                                     )
                                     and eachioc != "0.0.0.000"
+                                    and eachioc != ""
                                 ):
                                     with open(
                                         "/opt/elrond/elrond/tools/ioc_exclusions"
@@ -252,32 +254,6 @@ def compare_iocs(
                                                             resolve,
                                                         )
                                                     )
-                                                    (
-                                                        entry,
-                                                        prnt,
-                                                    ) = "{},{},{},IOC '{}' ({}) extracted from '{}'".format(
-                                                        datetime.now().isoformat(),
-                                                        img.split("::")[0],
-                                                        stage,
-                                                        eachioc.split("@")[-1],
-                                                        ioctype.replace("_", " "),
-                                                        iocfile.split(": ")[0],
-                                                    ), " -> {} -> potential IOC '{}' ({}) extracted from '{}' on line {} for '{}'".format(
-                                                        datetime.now()
-                                                        .isoformat()
-                                                        .replace("T", " "),
-                                                        eachioc.split("@")[-1],
-                                                        ioctype.replace("_", " "),
-                                                        iocfile.split(": ")[0],
-                                                        str(line.split(":±§±:")[0]),
-                                                        img.split("::")[0],
-                                                    )
-                                                    write_audit_log_entry(
-                                                        verbosity,
-                                                        output_directory,
-                                                        entry,
-                                                        prnt,
-                                                    )
                                             else:
                                                 pass
                                         else:
@@ -286,6 +262,33 @@ def compare_iocs(
                                         matches.clear()
                                 else:
                                     pass
+                            if ioctype != "" and ioc_before != eachioc.split("@")[-1]:
+                                (
+                                    entry,
+                                    prnt,
+                                ) = "{},{},{},IOC '{}' ({}) extracted from '{}'".format(
+                                    datetime.now().isoformat(),
+                                    img.split("::")[0],
+                                    stage,
+                                    eachioc.split("@")[-1],
+                                    ioctype.replace("_", " "),
+                                    iocfile.split(": ")[0],
+                                ), " -> {} -> potential IOC '{}' ({}) extracted from '{}' for '{}'".format(
+                                    datetime.now().isoformat().replace("T", " "),
+                                    eachioc.split("@")[-1],
+                                    ioctype.replace("_", " "),
+                                    iocfile.split(": ")[0].split("/")[-1],
+                                    img.split("::")[0],
+                                )
+                                write_audit_log_entry(
+                                    verbosity,
+                                    output_directory,
+                                    entry,
+                                    prnt,
+                                )
+                                ioc_before = eachioc.split("@")[-1]
+                            else:
+                                pass
                         else:
                             pass
                     else:
