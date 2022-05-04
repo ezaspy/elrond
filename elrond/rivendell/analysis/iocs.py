@@ -87,12 +87,11 @@ def compare_iocs(
                                             or "=" in eachioc
                                         )
                                     )
-                                    and "<" not in eachioc
+                                ) and (
+                                    "<" not in eachioc
                                     and ">" not in eachioc
-                                    and (
-                                        "/windows/" not in eachioc
-                                        and "/get/anytime-upgrade" not in eachioc
-                                    )
+                                    and "/windows/" not in eachioc
+                                    and "/get/anytime-upgrade" not in eachioc
                                     and eachioc != "0.0.0.000"
                                     and eachioc != ""
                                 ):
@@ -262,7 +261,7 @@ def compare_iocs(
                                         matches.clear()
                                 else:
                                     pass
-                            if ioctype != "" and ioc_before != eachioc.split("@")[-1]:
+                            if ioctype != "" and ioc_before.lower() != eachioc.split("@")[-1].lower():
                                 (
                                     entry,
                                     prnt,
