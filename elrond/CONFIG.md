@@ -29,7 +29,7 @@ Copy VMware-<version_number>.tar.gz -> ~/Downloads<br>
 `sudo git clone https://github.com/ezaspy/elrond`<br>
 `cd elrond/`<br>
 `./make.sh`<br>
-Enter the keys in the following order: **&darr; &darr; c g ENTER**
+Enter the keys in the following order: **&darr; &darr; ENTER c g ENTER**
 
 <br>
 
