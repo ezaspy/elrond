@@ -70,7 +70,7 @@ To invoke the script, simply follow the instructions in [CONFIG.md](https://gith
   - If you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [elrond/elrond/tools/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/scripts/)
 <br><br>
 
-Alternatviely, if you prefer to install the packages yourself...<br>
+Alternatviely, if you prefer to install the packages yourself... (bear in mind there may be additional dependency requirements)<br>
 
 - [volatility3](https://github.com/volatilityfoundation/volatility3/) - (optional)
 - [dwarfdump](https://manpages.ubuntu.com/manpages/trusty/man1/dwarfdump.1.html) - processing Linux memory images in volatility3
@@ -81,7 +81,7 @@ Alternatviely, if you prefer to install the packages yourself...<br>
 
 ## Usage
 
->`python3 elrond.py [-h] [-AaCcDEFGHIiKMoPpQqRrSsTtUVvYZ] <case_id> <directory> [<output_directory>] [<keyword_file>]`
+>`python3 elrond.py [-h] [-AaCcDEGHIiMoPpQqRrSsTtUVvZ] <case_id> <directory> [<output_directory>] [-K <keyword_file>] [-Y <yara_dir>] -F (include|exclude):[<include/exclude_file>]`
 
 <br>
 
