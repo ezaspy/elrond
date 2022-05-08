@@ -81,7 +81,7 @@ Alternatviely, if you prefer to install the packages yourself... (bear in mind t
 
 ## Usage
 
->`python3 elrond.py [-h] [-AaCcDEGHIiMoPpQqRrSsTtUVvZ] <case_id> <directory> [<output_directory>] [-K <keyword_file>] [-Y <yara_dir>] -F (include|exclude):[<include/exclude_file>]`
+`python3 elrond.py [-h] [-AaCcDEGHIiMoPpQqRrSsTtUVvZ] <case_id> <directory> [<output_directory>] [-K <keyword_file>] [-Y <yara_dir>] -F (include|exclude):[<include/exclude_file>]`
 
 <br>
 
