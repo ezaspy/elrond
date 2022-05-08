@@ -279,7 +279,6 @@ case = case[0]
 cwd = os.getcwd()
 sha256 = hashlib.sha256()
 allimgs = {}
-removeimgs = []
 flags = []
 elrond_mount = [
     "/mnt/elrond_mount",
@@ -444,7 +443,6 @@ if __name__ == "__main__":
         cwd,
         sha256,
         allimgs,
-        removeimgs,
         flags,
         elrond_mount,
         ewf_mount,

@@ -60,7 +60,6 @@ def main(
     cwd,
     sha256,
     allimgs,
-    removeimgs,
     flags,
     elrond_mount,
     ewf_mount,
@@ -212,6 +211,35 @@ def main(
             pass
     else:
         pass
+    apfsexists = str(
+        subprocess.Popen(
+            [
+                "locate",
+                "apfs",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate()[0]
+    )
+    if not "/usr/local/bin/apfs" in apfsexists:
+        if (
+            input(
+                "  apfs-fuse and associated libraries are not installed. This is required for macOS disk images.\n   Continue? Y/n [Y] "
+            )
+            == "n"
+        ):
+            print(
+                "\n  Please run https://github.com/ezaspy/elrond/elrond/tools/scripts/apfs-fuse.sh and try again.\n\n"
+            )
+            if os.path.exists("/usr/local/bin/apfs"):
+                shutil.rmtree("/usr/local/bin/apfs")
+            else:
+                pass
+            sys.exit()
+        else:
+            pass
+    else:
+        pass
     if len(directory) > 1:
         od = directory[1]
         if not od.endswith("/"):
@@ -307,29 +335,32 @@ def main(
     for root, _, files in os.walk(d):  # Mounting images
         for f in files:
             if os.path.exists(os.path.join(root, f)):  # Mounting images
-                path, imgformat, fsize = (
-                    os.path.join(root, f),
-                    str(
-                        subprocess.Popen(
-                            ["file", os.path.join(root, f)],
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE,
-                        ).communicate()[0]
-                    )[2:-3].split(": ")[1],
-                    os.stat(os.path.join(root, f)).st_size,
-                )
-                if fsize > 10000:
-                    if not os.path.isdir(output_directory + f):
-                        os.mkdir(output_directory + f)
-                        foundimgs.append(
-                            os.path.join(root, f)
-                            + "||"
-                            + root
-                            + "||"
-                            + f
-                            + "||"
-                            + imgformat
-                        )
+                if f.split(".E")[0] + ".E" not in str(foundimgs):
+                    path, imgformat, fsize = (
+                        os.path.join(root, f),
+                        str(
+                            subprocess.Popen(
+                                ["file", os.path.join(root, f)],
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE,
+                            ).communicate()[0]
+                        )[2:-3].split(": ")[1],
+                        os.stat(os.path.join(root, f)).st_size,
+                    )
+                    if fsize > 10000:
+                        if not os.path.isdir(output_directory + f):
+                            os.mkdir(output_directory + f)
+                            foundimgs.append(
+                                os.path.join(root, f)
+                                + "||"
+                                + root
+                                + "||"
+                                + f
+                                + "||"
+                                + imgformat
+                            )
+                        else:
+                            pass
                     else:
                         pass
                 else:
@@ -426,14 +457,21 @@ def main(
                     "mounting",
                     cwd,
                     quotes,
-                    removeimgs,
                 )
-                entry, prnt = "{},{},{},completed\n".format(
-                    datetime.now().isoformat(), f, "mounting"
-                ), " -> {} -> mounted '{}'".format(
-                    datetime.now().isoformat().replace("T", " "), f
-                )
-                write_audit_log_entry(verbosity, output_directory, entry, prnt)
+                if len(allimgs) > 0:
+                    entry, prnt = "{},{},{},completed\n".format(
+                        datetime.now().isoformat(), f, "mounting"
+                    ), " -> {} -> mounted '{}'".format(
+                        datetime.now().isoformat().replace("T", " "), f
+                    )
+                    write_audit_log_entry(verbosity, output_directory, entry, prnt)
+                else:
+                    entry, prnt = "{},{},{},failed\n".format(
+                        datetime.now().isoformat(), f, "mounting"
+                    ), " -> {} -> not mounted '{}'".format(
+                        datetime.now().isoformat().replace("T", " "), f
+                    )
+                    write_audit_log_entry(verbosity, output_directory, entry, prnt)
             else:
                 print("    OK. '{}' will not be mounted.\n".format(f))
             allimgs = {**allimgs, **ot}
@@ -463,8 +501,6 @@ def main(
             print()
         else:
             pass
-    for rmimg in removeimgs:
-        del allimgs[rmimg]
     allimgs = OrderedDict(sorted(allimgs.items(), key=lambda x: x[1]))
     if len(allimgs) > 0:
         for (

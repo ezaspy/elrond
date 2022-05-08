@@ -72,8 +72,36 @@ def compare_iocs(
                                     and "/get/anytime-upgrade" not in eachioc
                                     and eachioc != "0.0.0.000"
                                     and eachioc != ""
+                                    and "YnBsaXN0MDDUAQIDBAUG" not in eachioc
+                                    and "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    not in eachioc
+                                    and "AAAAAAAAAAAAAAAAAAAB" not in eachioc
                                 ) and (
-                                    (len(eachioc) > 7 and "." in eachioc)
+                                    (
+                                        (len(eachioc) > 7 and "." in eachioc)
+                                        and eachioc != "255.0.0.0"
+                                        and eachioc != "255.255.0.0"
+                                        and eachioc != "255.255.255.0"
+                                        and eachioc != "255.255.255.255"
+                                        and not eachioc.startswith("172.16.")
+                                        and not eachioc.startswith("172.17.")
+                                        and not eachioc.startswith("172.18.")
+                                        and not eachioc.startswith("172.19.")
+                                        and not eachioc.startswith("172.20.")
+                                        and not eachioc.startswith("172.21.")
+                                        and not eachioc.startswith("172.22.")
+                                        and not eachioc.startswith("172.23.")
+                                        and not eachioc.startswith("172.24.")
+                                        and not eachioc.startswith("172.25.")
+                                        and not eachioc.startswith("172.26.")
+                                        and not eachioc.startswith("172.27.")
+                                        and not eachioc.startswith("172.28.")
+                                        and not eachioc.startswith("172.29.")
+                                        and not eachioc.startswith("172.30.")
+                                        and not eachioc.startswith("172.31.")
+                                        and not eachioc.startswith("10.")
+                                        and not eachioc.startswith("192.168.")
+                                    )
                                     or (len(eachioc) > 7 and ":" in eachioc)
                                     or (
                                         len(eachioc) > 100
