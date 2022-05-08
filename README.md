@@ -81,7 +81,7 @@ Alternatviely, if you prefer to install the packages yourself... (bear in mind t
 
 ## Usage
 
->`python3 elrond.py [-h] [-AaCcDEGHIiMoPpQqRrSsTtUVvZ] <case_id> <directory> [<output_directory>] [-K <keyword_file>] [-Y <yara_dir>] -F (include|exclude):[<include/exclude_file>]`
+`python3 elrond.py [-h] [-AaCcDEGHIiMoPpQqRrSsTtUVvZ] <case_id> <directory> [<output_directory>] [-K <keyword_file>] [-Y <yara_dir>] -F (include|exclude):[<include/exclude_file>]`
 
 <br>
 
@@ -90,28 +90,35 @@ Alternatviely, if you prefer to install the packages yourself... (bear in mind t
 - With disk image
 
 Automatically, Metadata, Collect, Process, Analysis and index artefacts in Splunk<br>
->`python3 elrond.py -aqvVCPAS case_name /images`
+`python3 elrond.py -aqvVCPAS case_name /images`
 
 <br>
 
 - With previously collected artefacts
 
 Automatically, Metadata, Process, Analysis and index artefacts in Splunk<br>
->`python3 elrond.py -aqvVPAS case_name /images`
+`python3 elrond.py -aqvVPAS case_name /images`
 
 <br>
 
 
 ### Additional examples
 
-Automatically Process, Analysis and index artefacts in Splunk (previously collected disk artefacts)<br>
->`python3 elrond.py -aqvVPAS case_name /images`
+- Automatically (**-a**) and super-quietly (**-Q**) Collect (**-C**), Process (**-P**), Analyse (**-A**) and index all artefacts (including memory (**-M**)) in Splunk (**-S**)<br>
 
-Automatically, super-quietly Collect, Process, Analysis and index all artefacts (including memory) in Splunk<br>
->`python3 elrond.py -aqQvVMCPAS case_name /images`
+`python3 elrond.py -aqQvVMCPAS case_name /images`
 
-Automatically, super-quietly Collect, Process and conduct Keyword Searching (with minimal printing to screen)<br>
->`python3 elrond.py -aqQCPS case_name /images -K keywords.txt`
+- Automatically (**-a**) and quietly (**-q**) Process (**-P**), Analyse (**-A**) and index artefacts in Splunk (**-S**) (previously collected disk artefacts)<br>
+
+`python3 elrond.py -aqvVPAS case_name /images`
+
+- Automatically (**-a**), super-quietly (**-Q**) Collect (**-C**), Process (**-P**) and conduct IOC Extraction (**-I**)<br>
+
+`python3 elrond.py -aqQCPI case_name /images`
+
+- Automatically (**-a**), super-quietly (**-Q**) Collect (**-C**), Process (**-P**) and conduct Keyword Searching (-K <file_name>)<br>
+
+`python3 elrond.py -aqQCPS case_name /images -K keywords.txt`
 
 <br>
 
