@@ -191,7 +191,6 @@ def configure_splunk_stack(
             pass
         return splunkuser, splunkpswd
 
-    splunkdebpath = "/opt/elrond/elrond/tools/"
     splkproc = subprocess.Popen(
         ["locate", "splunk.version"],
         stdout=subprocess.PIPE,
@@ -213,9 +212,9 @@ def configure_splunk_stack(
         "\n\n  -> \033[1;36mCommencing Splunk Phase...\033[1;m\n  ----------------------------------------"
     )
     time.sleep(1)
-    for eachfile in os.listdir(splunkdebpath):
+    for eachfile in os.listdir("/opt/elrond/elrond/tools/"):
         if eachfile.startswith(".splunk") and eachfile.endswith(".deb"):
-            splunkdeb = splunkdebpath + eachfile
+            splunkdeb = "/opt/elrond/elrond/tools/" + eachfile
         else:
             pass
     if len(splkproc[2:-3]) != 0:

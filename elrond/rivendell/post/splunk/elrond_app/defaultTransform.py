@@ -109,7 +109,7 @@ def create_transforms_conf(transformsconf):
         "Artefact_|_nt/dnsclient": "T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay",  # timeline
         "Artefact_|_ntds|ntdsutil|secretsdump": "T1003.003 - NTDS",  # timeline
         "Artefact_|_odbcconf": "T1218.008 - Odbcconf",  # timeline
-        "Artefact_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # timeline
+        "Artefact_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|egnyte|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # timeline
         "Artefact_|_pam_unix\\.so": "T1556.003 - Pluggable Authentication Modules",  # timeline
         "Artefact_|_etc/passwd|etc/shadow": "T1003.008 - /etc/passwd and /etc/shadow | T1087.001 - Local Account | T1556.003 - Pluggable Authentication Modules",  # timeline
         "Artefact_|_password|pwd|login|secure|credentials": "T1552.001 - Credentials in Files | T1555.005 - Password Managers",  # timeline
@@ -256,7 +256,7 @@ def create_transforms_conf(transformsconf):
         "Filename1_|_msiexec": "T1218.007 - Msiexec",  # mft
         "Filename1_|_normal\\.dotm|personal\\.xlsb": "T1137.001 - Office Template Macros",  # mft
         "Filename1_|_odbcconf": "T1218.008 - Odbcconf",  # mft
-        "Filename1_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # mft
+        "Filename1_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|egnyte|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # mft
         "Filename1_|_policy\\.vpol|vaultcmd|vcrd": "T1555.004 - Windows Credential Manager",  # mft
         "Filename1_|_powershell\\.": "T1059.001 - PowerShell | T1106.000 - Native API",  # mft
         "Filename1_|_psexec": "T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer",  # mft
@@ -299,7 +299,7 @@ def create_transforms_conf(transformsconf):
         "Filename2_|_msiexec": "T1218.007 - Msiexec",  # mft
         "Filename2_|_normal\\.dotm|personal\\.xlsb": "T1137.001 - Office Template Macros",  # mft
         "Filename2_|_odbcconf": "T1218.008 - Odbcconf",  # mft
-        "Filename2_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # mft
+        "Filename2_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|egnyte|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # mft
         "Filename2_|_policy\\.vpol|vaultcmd|vcrd": "T1555.004 - Windows Credential Manager",  # mft
         "Filename2_|_powershell\\.": "T1059.001 - PowerShell | T1106.000 - Native API",  # mft
         "Filename2_|_psexec": "T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer",  # mft
@@ -342,7 +342,7 @@ def create_transforms_conf(transformsconf):
         "Filename3_|_msiexec": "T1218.007 - Msiexec",  # mft
         "Filename3_|_normal\\.dotm|personal\\.xlsb": "T1137.001 - Office Template Macros",  # mft
         "Filename3_|_odbcconf": "T1218.008 - Odbcconf",  # mft
-        "Filename3_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # mft
+        "Filename3_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|egnyte|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # mft
         "Filename3_|_policy\\.vpol|vaultcmd|vcrd": "T1555.004 - Windows Credential Manager",  # mft
         "Filename3_|_powershell\\.": "T1059.001 - PowerShell | T1106.000 - Native API",  # mft
         "Filename3_|_psexec": "T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer",  # mft
@@ -385,7 +385,7 @@ def create_transforms_conf(transformsconf):
         "Filename4_|_msiexec": "T1218.007 - Msiexec",  # mft
         "Filename4_|_normal\\.dotm|personal\\.xlsb": "T1137.001 - Office Template Macros",  # mft
         "Filename4_|_odbcconf": "T1218.008 - Odbcconf",  # mft
-        "Filename4_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # mft
+        "Filename4_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|egnyte|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # mft
         "Filename4_|_policy\\.vpol|vaultcmd|vcrd": "T1555.004 - Windows Credential Manager",  # mft
         "Filename4_|_powershell\\.": "T1059.001 - PowerShell | T1106.000 - Native API",  # mft
         "Filename4_|_psexec": "T1003.001 - LSASS Memory | T1569.002 - Service Execution | T1570.000 - Lateral Tool Transfer",  # mft
@@ -543,7 +543,7 @@ def create_transforms_conf(transformsconf):
         "Message_|_nt/dnsclient": "T1557.001 - LLMNR/NBT-NS Poisoning and SMB Relay",  # unix-logs, timeline
         "Message_|_ntds|ntdsutil|secretsdump": "T1003.003 - NTDS",  # unix-logs, timeline
         "Message_|_odbcconf": "T1218.008 - Odbcconf",  # unix-logs, timeline
-        "Message_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # unix-logs, timeline
+        "Message_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|egnyte|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # unix-logs, timeline
         "Message_|_pam_unix\\.so": "T1556.003 - Pluggable Authentication Modules",  # unix-logs, timeline
         "Message_|_etc/passwd|etc/shadow": "T1003.008 - /etc/passwd and /etc/shadow | T1087.001 - Local Account | T1556.003 - Pluggable Authentication Modules",  # unix-logs, timeline
         "Message_|_password|pwd|login|secure|credentials": "T1552.001 - Credentials in Files | T1555.005 - Password Managers",  # unix-logs, timeline
@@ -637,7 +637,7 @@ def create_transforms_conf(transformsconf):
         "nixCommand_|_malloc|ptrace_setregs|ptrace_poketext|ptrace_pokedata": "T1055.008 - Ptrace System Calls",  # memory, unix-logs
         "nixCommand_|_microphone": "T1123.000 - Audio Capture",  # memory, unix-logs
         "nixCommand_|_modprobe|insmod|lsmod|rmmod|modinfo|kextload|kextunload|autostart": "T1547.006 - Kernel Modules and Extensions",  # memory, unix-logs
-        "nixCommand_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # memory, unix-logs
+        "nixCommand_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|egnyte|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # memory, unix-logs
         "nixCommand_|_pam_unix\\.so": "T1556.003 - Pluggable Authentication Modules",  # memory, unix-logs
         "nixCommand_|_etc/passwd|etc/shadow": "T1003.008 - /etc/passwd and /etc/shadow | T1087.001 - Local Account | T1556.003 - Pluggable Authentication Modules",  # memory, unix-logs
         "nixCommand_|_password|pwd|login|secure|credentials": "T1552.001 - Credentials in Files | T1555.005 - Password Managers",  # memory, unix-logs
@@ -678,7 +678,7 @@ def create_transforms_conf(transformsconf):
         "nixProcess_|_malloc|ptrace_setregs|ptrace_poketext|ptrace_pokedata": "T1055.008 - Ptrace System Calls",  # unix-logs, timeline
         "nixProcess_|_microphone": "T1123.000 - Audio Capture",  # unix-logs, timeline
         "nixProcess_|_modprobe|insmod|lsmod|rmmod|modinfo|kextload|kextunload|autostart": "T1547.006 - Kernel Modules and Extensions",  # unix-logs, timeline
-        "nixProcess_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # memory
+        "nixProcess_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|egnyte|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # memory
         "nixProcess_|_pam_unix\\.so": "T1556.003 - Pluggable Authentication Modules",  # unix-logs, timeline
         "nixProcess_|_ping\\.|ping |traceroute|dig |etc/host|etc/hosts|bonjour": "T1016.001 - Internet Connection Discovery | T1018.000 - Remote System Discovery",  # unix-logs, timeline
         "nixProcess_|_python|\\.py |\\.py_": "T1059.006 - Python",  # memory, unix-logs
@@ -730,7 +730,7 @@ def create_transforms_conf(transformsconf):
         "Registry_|_vboxmanage|virtualbox|vmplayer|vmprocess|vmware|hyper-v|qemu": "T1564.006 - Run Virtual Instance",  # registry
         ## Spearphishing via Service sites - Facebook, Instagram etc.
         "url_|_github|gitlab|bitbucket": "T1567.001 - Exfiltration to Code Repository",  # urls
-        "url_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # urls
+        "url_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|egnyte|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # urls
         "WinCommand_|_-create|dscl|hide500users": "T1564.002 - Hidden Users",  # memory, evt
         "WinCommand_|_-decode|openssl": "T1140.000 - Deobfuscate/Decode Files or Information",  # memory, evt
         "WinCommand_|_-noprofile": "T1547.013 - PowerShell Profile",  # memory, evt
@@ -849,7 +849,7 @@ def create_transforms_conf(transformsconf):
         "WinCommand_|_ntsd": "T1546.012 - Image File Execution Options Injection",  # memory, evt
         "WinCommand_|_ntunmapviewofsection": "T1055.012 - Process Hollowing | T1055.013 - Process Doppelganging",  # memory, evt
         "WinCommand_|_odbcconf": "T1218.008 - Odbcconf",  # memory, evt
-        "WinCommand_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # memory, evt
+        "WinCommand_|_onedrive|1drv|azure|icloud|cloudrive|dropbox|drive\\.google|egnyte|mediafire|zippyshare|megaupload|4shared": "T1537.000 - Transfer Data to Cloud Account | T1567.002 - Exfiltration to Cloud Storage",  # memory, evt
         "WinCommand_|_openprocess": "T1556.001 - Domain Controller Authentication",  # memory, evt
         "WinCommand_|_openthread": "T1055.004 - Asynchronous Procedure Call | T1055.003 - Thread Execution Hijacking",  # memory, evt
         "WinCommand_|_password|secure|credentials|security": "T1552.001 - Credentials in Files | T1555.004 - Windows Credential Manager | T1555.005 - Password Managers",  # memory, evt

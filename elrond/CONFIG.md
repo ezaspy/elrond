@@ -10,7 +10,7 @@ Start SIFT (and do the next step immediately upon booting)<br>
 #### **Menu Bar -> Virtual Machine -> Reinstall VMware Tools... ->**
 
 Copy VMware-<version_number>.tar.gz -> ~/Downloads<br>
->`cd ~/Downloads`<br>
+`cd ~/Downloads`<br>
 `tar -xvf VMware-<version_number>.tar.gz`<br>
 `cd vmware-tools-distrib`<br>
 `sudo ./vmware-install.pl` (select **ENTER** to all except '...recover wasted disk space...' (last one))
@@ -25,11 +25,12 @@ Copy VMware-<version_number>.tar.gz -> ~/Downloads<br>
 
 #### **Menu Bar -> Virtual Machine -> Reinstall VMware Tools... ->**<br><br>
 
->`cd /opt`<br>
-`sudo git clone https://github.com/ezaspy/elrond`<br>
+`cd /opt`<br>
+`sudo git clone https://github.com/ezaspy/elrond.git`<br>
 `cd elrond/`<br>
 `./make.sh`<br>
-Enter the keys in the following order: **&darr; &darr; ENTER c g**
+When prompted, enter the keys in the following order:
+- **&darr; &darr; ENTER c g**
 
 <br>
 

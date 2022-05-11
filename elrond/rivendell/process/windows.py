@@ -14,9 +14,7 @@ from rivendell.process.extractions.shimcache import extract_shimcache
 from rivendell.process.extractions.usb import extract_usb
 
 
-def process_mft(
-    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
-):
+def process_mft(verbosity, vssimage, output_directory, img, vssartefact, stage):
     if verbosity != "":
         print("     Processing '$MFT' for {}...".format(vssimage))
     else:
@@ -26,7 +24,7 @@ def process_mft(
         + img.split("::")[0]
         + "/artefacts/cooked"
         + vssartefact
-        + "..MFT.csv",
+        + "..journal_mft.csv",
         "a",
     ) as mftcsv:
         entry, prnt = "{},{},{},'$MFT'\n".format(
@@ -55,7 +53,7 @@ def process_mft(
                     + img.split("::")[0]
                     + "/artefacts/cooked"
                     + vssartefact
-                    + "..MFT.csv",
+                    + "..journal_mft.csv",
                 ],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
@@ -69,7 +67,7 @@ def process_mft(
             + img.split("::")[0]
             + "/artefacts/cooked"
             + vssartefact
-            + ".MFT.csv",
+            + ".journal_mft.csv",
             "a",
         ) as mftwrite:
             with open(
@@ -77,7 +75,7 @@ def process_mft(
                 + img.split("::")[0]
                 + "/artefacts/cooked"
                 + vssartefact
-                + "..MFT.csv"
+                + "..journal_mft.csv"
             ) as mftread:
                 for eachinfo in mftread:
                     mftentries, mftcounter = (
@@ -120,7 +118,7 @@ def process_mft(
         + img.split("::")[0]
         + "/artefacts/cooked"
         + vssartefact
-        + "MFT.csv",
+        + "journal_mft.csv",
         "a",
     ) as mftwrite:
         with open(
@@ -128,7 +126,7 @@ def process_mft(
             + img.split("::")[0]
             + "/artefacts/cooked"
             + vssartefact
-            + ".MFT.csv"
+            + ".journal_mft.csv"
         ) as mftread:
             for eachentry in mftread:
                 mftwrite.write(eachentry.strip().strip(",") + "\n")
@@ -137,21 +135,21 @@ def process_mft(
         + img.split("::")[0]
         + "/artefacts/cooked"
         + vssartefact
-        + "..MFT.csv"
+        + "..journal_mft.csv"
     ):
         os.remove(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
             + vssartefact
-            + "..MFT.csv"
+            + "..journal_mft.csv"
         )
         os.remove(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
             + vssartefact
-            + ".MFT.csv"
+            + ".journal_mft.csv"
         )
     else:
         pass
@@ -639,13 +637,3 @@ def process_pagefile(
         print_done(verbosity)
     else:
         pass
-
-
-# sudo readpst -o -D -j 4 -r -u -w -m
-# pip install libpff-python
-#  import pypff
-#  pst = pypff.file()
-#  pst.open("MyPst.pst")
-#  pst.close()
-
-# https://stackoverflow.com/questions/69905319/how-to-parse-read-outlook-pst-files-with-python

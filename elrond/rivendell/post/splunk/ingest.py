@@ -88,7 +88,8 @@ def ingest_splunk_data(
                                 ) or atftfile.endswith("jumplists.csv"):
                                     sourcetype = "elrondCSV_noTime"
                                 elif (
-                                    atftfile.endswith("MFT.csv")
+                                    atftfile.endswith("mft.csv")
+                                    or atftfile.endswith("usn.csv")
                                     or atftfile.endswith("History.csv")
                                     or atftfile.endswith("sqlite.csv")
                                 ):

@@ -3,8 +3,6 @@ import os
 
 from rivendell.collect.files.compare import compare_include_exclude
 
-import time
-
 
 def collect_files(
     output_directory,
@@ -53,15 +51,31 @@ def collect_files(
                 or recovered_file.lower().endswith(".tar")
                 or recovered_file.lower().endswith(".tar.gz")
                 or recovered_file.lower().endswith(".arj")
-                or recovered_file.lower().endswith(".vmware")
-                or recovered_file.lower().endswith(".vmdk")
-                or recovered_file.lower().endswith(".vmx")
                 or recovered_file.lower().endswith(".ps1")
                 or recovered_file.lower().endswith(".py")
+                or recovered_file.lower().endswith(".bat")
                 or recovered_file.lower().endswith(".vba")
+                or recovered_file.lower().endswith(".vb")
+                or recovered_file.lower().endswith(".vbscript")
+                or recovered_file.lower().endswith(".js")
+                or recovered_file.lower().endswith(".c")
+                or recovered_file.lower().endswith(".o")
+                or recovered_file.lower().endswith(".cpp")
+                or recovered_file.lower().endswith(".cc")
+                or recovered_file.lower().endswith(".pl")
+                or recovered_file.lower().endswith(".go")
+                or recovered_file.lower().endswith(".lnk")
+                or recovered_file.lower().endswith(".apsx")
+                or recovered_file.lower().endswith(".html")
+                or recovered_file.lower().endswith(".htm")
+                or recovered_file.lower().endswith(".php")
+                or recovered_file.lower().endswith(".asp")
                 or recovered_file.lower().endswith(".ost")
                 or recovered_file.lower().endswith(".pst")
                 or recovered_file.lower().endswith(".eml")
+                or recovered_file.lower().endswith(".vmware")
+                or recovered_file.lower().endswith(".vmdk")
+                or recovered_file.lower().endswith(".vmx")
             )
             and (
                 "archive.ubuntu" not in recovered_file
@@ -533,30 +547,35 @@ def collect_files(
                 os.stat(output_directory + img.split("::")[0] + "/files/")
             except:
                 os.makedirs(output_directory + img.split("::")[0] + "/files/")
-            if ("H" in file_selection or "A" in file_selection) and (
-                recovered_file.lower().startswith(".")
-                and recovered_file != ".localized"
-                and recovered_file != ".DS_Store"
-                and recovered_file != ".CFUserTextEncoding"
-                and recovered_file != ".file"
-            ):
-                try:
-                    os.stat(output_directory + img.split("::")[0] + "/files/hidden")
-                except:
-                    os.makedirs(output_directory + img.split("::")[0] + "/files/hidden")
-                compare_include_exclude(
-                    output_directory,
-                    verbosity,
-                    stage,
-                    img,
-                    vssimage,
-                    "/files/hidden/",
-                    "hidden file",
-                    recovered_file_root,
-                    recovered_file,
-                    increment,
-                    collectfiles,
-                )
+            if "H" in file_selection or "A" in file_selection:
+                if (
+                    recovered_file.lower().startswith(".")
+                    and recovered_file != ".localized"
+                    and recovered_file != ".DS_Store"
+                    and recovered_file != ".CFUserTextEncoding"
+                    and recovered_file != ".file"
+                ):
+                    try:
+                        os.stat(output_directory + img.split("::")[0] + "/files/hidden")
+                    except:
+                        os.makedirs(
+                            output_directory + img.split("::")[0] + "/files/hidden"
+                        )
+                    compare_include_exclude(
+                        output_directory,
+                        verbosity,
+                        stage,
+                        img,
+                        vssimage,
+                        "/files/hidden/",
+                        "hidden file",
+                        recovered_file_root,
+                        recovered_file,
+                        increment,
+                        collectfiles,
+                    )
+                else:
+                    pass
             else:
                 pass
             if ("B" in file_selection or "A" in file_selection) and (
@@ -668,9 +687,7 @@ def collect_files(
             if ("S" in file_selection or "A" in file_selection) and (
                 recovered_file.lower().endswith(".ps1")
                 or recovered_file.lower().endswith(".py")
-                or recovered_file.lower().endswith(".rpy")
                 or recovered_file.lower().endswith(".bat")
-                or recovered_file.lower().endswith(".wbf")
                 or recovered_file.lower().endswith(".vba")
                 or recovered_file.lower().endswith(".vb")
                 or recovered_file.lower().endswith(".vbscript")
@@ -681,7 +698,6 @@ def collect_files(
                 or recovered_file.lower().endswith(".cc")
                 or recovered_file.lower().endswith(".pl")
                 or recovered_file.lower().endswith(".go")
-                or recovered_file.lower().endswith(".php")
             ):
                 try:
                     os.stat(output_directory + img.split("::")[0] + "/files/scripts")
@@ -704,32 +720,47 @@ def collect_files(
                 )
             else:
                 pass
-            if ("V" in file_selection or "A" in file_selection) and (
-                recovered_file.lower().endswith(".vmware")
-                or recovered_file.lower().endswith(".vmdk")
-                or recovered_file.lower().endswith(".vmx")
-                or recovered_file.lower().endswith(".vdi")
+            if ("L" in file_selection or "A" in file_selection) and (
+                recovered_file.lower().endswith(".lnk")
             ):
                 try:
-                    os.stat(
-                        output_directory
-                        + img.split("::")[0]
-                        + "/files/virtual_machines"
-                    )
+                    os.stat(output_directory + img.split("::")[0] + "/files/lnk")
                 except:
-                    os.makedirs(
-                        output_directory
-                        + img.split("::")[0]
-                        + "/files/virtual_machines"
-                    )
+                    os.makedirs(output_directory + img.split("::")[0] + "/files/lnk")
                 compare_include_exclude(
                     output_directory,
                     verbosity,
                     stage,
                     img,
                     vssimage,
-                    "/files/virtual_machines/",
-                    "virtual machine file",
+                    "/files/lnk/",
+                    "lnk file",
+                    recovered_file_root,
+                    recovered_file,
+                    increment,
+                    collectfiles,
+                )
+            else:
+                pass
+            if ("W" in file_selection or "A" in file_selection) and (
+                recovered_file.lower().endswith(".apsx")
+                or recovered_file.lower().endswith(".html")
+                or recovered_file.lower().endswith(".htm")
+                or recovered_file.lower().endswith(".php")
+                or recovered_file.lower().endswith(".asp")
+            ):
+                try:
+                    os.stat(output_directory + img.split("::")[0] + "/files/web")
+                except:
+                    os.makedirs(output_directory + img.split("::")[0] + "/files/web")
+                compare_include_exclude(
+                    output_directory,
+                    verbosity,
+                    stage,
+                    img,
+                    vssimage,
+                    "/files/web/",
+                    "web file",
                     recovered_file_root,
                     recovered_file,
                     increment,
@@ -754,6 +785,33 @@ def collect_files(
                     vssimage,
                     "/files/mail/",
                     "mail file",
+                    recovered_file_root,
+                    recovered_file,
+                    increment,
+                    collectfiles,
+                )
+            else:
+                pass
+            if ("V" in file_selection or "A" in file_selection) and (
+                recovered_file.lower().endswith(".vmware")
+                or recovered_file.lower().endswith(".vmdk")
+                or recovered_file.lower().endswith(".vmx")
+                or recovered_file.lower().endswith(".vdi")
+            ):
+                try:
+                    os.stat(output_directory + img.split("::")[0] + "/files/virtual")
+                except:
+                    os.makedirs(
+                        output_directory + img.split("::")[0] + "/files/virtual"
+                    )
+                compare_include_exclude(
+                    output_directory,
+                    verbosity,
+                    stage,
+                    img,
+                    vssimage,
+                    "/files/virtual/",
+                    "virtual file",
                     recovered_file_root,
                     recovered_file,
                     increment,

@@ -8,6 +8,7 @@ from zipfile import ZipFile
 from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 from rivendell.collect.files.carve import carve_files
+from rivendell.collect.files.compare import compare_include_exclude
 from rivendell.collect.files.files import collect_files
 from rivendell.collect.files.recover import recover_files
 
@@ -30,7 +31,7 @@ def select_files(
     )
     if collectfiles == True:
         file_selection = input(
-            "        Which file types do you want collected from {}?\n        [A]ll   [H]idden   [B]inaries   [D]ocuments   A[R]chives   [S]cripts   [V]irtual   [M]ail   [U]nallocated   [N]one\n\n        [A]ll ".format(
+            "        Which file types do you want collected from {}?\n        [A]ll   [H]idden   [B]inaries   [D]ocuments   A[R]chives   [S]cripts   [L]NK   [W]eb   [M]ail   [V]irtual   [U]nallocated   [N]one\n\n        [A]ll ".format(
                 vssimage
             )
         )
@@ -45,11 +46,14 @@ def select_files(
             or "D" in file_selection
             or "R" in file_selection
             or "S" in file_selection
-            or "V" in file_selection
+            or "L" in file_selection
+            or "W" in file_selection
             or "M" in file_selection
+            or "V" in file_selection
         ):
-            for recovered_file_root, _, recovered_files in os.walk(mnt):
-                increment = 1
+            for recovered_file_root, _, recovered_files in os.walk(
+                mnt
+            ):  # processing file selection
                 for recovered_file in recovered_files:
                     if collectfiles and recover:
                         collect_files(
@@ -60,7 +64,7 @@ def select_files(
                             vssimage,
                             recovered_file_root,
                             recovered_file,
-                            increment,
+                            1,
                             collectfiles,
                             file_selection,
                         )
@@ -82,7 +86,7 @@ def select_files(
                             vssimage,
                             recovered_file_root,
                             recovered_file,
-                            increment,
+                            1,
                             collectfiles,
                             file_selection,
                         )
@@ -96,9 +100,51 @@ def select_files(
                             recovered_file_root,
                             recovered_file,
                         )
+            if "L" in file_selection or "A" in file_selection:
+                link_files = subprocess.Popen(
+                    [
+                        "sudo",
+                        "find",
+                        mnt,
+                        "-type",
+                        "l",
+                    ],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                ).communicate()
+                for lnk_path in str(link_files)[3:-9].split("\\n"):
+                    if collect_files:
+                        try:
+                            os.stat(
+                                output_directory + img.split("::")[0] + "/files/lnk"
+                            )
+                        except:
+                            os.makedirs(
+                                output_directory + img.split("::")[0] + "/files/lnk"
+                            )
+                        if os.path.isfile(lnk_path.split("/")[-1]):
+                            compare_include_exclude(
+                                output_directory,
+                                verbosity,
+                                stage,
+                                img,
+                                vssimage,
+                                "/files/lnk/",
+                                "lnk file",
+                                "/".join(lnk_path.split("/")[0:-1]),
+                                lnk_path.split("/")[-1],
+                                1,
+                                collectfiles,
+                            )
+                        else:
+                            pass
+                    else:
+                        pass
+            else:
+                pass
             if os.path.exists(
                 output_directory + img.split("::")[0] + "/files/archives"
-            ):
+            ):  # extracting collected archives
                 recoverpath = output_directory + img.split("::")[0] + "/files/archives"
                 if len(os.listdir(recoverpath)) > 0:
                     print(
@@ -167,7 +213,7 @@ def select_files(
                 pass
             if os.path.exists(
                 output_directory + img.split("::")[0] + "/files/documents"
-            ):
+            ):  # extracting collected documents
                 recoverpath = output_directory + img.split("::")[0] + "/files/documents"
                 if len(os.listdir(recoverpath)) > 0:
                     print(

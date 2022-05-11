@@ -6,9 +6,7 @@ import shutil
 import subprocess
 import sys
 import time
-from datetime import datetime
 
-from rivendell.audit import write_audit_log_entry
 from rivendell.identify import identify_disk_image
 
 
@@ -62,7 +60,6 @@ def mount_images(
     cwd,
     quotes,
 ):
-
     def collect_ewfinfo(path, intermediate_mount):
         ewfinfo = list(
             re.findall(
@@ -130,7 +127,14 @@ def mount_images(
         )
         return offset_value
 
-    def mount_vmdk_image(verbosity, output_directory, intermediate_mount, destination_mount, disk_file, allimgs):
+    def mount_vmdk_image(
+        verbosity,
+        output_directory,
+        intermediate_mount,
+        destination_mount,
+        disk_file,
+        allimgs,
+    ):
         try:
             apfs = str(
                 subprocess.Popen(
@@ -185,7 +189,11 @@ def mount_images(
                         verbosity, output_directory, disk_file, destination_mount
                     )
                     allimgs[disk_image] = destination_mount
-                    print("   Mounted '{}' successfully at '{}'".format(disk_file, destination_mount))
+                    print(
+                        "   Mounted '{}' successfully at '{}'".format(
+                            disk_file, destination_mount
+                        )
+                    )
                 elif (
                     str(
                         subprocess.Popen(
@@ -209,7 +217,11 @@ def mount_images(
                         verbosity, output_directory, disk_file, destination_mount
                     )
                     allimgs[disk_image] = destination_mount
-                    print("   Mounted '{}' successfully at '{}'".format(disk_file, destination_mount))
+                    print(
+                        "   Mounted '{}' successfully at '{}'".format(
+                            disk_file, destination_mount
+                        )
+                    )
                 else:
                     print(
                         "   An error occured when mounting '{}'.\n    Perhaps this is a macOS-based image and requires apfs-fuse? Visit https://github.com/ezaspy/apfs-fuse and try again.\n   If this does not work, the disk may not be supported and/or may be corrupt? Feel free to raise an issue via https://github.com/ezaspy/elrond/issues".format(
@@ -217,15 +229,23 @@ def mount_images(
                         )
                     )
                     if os.path.exists(
-                        os.path.join(output_directory, intermediate_mount.split("/")[-1])
+                        os.path.join(
+                            output_directory, intermediate_mount.split("/")[-1]
+                        )
                     ):
                         os.remove(
-                            os.path.join(output_directory, intermediate_mount.split("/")[-1])
+                            os.path.join(
+                                output_directory, intermediate_mount.split("/")[-1]
+                            )
                             + "/"
                             + intermediate_mount.split("/")[-1]
                             + ".log"
                         )
-                        os.rmdir(os.path.join(output_directory, intermediate_mount.split("/")[-1]))
+                        os.rmdir(
+                            os.path.join(
+                                output_directory, intermediate_mount.split("/")[-1]
+                            )
+                        )
                     else:
                         pass
                     if input("    Continue? Y/n [n] ") != "Y":
@@ -238,7 +258,11 @@ def mount_images(
                     verbosity, output_directory, disk_file, destination_mount
                 )
                 allimgs[disk_image] = destination_mount
-                print("   Mounted '{}' successfully at '{}'".format(disk_file, destination_mount))
+                print(
+                    "   Mounted '{}' successfully at '{}'".format(
+                        disk_file, destination_mount
+                    )
+                )
         else:
             pass
 
@@ -256,7 +280,7 @@ def mount_images(
         pass
     if len(os.listdir(elrond_mount[0])) != 0:
         elrond_mount.pop(0)
-        mount_images(
+        allimgs = mount_images(
             d,
             auto,
             verbosity,
@@ -346,8 +370,11 @@ def mount_images(
                     verbosity, output_directory, disk_file, destination_mount
                 )
                 allimgs[disk_image] = destination_mount
-                print("   Mounted '{}' successfully at '{}'".format(disk_file, destination_mount))
-                allimgs[disk_file] = destination_mount
+                print(
+                    "   Mounted '{}' successfully at '{}'".format(
+                        disk_file, destination_mount
+                    )
+                )
                 if vss:
                     if verbosity != "":
                         print(
@@ -363,7 +390,9 @@ def mount_images(
                         stderr=subprocess.PIPE,
                     ).communicate()
                     time.sleep(0.5)
-                    if os.path.exists("/mnt/shadow_mount/" + disk_file.split("::")[0] + "/"):
+                    if os.path.exists(
+                        "/mnt/shadow_mount/" + disk_file.split("::")[0] + "/"
+                    ):
                         for current in os.listdir(
                             "/mnt/shadow_mount/" + disk_file.split("::")[0] + "/"
                         ):
@@ -380,9 +409,14 @@ def mount_images(
                             ).communicate()
                             time.sleep(0.1)
                             shutil.rmtree(
-                                "/mnt/shadow_mount/" + disk_file.split("::")[0] + "/" + current
+                                "/mnt/shadow_mount/"
+                                + disk_file.split("::")[0]
+                                + "/"
+                                + current
                             )
-                            shutil.rmtree("/mnt/shadow_mount/" + disk_file.split("::")[0] + "/")
+                            shutil.rmtree(
+                                "/mnt/shadow_mount/" + disk_file.split("::")[0] + "/"
+                            )
                     else:
                         pass
                     if not os.path.exists(
@@ -390,7 +424,12 @@ def mount_images(
                     ):
                         os.mkdir("/mnt/shadow_mount/" + disk_file.split("::")[0] + "/")
                         for i in os.listdir("/mnt/vss/"):
-                            os.mkdir("/mnt/shadow_mount/" + disk_file.split("::")[0] + "/" + i)
+                            os.mkdir(
+                                "/mnt/shadow_mount/"
+                                + disk_file.split("::")[0]
+                                + "/"
+                                + i
+                            )
                             try:
                                 subprocess.Popen(
                                     [
@@ -426,7 +465,10 @@ def mount_images(
                 "unknown filesystem type 'apfs'" in mounterr
                 or "wrong fs type" in mounterr
             ):
-                def successfull_mount(verbosity, output_directory, disk_file, destination_mount, allimgs):
+
+                def successfull_mount(
+                    verbosity, output_directory, disk_file, destination_mount, allimgs
+                ):
                     if verbosity != "":
                         disk_image = identify_disk_image(
                             verbosity, output_directory, disk_file, destination_mount
@@ -439,7 +481,7 @@ def mount_images(
                         )
                     else:
                         pass
-                
+
                 if "unknown filesystem type 'apfs'" in mounterr:
                     try:
                         attempt_to_mount = str(
@@ -456,7 +498,13 @@ def mount_images(
                             ).communicate()[1]
                         )
                         if attempt_to_mount == "b''":
-                            successfull_mount(verbosity, output_directory, disk_file, destination_mount, allimgs)
+                            successfull_mount(
+                                verbosity,
+                                output_directory,
+                                disk_file,
+                                destination_mount,
+                                allimgs,
+                            )
                         elif "mountpoint is not empty" in attempt_to_mount:
                             pass
                         else:
@@ -470,7 +518,8 @@ def mount_images(
                             [
                                 "mount",
                                 "-o",
-                                "ro,loop,show_sys_files,streams_interface=windows,offset=" + str(int(offset_value[0]) * 512),
+                                "ro,loop,show_sys_files,streams_interface=windows,offset="
+                                + str(int(offset_value[0]) * 512),
                                 intermediate_mount + "/ewf1",
                                 destination_mount,
                             ],
@@ -479,7 +528,13 @@ def mount_images(
                         ).communicate()[1]
                     )
                     if attempt_to_mount == "b''":
-                        successfull_mount(verbosity, output_directory, disk_file, destination_mount, allimgs)
+                        successfull_mount(
+                            verbosity,
+                            output_directory,
+                            disk_file,
+                            destination_mount,
+                            allimgs,
+                        )
                     elif "mountpoint is not empty" in attempt_to_mount:
                         pass
                     else:
@@ -497,7 +552,14 @@ def mount_images(
 
             def doVMDKConvert(intermediate_mount):
                 subprocess.Popen(
-                    ["qemu-img", "convert", "-O", "raw", intermediate_mount, intermediate_mount + ".raw"],
+                    [
+                        "qemu-img",
+                        "convert",
+                        "-O",
+                        "raw",
+                        intermediate_mount,
+                        intermediate_mount + ".raw",
+                    ],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                 ).communicate()
@@ -514,7 +576,12 @@ def mount_images(
                 )
             if "DOS/MBR boot sector" in imgformat and disk_file.endswith(".dd"):
                 mount_vmdk_image(
-                    verbosity, output_directory, intermediate_mount, destination_mount, disk_file, allimgs
+                    verbosity,
+                    output_directory,
+                    intermediate_mount,
+                    destination_mount,
+                    disk_file,
+                    allimgs,
                 )
             elif "DOS/MBR boot sector" in imgformat and disk_file.endswith(".raw"):
                 if auto != True:
@@ -536,7 +603,12 @@ def mount_images(
                 else:
                     pass
                 mount_vmdk_image(
-                    verbosity, output_directory, intermediate_mount, destination_mount, disk_file, allimgs
+                    verbosity,
+                    output_directory,
+                    intermediate_mount,
+                    destination_mount,
+                    disk_file,
+                    allimgs,
                 )
             else:
                 if not os.path.exists(intermediate_mount + ".raw"):
@@ -558,7 +630,12 @@ def mount_images(
                     else:
                         pass
                 mount_vmdk_image(
-                    verbosity, output_directory, intermediate_mount + ".raw", destination_mount, disk_file, allimgs
+                    verbosity,
+                    output_directory,
+                    intermediate_mount + ".raw",
+                    destination_mount,
+                    disk_file,
+                    allimgs,
                 )
         else:
             pass

@@ -71,9 +71,7 @@ def process_artefacts(
             + vssartefact
             + "MFT.csv"
         ):
-            process_mft(
-                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
-            )
+            process_mft(verbosity, vssimage, output_directory, img, vssartefact, stage)
         elif artefact.endswith(".SYSTEM") and not os.path.exists(
             output_directory
             + img.split("::")[0]

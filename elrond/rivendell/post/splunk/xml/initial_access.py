@@ -92,7 +92,7 @@ def create_initial_access_xml(sd):
             '<html depends="$it_tok$" src="t1203.html"/>\n    </panel>\n  </row>\n  <row>\n    <panel depends="$t1566_mft_panel$">\n      <table>\n        '
         )
         t1566xml.write(
-            "<title>Windows-based file activity</title>\n        <search>\n          <query>index=$case_tok$ host=$host_tok$ mitre_technique!=- mitre_technique=$mitre_tok$ logtype=MFT | `MITRE_lookup` "
+            "<title>Windows-based file activity</title>\n        <search>\n          <query>index=$case_tok$ host=$host_tok$ mitre_technique!=- mitre_technique=$mitre_tok$ logtype=journal | `MITRE_lookup` "
         )
         t1566xml.write(
             '| search id="T1203" | `merge_fileinfo` | table index host mitre_id mitre_technique LastWriteTime Filepath Filename Fileext</query>\n          <earliest>$time_tok.earliest$</earliest>\n          <latest>$time_tok.latest$</latest>\n          <sampleRatio>1</sampleRatio>\n          <progress>\n            <condition match="\'job.resultCount\' > 0">\n              <set token="t1566_mft_panel">true</set>\n            </condition>\n            <condition>\n              <unset token="t1566_mft_panel"/>\n            </condition>\n          </progress>\n        </search>\n        <option name="count">5</option>\n        <option name="dataOverlayMode">none</option>\n        <option name="drilldown">none</option>\n        <option name="percentagesRow">false</option>\n        <option name="refresh.display">progressbar</option>\n        <option name="rowNumbers">false</option>\n        <option name="totalsRow">false</option>\n        <option name="wrap">false</option>\n      </table>\n    </panel>\n  </row>\n  <row>\n    <panel depends="$t1566_unix_log_panel$">\n      <table>\n      '

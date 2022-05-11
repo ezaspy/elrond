@@ -12,14 +12,14 @@ def extract_shimcache(verbosity, vssimage, output_directory, img, vssartefact, s
         + img.split("::")[0]
         + "/artefacts/cooked"
         + vssartefact
-        + ".ShimCache.csv",
+        + ".shimcache.csv",
         "a",
     ):
         entry, prnt = "{},{},{},'ShimCache'\n".format(
             datetime.now().isoformat(),
             vssimage.replace("'", ""),
             stage,
-        ), " -> {} -> {} shimcache for {}".format(
+        ), " -> {} -> {} ShimCache for {}".format(
             datetime.now().isoformat().replace("T", " "),
             stage,
             vssimage,
@@ -39,7 +39,7 @@ def extract_shimcache(verbosity, vssimage, output_directory, img, vssartefact, s
                 + img.split("::")[0]
                 + "/artefacts/cooked"
                 + vssartefact
-                + ".ShimCache.csv",
+                + ".shimcache.csv",
             ],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -49,7 +49,7 @@ def extract_shimcache(verbosity, vssimage, output_directory, img, vssartefact, s
         + img.split("::")[0]
         + "/artefacts/cooked"
         + vssartefact
-        + ".ShimCache.csv",
+        + ".shimcache.csv",
         "r",
     ) as shimread:
         for shimline in shimread:
@@ -67,7 +67,7 @@ def extract_shimcache(verbosity, vssimage, output_directory, img, vssartefact, s
                 + img.split("::")[0]
                 + "/artefacts/cooked"
                 + vssartefact
-                + "ShimCache.csv",
+                + "shimcache.csv",
                 "a",
             ) as shimwrite:
                 shimwrite.write(
@@ -88,7 +88,7 @@ def extract_shimcache(verbosity, vssimage, output_directory, img, vssartefact, s
             + img.split("::")[0]
             + "/artefacts/cooked"
             + vssartefact
-            + ".ShimCache.csv"
+            + ".shimcache.csv"
         )
     except:
         pass

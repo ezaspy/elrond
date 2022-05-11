@@ -413,18 +413,9 @@ def process_browser(
             .cursor()
             .execute("SELECT visits.id, visits.from_visit FROM visits;")
         )
-        cursor_downloads = (
-            sqlite3.connect(artefact)
-            .cursor()
-            .execute(
-                "SELECT downloads.url, downloads.full_path, downloads.start_time, downloads.end_time, downloads.received_bytes, downloads.total_bytes FROM downloads;"
-            )
-        )
-        bwsritems, bwsrvisit, bwsrdownloads, bwsrentries, bwsrdownloadentries = (
+        bwsritems, bwsrvisit, bwsrentries = (
             cursor_items.fetchall(),
             cursor_visit.fetchall(),
-            cursor_downloads.fetchall(),
-            [],
             [],
         )
         for eachitem in bwsritems:
@@ -442,18 +433,29 @@ def process_browser(
                 else:
                     pass
         bwsrhist = bwsrentries
-        for eachdownload in bwsrdownloads:
-            bwsrdownloadentries.append(
-                "[{},{},{},{},{},{}]".format(
-                    eachdownload[0],
-                    eachdownload[1].replace("\\", "/"),
-                    eachdownload[2],
-                    eachdownload[3],
-                    eachdownload[4],
-                    eachdownload[5],
+        try:
+            cursor_downloads = (
+                sqlite3.connect(artefact)
+                .cursor()
+                .execute(
+                    "SELECT downloads.url, downloads.full_path, downloads.start_time, downloads.end_time, downloads.received_bytes, downloads.total_bytes FROM downloads;"
                 )
             )
-        bwsrdwnlds = bwsrdownloadentries
+            bwsrdownloads, bwsrdownloadentries = cursor_downloads.fetchall(), []
+            for eachdownload in bwsrdownloads:
+                bwsrdownloadentries.append(
+                    "[{},{},{},{},{},{}]".format(
+                        eachdownload[0],
+                        eachdownload[1].replace("\\", "/"),
+                        eachdownload[2],
+                        eachdownload[3],
+                        eachdownload[4],
+                        eachdownload[5],
+                    )
+                )
+            bwsrdwnlds = bwsrdownloadentries
+        except:
+            bwsrdwnlds = ""
     elif artefact.endswith("places.sqlite"):
         cursor_items = (
             sqlite3.connect(artefact)
@@ -469,18 +471,9 @@ def process_browser(
                 "SELECT moz_historyvisits.id, moz_historyvisits.from_visit FROM moz_historyvisits;"
             )
         )
-        cursor_downloads = (
-            sqlite3.connect(artefact)
-            .cursor()
-            .execute(
-                "SELECT moz_annos.place_id, moz_annos.content, moz_annos.type, moz_annos.dateAdded, moz_annos.lastModified FROM moz_annos;"
-            )
-        )
-        bwsritems, bwsrvisit, bwsrdownloads, bwsrentries, bwsrdownloadentries = (
+        bwsritems, bwsrvisit, bwsrentries = (
             cursor_items.fetchall(),
             cursor_visit.fetchall(),
-            cursor_downloads.fetchall(),
-            [],
             [],
         )
         for eachitem in bwsritems:
@@ -498,7 +491,15 @@ def process_browser(
                 else:
                     pass
         bwsrhist = bwsrentries
-        for eachitem in bwsritems:
+        try:
+            cursor_downloads = (
+                sqlite3.connect(artefact)
+                .cursor()
+                .execute(
+                    "SELECT moz_annos.place_id, moz_annos.content, moz_annos.type, moz_annos.dateAdded, moz_annos.lastModified FROM moz_annos;"
+                )
+            )
+            bwsrdownloads, bwsrdownloadentries = cursor_downloads.fetchall(), []
             for eachdownload in bwsrdownloads:
                 if eachitem[0] == eachdownload[0]:
                     bwsrdownloadentries.append(
@@ -512,7 +513,9 @@ def process_browser(
                     )
                 else:
                     pass
-        bwsrdwnlds = bwsrdownloadentries
+            bwsrdwnlds = bwsrdownloadentries
+        except:
+            bwsrdwnlds = ""
     elif "safari" in artefact and artefact.endswith(
         "History.db"
     ):  # for macOS downloads are collected from Downloads.plist
@@ -569,7 +572,7 @@ def process_browser(
                 + histtime
                 + "\n"
             )
-    if len(bwsrdwnlds) > 0:
+    if bwsrdwnlds != "":
         for eachentry in bwsrdwnlds:
             download, downloadtime = format_browser_entries("downloads", eachentry)
             with open(
