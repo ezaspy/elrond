@@ -126,9 +126,6 @@ See the [support file](https://github.com/ezaspy/elrond/SUPPORT.md) for a list o
 
 ## Roadmap
 
-- ELK/Elastic 'module'
-- Live 'module'
-
 <br>See the [open issues](https://github.com/ezaspy/elrond/issues) for a list of proposed features (and known issues).<br><br><br>
 
 <!-- CONTRIBUTING -->
