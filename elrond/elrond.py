@@ -81,14 +81,6 @@ parser.add_argument(
     default=False,
 )
 parser.add_argument(
-    "-G",
-    "--sigma",
-    help="Build SIGMA signatures based on the original images, artefacts and/or files collected",
-    action="store_const",
-    const=True,
-    default=False,
-)
-parser.add_argument(
     "-H",
     "--nsrl",
     help="Compare hashes against known-goods from NSRL database; connection to Internet required",
@@ -251,7 +243,6 @@ vss = args.vss
 delete = args.delete
 elastic = args.elastic
 collectfiles = args.collectfiles
-sigma = args.sigma
 nsrl = args.nsrl
 extractiocs = args.extractiocs
 imageinfo = args.imageinfo
@@ -417,7 +408,6 @@ if __name__ == "__main__":
         delete,
         elastic,
         collectfiles,
-        sigma,
         nsrl,
         extractiocs,
         imageinfo,

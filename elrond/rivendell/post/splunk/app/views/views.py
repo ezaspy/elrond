@@ -1,20 +1,50 @@
 #!/usr/bin/env python3 -tt
-from rivendell.post.splunk.html.initial_access import create_initial_access_html
-from rivendell.post.splunk.html.execution import create_execution_html
-from rivendell.post.splunk.html.persistence import create_persistence_html
-from rivendell.post.splunk.html.privilege_escalation import (
+from rivendell.post.splunk.app.views.html.initial_access import (
+    create_initial_access_html,
+)
+from rivendell.post.splunk.app.views.html.execution import create_execution_html
+from rivendell.post.splunk.app.views.html.persistence import create_persistence_html
+from rivendell.post.splunk.app.views.html.privilege_escalation import (
     create_privilege_escalation_html,
 )
-from rivendell.post.splunk.html.defence_evasion import create_defence_evasion_html
-from rivendell.post.splunk.html.credential_access import (
+from rivendell.post.splunk.app.views.html.defence_evasion import (
+    create_defence_evasion_html,
+)
+from rivendell.post.splunk.app.views.html.credential_access import (
     create_credential_access_html,
 )
-from rivendell.post.splunk.html.discovery import create_discovery_html
-from rivendell.post.splunk.html.lateral_movement import create_lateral_movement_html
-from rivendell.post.splunk.html.collection import create_collection_html
-from rivendell.post.splunk.html.command_control import create_command_control_html
-from rivendell.post.splunk.html.exfiltration import create_exfiltration_html
-from rivendell.post.splunk.html.impact import create_impact_html
+from rivendell.post.splunk.app.views.html.discovery import create_discovery_html
+from rivendell.post.splunk.app.views.html.lateral_movement import (
+    create_lateral_movement_html,
+)
+from rivendell.post.splunk.app.views.html.collection import create_collection_html
+from rivendell.post.splunk.app.views.html.command_control import (
+    create_command_control_html,
+)
+from rivendell.post.splunk.app.views.html.exfiltration import create_exfiltration_html
+from rivendell.post.splunk.app.views.html.impact import create_impact_html
+from rivendell.post.splunk.app.views.xml.initial_access import create_initial_access_xml
+from rivendell.post.splunk.app.views.xml.execution import create_execution_xml
+from rivendell.post.splunk.app.views.xml.persistence import create_persistence_xml
+from rivendell.post.splunk.app.views.xml.privilege_escalation import (
+    create_privilege_escalation_xml,
+)
+from rivendell.post.splunk.app.views.xml.defence_evasion import (
+    create_defence_evasion_xml,
+)
+from rivendell.post.splunk.app.views.xml.credential_access import (
+    create_credential_access_xml,
+)
+from rivendell.post.splunk.app.views.xml.discovery import create_discovery_xml
+from rivendell.post.splunk.app.views.xml.lateral_movement import (
+    create_lateral_movement_xml,
+)
+from rivendell.post.splunk.app.views.xml.collection import create_collection_xml
+from rivendell.post.splunk.app.views.xml.command_control import (
+    create_command_control_xml,
+)
+from rivendell.post.splunk.app.views.xml.exfiltration import create_exfiltration_xml
+from rivendell.post.splunk.app.views.xml.impact import create_impact_xml
 
 
 def create_htmls(sd):
@@ -59,3 +89,18 @@ def create_htmls(sd):
         sd, header, headings, iocs, related, insert, mitigations, footer
     )
     create_impact_html(sd, header, headings, iocs, related, insert, mitigations, footer)
+
+
+def create_xmls(sd):
+    create_initial_access_xml(sd)
+    create_execution_xml(sd)
+    create_persistence_xml(sd)  # unfinished: 1 custom
+    create_privilege_escalation_xml(sd)
+    create_defence_evasion_xml(sd)
+    create_credential_access_xml(sd)
+    create_discovery_xml(sd)
+    create_lateral_movement_xml(sd)
+    create_collection_xml(sd)
+    create_command_control_xml(sd)
+    create_exfiltration_xml(sd)
+    create_impact_xml(sd)

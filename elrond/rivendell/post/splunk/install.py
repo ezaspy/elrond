@@ -8,15 +8,14 @@ from datetime import datetime
 from collections import OrderedDict
 from tarfile import TarFile
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
+from rivendell.post.splunk.app.app import build_app_elrond
 from rivendell.post.splunk.apps.geolocate import build_app_geolocate
 from rivendell.post.splunk.apps.lookup import build_app_lookup
 from rivendell.post.splunk.apps.punchcard import build_app_punchcard
 from rivendell.post.splunk.apps.sankey import build_app_sankey
 from rivendell.post.splunk.apps.topology import build_app_topology
 from rivendell.post.splunk.apps.treemap import build_app_treemap
-from rivendell.post.splunk.elrond_app.app import build_app_elrond
 from rivendell.post.splunk.ingest import ingest_splunk_data
 
 
@@ -251,7 +250,6 @@ def configure_splunk_stack(
         "/" + postpath + "splunk/etc/apps/elrond/"
     ):  # deploying elrond Splunk app
         build_app_elrond(case, postpath)
-        print_done(verbosity)
     else:
         with open(
             "/" + postpath + "splunk/etc/apps/elrond/default/data/ui/nav/default.xml"

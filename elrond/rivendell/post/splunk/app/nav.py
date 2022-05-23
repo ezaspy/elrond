@@ -1,5 +1,5 @@
 #!/usr/bin/env python3 -tt
-def create_navigation_menu(defaultxml):
+def create_nav_menu(defaultxml):
     defaultxml.write('<collection label="MITRE">\n		')
     defaultxml.write('<view name="mitre" default="true" />\n			')
     defaultxml.write(

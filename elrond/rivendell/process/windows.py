@@ -59,7 +59,6 @@ def process_mft(verbosity, vssimage, output_directory, img, vssartefact, stage):
                 stderr=subprocess.PIPE,
             ).communicate()
             mftcsv.write(str(mftout.communicate()[0]))
-            print_done(verbosity)
         except:
             pass
         with open(
@@ -70,6 +69,9 @@ def process_mft(verbosity, vssimage, output_directory, img, vssartefact, stage):
             + ".journal_mft.csv",
             "a",
         ) as mftwrite:
+            mftwrite.write(
+                "record,state,active,record_type,seq_number,parent_file_record,parent_file_record_seq,std_info_creation_date,std_info_modification_date,std_info_access_date,std_info_entry_date,object_id,birth_volume_id,birth_object_id,birth_domain_id,std_info,attribute_list,has_filename,has_object_id,volume_name,volume_info,data,index_root,index_allocation,bitmap,reparse_point,ea_information,ea,property_set,logged_utility_stream,log/notes,stf_fn_shift,usec_zero,ads,possible_copy,possible_volume_move,Filename,fn_info_creation_date,fn_info_modification_date,fn_info_access_date,fn_info_entry_date,LastWriteTime\n"
+            )
             with open(
                 output_directory
                 + img.split("::")[0]
@@ -78,41 +80,169 @@ def process_mft(verbosity, vssimage, output_directory, img, vssartefact, stage):
                 + "..journal_mft.csv"
             ) as mftread:
                 for eachinfo in mftread:
-                    mftentries, mftcounter = (
+                    mftentries = (
                         list(
                             str(
                                 re.sub(
-                                    r"^([^\,]*\,[^\,]*\,[^\,]*\,[^\,]*\,[^\,]*\,[^\,]*\,[^\,]*\,\")([^\"]*)(\"\,[^\,]*\,[^\,]*\,\")([^\"]*)(\"\,[^\,]*\,[^\,]*\,[^\,]*\,[^\,]*\,[^\,]*\,[^\,]*\,[^\,]*\,[^\,]*\,[^\,]*\,\")([^\"]*)(\"\,[^\,]*\,[^\,]*\,[^\,]*\,[^\,]*\,\")([^\"]*)(\"\,[^\,]*\,[^\,]*\,[^\,]*\,[^\,]*\,\")([^\"]*)(\")([\S\s]*)",
-                                    r"\1\2\3\4\5\6\7\8\9\10\11\12,\"\2\",\"\6\",\"\8\",\"\10\",\"\4\"",
-                                    re.sub(
-                                        r"([^\"])\,([^\"])",
-                                        r"\1\2",
-                                        eachinfo.strip(),
-                                    ),
-                                )
-                            )
-                            .replace(
-                                '"Record Number","Good","Active","Record type","Sequence Number","Parent File Rec. #","Parent File Rec. Seq. #","Filename #1","Std Info Creation date","Std Info Modification date","Std Info Access date","Std Info Entry date","FN Info Creation date","FN Info Modification date","FN Info Access date","FN Info Entry date","Object ID","Birth Volume ID","Birth Object ID","Birth Domain ID","Filename #2","FN Info Creation date","FN Info Modify date","FN Info Access date","FN Info Entry date","Filename #3","FN Info Creation date","FN Info Modify date","FN Info Access date","FN Info Entry date","Filename #4","FN Info Creation date","FN Info Modify date","FN Info Access date","FN Info Entry date","Standard Information","Attribute List","Filename","Object ID","Volume Name","Volume Info","Data","Index Root","Index Allocation","Bitmap","Reparse Point","EA Information","EA","Property Set","Logged Utility Stream","Log/Notes","STF FN Shift","uSec Zero","ADS","Possible Copy","Possible Volume Move",\\"Filename #1\\",\\"Filename #2\\",\\"Filename #3\\",\\"Filename #4\\",\\"Std Info Access date\\"',
-                                '"Record_Number","Good","Active","Record_type","Sequence_Number","Parent_File_Rec","Parent_File_Rec_Seq","Filename_1","Std_Info_Creation_date","Std_Info_Modification_date","Std_Info_Access_date","Std_Info_Entry_date","FN_Info_Creation_date1","FN_Info_Modification_date1","FN_Info_Access_date1","FN_Info_Entry_date1","Object_ID","Birth_Volume_ID","Birth_Object_ID","Birth_Domain_ID","Filename_2","FN_Info_Creation_date2","FN_Info_Modify_date2","FN_Info_Access_date2","FN_Info_Entry_date2","Filename_3","FN_Info_Creation_date3","FN_Info_Modify_date3","FN_Info_Access_date3","FN_Info_Entry_date3","Filename_4","FN_Info_Creation_date4","FN_Info_Modify_date4","FN_Info_Access_date4","FN_Info_Entry_date4","Standard_Information","Attribute_List","Filename","Object_ID","Volume_Name","Volume_Info","Data","Index_Root","Index_Allocation","Bitmap","Reparse_Point","EA_Information","EA","Property_Set","Logged_Utility_Stream","Log/Notes","STF_FN_Shift","uSec_Zero","ADS","Possible_Copy","Possible_Volume_Move","Filename1","Filename2","Filename3","Filename4","LastWriteTime"',
-                            )
-                            .split(",")
+                                    r"([^\"])\,([^\"])",
+                                    r"\1\2",
+                                    eachinfo.strip(),
+                                ),
+                            ).split(",")
                         ),
-                        0,
                     )
-                    for mftentry in mftentries:
-                        mftwrite.write(
-                            str(mftentry.replace("\\", "").lower())
-                            .replace('""', '"-"')
-                            .replace(",,", ",-,")
-                            .replace("filename", "Filename")
-                            .replace("lastwritetime", "LastWriteTime")[1:-1]
+                    mftrow_information = (
+                        mftentries[0][0].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][1].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][2].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][3].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][4].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][5].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][6].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][8].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][9].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][10].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][11].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][16].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][17].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][18].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][19].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][35].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][36].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][37].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][38].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][39].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][40].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][41].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][42].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][43].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][44].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][45].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][46].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][47].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][48].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][49].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][50].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][51].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][52].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][53].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][54].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][55].strip('"').strip(",")
+                    )
+                    mftrow = (
+                        mftrow_information
+                        + ","
+                        + mftentries[0][7].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][12].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][13].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][14].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][15].strip('"').strip(",")
+                        + ","
+                        + mftentries[0][13].strip('"').strip(",")
+                    )
+                    if len(mftentries[0][20].strip('"').strip(",")) > 0:
+                        mftrow = (
+                            "\n"
+                            + mftrow_information
+                            + ","
+                            + mftentries[0][20].strip('"').strip(",")
+                            + ","
+                            + mftentries[0][21].strip('"').strip(",")
+                            + ","
+                            + mftentries[0][22].strip('"').strip(",")
+                            + ","
+                            + mftentries[0][23].strip('"').strip(",")
+                            + ","
+                            + mftentries[0][24].strip('"').strip(",")
+                            + ","
+                            + mftentries[0][22].strip('"').strip(",")
                         )
-                        if mftcounter <= 60:
-                            mftwrite.write(",")
-                        else:
-                            pass
-                        mftcounter += 1
-                    mftwrite.write("\n")
+                    else:
+                        pass
+                    if len(mftentries[0][25].strip('"').strip(",")) > 0:
+                        mftrow = (
+                            "\n"
+                            + mftrow_information
+                            + ","
+                            + mftentries[0][25].strip('"').strip(",")
+                            + ","
+                            + mftentries[0][26].strip('"').strip(",")
+                            + ","
+                            + mftentries[0][27].strip('"').strip(",")
+                            + ","
+                            + mftentries[0][28].strip('"').strip(",")
+                            + ","
+                            + mftentries[0][29].strip('"').strip(",")
+                            + ","
+                            + mftentries[0][27].strip('"').strip(",")
+                        )
+                    else:
+                        pass
+                    if len(mftentries[0][30].strip('"').strip(",")) > 0:
+                        mftrow = (
+                            "\n"
+                            + mftrow_information
+                            + ","
+                            + mftentries[0][30].strip('"').strip(",")
+                            + ","
+                            + mftentries[0][31].strip('"').strip(",")
+                            + ","
+                            + mftentries[0][32].strip('"').strip(",")
+                            + ","
+                            + mftentries[0][33].strip('"').strip(",")
+                            + ","
+                            + mftentries[0][34].strip('"').strip(",")
+                            + ","
+                            + mftentries[0][32].strip('"').strip(",")
+                        )
+                    else:
+                        pass
+                    if (
+                        "record number,good,active,record type,sequence number,parent file rec"
+                        not in mftrow.lower()
+                        and "NoFNRecord,NoFNRecord,NoFNRecord,NoFNRecord,NoFNRecord,NoFNRecord"
+                        not in mftrow
+                    ):
+                        mftwrite.write(mftrow + "\n")
     with open(
         output_directory
         + img.split("::")[0]
@@ -129,7 +259,12 @@ def process_mft(verbosity, vssimage, output_directory, img, vssartefact, stage):
             + ".journal_mft.csv"
         ) as mftread:
             for eachentry in mftread:
-                mftwrite.write(eachentry.strip().strip(",") + "\n")
+                if len(eachentry.strip()) > 0:
+                    mftwrite.write(
+                        eachentry.strip().strip(",").replace(",,", ",-,") + "\n"
+                    )
+                else:
+                    pass
     if os.path.exists(
         output_directory
         + img.split("::")[0]

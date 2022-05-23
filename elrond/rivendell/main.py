@@ -19,7 +19,6 @@ from rivendell.post.clean import archive_artefacts
 from rivendell.post.clean import delete_artefacts
 from rivendell.post.elastic.config import configure_elastic_stack
 from rivendell.post.mitre.nav_config import configure_navigator
-from rivendell.post.sigma.build import write_sigma_signatures
 from rivendell.post.splunk.install import configure_splunk_stack
 from rivendell.post.yara import run_yara_signatures
 
@@ -34,7 +33,6 @@ def main(
     delete,
     elastic,
     collectfiles,
-    sigma,
     nsrl,
     extractiocs,
     imageinfo,
@@ -582,7 +580,7 @@ def main(
     )
     if (
         len(allimgs) > 0
-    ):  # Post-processing metadata, YARA, Splunk, Elastic, SIGMA, Archive, Deletion
+    ):  # Post-processing metadata, YARA, Splunk, Elastic, Archive, Deletion
         if not superquick or hashcollected:
             print(
                 "\n\n  -> \033[1;36mCommencing Metadata phase for proccessed artefacts...\033[1;m\n  ----------------------------------------"
@@ -750,24 +748,6 @@ def main(
             flags.append("08elastic")
             print(
                 "  ----------------------------------------\n  -> Completed Elastic Phase.\n"
-            )
-            time.sleep(1)
-        else:
-            pass
-        if sigma:
-            write_sigma_signatures(
-                verbosity,
-                output_directory,
-                case,
-                allimgs,
-                volatility,
-                analysis,
-                timeline,
-                yara,
-            )
-            flags.append("09sigma")
-            print(
-                "  ----------------------------------------\n  -> Completed SIGMA Phase.\n"
             )
             time.sleep(1)
         else:
