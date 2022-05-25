@@ -382,7 +382,7 @@ def create_privilege_escalation_html(sd, header, headings, iocs, related, insert
             "Privilege Escalation, Defense Evasion</td>\n        <td>"
         )  # tactics
         t1055html.write(
-            "T1574.001: Dynamic-link Library Injection<br>T1574.002: Portable Execution Injection<br>T1574.003: Thread Execution Hijacking<br>T1574.004: Asynchronous Procedure Call<br>T1574.005: Thread Local Storage<br>T1574.008: Ptrace System Calls<br>T1574.009: Proc Memory<br>T1574.011: Extra Windows Memory Injection<br>T1574.012: Process Hollowing<br>T1574.013: Process Doppelganging<br>T1574.014: VDSO Hijacking"
+            "T1574.001: Dynamic-link Library Injection<br>T1574.002: Portable Execution Injection<br>T1574.003: Thread Execution Hijacking<br>T1574.004: Asynchronous Procedure Call<br>T1574.005: Thread Local Storage<br>T1574.008: Ptrace System Calls<br>T1574.009: Proc Memory<br>T1574.011: Extra Windows Memory Injection<br>T1574.012: Process Hollowing<br>T1574.013: Process Doppelganging<br>T1574.014: VDSO Hijacking<br>T1055.015: ListPlanting"
         )  # sub-techniques
         # indicator regex assignments
         t1055html.write("{}Event IDs: 17, 18</li>\n        <li>".format(iocs))
@@ -407,10 +407,18 @@ def create_privilege_escalation_html(sd, header, headings, iocs, related, insert
         t1055html.write("malloc</li>\n        <li>")
         t1055html.write("ptrace_setregs</li>\n        <li>")
         t1055html.write("ptrace_poketext</li>\n        <li>")
-        t1055html.write("ptrace_pokedata</li>")
+        t1055html.write("ptrace_pokedata</li>\n        <li>")
+        t1055html.write("FindWindow</li>\n        <li>")
+        t1055html.write("EnumWindow</li>\n        <li>")
+        t1055html.write("SendMessage</li>\n        <li>")
+        t1055html.write("ListView</li>")
         # related techniques
-        t1055html.write("{}-</a></td>\n        <td>".format(related))
-        t1055html.write("-")
+        t1055html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1055 target="_blank"">T1055</a></td>\n        <td>'.format(
+                related
+            )
+        )
+        t1055html.write("Process Injection")
         # mitigations
         t1055html.write(
             "{}Behavior Prevention on Endpoint</td>\n        <td>".format(mitigations)

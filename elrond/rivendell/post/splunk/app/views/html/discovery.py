@@ -347,6 +347,39 @@ def create_discovery_html(
                 footer
             )
         )
+    with open(sd + "t1615.html", "w") as t1615html:
+        # description
+        t1615html.write(
+            "{}Adversaries may gather information on Group Policy settings to identify paths for privilege escalation, security measures applied within a domain, and to discover patterns in domain objects that can be manipulated or used to blend in the environment. Group Policy allows for centralized management of user and computer settings in Active Directory (AD). Group policy objects (GPOs) are containers for group policy settings made up of files stored within a predicable network path \\SYSVOL\\Policies.<br>".format(
+                header
+            )
+        )
+        t1615html.write(
+            "Adversaries may use commands such as gpresult or various publicly available PowerShell functions, such as Get-DomainGPO and Get-DomainGPOLocalGroup, to gather information on Group Policy settings.[3][4] Adversaries may use this information to shape follow-on behaviors, including determining potential attack paths within the target network as well as opportunities to manipulate Group Policy settings (i.e. Domain Policy Modification) for their benefit."
+        )
+        # information
+        t1615html.write("{}T1615</td>\n        <td>".format(headings))  # id
+        t1615html.write("Windows</td>\n        <td>")  # platforms
+        t1615html.write("Discovery</td>\n        <td>")  # tactics
+        t1615html.write("-")  # sub-techniques
+        # indicator regex assignments
+        t1615html.write("{}sysvol/policies</li>\n        <li>".format(iocs))
+        t1615html.write("gpresult</li>\n        <li>")
+        t1615html.write("Get-DomainGPO</li>")
+        # related techniques
+        t1615html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1484 target="_blank"">T1484</a></td>\n        <td>'.format(
+                related
+            )
+        )
+        t1615html.write("Domain Policy Modification")
+        # mitigations
+        t1615html.write("{}-</td>\n        <td>".format(mitigations))
+        t1615html.write(
+            "This type of attack technique cannot be easily mitigated with preventive controls since it is based on the abuse of system features.{}".format(
+                footer
+            )
+        )
     with open(sd + "t1046.html", "w") as t1046html:
         # description
         t1046html.write(
@@ -419,7 +452,7 @@ def create_discovery_html(
         t1135html.write("net1.exe view</li>\n        <li>")
         t1135html.write("netsh</li>")
         # related techniques
-        t1135html.write("{}--</a></td>\n        <td>".format(related))
+        t1135html.write("{}-</a></td>\n        <td>".format(related))
         t1135html.write("-")
         # mitigations
         t1135html.write(
@@ -734,14 +767,32 @@ def create_discovery_html(
         t1614html.write("{}T1614</td>\n        <td>".format(headings))  # id
         t1614html.write("Windows, macOS, Linux, IaaS</td>\n        <td>")  # platforms
         t1614html.write("Discovery</td>\n        <td>")  # tactics
-        t1614html.write("-")  # sub-techniques
+        t1614html.write("T1614.001: System Language Discovery")  # sub-techniques
         # indicator regex assignments
-        t1614html.write("{}GetLocaleInfoW".format(iocs))
+        t1614html.write("{}hklm/system/currentcontrolset/control/nls/language</li>\n        <li>".format(iocs))
+        t1614html.write("GetUserDefaultUILanguage</li>\n        <li>")
+        t1614html.write("GetSystemDefaultUILanguage</li>\n        <li>")
+        t1614html.write("GetKeyboardLayoutList</li>\n        <li>")
+        t1614html.write("GetUserDefaultLangID</li>")
         # related techniques
         t1614html.write(
-            '<a href="http://127.0.0.1:8000/en-US/app/elrond/t1053 target="_blank"">T1124</a></td>\n        <td>'
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1053 target="_blank"">T1124</a></td>\n        <td>'.format(
+                related
+            )
         )
         t1614html.write("System Time Discovery")
+        t1614html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1012 target="_blank"">T1012</a></td>\n        <td>'.format(
+                insert
+            )
+        )
+        t1614html.write("Query Registry")
+        t1614html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1106 target="_blank"">T1106</a></td>\n        <td>'.format(
+                insert
+            )
+        )
+        t1614html.write("Native API")
         # mitigations
         t1614html.write("{}-</td>\n        <td>".format(mitigations))
         t1614html.write(

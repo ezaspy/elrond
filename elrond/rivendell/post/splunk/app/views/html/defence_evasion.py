@@ -15,7 +15,7 @@ def create_defence_evasion_html(
             "An adversary may take advantage of that build API to build a custom image on the host that includes malware downloaded from their C2 server, and then they then may utilize Deploy Container using that custom image. If the base image is pulled from a public registry, defenses will likely not detect the image as malicious since it’s a vanilla image. If the base image already resides in a local registry, the pull may be considered even less suspicious since the image is already in the environment."
         )
         # information
-        t1612html.write("{}T1610</td>\n        <td>".format(headings))  # id
+        t1612html.write("{}T1612</td>\n        <td>".format(headings))  # id
         t1612html.write("Containers</td>\n        <td>")  # platforms
         t1612html.write("Execution</td>\n        <td>")  # tactics
         t1612html.write("-")  # sub-techniques
@@ -57,6 +57,60 @@ def create_defence_evasion_html(
         t1612html.write("Privileged Account Management</td>\n        <td>")
         t1612html.write(
             "Ensure containers are not running as root by default.{}".format(footer)
+        )
+    with open(sd + "t1622.html", "w") as t1622html:
+        # description
+        t1622html.write(
+            "{}Adversaries may employ various means to detect and avoid debuggers. Debuggers are typically used by defenders to trace and/or analyze the execution of potential malware payloads.<br>".format(
+                header
+            )
+        )
+        t1622html.write(
+            "Debugger evasion may include changing behaviors based on the results of the checks for the presence of artifacts indicative of a debugged environment. Similar to Virtualization/Sandbox Evasion, if the adversary detects a debugger, they may alter their malware to disengage from the victim or conceal the core functions of the implant. They may also search for debugger artifacts before dropping secondary or additional payloads.<br>"
+        )
+        t1622html.write(
+            'Specific checks will vary based on the target and/or adversary, but may involve Native API function calls such as IsDebuggerPresent() and NtQueryInformationProcess(), or manually checking the BeingDebugged flag of the Process Environment Block (PEB). Other checks for debugging artifacts may also seek to enumerate hardware breakpoints, interrupt assembly opcodes, time checks, or measurements if exceptions are raised in the current process (assuming a present debugger would "swallow" or handle the potential error).<br>'
+        )
+        t1622html.write(
+            "Adversaries may use the information learned from these debugger checks during automated discovery to shape follow-on behaviors. Debuggers can also be evaded by detaching the process or flooding debug logs with meaningless data via messages produced by looping Native API function calls such as OutputDebugStringW()."
+        )
+        # information
+        t1622html.write("{}T1622</td>\n        <td>".format(headings))  # id
+        t1622html.write("Windows, macOS, Linux</td>\n        <td>")  # platforms
+        t1622html.write("Defense Evasion, Discovery</td>\n        <td>")  # tactics
+        t1622html.write("-")  # sub-techniques
+        # indicator regex assignments
+        t1622html.write("{}IsDebuggerPresent</li>\n        <li>".format(iocs))
+        t1622html.write("NtQueryInformationProcess</li>\n        <li>")
+        t1622html.write("BeingDebugged</li>\n        <li>")
+        t1622html.write("P_TRACED</li>")
+        # related techniques
+        t1622html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1497 target="_blank"">T1497</a></td>\n        <td>'.format(
+                related
+            )
+        )
+        t1622html.write("Virtualization/Sandbox Evasion")
+        t1622html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1106 target="_blank"">T1106</a></td>\n        <td>'.format(
+                insert
+            )
+        )
+        t1622html.write("Native API")
+        # mitigations
+        t1622html.write(
+            "{}Behavior Prevention on Endpoint</td>\n        <td>".format(mitigations)
+        )
+        t1622html.write(
+            "On Windows 10, enable Attack Surface Reduction (ASR) rules to prevent Office VBA macros from calling Win32 APIs.{}".format(
+                insert
+            )
+        )
+        t1622html.write("Execution Prevention</td>\n        <td>")
+        t1622html.write(
+            "Identify and block potentially malicious software executed that may be executed through this technique by using application control tools, like Windows Defender Application Control, AppLocker or Software Restriction Policies where appropriate.{}".format(
+                footer
+            )
         )
     with open(sd + "t1140.html", "w") as t1140html:
         # description
@@ -334,7 +388,7 @@ def create_defence_evasion_html(
         t1564html.write("Windows, macOS, Linux</td>\n        <td>")  # platforms
         t1564html.write("Defense Evasion</td>\n        <td>")  # tactics
         t1564html.write(
-            "T1564.001: Hidden Files and Directories<br>T1564.002: Hidden Users<br>T1564.003: Hidden Window<br>T1564.004: NTFS File Attributes<br>T1564.005: Hidden File System<br>T1564.006: Run Virtual Instance<br>T1564.007: VBA Stomping"
+            "T1564.001: Hidden Files and Directories<br>T1564.002: Hidden Users<br>T1564.003: Hidden Window<br>T1564.004: NTFS File Attributes<br>T1564.005: Hidden File System<br>T1564.006: Run Virtual Instance<br>T1564.007: VBA Stomping<br>T1564.008: Email Hiding Rules<br>T1564.009: Resource Forking<br>T1564.010: Process Argument Spoofing"
         )  # sub-techniques
         # indicator regex assignments
         t1564html.write("{}-create</li>\n        <li>".format(iocs))
@@ -358,14 +412,47 @@ def create_defence_evasion_html(
         t1564html.write("LoginWindow</li>\n        <li>")
         t1564html.write("Hide500Users</li>\n        <li>")
         t1564html.write("UniqueID</li>\n        <li>")
+        t1564html.write("UIElement</li>\n        <li>")
+        t1564html.write("WriteProcessMemory</li>\n        <li>")
+        t1564html.write("xattr</li>\n        <li>")
+        t1564html.write("New-InboxRule</li>\n        <li>")
+        t1564html.write("Set-InboxRule</li>\n        <li>")
         t1564html.write("UIElement</li>")
         # related techniques
-        t1564html.write("{}-</a></td>\n        <td>".format(related))
-        t1564html.write("-")
-        # mitigations
-        t1564html.write("{}-</td>\n        <td>".format(mitigations))
         t1564html.write(
-            "This type of attack technique cannot be easily mitigated with preventive controls since it is based on the abuse of system features.{}".format(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1106 target="_blank"">T1106</a></td>\n        <td>'.format(
+                insert
+            )
+        )
+        t1564html.write("Native API")
+        t1564html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1134 target="_blank"">T1134.004</a></td>\n        <td>'.format(
+                insert
+            )
+        )
+        t1564html.write("Access Token Manipulation: Parent PID Spoofing")
+        t1564html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1059 target="_blank"">T1059.001</a></td>\n        <td>'.format(
+                insert
+            )
+        )
+        t1564html.write("Command and Scripting Interpreter: PowerShell")
+        t1564html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1055 target="_blank"">T1055.12</a></td>\n        <td>'.format(
+                insert
+            )
+        )
+        t1564html.write("Process Injection: Process Hollowing")
+        # mitigations
+        t1564html.write("{}Audit</td>\n        <td>".format(mitigations))
+        t1564html.write(
+            "Enterprise email solutions may have monitoring mechanisms that may include the ability to audit inbox rules on a regular basis. In an Exchange environment, Administrators can use Get-InboxRule to discover and remove potentially malicious inbox rules.{}".format(
+                insert
+            )
+        )
+        t1564html.write("Application Developer Guidance</td>\n        <td>")
+        t1564html.write(
+            "Configure applications to use the application bundle structure which leverages the /Resources folder location.{}".format(
                 footer
             )
         )
@@ -389,7 +476,7 @@ def create_defence_evasion_html(
         )  # platforms
         t1562html.write("Defense Evasion</td>\n        <td>")  # tactics
         t1562html.write(
-            "T1562.001: Disable or Modify Tools<br>T1562.002: Disable Windows Event Logging<br>T1562.003: HISTCONTROL<br>T1562.004: Disable or Modify System Firewall<br>T1562.006: Indicator Blocking<br>T1562.007: Disable or Modify Cloud Firewall<br>T1562.008: Disable Cloud Logs"
+            "T1562.001: Disable or Modify Tools<br>T1562.002: Disable Windows Event Logging<br>T1562.003: HISTCONTROL<br>T1562.004: Disable or Modify System Firewall<br>T1562.006: Indicator Blocking<br>T1562.007: Disable or Modify Cloud Firewall<br>T1562.008: Disable Cloud Logs<br>T1562.009: Safe Boot Mode<br>T1562.010: Downgrade Attack"
         )  # sub-techniques
         # indicator regex assignments
         t1562html.write("{}AUDITPOL</li>\n        <li>".format(iocs))
@@ -407,8 +494,14 @@ def create_defence_evasion_html(
         t1562html.write("HISTFILE</li>\n        <li>")
         t1562html.write("kill</li>")
         # related techniques
-        t1562html.write("{}-</a></td>\n        <td>".format(related))
-        t1562html.write("-")
+        t1562html.write(
+            '<a href="http://127.0.0.1:8000/en-US/app/elrond/t1112 target="_blank"">T1112</a></td>\n        <td>'
+        )
+        t1562html.write("Modify Registry")
+        t1562html.write(
+            '<a href="http://127.0.0.1:8000/en-US/app/elrond/t1559 target="_blank"">T1559.001</a></td>\n        <td>'
+        )
+        t1562html.write("Inter-Process Communication: Component Object Model")
         # mitigations
         t1562html.write(
             "{}Restrict File and Directory Permissions</td>\n        <td>".format(
@@ -429,6 +522,22 @@ def create_defence_evasion_html(
         t1562html.write("User Account Management</td>\n        <td>")
         t1562html.write(
             "Ensure proper user permissions are in place to prevent adversaries from disabling or interfering with security/logging services.{}".format(
+                insert
+            )
+        )
+        t1562html.write("Privileged Account Management</td>\n        <td>")
+        t1562html.write(
+            "Restrict administrator accounts to as few individuals as possible, following least privilege principles, that may be abused to remotely boot a machine in safe mode.{}".format(
+                insert
+            )
+        )
+        t1562html.write("Software Configuration</td>\n        <td>")
+        t1562html.write(
+            "Ensure that endpoint defenses run in safe mode.{}".format(insert)
+        )
+        t1562html.write("Disable or Remove Feature or Program</td>\n        <td>")
+        t1562html.write(
+            "Consider removing previous versions of tools that are unnecessary to the environment when possible.{}".format(
                 footer
             )
         )
@@ -552,7 +661,7 @@ def create_defence_evasion_html(
         t1036html.write("Windows, macOS, Linux</td>\n        <td>")  # platforms
         t1036html.write("Defense Evasion</td>\n        <td>")  # tactics
         t1036html.write(
-            "T1036.001: Invalid Code Signature<br>T1036.002: Right-to-Left Override<br>T1036.003: Rename System Utilities<br>T1036.004: Masquerade Task or Service<br>T1036.005: Match Legitimate Name or Location<br>T1036.006: Space after Filename"
+            "T1036.001: Invalid Code Signature<br>T1036.002: Right-to-Left Override<br>T1036.003: Rename System Utilities<br>T1036.004: Masquerade Task or Service<br>T1036.005: Match Legitimate Name or Location<br>T1036.006: Space after Filename<br>T1036.007: Double File Extension"
         )  # sub-techniques
         # indicator regex assignments
         t1036html.write("{}certutil</li>\n        <li>".format(iocs))
@@ -594,6 +703,18 @@ def create_defence_evasion_html(
         t1036html.write("Restrict File and Directory Permissions</td>\n        <td>")
         t1036html.write(
             "Use file system access controls to protect folders such as C:\\Windows\\System32.{}".format(
+                insert
+            )
+        )
+        t1036html.write("Operating System Configuration</td>\n        <td>")
+        t1036html.write(
+            'Disable the default to "hide file extensions for known file types" in Windows OS.{}'.format(
+                insert
+            )
+        )
+        t1036html.write("User Training</td>\n        <td>")
+        t1036html.write(
+            "Train users to look for double extensions in filenames, and in general use training as a way to bring awareness to common phishing and spearphishing techniques and how to raise suspicion for potentially malicious events.{}".format(
                 footer
             )
         )
@@ -838,7 +959,7 @@ def create_defence_evasion_html(
         t1027html.write("Windows, macOS, Linux</td>\n        <td>")  # platforms
         t1027html.write("Defense Evasion</td>\n        <td>")  # tactics
         t1027html.write(
-            "T1027.001: Binary Padding<br>T1027.002: Software Packing<br>T1027.003: Steganography<br>T1027.004: Complie After Delivery<br>T1027.005: Indicator Removal from Tools"
+            "T1027.001: Binary Padding<br>T1027.002: Software Packing<br>T1027.003: Steganography<br>T1027.004: Complie After Delivery<br>T1027.005: Indicator Removal from Tools<br>T1027.006: HTML Smuggling"
         )  # sub-techniques
         # indicator regex assignments
         t1027html.write("{}csc.exe</li>\n        <li>".format(iocs))
@@ -864,6 +985,92 @@ def create_defence_evasion_html(
         )
         t1027html.write(
             "Consider utilizing the Antimalware Scan Interface (AMSI) on Windows 10 to analyze commands after being processed/interpreted.{}".format(
+                footer
+            )
+        )
+    with open(sd + "t1647.html", "w") as t1647html:
+        # description
+        t1647html.write(
+            "{}Adversaries may modify property list files (plist files) to enable other malicious activity, while also potentially evading and bypassing system defenses. macOS applications use plist files, such as the info.plist file, to store properties and configuration settings that inform the operating system how to handle the application at runtime. Plist files are structured metadata in key-value pairs formatted in XML based on Apple's Core Foundation DTD. Plist files can be saved in text or binary format.<br>".format(
+                header
+            )
+        )
+        t1647html.write(
+            "Adversaries can modify key-value pairs in plist files to influence system behaviors, such as hiding the execution of an application (i.e. Hidden Window) or running additional commands for persistence (ex: Launch Agent/Launch Daemon or Re-opened Applications).<br>"
+        )
+        t1647html.write(
+            "For example, adversaries can add a malicious application path to the ~/Library/Preferences/com.apple.dock.plist file, which controls apps that appear in the Dock. Adversaries can also modify the LSUIElement key in an application’s info.plist file to run the app in the background. Adversaries can also insert key-value pairs to insert environment variables, such as LSEnvironment, to enable persistence via Dynamic Linker Hijacking."
+        )
+        # information
+        t1647html.write("{}T1647</td>\n        <td>".format(headings))  # id
+        t1647html.write("macOS</td>\n        <td>")  # platforms
+        t1647html.write("Defense Evasion</td>\n        <td>")  # tactics
+        t1647html.write("-")  # sub-techniques
+        # indicator regex assignments
+        t1647html.write("{}LSUIElement</li>\n        <li>".format(iocs))
+        t1647html.write("LSEnvironment</li>")
+        # related techniques
+        t1647html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1574 target="_blank"">T1574</a></td>\n        <td>'.format(
+                related
+            )
+        )
+        t1647html.write("Hijack Execution Flow")
+        t1647html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1564 target="_blank"">T1564</a></td>\n        <td>'.format(
+                insert
+            )
+        )
+        t1647html.write("Hide Artifacts")
+        t1647html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1543 target="_blank"">T1543</a></td>\n        <td>'.format(
+                insert
+            )
+        )
+        t1647html.write("Create or Modify System Process")
+        t1647html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1547 target="_blank"">T1547</a></td>\n        <td>'.format(
+                insert
+            )
+        )
+        t1647html.write("Boot or Logon Autostart Execution")
+        # mitigations
+        t1647html.write(
+            "{}Application Developer Guidance</td>\n        <td>".format(mitigations)
+        )
+        t1647html.write(
+            "Ensure applications are using Apple's developer guidance which enables hardened runtime.{}".format(
+                footer
+            )
+        )
+    with open(sd + "t1620.html", "w") as t1620html:
+        # description
+        t1620html.write(
+            "{}Adversaries may reflectively load code into a process in order to conceal the execution of malicious payloads. Reflective loading involves allocating then executing payloads directly within the memory of the process, vice creating a thread or process backed by a file path on disk. Reflectively loaded payloads may be compiled binaries, anonymous files (only present in RAM), or just snubs of fileless executable code (ex: position-independent shellcode).<br>".format(
+                header
+            )
+        )
+        t1620html.write(
+            'Reflective code injection is very similar to Process Injection except that the "injection" loads code into the processes’ own memory instead of that of a separate process. Reflective loading may evade process-based detections since the execution of the arbitrary code may be masked within a legitimate or otherwise benign process. Reflectively loading payloads directly into memory may also avoid creating files or other artifacts on disk, while also enabling malware to keep these payloads encrypted (or otherwise obfuscated) until execution.<br>'
+        )
+        # information
+        t1620html.write("{}T1207</td>\n        <td>".format(headings))  # id
+        t1620html.write("Windows, macOS, Linux</td>\n        <td>")  # platforms
+        t1620html.write("Defense Evasion</td>\n        <td>")  # tactics
+        t1620html.write("-")
+        # indicator regex assignments
+        t1620html.write("{}-".format(iocs))
+        # related techniques
+        t1620html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1055 target="_blank"">T1055</a></td>\n        <td>'.format(
+                related
+            )
+        )
+        t1620html.write("Process Injection")
+        # mitigations
+        t1620html.write("{}-</td>\n        <td>".format(mitigations))
+        t1620html.write(
+            "This type of attack technique cannot be easily mitigated with preventive controls since it is based on the abuse of system features.{}".format(
                 footer
             )
         )
@@ -989,10 +1196,29 @@ def create_defence_evasion_html(
         t1218html.write("DllEntryPoint</li>\n        <li>")
         t1218html.write("Control_RunDLL</li>\n        <li>")
         t1218html.write("ControlRunDLLAsUser</li>\n        <li>")
-        t1218html.write("panel/cpls</li>")
+        t1218html.write("panel/cpls</li>\n        <li>")
+        t1218html.write("mmc</li>\n        <li>")
+        t1218html.write("wbadmin</li>\n        <li>")
+        t1218html.write("mavinject</li>")
         # related techniques
-        t1218html.write("{}-</a></td>\n        <td>".format(related))
-        t1218html.write("-")
+        t1218html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1490 target="_blank"">T1490</a></td>\n        <td>'.format(
+                insert
+            )
+        )
+        t1218html.write("Inhibit System Recovery")
+        t1218html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1559 target="_blank"">T1559.001</a></td>\n        <td>'.format(
+                insert
+            )
+        )
+        t1218html.write("Inter-Process Communication: Component Object Model")
+        t1218html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1055 target="_blank"">T1055.001</a></td>\n        <td>'.format(
+                related
+            )
+        )
+        t1218html.write("Process Injection: Dynamic-link Library Injection")
         # mitigations
         t1218html.write(
             "{}Disable or Remove Feature or Program</td>\n        <td>".format(

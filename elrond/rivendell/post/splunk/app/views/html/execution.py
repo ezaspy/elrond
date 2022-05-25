@@ -309,15 +309,18 @@ def create_execution_html(sd, header, headings, iocs, related, insert, mitigatio
         t1559html.write("Windows, macOS, Linux</td>\n        <td>")  # platforms
         t1559html.write("Execution</td>\n        <td>")  # tactics
         t1559html.write(
-            "T1559.001: Component Object Model<br>T1559.002: Dynamic Data Exchange"
+            "T1559.001: Component Object Model<br>T1559.002: Dynamic Data Exchange<br>T1559.003: XPC Services"
         )  # sub-techniques
         # indicator regex assignments
         t1559html.write("{}.docm</li>\n        <li>".format(iocs))
         t1559html.write(".xlsm</li>\n        <li>")
         t1559html.write(".pptm</li>\n        <li>")
-        t1559html.write("IPC$")
-        ## itaskservice|itaskdefinition|itasksettings
-        ## microsoft\\.office\\.interop
+        t1559html.write("IPC$</li>\n        <li>")
+        t1559html.write("itaskservice</li>\n        <li>")
+        t1559html.write("itaskdefinition</li>\n        <li>")
+        t1559html.write("itasksettings</li>\n        <li>")
+        t1559html.write("microsoft.office.interop</li>\n        <li>")
+        t1559html.write("NSXPCConnection")
         # related techniques
         t1559html.write(
             '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1059 target="_blank"">T1059</a></td>\n        <td>'.format(
@@ -367,6 +370,12 @@ def create_execution_html(sd, header, headings, iocs, related, insert, mitigatio
         t1559html.write("Restrict Web-Based Content</td>\n        <td>")
         t1559html.write(
             "Script blocking extensions can help prevent the execution of scripts and HTA files that may commonly be used during the exploitation process. For malicious code served up through ads, adblockers can help prevent that code from executing in the first place.{}".format(
+                insert
+            )
+        )
+        t1559html.write("Application Developer Guidance</td>\n        <td>")
+        t1559html.write(
+            "Enable the Hardened Runtime capability when developing applications. Do not include the com.apple.security.get-task-allow entitlement with the value set to any variation of true.{}".format(
                 footer
             )
         )
@@ -491,11 +500,13 @@ def create_execution_html(sd, header, headings, iocs, related, insert, mitigatio
             "Execution, Persistence, Privilege Escalation</td>\n        <td>"
         )  # tactics
         t1053html.write(
-            "T1053.001: At (Linux)<br>T1053.002: At (Windows)<br>T1053.003: Cron<br>T1053.004: Launchd<br>T1053.005: Scheduled Task<br>T1053.006: Systemd Timers<br>T1053.007: Container Orchestration Job"
+            "T1053.002: At<br>T1053.003: Cron<br>T1053.005: Scheduled Task<br>T1053.006: Systemd Timers<br>T1053.007: Container Orchestration Job"
         )  # sub-techniques
         # indicator regex assignments
         t1053html.write("{}schtask</li>\n        <li>".format(iocs))
-        t1053html.write("at</li>\n        <li>")
+        t1053html.write("at.allow</li>\n        <li>")
+        t1053html.write("at.deny</li>\n        <li>")
+        t1053html.write("at.</li>\n        <li>")
         t1053html.write(".job")
         ## timer
         # related techniques

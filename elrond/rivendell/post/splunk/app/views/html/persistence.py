@@ -22,7 +22,7 @@ def create_persistence_html(sd, header, headings, iocs, related, insert, mitigat
         )  # platforms
         t1098html.write("Persistence</td>\n        <td>")  # tactics
         t1098html.write(
-            "T1098.001: Additional Cloud Credentials<br>T1098.002: Exchange Email Delegate Permissions<br>T1098.003: Add Office 365 Global Administrator Role<br>T1098.004: SSH Authorized Keys"
+            "T1098.001: Additional Cloud Credentials<br>T1098.002: Exchange Email Delegate Permissions<br>T1098.003: Add Office 365 Global Administrator Role<br>T1098.004: SSH Authorized Keys<br>T1098.005: Device Registration"
         )  # sub-techniques
         # indicator regex assignments
         t1098html.write("{}authorized_keys</li>\n        <li>".format(iocs))
@@ -155,7 +155,7 @@ def create_persistence_html(sd, header, headings, iocs, related, insert, mitigat
             "Persistence, Privilege Escalation</td>\n        <td>"
         )  # tactics
         t1547html.write(
-            "T1547.001: Registry Run Keys/Startup Folder<br>T1547.002: Authentication Package<br>T1547.003: Time Providers<br>T1547.004: Winlogon Helper DLL<br>T1547.005: Security Support Provider<br>T1547.006: Kernel Modules and Extensions<br>T1547.007: Re-opened Applications<br>T1547.008: LSASS Driver<br>T1547.009: Shortcut Modification<br>T1547.010: Port Monitors<br>T1547.011: Plist Modification<br>T1547.012: Print Processors<br>T1547.013: XDG Autostart Entries<br>T1547.014: Active Setup"
+            "T1547.001: Registry Run Keys/Startup Folder<br>T1547.002: Authentication Package<br>T1547.003: Time Providers<br>T1547.004: Winlogon Helper DLL<br>T1547.005: Security Support Provider<br>T1547.006: Kernel Modules and Extensions<br>T1547.007: Re-opened Applications<br>T1547.008: LSASS Driver<br>T1547.009: Shortcut Modification<br>T1547.010: Port Monitors<br>T1547.012: Print Processors<br>T1547.013: XDG Autostart Entries<br>T1547.014: Active Setup<br>T1547.015: Login Items"
         )  # sub-techniques
         # indicator regex assignments
         t1547html.write("{}Event IDs: 3033, 3063</li>\n        <li>".format(iocs))
@@ -219,7 +219,8 @@ def create_persistence_html(sd, header, headings, iocs, related, insert, mitigat
         t1547html.write("SMLoginItemSetEnabled</li>\n        <li>")
         t1547html.write("uielement</li>\n        <li>")
         t1547html.write("quarantine</li>\n        <li>")
-        t1547html.write("startupparameters</li>")
+        t1547html.write("startupparameters</li>\n        <li>")
+        t1547html.write("backgrounditems.btm</li>")
         # related techniques
         t1547html.write(
             '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1037 target="_blank"">T1037</a></td>\n        <td>'.format(
@@ -227,6 +228,18 @@ def create_persistence_html(sd, header, headings, iocs, related, insert, mitigat
             )
         )
         t1547html.write("Boot or Logon Initialization Scripts")
+        t1547html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1059 target="_blank"">T1059.002</a></td>\n        <td>'.format(
+                insert
+            )
+        )
+        t1547html.write("Command and Scripting Interpreter: AppleScript")
+        t1547html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1106 target="_blank"">T1106</a></td>\n        <td>'.format(
+                insert
+            )
+        )
+        t1547html.write("Native API")
         # mitigations
         t1547html.write("{}-</td>\n        <td>".format(mitigations))
         t1547html.write(
@@ -623,16 +636,27 @@ def create_persistence_html(sd, header, headings, iocs, related, insert, mitigat
         t1574html.write("net1.exe use</li>\n        <li>")
         t1574html.write("CurrentControlSet/Services/</li>\n        <li>")
         t1574html.write("LC_CODE_SIGNATURE</li>\n        <li>")
-        t1574html.write("LC_LOAD_DYLIB</li>")
+        t1574html.write("LC_LOAD_DYLIB</li>\n        <li>")
+        t1574html.write("KernelCallbackTable</li>")
         # related techniques
         t1574html.write(
-            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1548 target="_blank"">T1548.002</a></td>\n        <td>'.format(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1620 target="_blank"">T1620</a></td>\n        <td>'.format(
                 related
             )
         )
+        t1574html.write("Reflective Code Loading")
         t1574html.write(
-            "Abuse Elevation Control Mechanism: Bypass User Account Control"
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1055 target="_blank"">T1055</a></td>\n        <td>'.format(
+                insert
+            )
         )
+        t1574html.write("Process Injection")
+        t1574html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1106 target="_blank"">T1106</a></td>\n        <td>'.format(
+                insert
+            )
+        )
+        t1574html.write("Native API")
         # mitigations
         t1574html.write(
             "{}Application Developer Guidance</td>\n        <td>".format(mitigations)
@@ -686,7 +710,13 @@ def create_persistence_html(sd, header, headings, iocs, related, insert, mitigat
         )
         t1574html.write("User Account Management</td>\n        <td>")
         t1574html.write(
-            "Limit privileges of user accounts and groups so that only authorized administrators can interact with service changes and service binary target path locations. Deny execution from user directories such as file download directories and temp directories where able.<>Ensure that proper permissions and directory access control are set to deny users the ability to write files to the top-level directory C: and system directories, such as C:\\Windows\\, to reduce places where malicious files could be placed for execution.{}".format(
+            'Limit privileges of user accounts and groups so that only authorized administrators can interact with service changes and service binary target path locations. Deny execution from user directories such as file download directories and temp directories where able.<>Ensure that proper permissions and directory access control are set to deny users the ability to write files to the top-level directory C: and system directories, such as C:\\Windows\\, to reduce places where malicious files could be placed for execution.{}'.format(
+                insert
+            )
+        )
+        t1574html.write("Behavior Prevention on Endpoint</td>\n        <td>")
+        t1574html.write(
+            "Some endpoint security solutions can be configured to block some types of behaviors related to process injection/memory tampering based on common sequences of indicators (ex: execution of specific API functions).{}".format(
                 footer
             )
         )
@@ -762,7 +792,7 @@ def create_persistence_html(sd, header, headings, iocs, related, insert, mitigat
             "Defense Evasion, Credential Access</td>\n        <td>"
         )  # tactics
         t1556html.write(
-            "T1556.001: Domain Controller Authentication<br>T1556.002: Password Filter DLL<br>T1556.003: Pluggable Authentication Modules<br>T1556.004: Network Device Authenticiation"
+            "T1556.001: Domain Controller Authentication<br>T1556.002: Password Filter DLL<br>T1556.003: Pluggable Authentication Modules<br>T1556.004: Network Device Authenticiation<br>T1556.005: Reversible Encryption"
         )  # sub-techniques
         # indicator regex assignments
         t1556html.write("{}OpenProcess</li>\n        <li>".format(iocs))
@@ -770,7 +800,8 @@ def create_persistence_html(sd, header, headings, iocs, related, insert, mitigat
         t1556html.write("CurrentControlSet/Control/Lsa</li>\n        <li>")
         t1556html.write("pam_unix.so</li>\n        <li>")
         t1556html.write("etc/passwd</li>\n        <li>")
-        t1556html.write("etc/shadow</li>")
+        t1556html.write("etc/shadow</li>\n        <li>")
+        t1556html.write("AllowReversiblePasswordEncryption</li>")
         # related techniques
         t1556html.write(
             '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1078 target="_blank"">T1078</a></td>\n        <td>'.format(
@@ -778,6 +809,12 @@ def create_persistence_html(sd, header, headings, iocs, related, insert, mitigat
             )
         )
         t1556html.write("Valid Accounts")
+        t1556html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1059 target="_blank"">T1059.001</a></td>\n        <td>'.format(
+                insert
+            )
+        )
+        t1556html.write("Command and Scripting Interpreter: PowerShell")
         # mitigations
         t1556html.write(
             "{}Multi-factor Authentication</td>\n        <td>".format(mitigations)
@@ -790,6 +827,12 @@ def create_persistence_html(sd, header, headings, iocs, related, insert, mitigat
         t1556html.write("Operating System Configuration</td>\n        <td>")
         t1556html.write(
             "Ensure only valid password filters are registered. Filter DLLs must be present in Windows installation directory (C:\\Windows\\System32\\ by default) of a domain controller and/or local computer with a corresponding entry in HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Lsa\\Notification Packages.{}".format(
+                insert
+            )
+        )
+        t1556html.write("Password Policies</td>\n        <td>")
+        t1556html.write(
+            "Ensure that AllowReversiblePasswordEncryption property is set to disabled unless there are application requirements.{}".format(
                 insert
             )
         )
@@ -938,17 +981,33 @@ def create_persistence_html(sd, header, headings, iocs, related, insert, mitigat
         t1505html.write("Windows, macOS, Linux</td>\n        <td>")  # platforms
         t1505html.write("Persistence</td>\n        <td>")  # tactics
         t1505html.write(
-            "T1505.001: SQL Stored Procedures<br>T1505.002: Transport Agent<br>T1505.003: Web Shell"
+            "T1505.001: SQL Stored Procedures<br>T1505.002: Transport Agent<br>T1505.003: Web Shell<br>T1505.004: IIS Components<br>T1505.005: Terminal Services DLL"
         )  # sub-techniques
         # indicator regex assignments
-        t1505html.write("{}-".format(iocs))
+        t1505html.write(
+            "{}RegisterModule</li>\n        <li>".format(
+                iocs
+            )
+        )
+        t1505html.write("hklm/system/currentcontrolset/services/termservice/parameters</li>\n        <li>")
+        t1505html.write("termsrv.dll</li>")
         # related techniques
-        t1505html.write("{}-</a></td>\n        <td>".format(related))
-        t1505html.write("-")
+        t1505html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1021 target="_blank"">T1021.001</a></td>\n        <td>'.format(
+                related
+            )
+        )
+        t1505html.write("Remote Services: Remote Desktop Protocol")
         # mitigations
         t1505html.write("{}Audit</td>\n        <td>".format(mitigations))
         t1505html.write(
             "Regularly check component software on critical services that adversaries may target for persistence to verify the integrity of the systems and identify if unexpected changes have been made.{}".format(
+                insert
+            )
+        )
+        t1505html.write("Execution Prevention</td>\n        <td>")
+        t1505html.write(
+            "Restrict unallowed ISAPI extensions and filters from running by specifying a list of ISAPI extensions and filters that can run on IIS.{}".format(
                 insert
             )
         )

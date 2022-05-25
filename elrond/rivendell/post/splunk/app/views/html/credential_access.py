@@ -1,7 +1,9 @@
 #!/usr/bin/env python3 -tt
 
 
-def create_credential_access_html(sd, header, headings, iocs, related, insert, mitigations, footer):
+def create_credential_access_html(
+    sd, header, headings, iocs, related, insert, mitigations, footer
+):
     with open(sd + "t1110.html", "w") as t1110html:
         # description
         t1110html.write(
@@ -342,7 +344,7 @@ def create_credential_access_html(sd, header, headings, iocs, related, insert, m
     with open(sd + "t1557.html", "w") as t1557html:
         # description
         t1557html.write(
-            "{}Adversaries may attempt to position themselves between two or more networked devices using a man-in-the-middle (MiTM) technique to support follow-on behaviors such as Network Sniffing or Transmitted Data Manipulation.<br>".format(
+            "{}Adversaries may attempt to position themselves between two or more networked devices using a advesary-in-the-middle (AiTM) technique to support follow-on behaviors such as Network Sniffing or Transmitted Data Manipulation.<br>".format(
                 header
             )
         )
@@ -350,20 +352,25 @@ def create_credential_access_html(sd, header, headings, iocs, related, insert, m
             "By abusing features of common networking protocols that can determine the flow of network traffic (e.g. ARP, DNS, LLMNR, etc.), adversaries may force a device to communicate through an adversary controlled system so they can collect information or perform additional actions.<br>"
         )
         t1557html.write(
-            "Adversaries may leverage the MiTM position to attempt to modify traffic, such as in Transmitted Data Manipulation. Adversaries can also stop traffic from flowing to the appropriate destination, causing denial of service."
+            "Adversaries may leverage the AiTM position to attempt to modify traffic, such as in Transmitted Data Manipulation. Adversaries can also stop traffic from flowing to the appropriate destination, causing denial of service."
         )
         # information
         t1557html.write("{}T1557</td>\n        <td>".format(headings))  # id
         t1557html.write("Windows, macOS, Linux</td>\n        <td>")  # platforms
         t1557html.write("Credential Access, Collection</td>\n        <td>")  # tactics
         t1557html.write(
-            "T1557.001: LLMNR/NBT-NS Poisoning and SMB Relay<br>T1557.002: ARP Cache Poisoning"
+            "T1557.001: LLMNR/NBT-NS Poisoning and SMB Relay<br>T1557.002: ARP Cache Poisoning<br>T1557.003: DHCP Spoofing"
         )  # sub-techniques
         # indicator regex assignments
         t1557html.write("{}Ports: 137, 5355</li>\n        <li>".format(iocs))
-        t1557html.write("Event IDs: 4657, 7045</li>\n        <li>")
+        t1557html.write(
+            "Event IDs: 1020, 1063, 1341, 1342, 4657, 7045</li>\n        <li>"
+        )
         t1557html.write("EnableMulticast</li>\n        <li>")
-        t1557html.write("NT/DNSClient</li>")
+        t1557html.write("NT/DNSClient</li>\n        <li>")
+        t1557html.write("DISCOVER</li>\n        <li>")
+        t1557html.write("OFFER</li>\n        <li>")
+        t1557html.write("REQUEST</li>")
         # related techniques
         t1557html.write(
             '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1040 target="_blank"">T1040</a></td>\n        <td>'.format(
@@ -453,7 +460,7 @@ def create_credential_access_html(sd, header, headings, iocs, related, insert, m
                 related
             )
         )
-        t1040html.write("Man-in-the-Middle: LLMNR/NBT-NS Poisoning and SMB Relay")
+        t1040html.write("Advesary-in-the-Middle: LLMNR/NBT-NS Poisoning and SMB Relay")
         # mitigations
         t1040html.write(
             "{}Encrypt Sensitive Information</td>\n        <td>".format(mitigations)
@@ -704,7 +711,7 @@ def create_credential_access_html(sd, header, headings, iocs, related, insert, m
             "Additionally, other applications on the targets machine might store sensitive authentication cookies in memory (e.g. apps which authenticate to cloud services). Session cookies can be used to bypasses some multi-factor authentication protocols.<br>"
         )
         t1539html.write(
-            "There are several examples of malware targeting cookies from web browsers on the local system. There are also open source frameworks such as Evilginx 2 and Muraena that can gather session cookies through a man-in-the-middle proxy that can be set up by an adversary and used in phishing campaigns.<br>"
+            "There are several examples of malware targeting cookies from web browsers on the local system. There are also open source frameworks such as Evilginx 2 and Muraena that can gather session cookies through a advesary-in-the-middle proxy that can be set up by an adversary and used in phishing campaigns.<br>"
         )
         t1539html.write(
             "After an adversary acquires a valid cookie, they can then perform a Web Session Cookie technique to login to the corresponding web application."
@@ -791,6 +798,52 @@ def create_credential_access_html(sd, header, headings, iocs, related, insert, m
         # mitigations
         t1111html.write("{}User Training</td>\n        <td>".format(mitigations))
         t1111html.write("Remove smart cards when not in use.{}".format(footer))
+    with open(sd + "t1621.html", "w") as t1621html:
+        # description
+        t1621html.write(
+            "{}Adversaries may attempt to bypass multi-factor authentication (MFA) mechanisms and gain access to accounts by generating MFA requests sent to users.<br>".format(
+                header
+            )
+        )
+        t1621html.write(
+            "Adversaries in possession credentials to Valid Accounts may be unable to complete the login process if they lack access to the 2FA or MFA mechanisms required as an additional credential and security control. To circumvent this, adversaries may abuse the automatic generation of push notifications to MFA services such as Duo Push, Microsoft Authenticator, Okta, or similar services to have the user grant access to their account.<br>"
+        )
+        t1621html.write(
+            'In some cases, adversaries may continuously repeat login attempts in order to bombard users with MFA push notifications, SMS messages, and phone calls, potentially resulting in the user finally accepting the authentication request in response to "MFA fatigue."'
+        )
+        # information
+        t1621html.write("{}T1621</td>\n        <td>".format(headings))  # id
+        t1621html.write("Windows, macOS, Linux</td>\n        <td>")  # platforms
+        t1621html.write("Credential Access</td>\n        <td>")  # tactics
+        t1621html.write("-")  # sub-techniques
+        # indicator regex assignments
+        t1621html.write("{}-".format(iocs))
+        # related techniques
+        t1621html.write(
+            '{}<a href="http://127.0.0.1:8000/en-US/app/elrond/t1078 target="_blank"">T1078</a></td>\n        <td>'.format(
+                related
+            )
+        )
+        t1621html.write("Valid Accounts")
+        # mitigations
+        t1621html.write("{}Account Use Policies</td>\n        <td>".format(mitigations))
+        t1621html.write(
+            "Enable account restrictions to prevent login attempts, and the subsequent 2FA/MFA service requests, from being initiated from suspicious locations or when the source of the login attempts do not match the location of the 2FA/MFA smart device.{}".format(
+                insert
+            )
+        )
+        t1621html.write("Multi-factor Authentication</td>\n        <td>")
+        t1621html.write(
+            "Implement more secure 2FA/MFA mechanisms in replacement of simple push or one-click 2FA/MFA options. For example, having users enter a one-time code provided by the login screen into the 2FA/MFA application or utilizing other out-of-band 2FA/MFA mechanisms (such as rotating code-based hardware tokens providing rotating codes that need an accompanying user pin) may be more secure. Furthermore, change default configurations and implement limits upon the maximum number of 2FA/MFA request prompts that can be sent to users in period of time.{}".format(
+                insert
+            )
+        )
+        t1621html.write("User Training</td>\n        <td>")
+        t1621html.write(
+            "Train users to only accept 2FA/MFA requests from login attempts they initiated, to review source location of the login attempt prompting the 2FA/MFA requests, and to report suspicious/unsolicited prompts.{}".format(
+                footer
+            )
+        )
     with open(sd + "t1552.html", "w") as t1552html:
         # description
         t1552html.write(

@@ -39,7 +39,7 @@ def build_app_elrond(case, postpath):
                 )
             with open(sd + "na.html", "w") as nahtml:
                 nahtml.write(
-                    '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">\n  <head>\n    <p><center><font size="6"><br><strong>No Events Available for this Technique</strong></font></center></p>\n  </head>\n</html>'
+                    '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">\n  <head>\n    <p><center><font size="6"><br><strong>Undetectable - No Events Available for this Technique</strong></font></center></p>\n  </head>\n</html>'
                 )
             create_htmls(sd)
         elif sd.endswith("default/"):
@@ -199,30 +199,30 @@ def build_app_elrond(case, postpath):
             with open(sd + "mitre.csv", "w") as mitre_csv:
                 create_mitre_lookup(mitre_csv)
         elif sd.endswith("nav/"):
-            with open(sd + "default.xml", "w") as defaultxml:
-                defaultxml.write(
+            with open(sd + "default.xml", "w") as defaultnav:
+                defaultnav.write(
                     '<nav search_view="search">\n    <collection label="Splunk">\n        '
                 )
-                defaultxml.write('<view name="datasets" />\n		')
-                defaultxml.write('<view name="reports" />\n		')
-                defaultxml.write('<view name="alerts" />\n	')
-                defaultxml.write("</collection>\n	")
-                defaultxml.write('<collection label="Toolbox">\n		')
-                defaultxml.write('<view name="CyberChef" />\n		')
-                defaultxml.write('<view name="ascii" />\n		')
-                defaultxml.write('<view name="ports" />\n		')
-                defaultxml.write('<view name="subnetting" />\n	')
-                defaultxml.write("</collection>\n	")
-                create_nav_menu(defaultxml)
-                defaultxml.write('<view name="actors_vectors" />\n    ')
-                defaultxml.write('<view name="iocs" />\n    ')
-                defaultxml.write(
+                defaultnav.write('<view name="datasets" />\n		')
+                defaultnav.write('<view name="reports" />\n		')
+                defaultnav.write('<view name="alerts" />\n	')
+                defaultnav.write("</collection>\n	")
+                defaultnav.write('<collection label="Toolbox">\n		')
+                defaultnav.write('<view name="CyberChef" />\n		')
+                defaultnav.write('<view name="ascii" />\n		')
+                defaultnav.write('<view name="ports" />\n		')
+                defaultnav.write('<view name="subnetting" />\n	')
+                defaultnav.write("</collection>\n	")
+                create_nav_menu(defaultnav)
+                defaultnav.write('<view name="actors_vectors" />\n    ')
+                defaultnav.write('<view name="iocs" />\n    ')
+                defaultnav.write(
                     '<collection label="Cases &amp; Host Analysis">\n        <view source="all" match="{}" />\n    </collection>\n'.format(
                         case
                     )
                 )
-                defaultxml.write('<view name="search" />\n    ')
-                defaultxml.write('<view name="dashboards" />\n</nav>'.format(case))
+                defaultnav.write('<view name="search" />\n    ')
+                defaultnav.write('<view name="dashboards" />\n</nav>'.format(case))
         elif sd.endswith("static/"):
             icons = [
                 sd + "appIconAlt_2x.png",
