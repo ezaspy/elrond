@@ -239,8 +239,10 @@ def configure_splunk_stack(
         "/" + postpath + "splunk/etc/system/default/limits.conf"
     ) as limitsconfread:
         oldlimitsdata = limitsconfread.read()
-    newlimitsdata = str(
-        re.sub(r"indexed_kv_limit = \d+", r"indexed_kv_limit = 0", oldlimitsdata)
+    newlimitsdata = re.sub(
+        r"max_mem_usage_mb = \d+",
+        r"max_mem_usage_mb = 1000",
+        str(re.sub(r"indexed_kv_limit = \d+", r"indexed_kv_limit = 0", oldlimitsdata)),
     )
     with open(
         "/" + postpath + "splunk/etc/system/default/limits.conf", "w"
