@@ -21,6 +21,7 @@ def ingest_splunk_data(
     yara,
 ):
     for img in allimgs:
+        print(img)
         if "vss" in img.split("::")[1]:
             vssimage, vsstext = "'" + img.split("::")[0] + "' (" + img.split("::")[
                 1

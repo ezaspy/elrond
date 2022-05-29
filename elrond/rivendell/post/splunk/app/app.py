@@ -62,13 +62,13 @@ def build_app_elrond(case, postpath):
                     '[browser_name]\ndefinition = rex field=source "/browsers/(?P<browser>[^/]+)/"\niseval = 0\n\n'
                 )
                 macrosconf.write(
-                    '[browser_domain_domain]\ndefinition = search url=* | rex field=Domain "(?:https?://)?(?:www\\.)?(?P<domain_domain>[^/:]+)(?:/|:)"\niseval = 0\n\n'
+                    '[browser_domain_domain]\ndefinition = search url=* | rex field=Domain "(?:https?://)?(?:www\\.)?(?P<domain_domain>[^/:]+)\.[^/:]+(?:/|:)"\niseval = 0\n\n'
                 )
                 macrosconf.write(
-                    '[browser_url_domain]\ndefinition = search url=* | rex field=url "(?:https?://)?(?:www\\.)?(?P<url_domain>[^/:]+)(?:/|:)"\niseval = 0\n\n'
+                    '[browser_domain_url]\ndefinition = search url=* | rex field=url "(?:https?://)?(?:www\\.)?(?P<domain_url>[^/:]+)\.[^/:]+(?:/|:)"\niseval = 0\n\n'
                 )
                 macrosconf.write(
-                    "[browser_domain]\ndefinition = `browser_domain_domain` | `browser_url_domain` | eval domain = mvdedup(mvappend(domain_domain, url_domain)) | fields - domain_domain url_domain\niseval = 0\n\n"
+                    "[browser_domain]\ndefinition = `browser_domain_domain` | `browser_domain_url` | eval domain = mvdedup(mvappend(domain_domain, domain_url)) | fields - domain_domain domain_url\niseval = 0\n\n"
                 )
                 macrosconf.write(
                     '[jumplist_info]\ndefinition = search logtype=jumplists | table index host mitre_id subid mitre_technique logtype Account JumplistType JumplistID | lookup jumplistID.csv appID AS JumplistID OUTPUT application source date | fillnull value=- | rename application AS Application date AS "Date(s)" source AS "ID Source" | table index host mitre_id subid mitre_technique logtype Account JumplistType JumplistID Application "ID Source" "Date(s)"\niseval = 0\n\n'

@@ -116,7 +116,7 @@ def mount_images(
 
     def obtain_offset(intermediate_mount):
         offset_value = re.findall(
-            r"\\n[\w\-\.\/]+(?:(?:ewf1p2)|\.(?:raw|dd|img)\d)[\ \*]+(?P<offset>\d+)[\w\d\.\ \*]+\s+(?:Linux|Microsoft\ basic\ data|HPFS|NTFS|exFAT)[\S]+",
+            r"\\n[\w\-\.\/]+(?:(?:ewf1p2)|\.(?:raw|dd|img)\d)[\ \*]+(?P<offset>\d+)[\w\d\.\ \*]+\s+(?:Linux|Microsoft\ basic\ data|HPFS|NTFS|exFAT)",
             str(
                 subprocess.Popen(
                     ["fdisk", "-l", intermediate_mount],
