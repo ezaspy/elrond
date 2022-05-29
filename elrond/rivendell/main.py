@@ -924,7 +924,7 @@ def main(
         ):
             for donefile in donefiles:
                 if os.path.exists(os.path.join(doneroot, donefile)):
-                    if os.stat(os.path.join(doneroot, donefile)).st_size <= 10:
+                    if os.stat(os.path.join(doneroot, donefile)).st_size <= 100:
                         try:
                             os.remove(os.path.join(doneroot, donefile))
                         except:
