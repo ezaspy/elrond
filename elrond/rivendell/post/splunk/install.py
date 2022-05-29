@@ -326,11 +326,11 @@ def configure_splunk_stack(
         if not os.path.isdir("/" + postpath + "splunk/etc/apps/" + appdir):
             os.makedirs("/" + postpath + "splunk/etc/apps/" + appdir)
             with open("." + apptar, "w") as tarout:
-                if appdir == "lookup_editor/":
-                    apphexdump = build_app_lookup()
+                if appdir == "TA-geolocate/":
+                    apphexdump = build_app_geolocate()
                     tarout.write(apphexdump)
-                elif appdir == "network_topology/":
-                    apphexdump = build_app_topology()
+                elif appdir == "lookup_editor/":
+                    apphexdump = build_app_lookup()
                     tarout.write(apphexdump)
                 elif appdir == "punchcard_app/":
                     apphexdump = build_app_punchcard()
@@ -338,8 +338,8 @@ def configure_splunk_stack(
                 elif appdir == "sankey_diagram_app/":
                     apphexdump = build_app_sankey()
                     tarout.write(apphexdump)
-                elif appdir == "TA-geolocate/":
-                    apphexdump = build_app_geolocate()
+                elif appdir == "network_topology/":
+                    apphexdump = build_app_topology()
                     tarout.write(apphexdump)
                 elif appdir == "treemap_app/":
                     apphexdump = build_app_treemap()
@@ -347,8 +347,9 @@ def configure_splunk_stack(
                 else:
                     pass
                 subprocess.call(["xxd", "-plain", "-revert", "." + apptar, apptar])
-                with TarFile(apptar) as tar:
-                    tar.extractall("/" + postpath + "splunk/etc/apps/")
+                tar = TarFile.open(apptar, "r:gz")
+                tar.extractall("/" + postpath + "splunk/etc/apps/")
+                tar.close()
                 os.remove("." + apptar)
                 os.remove(apptar)
                 os.chdir("/" + postpath + "splunk/etc/apps/")

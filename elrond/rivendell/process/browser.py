@@ -92,9 +92,21 @@ def process_browser_index(
                 + "+"
                 + artefact.split("/")[-1]
                 + ".csv",
-                "a",
+                "w",
             ) as indexout:
                 indexout.write("Profile,Protocol,Domain,url,Description\n")
+            with open(
+                output_directory
+                + img.split("::")[0]
+                + "/artefacts/cooked"
+                + vssartefact
+                + "browsers/IE/"
+                + indexuser
+                + "+"
+                + artefact.split("/")[-1]
+                + ".csv",
+                "a",
+            ) as indexout:
                 with open(artefact, encoding="ISO-8859-1") as indexdat:
                     indexdata = indexdat.read()
                 for eachindex in str(
