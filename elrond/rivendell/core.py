@@ -103,6 +103,7 @@ def collect_process_keyword_analysis_timeline(
     else:
         pass
     if keywords:
+        print(type(flags))
         if not os.path.exists(keywords[0]):
             print(
                 "\n    {} is an invalid path because it does not exist. Please try again.\n".format(
@@ -119,8 +120,8 @@ def collect_process_keyword_analysis_timeline(
                 verbosity,
                 output_directory,
                 auto,
-                flags,
                 imgs,
+                flags,
                 keywords,
                 "keyword searching",
             )

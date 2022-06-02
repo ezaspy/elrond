@@ -116,7 +116,7 @@ def mount_images(
 
     def obtain_offset(intermediate_mount):
         offset_value = re.findall(
-            r"\\n[\w\-\.\/]+(?:(?:ewf1p2)|\.(?:raw|dd|img)\d)[\ \*]+(?P<offset>\d+)[\w\d\.\ \*]+\s+(?:Linux|Microsoft\ basic\ data|HPFS|NTFS|exFAT)",
+            r"\\n[\w\-\.\/]+(?:(?:ewf1p2)|\.(?:raw|dd|img)\d)[\ \*]+(?P<offset>\d+)[\w\d\.\ \*]+\s+(?:NTFS|Microsoft\ basic\ data|HPFS|Linux|exFAT)",
             str(
                 subprocess.Popen(
                     ["fdisk", "-l", intermediate_mount],
@@ -126,6 +126,21 @@ def mount_images(
             )[2:-3],
         )
         return offset_value
+
+    def mounted_image(allimgs, disk_image, destination_mount):
+        if (
+            "::Windows" in disk_image
+            or "::macOS" in disk_image
+            or "::Linux" in disk_image
+        ):
+            allimgs[disk_image] = destination_mount
+            print(
+                "   Mounted '{}' successfully at '{}'".format(
+                    disk_file, destination_mount
+                )
+            )
+        else:
+            print("   '{}' could not be mounted.".format(disk_image))
 
     def mount_vmdk_image(
         verbosity,
@@ -188,12 +203,7 @@ def mount_images(
                     disk_image = identify_disk_image(
                         verbosity, output_directory, disk_file, destination_mount
                     )
-                    allimgs[disk_image] = destination_mount
-                    print(
-                        "   Mounted '{}' successfully at '{}'".format(
-                            disk_file, destination_mount
-                        )
-                    )
+                    mounted_image(allimgs, disk_image, destination_mount)
                 elif (
                     str(
                         subprocess.Popen(
@@ -216,12 +226,7 @@ def mount_images(
                     disk_image = identify_disk_image(
                         verbosity, output_directory, disk_file, destination_mount
                     )
-                    allimgs[disk_image] = destination_mount
-                    print(
-                        "   Mounted '{}' successfully at '{}'".format(
-                            disk_file, destination_mount
-                        )
-                    )
+                    mounted_image(allimgs, disk_image, destination_mount)
                 else:
                     print(
                         "   An error occured when mounting '{}'.\n    Perhaps this is a macOS-based image and requires apfs-fuse? Visit https://github.com/ezaspy/apfs-fuse and try again.\n   If this does not work, the disk may not be supported and/or may be corrupt? Feel free to raise an issue via https://github.com/ezaspy/elrond/issues".format(
@@ -257,12 +262,7 @@ def mount_images(
                 disk_image = identify_disk_image(
                     verbosity, output_directory, disk_file, destination_mount
                 )
-                allimgs[disk_image] = destination_mount
-                print(
-                    "   Mounted '{}' successfully at '{}'".format(
-                        disk_file, destination_mount
-                    )
-                )
+                mounted_image(allimgs, disk_image, destination_mount)
         else:
             pass
 
@@ -369,98 +369,7 @@ def mount_images(
                 disk_image = identify_disk_image(
                     verbosity, output_directory, disk_file, destination_mount
                 )
-                allimgs[disk_image] = destination_mount
-                print(
-                    "   Mounted '{}' successfully at '{}'".format(
-                        disk_file, destination_mount
-                    )
-                )
-                if vss:
-                    if verbosity != "":
-                        print(
-                            "    Attempting to mount Volume Shadow Copies for '{}'...".format(
-                                disk_file
-                            )
-                        )
-                    else:
-                        pass
-                    subprocess.Popen(
-                        ["vshadowmount", intermediate_mount + "/ewf1", "/mnt/vss/"],
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
-                    ).communicate()
-                    time.sleep(0.5)
-                    if os.path.exists(
-                        "/mnt/shadow_mount/" + disk_file.split("::")[0] + "/"
-                    ):
-                        for current in os.listdir(
-                            "/mnt/shadow_mount/" + disk_file.split("::")[0] + "/"
-                        ):
-                            subprocess.Popen(
-                                [
-                                    "umount",
-                                    "/mnt/shadow_mount/"
-                                    + disk_file.split("::")[0]
-                                    + "/"
-                                    + current,
-                                ],
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE,
-                            ).communicate()
-                            time.sleep(0.1)
-                            shutil.rmtree(
-                                "/mnt/shadow_mount/"
-                                + disk_file.split("::")[0]
-                                + "/"
-                                + current
-                            )
-                            shutil.rmtree(
-                                "/mnt/shadow_mount/" + disk_file.split("::")[0] + "/"
-                            )
-                    else:
-                        pass
-                    if not os.path.exists(
-                        "/mnt/shadow_mount/" + disk_file.split("::")[0] + "/"
-                    ):
-                        os.mkdir("/mnt/shadow_mount/" + disk_file.split("::")[0] + "/")
-                        for i in os.listdir("/mnt/vss/"):
-                            os.mkdir(
-                                "/mnt/shadow_mount/"
-                                + disk_file.split("::")[0]
-                                + "/"
-                                + i
-                            )
-                            try:
-                                subprocess.Popen(
-                                    [
-                                        "mount",
-                                        "-o",
-                                        "ro,loop,show_sys_files,streams_interface=windows",
-                                        "/mnt/vss/" + i,
-                                        "/mnt/shadow_mount/"
-                                        + disk_file.split("::")[0]
-                                        + "/"
-                                        + i,
-                                    ],
-                                    stdout=subprocess.PIPE,
-                                    stderr=subprocess.PIPE,
-                                ).communicate()
-                                time.sleep(0.1)
-                            except:
-                                pass
-                    else:
-                        pass
-                    if verbosity != "":
-                        print(
-                            "    All valid Volume Shadow Copies for '{}' have been successfully mounted.".format(
-                                disk_file
-                            )
-                        )
-                    else:
-                        pass
-                    os.chdir(cwd)
-                else:
-                    pass
+                mounted_image(allimgs, disk_image, destination_mount)
             elif (
                 "unknown filesystem type 'apfs'" in mounterr
                 or "wrong fs type" in mounterr
@@ -471,14 +380,12 @@ def mount_images(
                 ):
                     if verbosity != "":
                         disk_image = identify_disk_image(
-                            verbosity, output_directory, disk_file, destination_mount
+                            verbosity,
+                            output_directory,
+                            disk_file,
+                            destination_mount,
                         )
-                        allimgs[disk_image] = destination_mount
-                        print(
-                            "   Mounted '{}' successfully at '{}'".format(
-                                disk_file, destination_mount
-                            )
-                        )
+                        mounted_image(allimgs, disk_image, destination_mount)
                     else:
                         pass
 
@@ -511,6 +418,8 @@ def mount_images(
                             pass
                     except:
                         pass
+                else:
+                    pass
                 if "wrong fs type" in mounterr:
                     offset_value = obtain_offset(intermediate_mount + "/ewf1")
                     attempt_to_mount = str(
@@ -539,15 +448,19 @@ def mount_images(
                         pass
                     else:
                         pass
+                else:
+                    pass
             elif "is already mounted." in mounterr:
                 pass
             else:
                 pass
         elif ("VMware" in imgformat and " disk image" in imgformat) or (
             "DOS/MBR boot sector" in imgformat
-            and disk_file.endswith(".raw")
-            or disk_file.endswith(".dd")
-            or disk_file.endswith(".img")
+            and (
+                disk_file.endswith(".raw")
+                or disk_file.endswith(".dd")
+                or disk_file.endswith(".img")
+            )
         ):
 
             def doVMDKConvert(intermediate_mount):
@@ -595,8 +508,6 @@ def mount_images(
                 if vmdkow != "n":
                     if os.path.exists(intermediate_mount + ".raw"):
                         os.remove(intermediate_mount + ".raw")
-                    elif os.path.exists(intermediate_mount):
-                        os.remove(intermediate_mount)
                     else:
                         pass
                     doVMDKConvert(intermediate_mount)
@@ -620,7 +531,7 @@ def mount_images(
                     doVMDKConvert(intermediate_mount)
                 else:
                     convertVMDK = input(
-                        "  It looks like '{}'.raw already exists. Did you want to replace it? Y/n [Y] ".format(
+                        "  It looks like '{}.raw' already exists. Did you want to replace it? Y/n [Y] ".format(
                             intermediate_mount.split("/")[-1]
                         )
                     )

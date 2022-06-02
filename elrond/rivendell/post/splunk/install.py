@@ -190,13 +190,20 @@ def configure_splunk_stack(
             pass
         return splunkuser, splunkpswd
 
-    splkproc = subprocess.Popen(
+    splunk_install_locations = []
+    splunk_locations = subprocess.Popen(
         ["locate", "splunk.version"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-    ).communicate()[0]
-    postpath = "opt/"
+    ).communicate()
+    for splunk_location in splunk_locations:
+        if not str(splunk_location)[2:-3].startswith("/mnt/elrond_mount"):
+            splunk_install_locations.append(str(splunk_location)[2:-3])
+        else:
+            pass
+    splunk_install_locations = list(set(splunk_install_locations))
     allimgs = OrderedDict(sorted(allimgs.items(), key=lambda x: x[1]))
+    postpath = "opt/"
     pwd = os.getcwd()
     stage = "splunk"
     apps = {
@@ -216,12 +223,18 @@ def configure_splunk_stack(
             splunkdeb = "/opt/elrond/elrond/tools/" + eachfile
         else:
             pass
-    if len(splkproc[2:-3]) != 0:
-        postpath = str(
-            re.findall(r"\/(.*)splunk\/etc\/splunk.version", str(splkproc)[2:-3])[0]
+    if len(splunk_install_locations[0]) != 0:
+        pathfound = str(
+            re.findall(
+                r"\/(.*)splunk\/etc\/splunk.version", str(splunk_install_locations[0])
+            )
         )
-        print("     Splunk installion found, please provide")
-        splunkuser, splunkpswd = request_splunk_creds()
+        if pathfound != "":
+            postpath = pathfound
+            print("     Splunk installation found, please provide")
+            splunkuser, splunkpswd = request_splunk_creds()
+        else:
+            pass
     else:
         print("     Splunk is not installed, please stand by...")
         splunkuser, splunkpswd = install_splunk_stack(

@@ -285,7 +285,7 @@ def collect_artefacts(
             pass
         if keywords:
             prepare_keywords(
-                verbosity, output_directory, auto, flags, imgs, keywords, stage
+                verbosity, output_directory, auto, imgs, flags, keywords, stage
             )
         else:
             pass

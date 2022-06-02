@@ -67,6 +67,11 @@ def main(
 ):
     subprocess.Popen(["clear"])
     time.sleep(2)
+    print(
+        "\n\n    \033[1;36m        .__                               .___\n      ____  |  |  _______   ____    ____    __| _/\n    _/ __ \\ |  |  \\_  __ \\ /  _ \\  /    \\  / __ |\n    \\  ___/ |  |__ |  | \\/(  <_> )|   |  \\/ /_/ |\n     \\___  >|____/ |__|    \\____/ |___|  /\\____ |\n         \\/                            \\/      \\/\n\n     {}\033[1;m\n\n".format(
+            random.choice(quotes)
+        )
+    )
     if not collect and not process:
         if volatility and not process:
             print(
@@ -165,11 +170,6 @@ def main(
         verbosity = "verbose"
     else:
         verbosity = ""
-    print(
-        "\n\n    \033[1;36m        .__                               .___\n      ____  |  |  _______   ____    ____    __| _/\n    _/ __ \\ |  |  \\_  __ \\ /  _ \\  /    \\  / __ |\n    \\  ___/ |  |__ |  | \\/(  <_> )|   |  \\/ /_/ |\n     \\___  >|____/ |__|    \\____/ |___|  /\\____ |\n         \\/                            \\/      \\/\n\n     {}\033[1;m\n\n".format(
-            random.choice(quotes)
-        )
-    )
     if collectfiles:
         if collectfiles != True:
             if len(collectfiles) > 0:
@@ -358,7 +358,12 @@ def main(
                                 + imgformat
                             )
                         else:
-                            pass
+                            print(
+                                "\n    '{}' already exists in '{}'\n     Please remove it before trying again.\n\n\n".format(
+                                    f, output_directory
+                                )
+                            )
+                            sys.exit()
                     else:
                         pass
                 else:
@@ -389,7 +394,7 @@ def main(
                             output_directory + f + "/meta.audit", "w"
                         ) as metaimglog:
                             metaimglog.write(
-                                "Filename,SHA256,known-good,Entropy,Filesize,LastWriteTime,LastAccessTime,LastInodeChangeTime,Permissions,FileType\n"
+                                "Filename,SHA256,NSRL,Entropy,Filesize,LastWriteTime,LastAccessTime,LastInodeChangeTime,Permissions,FileType\n"
                             )
                     else:
                         pass
@@ -475,6 +480,46 @@ def main(
             allimgs = {**allimgs, **ot}
             print()
         elif volatility and "data" in imgformat:
+            if not superquick and not quick:
+                if not os.path.exists(output_directory + f + "/meta.audit"):
+                    with open(output_directory + f + "/meta.audit", "w") as metaimglog:
+                        metaimglog.write(
+                            "Filename,SHA256,known-good,Entropy,Filesize,LastWriteTime,LastAccessTime,LastInodeChangeTime,Permissions,FileType\n"
+                        )
+                else:
+                    pass
+                if verbosity != "":
+                    print(
+                        "    Calculating SHA256 hash for '{}', please stand by...".format(
+                            f
+                        )
+                    )
+                else:
+                    pass
+                with open(path, "rb") as metaimg:
+                    buffer = metaimg.read(262144)
+                    while len(buffer) > 0:
+                        sha256.update(buffer)
+                        buffer = metaimg.read(262144)
+                    metaentry = (
+                        path
+                        + ","
+                        + sha256.hexdigest()
+                        + ",unknown,N/A,N/A,N/A,N/A,N/A,N/A,N/A\n"
+                    )
+                with open(output_directory + f + "/meta.audit", "a") as metaimglog:
+                    metaimglog.write(metaentry)
+                extract_metadata(
+                    verbosity,
+                    output_directory,
+                    f,
+                    path,
+                    "metadata",
+                    sha256,
+                    nsrl,
+                )
+            else:
+                pass
             ot = identify_memory_image(
                 verbosity,
                 output_directory,
