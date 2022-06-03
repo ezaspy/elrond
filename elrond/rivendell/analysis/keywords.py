@@ -281,7 +281,6 @@ def prepare_keywords(verbosity, output_directory, auto, imgs, flags, keywords, s
                     keywords,
                     keywords_target_list,
                     each.split("::")[0],
-                    "",
                     "'collected artefacts'",
                 )
             else:
@@ -298,7 +297,6 @@ def prepare_keywords(verbosity, output_directory, auto, imgs, flags, keywords, s
                     keywords,
                     keywords_target_list,
                     each.split("::")[0],
-                    "",
                     "'collected files'",
                 )
             else:

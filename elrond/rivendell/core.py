@@ -103,14 +103,16 @@ def collect_process_keyword_analysis_timeline(
     else:
         pass
     if keywords:
-        print(type(flags))
         if not os.path.exists(keywords[0]):
-            print(
-                "\n    {} is an invalid path because it does not exist. Please try again.\n".format(
+            continue_with_kw = input(
+                "\n    {} is an invalid path because it does not exist. Continue? Y/n [Y] \n".format(
                     keywords[0]
                 )
             )
-            sys.exit()
+            if continue_with_kw == "n":
+                sys.exit()
+            else:
+                pass
         else:
             print(
                 "\n\n  -> \033[1;36mCommencing Keyword Searching phase for proccessed artefacts...\033[1;m\n  ----------------------------------------"
