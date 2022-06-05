@@ -9,7 +9,7 @@ def print_done(verbosity):
 
 
 def write_audit_log_entry(verbosity, output_directory, entry, prnt):
-    if "elrond_time,elrond_host,elrond_stage,elrond_log_entry" in entry:
+    if "timestamp,hostname,stage,log_entry" in entry:
         writemode = "w"
     else:
         writemode = "a"

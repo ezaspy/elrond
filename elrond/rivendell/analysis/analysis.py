@@ -228,7 +228,7 @@ def analyse_artefacts(
             pass
         with open(anysd + "/analysis.csv", "a") as analysisfile:
             analysisfile.write(
-                "LastWriteTime,elrond_host,Filename,AnalysisType,AnalysisValue\n"
+                "LastWriteTime,hostname,Filename,analysis_type,analysis_value\n"
             )
         print(
             "     Analysing files for file-signature (magic-byte) discrepencies for {}...".format(
@@ -542,7 +542,7 @@ def analyse_artefacts(
                 "w",
             ) as ioccsv:
                 ioccsv.write(
-                    "CreationTime,LastAccessTime,LastWriteTime,Filename,IOC,IndicatorType,LineNumber,Resolvable\n"
+                    "CreationTime,LastAccessTime,LastWriteTime,Filename,IOC,indicator_type,line_number,resolvable\n"
                 )
         else:
             pass

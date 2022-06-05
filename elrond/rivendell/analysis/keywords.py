@@ -17,7 +17,7 @@ def search_keywords(
             "a",
         ) as keyword_matches_results_file:
             keyword_matches_results_file.write(
-                "elrond_host,Keyword,Filename,LineNumber,LineEntry\n"
+                "hostname,Keyword,Filename,line_number,line_entry\n"
             )
     else:
         pass
@@ -33,7 +33,7 @@ def search_keywords(
                 pass
             for keywords_target_file in keywords_target_list:
                 with open(keywords_target_file, "r") as keyword_search_fileile:
-                    keyword_line_number = 0
+                    keyword_line_number = 1
                     try:
                         for eachline in keyword_search_fileile:
                             if eachkeyword.lower().strip() in eachline.lower().strip():
