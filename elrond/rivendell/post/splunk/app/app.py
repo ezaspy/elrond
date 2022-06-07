@@ -22,7 +22,6 @@ def build_app_elrond(case, postpath):
         "/" + postpath + "splunk/etc/apps/elrond/default/data/ui/html/",
         "/" + postpath + "splunk/etc/apps/elrond/default/data/ui/nav/",
         "/" + postpath + "splunk/etc/apps/elrond/default/data/ui/views/",
-        "/" + postpath + "splunk/etc/apps/elrond/local/",
         "/" + postpath + "splunk/etc/apps/elrond/lookups/",
         "/" + postpath + "splunk/etc/apps/elrond/metadata/",
         "/" + postpath + "splunk/etc/apps/elrond/static/",
