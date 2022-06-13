@@ -266,7 +266,7 @@ def compare_iocs(
                                                 with open(
                                                     output_directory
                                                     + img.split("::")[0]
-                                                    + "/analysis/IOCs.csv",
+                                                    + "/analysis/iocs.csv",
                                                     "a",
                                                 ) as ioccsv:
                                                     ioccsv.write(

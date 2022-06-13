@@ -18,7 +18,13 @@ from rivendell.post.splunk.apps.topology import build_app_topology
 from rivendell.post.splunk.apps.treemap import build_app_treemap
 from rivendell.post.splunk.ingest import ingest_splunk_data
 
-import sys
+
+def splunk_service(splunk_install_path, action):
+    subprocess.Popen(
+        ["/" + splunk_install_path + "splunk/bin/./splunk", action],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ).communicate()
 
 
 def overwrite_splunk_index(
@@ -165,11 +171,7 @@ def install_splunk_stack(
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ).communicate()
-    subprocess.Popen(
-        ["/" + splunk_install_path + "splunk/bin/./splunk", "stop"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    ).communicate()
+    splunk_service(splunk_install_path, "stop")
     if "already exists" in str(
         subprocess.Popen(
             ["/" + splunk_install_path + "splunk/bin/./splunk", "add", "index", case],
@@ -193,6 +195,7 @@ def configure_splunk_stack(
         splunkuser, splunkpswd = input(
             "      Splunk admin username: "
         ), getpass.getpass("      Splunk admin password: ")
+        splunk_service(splunk_install_path, "start")
         testcreds = subprocess.Popen(
             [
                 "curl",
@@ -211,6 +214,7 @@ def configure_splunk_stack(
             request_splunk_creds()
         else:
             pass
+        splunk_service(splunk_install_path, "stop")
         return splunkuser, splunkpswd
 
     splunk_install_locations = []
@@ -368,19 +372,7 @@ def configure_splunk_stack(
         stage,
         allimgs,
         splunk_install_path,
-        volatility,
-        analysis,
-        timeline,
-        yara,
     )
-    try:
-        subprocess.Popen(
-            ["/" + splunk_install_path + "splunk/bin/./splunk", "status"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        ).communicate()
-    except:
-        pass
     for appdir, apptar in apps.items():
         if not os.path.isdir("/" + splunk_install_path + "splunk/etc/apps/" + appdir):
             os.makedirs("/" + splunk_install_path + "splunk/etc/apps/" + appdir)
@@ -440,11 +432,7 @@ def configure_splunk_stack(
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ).communicate()
-    subprocess.Popen(
-        ["/" + splunk_install_path + "splunk/bin/./splunk", "start"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    ).communicate()
+    splunk_service(splunk_install_path, "start")
     print()
     print("   Splunk Web is available at:            127.0.0.1:8000")
     os.chdir(pwd)

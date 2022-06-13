@@ -1,10 +1,88 @@
 #!/usr/bin/env python3 -tt
 import os
+import re
 import time
 from datetime import datetime
 
 from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
+
+
+def write_keywords(
+    output_directory,
+    verbosity,
+    img,
+    vssimage,
+    keyword_search_file,
+    keywords_target_file,
+    eachkeyword,
+    encoding_choice,
+):
+    keyword_line_number = 1
+    for eachline in keyword_search_file:
+        if eachkeyword.lower().strip() in eachline.lower().strip():
+            (
+                entry,
+                prnt,
+            ) = "{},{},keyword identified,{} (line {}) found in {}\n".format(
+                datetime.now().isoformat(),
+                vssimage,
+                eachkeyword.strip(),
+                keyword_line_number,
+                keywords_target_file.split("/")[-1],
+            ), " -> {} -> identified keyword '{}' on line {} in '{}' from {}".format(
+                datetime.now().isoformat().replace("T", " "),
+                eachkeyword.strip(),
+                keyword_line_number,
+                keywords_target_file.split("/")[-1],
+                "'" + vssimage.strip("'") + "'",
+            )
+            write_audit_log_entry(verbosity, output_directory, entry, prnt)
+            keyword_match_entry = "{},{},{},{},{},{},{}\n".format(
+                str(
+                    datetime.fromtimestamp(
+                        os.path.getctime(keywords_target_file.split(": ")[0])
+                    )
+                ),
+                str(
+                    datetime.fromtimestamp(
+                        os.path.getatime(keywords_target_file.split(": ")[0])
+                    )
+                ),
+                str(
+                    datetime.fromtimestamp(
+                        os.path.getmtime(keywords_target_file.split(": ")[0])
+                    )
+                ),
+                eachkeyword.strip(),
+                keywords_target_file.replace(",", "%2C"),
+                str(keyword_line_number),
+                eachline.strip().replace(",", "%2C").replace("\n", "\\n"),
+            )
+            kw_match_entry = (
+                str(keyword_match_entry.split())[2:-2]
+                .replace("', '", " ")
+                .replace("\\x", "\\\\x")
+                .replace("\\\\\\", "\\\\")
+            )
+            if len(keyword_match_entry.split(",")[-1]) > 200:
+                kw_match_entry = (
+                    ",".join(keyword_match_entry.split(",")[0:-1])
+                    + ","
+                    + keyword_match_entry.split(",")[-1][0:200]
+                    + "<>TRUNCATED<>\n"
+                )
+            else:
+                kw_match_entry = kw_match_entry + "\n"
+            with open(
+                output_directory + img.split("::")[0] + "/analysis/keyword_matches.csv",
+                "a",
+                encoding=encoding_choice,
+            ) as keyword_matches_results_file:
+                keyword_matches_results_file.write(kw_match_entry)
+        else:
+            pass
+        keyword_line_number += 1
 
 
 def search_keywords(
@@ -13,11 +91,11 @@ def search_keywords(
     if not os.path.exists(output_directory + img.split("::")[0] + "/analysis/"):
         os.mkdir(output_directory + img.split("::")[0] + "/analysis/")
         with open(
-            output_directory + img.split("::")[0] + "/analysis/KeywordMatches.csv",
+            output_directory + img.split("::")[0] + "/analysis/keyword_matches.csv",
             "a",
         ) as keyword_matches_results_file:
             keyword_matches_results_file.write(
-                "hostname,Keyword,Filename,line_number,line_entry\n"
+                "CreationTime,LastAccessTime,LastWriteTime,keyword,Filename,line_number,line_entry\n"
             )
     else:
         pass
@@ -32,129 +110,65 @@ def search_keywords(
             else:
                 pass
             for keywords_target_file in keywords_target_list:
-                with open(keywords_target_file, "r") as keyword_search_fileile:
-                    keyword_line_number = 1
-                    try:
-                        for eachline in keyword_search_fileile:
-                            if eachkeyword.lower().strip() in eachline.lower().strip():
-                                (
-                                    entry,
-                                    prnt,
-                                ) = "{},{},keyword identified,{} (line {}) found in {}\n".format(
-                                    datetime.now().isoformat(),
-                                    vssimage,
-                                    eachkeyword.strip(),
-                                    keyword_line_number,
-                                    keywords_target_file.split("/")[-1],
-                                ), " -> {} -> identified keyword '{}' on line {} in '{}' for {}".format(
-                                    datetime.now().isoformat().replace("T", " "),
-                                    eachkeyword.strip(),
-                                    keyword_line_number,
-                                    keywords_target_file.split("/")[-1],
-                                    vssimage,
-                                )
-                                write_audit_log_entry(
-                                    verbosity, output_directory, entry, prnt
-                                )
-                                with open(
-                                    output_directory
-                                    + img.split("::")[0]
-                                    + "/analysis/KeywordMatches.csv",
-                                    "a",
-                                ) as keyword_matches_results_file:
-                                    keyword_matches_results_file.write(
-                                        vssimage.strip("'")
-                                        + ","
-                                        + eachkeyword.strip()
-                                        + ","
-                                        + keywords_target_file
-                                        + ","
-                                        + str(keyword_line_number)
-                                        + ","
-                                        + eachline.strip()
-                                        + "\n"
-                                    )
-                            else:
-                                pass
-                            keyword_line_number += 1
-                    except:
-                        pass
-                with open(
-                    keywords_target_file, "r", encoding="ISO-8859-1"
-                ) as keyword_search_fileile:
-                    keyword_line_number = 0
-                    try:
-                        for eachline in keyword_search_fileile:
-                            if eachkeyword.lower().strip() in eachline.lower().strip():
-                                (
-                                    entry,
-                                    prnt,
-                                ) = "{},{},keyword identified,{} (line {}) found in {}\n".format(
-                                    datetime.now().isoformat(),
-                                    vssimage,
-                                    eachkeyword.strip(),
-                                    keyword_line_number,
-                                    keywords_target_file.split("/")[-1],
-                                ), " -> {} -> identified keyword '{}' on line {} in '{}' for {}".format(
-                                    datetime.now().isoformat().replace("T", " "),
-                                    eachkeyword.strip(),
-                                    keyword_line_number,
-                                    keywords_target_file.split("/")[-1],
-                                    vssimage,
-                                )
-                                write_audit_log_entry(
-                                    verbosity, output_directory, entry, prnt
-                                )
-                                with open(
-                                    output_directory
-                                    + img.split("::")[0]
-                                    + "/analysis/KeywordMatches.csv",
-                                    "a",
-                                ) as keyword_matches_results_file:
-                                    keyword_matches_results_file.write(
-                                        vssimage.strip("'")
-                                        + ","
-                                        + eachkeyword.strip()
-                                        + ","
-                                        + keywords_target_file
-                                        + ","
-                                        + str(keyword_line_number)
-                                        + ","
-                                        + eachline.strip()
-                                        + "\n"
-                                    )
-                            else:
-                                pass
-                            keyword_line_number += 1
-                    except:
-                        pass
+                try:
+                    encoding_choice = "UTF-8"
+                    with open(
+                        keywords_target_file, "r", encoding=encoding_choice
+                    ) as keyword_search_file:
+                        write_keywords(
+                            output_directory,
+                            verbosity,
+                            img,
+                            vssimage,
+                            keyword_search_file,
+                            keywords_target_file,
+                            eachkeyword,
+                            encoding_choice,
+                        )
+                except:
+                    encoding_choice = "ISO-8859-1"
+                    with open(
+                        keywords_target_file, "r", encoding=encoding_choice
+                    ) as keyword_search_file:
+                        write_keywords(
+                            output_directory,
+                            verbosity,
+                            img,
+                            vssimage,
+                            keyword_search_file,
+                            keywords_target_file,
+                            eachkeyword,
+                            encoding_choice,
+                        )
+                else:
+                    pass
             print_done(verbosity)
 
 
 def build_keyword_list(mnt):
     keywords_target_list = []
     for keyword_search_root, _, keyword_search_file in os.walk(mnt):
-        for keyword_search_fileile in keyword_search_file:
+        for keyword_search_file in keyword_search_file:
             try:
                 if (
                     os.stat(
-                        os.path.join(keyword_search_root, keyword_search_fileile)
+                        os.path.join(keyword_search_root, keyword_search_file)
                     ).st_size
                     > 0
                     and os.stat(
-                        os.path.join(keyword_search_root, keyword_search_fileile)
+                        os.path.join(keyword_search_root, keyword_search_file)
                     ).st_size
                     < 100000000
                     and not os.path.islink(
-                        os.path.join(keyword_search_root, keyword_search_fileile)
+                        os.path.join(keyword_search_root, keyword_search_file)
                     )  # 100MB
                 ):
                     with open(
-                        os.path.join(keyword_search_root, keyword_search_fileile), "r"
+                        os.path.join(keyword_search_root, keyword_search_file), "r"
                     ) as filetest:
                         filetest.readline()
                         keywords_target_list.append(
-                            os.path.join(keyword_search_root, keyword_search_fileile)
+                            os.path.join(keyword_search_root, keyword_search_file)
                         )
                 else:
                     pass
@@ -163,25 +177,25 @@ def build_keyword_list(mnt):
             try:
                 if (
                     os.stat(
-                        os.path.join(keyword_search_root, keyword_search_fileile)
+                        os.path.join(keyword_search_root, keyword_search_file)
                     ).st_size
                     > 0
                     and os.stat(
-                        os.path.join(keyword_search_root, keyword_search_fileile)
+                        os.path.join(keyword_search_root, keyword_search_file)
                     ).st_size
                     < 100000000
                     and not os.path.islink(
-                        os.path.join(keyword_search_root, keyword_search_fileile)
+                        os.path.join(keyword_search_root, keyword_search_file)
                     )  # 100MB
                 ):
                     with open(
-                        os.path.join(keyword_search_root, keyword_search_fileile),
+                        os.path.join(keyword_search_root, keyword_search_file),
                         "r",
                         encoding="ISO-8859-1",
                     ) as filetest:
                         filetest.readline()
                         keywords_target_list.append(
-                            os.path.join(keyword_search_root, keyword_search_fileile)
+                            os.path.join(keyword_search_root, keyword_search_file)
                         )
                 else:
                     pass
@@ -281,7 +295,7 @@ def prepare_keywords(verbosity, output_directory, auto, imgs, flags, keywords, s
                     keywords,
                     keywords_target_list,
                     each.split("::")[0],
-                    "'collected artefacts'",
+                    "collected/processed artefacts",
                 )
             else:
                 pass

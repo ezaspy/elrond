@@ -5,8 +5,6 @@ from datetime import datetime
 from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
-import time
-
 
 def ingest_splunk_data(
     verbosity,
@@ -15,10 +13,6 @@ def ingest_splunk_data(
     stage,
     allimgs,
     postpath,
-    volatility,
-    analysis,
-    timeline,
-    yara,
 ):
     for img in allimgs:
         if "vss" in img.split("::")[1]:
@@ -84,20 +78,21 @@ def ingest_splunk_data(
                         if os.path.isfile(os.path.join(atftroot, atftfile)):
                             if str(img.split("::")[-1])[1:].startswith("indows"):
                                 if atftfile.endswith(
-                                    "ShimCache.csv"
+                                    "shimcache.csv"
                                 ) or atftfile.endswith("jumplists.csv"):
                                     sourcetype = "elrondCSV_noTime"
                                 elif (
                                     atftfile.endswith("mft.csv")
                                     or atftfile.endswith("usn.csv")
-                                    or atftfile.endswith("History.csv")
                                     or atftfile.endswith("sqlite.csv")
                                 ):
                                     sourcetype = "elrondCSV"
                                 elif (
                                     (
                                         atftfile.endswith(".json")
+                                        and "windows." not in atftfile
                                         and "memory_" not in atftfile
+                                        and "/memory/" not in atftroot
                                     )
                                     and "registry" not in atftroot
                                     and "evt" not in atftroot
@@ -109,7 +104,9 @@ def ingest_splunk_data(
                                 if (
                                     (
                                         atftfile.endswith(".json")
+                                        and "macos." not in atftfile
                                         and "memory_" not in atftfile
+                                        and "/memory/" not in atftroot
                                     )
                                     and "logs" not in atftroot
                                     and "plists" not in atftroot
@@ -123,7 +120,9 @@ def ingest_splunk_data(
                                 if (
                                     (
                                         atftfile.endswith(".json")
+                                        and "linux." not in atftfile
                                         and "memory_" not in atftfile
+                                        and "/memory/" not in atftroot
                                     )
                                     and "logs" not in atftroot
                                     and "services" not in atftroot
@@ -155,7 +154,7 @@ def ingest_splunk_data(
                                     os.listdir(os.path.join(atftroot, atftdir))
                                 ) > 0 and (atftdir == "registry" or atftdir == "evt"):
                                     inputsconf.write(
-                                        "[monitor://{}/*]\ndisabled = false\nhost = {}\nsourcetype = elrondJSON\nindex = {}\n\n".format(
+                                        "[monitor://{}/*.json]\ndisabled = false\nhost = {}\nsourcetype = elrondJSON\nindex = {}\n\n".format(
                                             os.path.join(atftroot, atftdir),
                                             str(img.split("::")[0]),
                                             case,
@@ -165,7 +164,7 @@ def ingest_splunk_data(
                                     os.listdir(os.path.join(atftroot, atftdir))
                                 ) > 0 and (atftdir == "IE"):
                                     inputsconf.write(
-                                        "[monitor://{}/*]\ndisabled = false\nhost = {}\nsourcetype = elrondCSV_noTime\nindex = {}\n\n".format(
+                                        "[monitor://{}/*.csv]\ndisabled = false\nhost = {}\nsourcetype = elrondCSV_noTime\nindex = {}\n\n".format(
                                             os.path.join(atftroot, atftdir),
                                             str(img.split("::")[0]),
                                             case,
@@ -173,13 +172,9 @@ def ingest_splunk_data(
                                     )
                                 elif len(
                                     os.listdir(os.path.join(atftroot, atftdir))
-                                ) > 0 and (
-                                    atftdir == "edge"
-                                    or atftdir == "chrome"
-                                    or atftdir == "firefox"
-                                ):
+                                ) > 0 and (atftdir == "chrome"):
                                     inputsconf.write(
-                                        "[monitor://{}/*]\ndisabled = false\nhost = {}\nsourcetype = elrondCSV_noTime\nindex = {}\n\n".format(
+                                        "[monitor://{}/*.csv]\ndisabled = false\nhost = {}\nsourcetype = elrondCSV\nindex = {}\n\n".format(
                                             os.path.join(atftroot, atftdir),
                                             str(img.split("::")[0]),
                                             case,
@@ -194,7 +189,7 @@ def ingest_splunk_data(
                                     os.listdir(os.path.join(atftroot, atftdir))
                                 ) > 0 and (atftdir == "logs" or atftdir == "plists"):
                                     inputsconf.write(
-                                        "[monitor://{}/*]\ndisabled = false\nhost = {}\nsourcetype = elrondJSON\nindex = {}\n\n".format(
+                                        "[monitor://{}/*.json]\ndisabled = false\nhost = {}\nsourcetype = elrondJSON\nindex = {}\n\n".format(
                                             os.path.join(atftroot, atftdir),
                                             str(img.split("::")[0]),
                                             case,
@@ -209,7 +204,7 @@ def ingest_splunk_data(
                                     os.listdir(os.path.join(atftroot, atftdir))
                                 ) > 0 and (atftdir == "logs" or atftdir == "services"):
                                     inputsconf.write(
-                                        "[monitor://{}/*]\ndisabled = false\nhost = {}\nsourcetype = elrondJSON\nindex = {}\n\n".format(
+                                        "[monitor://{}/*.json]\ndisabled = false\nhost = {}\nsourcetype = elrondJSON\nindex = {}\n\n".format(
                                             os.path.join(atftroot, atftdir),
                                             str(img.split("::")[0]),
                                             case,
@@ -221,7 +216,7 @@ def ingest_splunk_data(
                                 pass
                         else:
                             pass
-                if volatility and os.path.isdir(
+                if os.path.isdir(
                     os.path.realpath(output_directory + img.split("::")[0])
                     + "/artefacts/cooked/memory/"
                 ):
@@ -234,10 +229,10 @@ def ingest_splunk_data(
                     )
                     if os.path.exists(
                         str(os.path.realpath(output_directory + img.split("::")[0]))
-                        + "/artefacts/cooked/memory/memory_timeliner.csv"
+                        + "/artefacts/cooked/memory/timeliner.csv"
                     ):
                         inputsconf.write(
-                            "[monitor://{}/artefacts/cooked/memory/memory_timeliner.csv]\ndisabled = false\nhost = {}\nsourcetype = elrondCSV\nindex = {}\n\n".format(
+                            "[monitor://{}/artefacts/cooked/memory/timeliner.csv]\ndisabled = false\nhost = {}\nsourcetype = elrondCSV\nindex = {}\n\n".format(
                                 os.path.realpath(output_directory + img.split("::")[0]),
                                 img.split("::")[0],
                                 case,
@@ -258,59 +253,54 @@ def ingest_splunk_data(
                         )
                     else:
                         pass
-                else:
-                    pass
-                if analysis or yara:
-                    for atftroot, atftdirs, atftfiles in os.walk(
-                        os.path.realpath(
-                            output_directory + img.split("::")[0] + "/analysis/"
-                        )
-                    ):
-                        for atftfile in atftfiles:
-                            if img.split("::")[0] in atftroot and os.path.isfile(
-                                os.path.join(atftroot, atftfile)
+                for atftroot, atftdirs, atftfiles in os.walk(
+                    os.path.realpath(
+                        output_directory + img.split("::")[0] + "/analysis/"
+                    )
+                ):
+                    for atftfile in atftfiles:
+                        if img.split("::")[0] in atftroot and os.path.isfile(
+                            os.path.join(atftroot, atftfile)
+                        ):
+                            if (
+                                atftfile.endswith("analysis.csv")
+                                or atftfile.endswith("iocs.csv")
+                                or atftfile.endswith("keyword_matches.csv")
+                                or atftfile.endswith("yara.csv")
                             ):
-                                if atftfile.endswith(
-                                    "analysis.csv"
-                                ) or atftfile.endswith("IOCs.csv"):
-                                    inputsconf.write(
-                                        "[monitor://{}]\ndisabled = false\nhost = {}\nsourcetype = elrondCSV\nindex = {}\n\n".format(
-                                            os.path.join(atftroot, atftfile),
-                                            str(img.split("::")[0]),
-                                            case,
-                                        )
+                                inputsconf.write(
+                                    "[monitor://{}/*.csv]\ndisabled = false\nhost = {}\nsourcetype = elrondCSV\nindex = {}\n\n".format(
+                                        atftroot,
+                                        str(img.split("::")[0]),
+                                        case,
                                     )
-                                else:
-                                    pass
+                                )
                             else:
                                 pass
-                else:
-                    pass
-                if timeline:
-                    for timeroot, _, timefiles in os.walk(
-                        os.path.realpath(
-                            output_directory + img.split("::")[0] + "/artefacts/"
-                        )
-                    ):
-                        for timefile in timefiles:
-                            if img.split("::")[0] in timeroot and os.path.isfile(
-                                os.path.join(timeroot, timefile)
-                            ):
-                                if timefile.endswith("plaso_timeline.csv"):
-                                    inputsconf.write(
-                                        "[monitor://{}]\ndisabled = false\nhost = {}\nsourcetype = elrondCSV\nindex = {}\n\n".format(
-                                            os.path.join(timeroot, timefile),
-                                            str(img.split("::")[0]),
-                                            case,
-                                        )
+                        else:
+                            pass
+                for timeroot, _, timefiles in os.walk(
+                    os.path.realpath(
+                        output_directory + img.split("::")[0] + "/artefacts/"
+                    )
+                ):
+                    for timefile in timefiles:
+                        if img.split("::")[0] in timeroot and os.path.isfile(
+                            os.path.join(timeroot, timefile)
+                        ):
+                            if timefile.endswith("plaso_timeline.csv"):
+                                inputsconf.write(
+                                    "[monitor://{}]\ndisabled = false\nhost = {}\nsourcetype = elrondCSV\nindex = {}\n\n".format(
+                                        os.path.join(timeroot, timefile),
+                                        str(img.split("::")[0]),
+                                        case,
                                     )
-                                else:
-                                    pass
+                                )
                             else:
                                 pass
-                else:
-                    pass
-            elif img.split("::")[-1].startswith("memory") and "memory_" in str(
+                        else:
+                            pass
+            elif img.split("::")[-1].startswith("memory") and ".json" in str(
                 os.listdir(os.path.realpath(output_directory + img.split("::")[0]))
             ):
                 inputsconf.write(
@@ -322,10 +312,10 @@ def ingest_splunk_data(
                 )
                 if os.path.exists(
                     str(os.path.realpath(output_directory + img.split("::")[0]))
-                    + "/memory_timeliner.csv"
+                    + "/timeliner.csv"
                 ):
                     inputsconf.write(
-                        "[monitor://{}/memory_timeliner.csv]\ndisabled = false\nhost = {}\nsourcetype = elrondCSV\nindex = {}\n\n".format(
+                        "[monitor://{}/timeliner.csv]\ndisabled = false\nhost = {}\nsourcetype = elrondCSV\nindex = {}\n\n".format(
                             os.path.realpath(output_directory + img.split("::")[0]),
                             img.split("::")[0],
                             case,

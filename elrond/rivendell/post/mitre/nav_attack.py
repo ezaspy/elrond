@@ -1,6 +1,7 @@
 #!/usr/bin/env python3 -tt
 
-def create_attack_navigator(case, nav_list, eachtechnique):
+
+def create_attack_navigator(nav_list, eachtechnique):
     nav_pairs = {
         "T1001": '{\n            "techniqueID": "T1001",\n            "tactic": "command-and-control",\n            "color": "#00ACB4",\n            "comment": "",\n            "enabled": true,\n            "metadata": [],\n            "showSubtechniques": false\n        },\n        ',
         "T1001.001": '{\n            "techniqueID": "T1001.001",\n            "tactic": "command-and-control",\n            "color": "#00ACB4",\n            "comment": "",\n            "enabled": true,\n            "metadata": [],\n            "showSubtechniques": false\n        },\n        ',

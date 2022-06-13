@@ -310,10 +310,10 @@ def extract_memory_artefacts(
         if profile.startswith("Win"):
             if memtimeline:
                 if not os.path.exists(
-                    output_directory + mempath + "/memory_" + "timeliner.csv"
+                    output_directory + mempath + "timeliner.csv"
                 ):
                     with open(
-                        output_directory + mempath + "/memory_" + "timeliner.csv", "a"
+                        output_directory + mempath + "timeliner.csv", "a"
                     ) as timeliner:
                         timeline = str(
                             subprocess.Popen(

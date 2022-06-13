@@ -324,6 +324,7 @@ def analyse_artefacts(
                                             str(file_hdr)[2:10] != "\\x4d\\x5a"
                                             and str(file_hdr)[2:10] != "MZ\\x90\\x"
                                             and str(file_hdr)[2:10] != "MZ\\x00\\x"
+                                            and str(file_hdr)[2:10] != "MZx\\x00\\"
                                             and str(file_hdr)[2:10] != "MZ\\x9f\\x"
                                             and str(file_hdr)[2:9] != "DCH\\x01"
                                             and str(file_hdr)[2:9] != "DCD\\x01"
@@ -372,6 +373,7 @@ def analyse_artefacts(
                                     or (
                                         (f.endswith(".jar") or f.endswith(".zip"))
                                         and str(file_hdr)[2:10] != "\\x50\\x4b"
+                                        and str(file_hdr)[2:10] != "PK\\x03\\x"
                                         and str(file_hdr)[2:9] != "PK\\x03"
                                     )
                                     or (
@@ -535,14 +537,14 @@ def analyse_artefacts(
         else:
             pass
         if not os.path.exists(
-            output_directory + img.split("::")[0] + "/analysis/IOCs.csv"
+            output_directory + img.split("::")[0] + "/analysis/iocs.csv"
         ):
             with open(
-                output_directory + img.split("::")[0] + "/analysis/IOCs.csv",
+                output_directory + img.split("::")[0] + "/analysis/iocs.csv",
                 "w",
             ) as ioccsv:
                 ioccsv.write(
-                    "CreationTime,LastAccessTime,LastWriteTime,Filename,IOC,indicator_type,line_number,resolvable\n"
+                    "CreationTime,LastAccessTime,LastWriteTime,Filename,ioc,indicator_type,line_number,resolvable\n"
                 )
         else:
             pass

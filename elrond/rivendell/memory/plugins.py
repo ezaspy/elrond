@@ -214,6 +214,7 @@ def use_plugins(output_directory, artefact, volver, memext, mempath, profile, pl
                         .replace("pid", "PID")
                         .replace("Filepath", "Path")
                         .replace("Command line", "CommandLine")
+                        .replace("LoadTime", "LastWriteTime")
                     )
                     if "Win" in profile:
                         if (
