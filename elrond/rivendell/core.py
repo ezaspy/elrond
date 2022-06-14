@@ -266,4 +266,3 @@ def collect_process_keyword_analysis_timeline(
             pass
     else:
         pass
-    time.sleep(240)

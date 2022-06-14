@@ -307,16 +307,13 @@ def main(
             )[2:-1],
         )
         if volcheck != "":
-            if not auto:
-                volchoose = input(
-                    "  Which version of volatility do you wish to use? 3/2.6 [3] "
-                )
-                if volchoose != "2.6":
-                    volchoice = "3"
-                else:
-                    pass
-            else:
+            volchoose = input(
+                "  Which version of volatility do you wish to use? 3/2.6 [3] "
+            )
+            if volchoose != "2.6":
                 volchoice = "3"
+            else:
+                pass
         else:
             pass
         if memorytimeline:
