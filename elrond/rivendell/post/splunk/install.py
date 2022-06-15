@@ -346,7 +346,7 @@ def configure_splunk_stack(
                     new_default_nav.write(insert_new_case + "\n")
             else:
                 pass
-            if not os.isfile(
+            if not os.path.isfile(
                 "/"
                 + splunk_install_path
                 + "splunk/etc/apps/elrond/default/data/ui/views/"

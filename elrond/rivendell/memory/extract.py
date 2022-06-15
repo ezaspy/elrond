@@ -18,7 +18,6 @@ def extract_memory_artefacts(
     mempath,
     memext,
     vssimage,
-    vsstext,
     memtimeline,
 ):
     def print_extraction(
@@ -173,9 +172,7 @@ def extract_memory_artefacts(
             volprefix,
             profile,
             "profile",
-            mempath,
             vssimage,
-            vsstext,
         )
         if profile.startswith("Win"):
             volplugins = [
@@ -309,9 +306,7 @@ def extract_memory_artefacts(
                 pass
         if profile.startswith("Win"):
             if memtimeline:
-                if not os.path.exists(
-                    output_directory + mempath + "timeliner.csv"
-                ):
+                if not os.path.exists(output_directory + mempath + "timeliner.csv"):
                     with open(
                         output_directory + mempath + "timeliner.csv", "a"
                     ) as timeliner:

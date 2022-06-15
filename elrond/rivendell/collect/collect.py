@@ -328,18 +328,57 @@ def collect_artefacts(
                 print("     Identifying profile for {}...".format(vssimage))
             else:
                 pass
-            process_memory(
-                output_directory,
-                verbosity,
-                d,
-                stage,
-                f,
-                path,
-                volchoice,
-                vss,
-                vssmem,
-                memtimeline,
-            )
+            if volchoice == "3":
+                process_memory(
+                    output_directory,
+                    verbosity,
+                    d,
+                    stage,
+                    f,
+                    path,
+                    "3",
+                    vss,
+                    vssmem,
+                    memtimeline,
+                )
+            elif volchoice == "2.6":
+                process_memory(
+                    output_directory,
+                    verbosity,
+                    d,
+                    stage,
+                    f,
+                    path,
+                    "2.6",
+                    vss,
+                    vssmem,
+                    memtimeline,
+                )
+            else:
+                process_memory(
+                    output_directory,
+                    verbosity,
+                    d,
+                    stage,
+                    f,
+                    path,
+                    "3",
+                    vss,
+                    vssmem,
+                    memtimeline,
+                )
+                process_memory(
+                    output_directory,
+                    verbosity,
+                    d,
+                    stage,
+                    f,
+                    path,
+                    "2.6",
+                    vss,
+                    vssmem,
+                    memtimeline,
+                )
             flags.append("02processing")
             os.chdir(cwd)
         else:  # Collection

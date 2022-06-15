@@ -48,58 +48,61 @@ def collect_process_keyword_analysis_timeline(
     memtimeline,
     stage,
 ):
-    if collect:
-        collect_artefacts(
-            auto,
-            vss,
-            collectfiles,
-            nsrl,
-            keywords,
-            volatility,
-            hashcollected,
-            superquick,
-            quick,
-            recover,
-            symlinks,
-            userprofiles,
-            verbose,
-            d,
-            cwd,
-            sha256,
-            flags,
-            system_artefacts,
-            output_directory,
-            verbosity,
-            f,
-            imgs,
-            path,
-            volchoice,
-            vssmem,
-            memtimeline,
-            stage,
-        )
-    else:
-        imgs = reorganise_artefacts(
-            output_directory, verbosity, allimgs, flags, auto, volatility
-        )
-    if process:
-        identify_pre_process_artefacts(
-            output_directory,
-            verbosity,
-            d,
-            flags,
-            stage,
-            cwd,
-            imgs,
-            f,
-            path,
-            vssmem,
-            volatility,
-            volchoice,
-            vss,
-            memtimeline,
-            collectfiles,
-        )
+    if len(imgs) != 0:
+        if collect:
+            collect_artefacts(
+                auto,
+                vss,
+                collectfiles,
+                nsrl,
+                keywords,
+                volatility,
+                hashcollected,
+                superquick,
+                quick,
+                recover,
+                symlinks,
+                userprofiles,
+                verbose,
+                d,
+                cwd,
+                sha256,
+                flags,
+                system_artefacts,
+                output_directory,
+                verbosity,
+                f,
+                imgs,
+                path,
+                volchoice,
+                vssmem,
+                memtimeline,
+                stage,
+            )
+        else:
+            imgs = reorganise_artefacts(
+                output_directory, verbosity, allimgs, flags, auto, volatility
+            )
+        if process:
+            identify_pre_process_artefacts(
+                output_directory,
+                verbosity,
+                d,
+                flags,
+                stage,
+                cwd,
+                imgs,
+                f,
+                path,
+                vssmem,
+                volatility,
+                volchoice,
+                vss,
+                memtimeline,
+                collectfiles,
+            )
+        else:
+            pass
     else:
         pass
     if keywords:

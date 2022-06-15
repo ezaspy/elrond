@@ -108,18 +108,57 @@ def identify_memory_image(
             ),
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
-        symbolprofile, vssmem = process_memory(
-            output_directory,
-            verbosity,
-            d,
-            "process",
-            f,
-            path,
-            volchoice,
-            vss,
-            vssmem,
-            memtimeline,
-        )
+        if volchoice == "3":
+            symbolprofile, vssmem = process_memory(
+                output_directory,
+                verbosity,
+                d,
+                "process",
+                f,
+                path,
+                "3",
+                vss,
+                vssmem,
+                memtimeline,
+            )
+        elif volchoice == "2.6":
+            symbolprofile, vssmem = process_memory(
+                output_directory,
+                verbosity,
+                d,
+                "process",
+                f,
+                path,
+                "2.6",
+                vss,
+                vssmem,
+                memtimeline,
+            )
+        else:
+            symbolprofile, vssmem = process_memory(
+                output_directory,
+                verbosity,
+                d,
+                "process",
+                f,
+                path,
+                "3",
+                vss,
+                vssmem,
+                memtimeline,
+            )
+            symbolprofile, vssmem = process_memory(
+                output_directory,
+                verbosity,
+                d,
+                "process",
+                f,
+                path,
+                "2.6",
+                vss,
+                vssmem,
+                memtimeline,
+            )
         if "Win" in symbolprofile or "win" in symbolprofile:
             memoryplatform = "Windows memory"
         elif (

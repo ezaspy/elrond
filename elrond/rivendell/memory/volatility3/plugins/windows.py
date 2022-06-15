@@ -5,6 +5,9 @@ import re
 import shutil
 
 
+import time
+
+
 def windows_vol3(
     output_directory,
     mempath,
@@ -116,34 +119,37 @@ def windows_vol3(
     elif plugin == "windows.envars.Envars":
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
-                for eachkv in re.findall(
-                    r"^(?P<PID>\d+)\\t(?P<ProcessName>\S+)\\t(?P<Block>0x[A-Fa-f\d]+)\\t(?P<Variable>\S+)\\t(?P<Value>.*)",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
+                for eachline in str(re.sub(r"\\\\ n(\d+)", r"\n\1", eachinfo)).split(
+                    "\n"
                 ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["ProcessName"],
-                            jsondict["PID"],
-                            jsondict["Variable"],
-                            jsondict["Value"],
-                            jsondict["Block"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[1],
-                            kv[0],
-                            kv[3],
-                            kv[4],
-                            kv[2],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
+                    for eachkv in re.findall(
+                        r"^(?P<PID>\d+)\\t(?P<ProcessName>\S+)\\t(?P<Block>0x[A-Fa-f\d]+)\\t(?P<Variable>\S+)\\t(?P<Value>.*)",
+                        eachline.replace("\\\\ n", "\\\\n"),
+                    ):
+                        kv = list(eachkv)
+                        if len(kv) > 0:
+                            (
+                                jsondict["VolatilityVersion"],
+                                jsondict[symbolorprofile],
+                                jsondict["VolatilityPlugin"],
+                                jsondict["ProcessName"],
+                                jsondict["PID"],
+                                jsondict["Variable"],
+                                jsondict["Value"],
+                                jsondict["Block"],
+                            ) = (
+                                volver,
+                                profile,
+                                plugin,
+                                kv[1],
+                                kv[0],
+                                kv[3],
+                                kv[4],
+                                kv[2],
+                            )
+                        else:
+                            pass
+                        jsonlist.append(json.dumps(jsondict))
     elif plugin == "windows.filescan.FileScan":
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
@@ -228,38 +234,41 @@ def windows_vol3(
     elif plugin == "windows.handles.Handles":
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
-                for eachkv in re.findall(
-                    r"^(?P<PID>\d+)\\t(?P<ProcessName>\S+)\\t(?P<Offset>0x[A-Fa-f\d]+)\\t(?P<HandleValue>0x[A-Fa-f\d]+)\\t(?P<Type>[\w\ ]+)\\t(?P<GrantedAccess>0x[A-Fa-f\d]+)\\t?(?P<HandleName>[\S\ ]+)?",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
+                for eachline in str(re.sub(r"\\\\ n(\d+)", r"\n\1", eachinfo)).split(
+                    "\n"
                 ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["ProcessName"],
-                            jsondict["PID"],
-                            jsondict["HandleName"],
-                            jsondict["HandleValue"],
-                            jsondict["Type"],
-                            jsondict["GrantedAccess"],
-                            jsondict["Offset"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[1],
-                            kv[0],
-                            kv[6],
-                            kv[3],
-                            kv[4],
-                            kv[5],
-                            kv[2],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
+                    for eachkv in re.findall(
+                        r"^(?P<PID>\d+)\\t(?P<ProcessName>\S+)\\t(?P<Offset>0x[A-Fa-f\d]+)\\t(?P<HandleValue>0x[A-Fa-f\d]+)\\t(?P<Type>[\w\ ]+)\\t(?P<GrantedAccess>0x[A-Fa-f\d]+)\\t?(?P<HandleName>[\S\ ]+)?",
+                        eachline.replace("\\\\ n", "\\\\n"),
+                    ):
+                        kv = list(eachkv)
+                        if len(kv) > 0:
+                            (
+                                jsondict["VolatilityVersion"],
+                                jsondict[symbolorprofile],
+                                jsondict["VolatilityPlugin"],
+                                jsondict["ProcessName"],
+                                jsondict["PID"],
+                                jsondict["HandleName"],
+                                jsondict["HandleValue"],
+                                jsondict["Type"],
+                                jsondict["GrantedAccess"],
+                                jsondict["Offset"],
+                            ) = (
+                                volver,
+                                profile,
+                                plugin,
+                                kv[1],
+                                kv[0],
+                                kv[6].strip("\\"),
+                                kv[3],
+                                kv[4],
+                                kv[5],
+                                kv[2],
+                            )
+                        else:
+                            pass
+                        jsonlist.append(json.dumps(jsondict))
     elif plugin == "windows.info.Info":
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):

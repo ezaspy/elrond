@@ -310,10 +310,14 @@ def process_memory(
             mempath,
             memext,
             vssimage,
-            vsstext,
             memtimeline,
         )
     else:
+        print(
+            "      Identifying likely profiles for '{}'...".format(
+                artefact.split("/")[-1]
+            )
+        )
         profiles = re.findall(
             r"Suggested Profile\(s\) \: (?P<profiles>[\S\ ]+)",
             str(
@@ -363,23 +367,12 @@ def process_memory(
                         mempath,
                         memext,
                         vssimage,
-                        vsstext,
                         memtimeline,
                     )
                 else:  # vss invoked - processing original disk image
                     profiles, artefact, profile = suggest_volatility_profile(
-                        verbosity,
-                        output_directory,
-                        stage,
                         profiles,
                         artefact,
-                        volchoice,
-                        volprefix,
-                        mempath,
-                        memext,
-                        vssimage,
-                        vsstext,
-                        memtimeline,
                     )
                     if stage == "processing":
                         convert_memory_image(
@@ -414,23 +407,12 @@ def process_memory(
                         mempath,
                         memext,
                         vssimage,
-                        vsstext,
                         memtimeline,
                     )
             else:  # vss not invoked or N/A
                 profiles, artefact, profile = suggest_volatility_profile(
-                    verbosity,
-                    output_directory,
-                    stage,
                     profiles,
                     artefact,
-                    volchoice,
-                    volprefix,
-                    mempath,
-                    memext,
-                    vssimage,
-                    vsstext,
-                    memtimeline,
                 )
                 if stage == "processing":
                     convert_memory_image(
@@ -465,7 +447,6 @@ def process_memory(
                     mempath,
                     memext,
                     vssimage,
-                    vsstext,
                     memtimeline,
                 )
         else:
@@ -692,20 +673,19 @@ def process_memory(
                 mempath,
                 memext,
                 vssimage,
-                vsstext,
                 memtimeline,
             )
         if volchoice == "2.6":
             profiledirs = []
             for eachfile in os.listdir(
-                "/usr/lib/python2.7/dist-packages/volatility/plugins/overlays/mac/"
+                "/usr/local/lib/python2.7/dist-packages/volatility/plugins/overlays/mac/"
             ):
                 if eachfile.endswith(".zip"):
                     profiledirs.append(eachfile)
                 else:
                     pass
             for eachfile in os.listdir(
-                "/usr/lib/python2.7/dist-packages/volatility/plugins/overlays/linux/"
+                "/usr/local/lib/python2.7/dist-packages/volatility/plugins/overlays/linux/"
             ):
                 if eachfile.endswith(".zip"):
                     profiledirs.append(eachfile)

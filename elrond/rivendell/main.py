@@ -118,6 +118,11 @@ def main(
         sys.exit()
     else:
         pass
+    if memorytimeline and not volatility:
+        print(
+            "\n\n You cannot provide the memorytimeline Flag (-t) without provided the Volatility Flag (-M). Please try again.\n\n\n\n"
+        )
+        sys.exit()
     if analysis and not process:
         print(
             "\n\n You cannot provide the Analysis Flag (-A) without provided the Processing Flag (-P). Please try again.\n\n\n\n"
@@ -308,9 +313,11 @@ def main(
         )
         if volcheck != "":
             volchoose = input(
-                "  Which version of volatility do you wish to use? 3/2.6 [3] "
+                "  Which version of volatility do you wish to use? 3/2.6/Both [Both] "
             )
-            if volchoose != "2.6":
+            if volchoose != "3" and volchoose != "2.6":
+                volchoice = "Both"
+            elif volchoose == "3":
                 volchoice = "3"
             else:
                 pass

@@ -58,18 +58,8 @@ def select_volatility_profile(finalprofiles):
 
 
 def suggest_volatility_profile(
-    verbosity,
-    output_directory,
-    stage,
     profiles,
     artefact,
-    volchoice,
-    volprefix,
-    mempath,
-    memext,
-    vssimage,
-    vsstext,
-    memtimeline,
 ):
     if "No suggestion " in profiles[0]:
         print(
@@ -162,23 +152,6 @@ def suggest_volatility_profile(
             )
         )
         select_volatility_profile(finalprofiles)
-        for key, value in sorted(profilepairs.items()):
-            if profile == key or profile == value:
-                extract_memory_artefacts(
-                    verbosity,
-                    output_directory,
-                    volchoice,
-                    volprefix,
-                    artefact,
-                    value,
-                    mempath,
-                    memext,
-                    vssimage,
-                    vsstext,
-                    memtimeline,
-                )
-            else:
-                pass
     return profiles, artefact, profile
 
 
@@ -194,7 +167,6 @@ def convert_memory_image(
     mempath,
     memext,
     vssimage,
-    vsstext,
     memtimeline,
 ):
     print(
@@ -238,7 +210,6 @@ def convert_memory_image(
         profiles, artefact, profile = suggest_volatility_profile(
             verbosity,
             output_directory,
-            stage,
             profiles,
             artefact,
             volchoice,
@@ -246,7 +217,6 @@ def convert_memory_image(
             mempath,
             memext,
             vssimage,
-            vsstext,
             memtimeline,
         )
         convert_memory_image(
@@ -259,7 +229,6 @@ def convert_memory_image(
             mempath,
             memext,
             vssimage,
-            vsstext,
             memtimeline,
         )
     else:
