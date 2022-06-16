@@ -5,7 +5,6 @@ import subprocess
 from datetime import datetime
 
 from rivendell.audit import write_audit_log_entry
-from rivendell.memory.extract import extract_memory_artefacts
 
 
 def select_volatility_profile(finalprofiles):

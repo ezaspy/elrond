@@ -346,7 +346,6 @@ def process_memory(
                             mempath,
                             memext,
                             vssimage,
-                            vsstext,
                             memtimeline,
                         )
                         print(
@@ -387,7 +386,6 @@ def process_memory(
                             mempath,
                             memext,
                             vssimage,
-                            vsstext,
                             memtimeline,
                         )
                         print(
@@ -427,7 +425,6 @@ def process_memory(
                         mempath,
                         memext,
                         vssimage,
-                        vsstext,
                         memtimeline,
                     )
                     print(
