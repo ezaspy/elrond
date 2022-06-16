@@ -370,6 +370,86 @@ def mount_images(
                     verbosity, output_directory, disk_file, destination_mount
                 )
                 mounted_image(allimgs, disk_image, destination_mount)
+                if vss:
+                    if verbosity != "":
+                        print(
+                            "    Attempting to mount Volume Shadow Copies for '{}'...".format(
+                                disk_file
+                            )
+                        )
+                    else:
+                        pass
+                    subprocess.Popen(
+                        ["vshadowmount", intermediate_mount + "/ewf1", "/mnt/vss/"],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                    ).communicate()
+                    time.sleep(0.5)
+                    if os.path.exists(
+                        "/mnt/shadow_mount/" + disk_file.split("::")[0] + "/"
+                    ):
+                        for current in os.listdir(
+                            "/mnt/shadow_mount/" + disk_file.split("::")[0] + "/"
+                        ):
+                            subprocess.Popen(
+                                [
+                                    "umount",
+                                    "/mnt/shadow_mount/"
+                                    + disk_file.split("::")[0]
+                                    + "/"
+                                    + current,
+                                ],
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE,
+                            ).communicate()
+                            time.sleep(0.1)
+                            shutil.rmtree(
+                                "/mnt/shadow_mount/"
+                                + disk_file.split("::")[0]
+                                + "/"
+                                + current
+                            )
+                            shutil.rmtree(
+                                "/mnt/shadow_mount/" + disk_file.split("::")[0] + "/"
+                            )
+                    else:
+                        os.mkdir("/mnt/shadow_mount/" + disk_file.split("::")[0] + "/")
+                        for i in os.listdir("/mnt/vss/"):
+                            os.mkdir(
+                                "/mnt/shadow_mount/"
+                                + disk_file.split("::")[0]
+                                + "/"
+                                + i
+                            )
+                            try:
+                                subprocess.Popen(
+                                    [
+                                        "mount",
+                                        "-o",
+                                        "ro,loop,show_sys_files,streams_interface=windows",
+                                        "/mnt/vss/" + i,
+                                        "/mnt/shadow_mount/"
+                                        + disk_file.split("::")[0]
+                                        + "/"
+                                        + i,
+                                    ],
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE,
+                                ).communicate()
+                                time.sleep(0.1)
+                            except:
+                                pass
+                    if verbosity != "":
+                        print(
+                            "    All valid Volume Shadow Copies for '{}' have been successfully mounted.".format(
+                                disk_file
+                            )
+                        )
+                    else:
+                        pass
+                    os.chdir(cwd)
+                else:
+                    pass
             elif (
                 "unknown filesystem type 'apfs'" in mounterr
                 or "wrong fs type" in mounterr
