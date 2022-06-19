@@ -17,6 +17,7 @@ def write_keywords(
     keywords_target_file,
     eachkeyword,
     encoding_choice,
+    vsstext,
 ):
     keyword_line_number = 1
     for eachline in keyword_search_file:
@@ -30,12 +31,13 @@ def write_keywords(
                 eachkeyword.strip(),
                 keyword_line_number,
                 keywords_target_file.split("/")[-1],
-            ), " -> {} -> identified keyword '{}' on line {} in '{}' from {}".format(
+            ), " -> {} -> identified keyword '{}' on line {} in '{}' from {}{}".format(
                 datetime.now().isoformat().replace("T", " "),
                 eachkeyword.strip(),
                 keyword_line_number,
                 keywords_target_file.split("/")[-1],
-                "'" + vssimage.strip("'") + "'",
+                vssimage,
+                vsstext,
             )
             write_audit_log_entry(verbosity, output_directory, entry, prnt)
             keyword_match_entry = "{},{},{},{},{},{},{}\n".format(
@@ -86,7 +88,14 @@ def write_keywords(
 
 
 def search_keywords(
-    verbosity, output_directory, img, keywords, keywords_target_list, vssimage, insert
+    verbosity,
+    output_directory,
+    img,
+    keywords,
+    keywords_target_list,
+    vssimage,
+    insert,
+    vsstext,
 ):
     if not os.path.exists(output_directory + img.split("::")[0] + "/analysis/"):
         os.mkdir(output_directory + img.split("::")[0] + "/analysis/")
@@ -124,6 +133,7 @@ def search_keywords(
                             keywords_target_file,
                             eachkeyword,
                             encoding_choice,
+                            vsstext,
                         )
                 except:
                     encoding_choice = "ISO-8859-1"
@@ -139,6 +149,7 @@ def search_keywords(
                             keywords_target_file,
                             eachkeyword,
                             encoding_choice,
+                            vsstext,
                         )
                 else:
                     pass
@@ -264,6 +275,7 @@ def prepare_keywords(verbosity, output_directory, auto, imgs, flags, keywords, s
                     keywords_target_list,
                     vssimage,
                     vssimage,
+                    vsstext,
                 )
                 print("  -> Completed Keyword Searching Phase for {}".format(vssimage))
                 entry, prnt = "{},{},{},completed\n".format(
@@ -296,6 +308,7 @@ def prepare_keywords(verbosity, output_directory, auto, imgs, flags, keywords, s
                     keywords_target_list,
                     each.split("::")[0],
                     "collected/processed artefacts",
+                    vsstext,
                 )
             else:
                 pass
@@ -311,7 +324,8 @@ def prepare_keywords(verbosity, output_directory, auto, imgs, flags, keywords, s
                     keywords,
                     keywords_target_list,
                     each.split("::")[0],
-                    "'collected files'",
+                    "collected files",
+                    vsstext,
                 )
             else:
                 pass
