@@ -664,57 +664,40 @@ def process_hiberfil(
     vssartefact,
     stage,
     artefact,
-    volatility,
     volchoice,
     vss,
     vssmem,
     memtimeline,
 ):
-    if volatility:
-        if not os.path.exists(
-            output_directory
-            + img.split("::")[0]
-            + "/artefacts/cooked"
-            + vssartefact
-            + "memory"
-        ):
-            if verbosity != "":
-                print(
-                    "     Processing '{}' for {}...".format(
-                        artefact.split("/")[-1], vssimage
-                    )
-                )
-            else:
-                pass
-            os.makedirs(
-                output_directory
-                + img.split("::")[0]
-                + "/artefacts/cooked"
-                + vssartefact
-                + "memory"
-            )
-            profile, vssmem = process_memory(
-                output_directory,
-                verbosity,
-                d,
-                stage,
-                img,
-                artefact,
-                volchoice,
-                vss,
-                vssmem,
-                memtimeline,
-            )
-        else:
-            pass
+    if verbosity != "":
+        print(
+            "     Processing '{}' for {}...".format(artefact.split("/")[-1], vssimage)
+        )
     else:
         pass
+    os.makedirs(
+        output_directory
+        + img.split("::")[0]
+        + "/artefacts/cooked"
+        + vssartefact
+        + "memory"
+    )
+    profile, vssmem = process_memory(
+        output_directory,
+        verbosity,
+        d,
+        stage,
+        img,
+        artefact,
+        volchoice,
+        vss,
+        vssmem,
+        memtimeline,
+    )
     return profile, vssmem
 
 
-def process_pagefile(
-    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
-):
+def process_pagefile(verbosity, vssimage, output_directory, img, vssartefact, artefact):
     if not os.path.exists(
         output_directory
         + img.split("::")[0]

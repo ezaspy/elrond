@@ -52,10 +52,10 @@ def collect_windows_artefacts(
                 img.split("::")[0],
             )
             write_audit_log_entry(verbosity, output_directory, entry, prnt)
-            try:
+            """try:
                 shutil.copy2(item, dest)
             except:
-                pass
+                pass"""
             print_done(verbosity)
         else:
             pass
@@ -125,7 +125,7 @@ def collect_windows_artefacts(
         else:
             pass
     elif len(os.listdir(item)) > 0:  # directories
-        if item == mnt + "/Windows/System32/config/":
+        """if item == mnt + "/Windows/System32/config/":
             dest = dest + "registry/"
             try:
                 os.stat(dest)
@@ -232,7 +232,7 @@ def collect_windows_artefacts(
             else:
                 pass
         else:
-            pass
+            pass"""
         if item == mnt + "/$Recycle.Bin":
             item_list, dest = (
                 os.listdir(item),

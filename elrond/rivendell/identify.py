@@ -108,20 +108,7 @@ def identify_memory_image(
             ),
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
-        if volchoice == "3":
-            symbolprofile, vssmem = process_memory(
-                output_directory,
-                verbosity,
-                d,
-                "process",
-                f,
-                path,
-                "3",
-                vss,
-                vssmem,
-                memtimeline,
-            )
-        elif volchoice == "2.6":
+        if volchoice == "2.6":
             symbolprofile, vssmem = process_memory(
                 output_directory,
                 verbosity,
@@ -130,6 +117,19 @@ def identify_memory_image(
                 f,
                 path,
                 "2.6",
+                vss,
+                vssmem,
+                memtimeline,
+            )
+        elif volchoice == "3":
+            symbolprofile, vssmem = process_memory(
+                output_directory,
+                verbosity,
+                d,
+                "process",
+                f,
+                path,
+                "3",
                 vss,
                 vssmem,
                 memtimeline,
@@ -142,7 +142,7 @@ def identify_memory_image(
                 "process",
                 f,
                 path,
-                "3",
+                "2.6",
                 vss,
                 vssmem,
                 memtimeline,
@@ -154,7 +154,7 @@ def identify_memory_image(
                 "process",
                 f,
                 path,
-                "2.6",
+                "3",
                 vss,
                 vssmem,
                 memtimeline,

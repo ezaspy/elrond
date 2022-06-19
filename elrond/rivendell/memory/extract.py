@@ -45,7 +45,7 @@ def extract_memory_artefacts(
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
         return profile
 
-    if volver == "3":
+    if volver == "3":  # volatility3
         if artefact.endswith("hiberfil.sys"):
             print_extraction(
                 verbosity,
@@ -164,7 +164,7 @@ def extract_memory_artefacts(
                     pass
         else:
             pass
-    else:
+    else:  # volatility2.6
         print_extraction(
             verbosity,
             output_directory,

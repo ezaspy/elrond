@@ -210,27 +210,37 @@ def process_artefacts(
             process_browser(
                 verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
             )
+        elif artefact.endswith("hiberfil.sys") and volatility:
+            if not os.path.exists(
+                output_directory
+                + img.split("::")[0]
+                + "/artefacts/cooked"
+                + vssartefact
+                + "memory"
+            ):
+                process_hiberfil(
+                    d,
+                    verbosity,
+                    vssimage,
+                    output_directory,
+                    img,
+                    vssartefact,
+                    stage,
+                    artefact,
+                    volchoice,
+                    vss,
+                    vssmem,
+                    memtimeline,
+                )
+            else:
+                pass
+        elif artefact.endswith("MEMORY.DMP") and volatility:
+            pass
         elif (
-            artefact.endswith("hiberfil.sys") or artefact.endswith("MEMORY.DMP")
+            artefact.endswith("pagefile.sys") or artefact.endswith("swapfile.sys")
         ) and volatility:
-            process_hiberfil(
-                d,
-                verbosity,
-                vssimage,
-                output_directory,
-                img,
-                vssartefact,
-                stage,
-                artefact,
-                volatility,
-                volchoice,
-                vss,
-                vssmem,
-                memtimeline,
-            )
-        elif artefact.endswith("pagefile.sys") or artefact.endswith("swapfile.sys"):
             process_pagefile(
-                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+                verbosity, vssimage, output_directory, img, vssartefact, artefact
             )
         else:
             pass
