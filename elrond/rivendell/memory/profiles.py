@@ -246,9 +246,12 @@ def convert_memory_image(
 def identify_profile(
     output_directory,
     verbosity,
+    d,
     stage,
     vss,
     vssimage,
+    vssmem,
+    artefact,
     volchoice,
     volprefix,
     mempath,
@@ -431,3 +434,4 @@ def identify_profile(
             )
         else:
             pass
+    return profile, vssmem

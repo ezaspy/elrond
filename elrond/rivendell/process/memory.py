@@ -67,19 +67,22 @@ def process_memory(
             "'" + img.split("::")[0] + "'",
         )
     if volchoice != "3":
-        identify_profile(
+        profile, vssmem = identify_profile(
             output_directory,
             verbosity,
             d,
             stage,
             vss,
             vssimage,
+            vssmem,
+            artefact,
             volchoice,
             volprefix,
             mempath,
             memext,
             memtimeline,
         )
+        vssmem = profile
         profiledirs = []
         for eachfile in os.listdir(
             "/usr/local/lib/python2.7/dist-packages/volatility/plugins/overlays/mac/"
@@ -117,16 +120,17 @@ def process_memory(
                 pass
         else:
             pass
-        vssmem = profile
     else:
         if artefact.endswith("hiberfil.sys"):
-            identify_profile(
+            profile, vssmem = identify_profile(
                 output_directory,
                 verbosity,
                 d,
                 stage,
                 vss,
                 vssimage,
+                vssmem,
+                artefact,
                 volchoice,
                 volprefix,
                 mempath,
@@ -215,22 +219,25 @@ def process_memory(
             )
         else:
             pass
-        entry, prnt = "{},identification,{},{} ({})\n".format(
-            datetime.now().isoformat(),
-            artefact.split("/")[-1],
-            profileplatform,
-            profile,
-        ), " -> {} -> identified platform as '{}' for '{}'".format(
-            datetime.now().isoformat().replace("T", " "),
-            profileplatform,
-            artefact.split("/")[-1],
-        )
-        print(
-            "   Identified platform of '{}' for '{}'.".format(
-                profile, artefact.split("/")[-1]
+        if stage != "processing":
+            entry, prnt = "{},identification,{},{} ({})\n".format(
+                datetime.now().isoformat(),
+                artefact.split("/")[-1],
+                profileplatform,
+                profile,
+            ), " -> {} -> identified platform as '{}' for '{}'".format(
+                datetime.now().isoformat().replace("T", " "),
+                profileplatform,
+                artefact.split("/")[-1],
             )
-        )
-        write_audit_log_entry(verbosity, output_directory, entry, prnt)
+            print(
+                "   Identified platform of '{}' for '{}'.".format(
+                    profile, artefact.split("/")[-1]
+                )
+            )
+            write_audit_log_entry(verbosity, output_directory, entry, prnt)
+        else:
+            pass
         assess_volatility_choice(
             verbosity,
             output_directory,
