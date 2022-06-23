@@ -2,6 +2,7 @@
 import os
 import re
 import subprocess
+import time
 from datetime import datetime
 
 from rivendell.audit import write_audit_log_entry
@@ -215,18 +216,7 @@ def convert_memory_image(
                 profile, artefact.split("/")[-1]
             )
         )
-        profiles, artefact, profile = suggest_volatility_profile(
-            verbosity,
-            output_directory,
-            profiles,
-            artefact,
-            volchoice,
-            volprefix,
-            mempath,
-            memext,
-            vssimage,
-            memtimeline,
-        )
+        profiles, artefact, profile = suggest_volatility_profile(profiles, artefact)
         convert_memory_image(
             stage,
             artefact,
@@ -243,11 +233,26 @@ def convert_memory_image(
         pass
 
 
+def check_profile(state, img, profile):
+    if state == "notvss":
+        with open(".profile", "w") as save_profile:
+            save_profile.write(img + ">>" + profile)
+    else:
+        with open(".profile") as saved_profile:
+            original_img, original_profile = saved_profile.readlines()[0].split(">>")
+            if original_img in img:
+                profile = original_profile
+            else:
+                pass
+    return profile
+
+
 def identify_profile(
     output_directory,
     verbosity,
     d,
     stage,
+    img,
     vss,
     vssimage,
     vssmem,
@@ -271,90 +276,85 @@ def identify_profile(
             ).communicate()[0]
         ),
     )
+    time.sleep(1)
     if "Win" in profiles[0]:
-        if vss:
-            if (
-                vssmem != "" and len(vssmem) != 0
-            ):  # vss invoked - processing volume shadow copies
-                if stage == "processing":
-                    convert_memory_image(
-                        verbosity,
-                        output_directory,
-                        stage,
-                        artefact,
-                        profile,
-                        profiles,
-                        volchoice,
-                        volprefix,
-                        mempath,
-                        memext,
-                        vssimage,
-                        memtimeline,
+        if stage == "processing" and vss:
+            if "vss" in img and "/vss" in artefact:
+                profile = check_profile("vss", img, "")
+                print(
+                    "       Identified '{}' as suitable profile for '{}'.".format(
+                        profile, artefact.split("/")[-1]
                     )
-                    print(
-                        "      Conversion of '{}' memory file complete.".format(
-                            artefact.split("/")[-1]
-                        )
+                )
+                convert_memory_image(
+                    verbosity,
+                    output_directory,
+                    stage,
+                    artefact,
+                    profile,
+                    profiles,
+                    volchoice,
+                    volprefix,
+                    mempath,
+                    memext,
+                    vssimage,
+                    memtimeline,
+                )
+                print(
+                    "      Conversion of '{}' memory file complete.".format(
+                        artefact.split("/")[-1]
                     )
-                else:
-                    pass
-                if volchoice != "3":
-                    profile, vssmem = assess_volatility_choice(
-                        verbosity,
-                        output_directory,
-                        volchoice,
-                        volprefix,
-                        artefact,
-                        profile,
-                        mempath,
-                        memext,
-                        vssimage,
-                        memtimeline,
-                    )
-                else:
-                    pass
-            else:  # vss invoked - processing original disk image
+                )
+                profile, vssmem = assess_volatility_choice(
+                    verbosity,
+                    output_directory,
+                    volchoice,
+                    volprefix,
+                    artefact,
+                    profile,
+                    mempath,
+                    memext,
+                    vssimage,
+                    memtimeline,
+                )
+            else:
                 profiles, artefact, profile = suggest_volatility_profile(
                     profiles,
                     artefact,
                 )
-                if stage == "processing":
-                    convert_memory_image(
-                        verbosity,
-                        output_directory,
-                        stage,
-                        artefact,
-                        profile,
-                        profiles,
-                        volchoice,
-                        volprefix,
-                        mempath,
-                        memext,
-                        vssimage,
-                        memtimeline,
-                    )
-                    print(
-                        "      Conversion of '{}' memory file complete.".format(
-                            artefact.split("/")[-1]
-                        )
-                    )
-                else:
-                    pass
-                if volchoice != "3":
-                    profile, vssmem = assess_volatility_choice(
-                        verbosity,
-                        output_directory,
-                        volchoice,
-                        volprefix,
-                        artefact,
-                        profile,
-                        mempath,
-                        memext,
-                        vssimage,
-                        memtimeline,
-                    )
-                else:
-                    pass
+                time.sleep(1)
+                profile = check_profile("notvss", img, profile)
+            convert_memory_image(
+                verbosity,
+                output_directory,
+                stage,
+                artefact,
+                profile,
+                profiles,
+                volchoice,
+                volprefix,
+                mempath,
+                memext,
+                vssimage,
+                memtimeline,
+            )
+            print(
+                "      Conversion of '{}' memory file complete.".format(
+                    artefact.split("/")[-1]
+                )
+            )
+            profile, vssmem = assess_volatility_choice(
+                verbosity,
+                output_directory,
+                volchoice,
+                volprefix,
+                artefact,
+                profile,
+                mempath,
+                memext,
+                vssimage,
+                memtimeline,
+            )
         else:  # vss not invoked or N/A
             profiles, artefact, profile = suggest_volatility_profile(
                 profiles,
@@ -382,21 +382,18 @@ def identify_profile(
                 )
             else:
                 pass
-            if volchoice != "3":
-                assess_volatility_choice(
-                    verbosity,
-                    output_directory,
-                    volchoice,
-                    volprefix,
-                    artefact,
-                    profile,
-                    mempath,
-                    memext,
-                    vssimage,
-                    memtimeline,
-                )
-            else:
-                pass
+            assess_volatility_choice(
+                verbosity,
+                output_directory,
+                volchoice,
+                volprefix,
+                artefact,
+                profile,
+                mempath,
+                memext,
+                vssimage,
+                memtimeline,
+            )
     else:
         if "Instantiated with no profile" not in profiles[0]:
             profile = re.findall(r"Instantiated\ with\ ([^\)]+)", profiles[0])[0]
@@ -419,19 +416,16 @@ def identify_profile(
             )
             profileselect, profile, ziphexdump = doProfile(volchoice, artefact)
             dump_nix_ziphex(d, profileselect, profile, ziphexdump)
-        if volchoice != "3":
-            assess_volatility_choice(
-                verbosity,
-                output_directory,
-                volchoice,
-                volprefix,
-                os.path.realpath(artefact),
-                profile,
-                mempath,
-                memext,
-                vssimage,
-                memtimeline,
-            )
-        else:
-            pass
+        assess_volatility_choice(
+            verbosity,
+            output_directory,
+            volchoice,
+            volprefix,
+            os.path.realpath(artefact),
+            profile,
+            mempath,
+            memext,
+            vssimage,
+            memtimeline,
+        )
     return profile, vssmem

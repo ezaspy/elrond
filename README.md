@@ -53,7 +53,10 @@
 ## About The Project
 
 elrond has been created to help fellow digitial forensicators with the identification, collection, processing, analysis and outputting of forensic artefacts from a Windows E01 or VMDK, macOS DMG/E01 or VMDK, Linux dd or VMDK disk images as well as raw memory images and previously collected artefacts which can all be outputted into Splunk. I have spent many an incident repeating the same processes by mounting, collecting (mainly Windows) forensic artefacts and then attempting to correlate them together with other data sources and artefacts. Thus, as mentioned above elrond has been built to consolidate those seperate processes into one single script helping to accerlate and automate these otherwise repetitive, tedious and often occasionally-referenced commands. As elrond outputs the artefact information as either CSV or JSON, they can be processed by many commonly-used log file analysis tools, consequently, elrond does have the capability to stand up a local Splunk instance with a custom Splunk app, whereby the artefacts are automatically assigned and aligned with the MITRE ATT&CK® Framework. In addition, elrond can also populate a local ATT&CK Navigator instance providing a visual representation of potential attack techniques leveraged as part of said incident.
-elrond also provides additional features such as image and file hashing, metadata extraction, file recovery and carving, IOC extraction, keyword searching and timelining.
+elrond also provides additional features such as image and file hashing, metadata extraction, file recovery and carving, IOC extraction, keyword searching and timelining.<br>
+### Related Projects
+
+elrond is responsible for the analysis-side of digital forensic, but what about acquisition? An acompanying script(s) called [gandalf](https://github.com/ezaspy/gandalf) can be deployed (locally or remotely) on either Windows, macOS or Linux hosts to acquire forensic artefacts. 
 <br><br><br>
 
 <!-- Prerequisites -->
@@ -165,7 +168,8 @@ Other Projects: [https://github.com/ezaspy/](https://github.com/ezaspy/)
 
 - [Joff Thyor](https://www.blackhillsinfosec.com/team/joff-thyer/)
 - [alexandercarruthers](https://github.com/alexandercarruthers)
-- [SANS](https://www.sans.org)<br><br>
+- [SANS](https://www.sans.org)
+- [Harbingers LLC](https://uspto.report/company/Harbingers-L-L-C)<br><br>
 - Tooling
   - [joachimmetz](https://github.com/joachimmetz)
   - [Harlan Carvey](https://github.com/hcarvey)
@@ -184,8 +188,9 @@ Other Projects: [https://github.com/ezaspy/](https://github.com/ezaspy/)
 - Theme &amp; Artwork
   - [J.R.R. Tolkien](https://en.wikipedia.org/wiki/J._R._R._Tolkien)
   - [Peter Jackson](https://twitter.com/ReaPeterJackson)
+  - [ASCII Text Generator](https://textkool.com/en/ascii-art-generator?hl=default&vl=default&font=Red%20Phoenix&text=Your%20text%20here%20)
   - [ASCII Art Generator](https://www.ascii-art-generator.org)
-  - [ASCII World](http://www.asciiworld.com/-Lord-of-the-Rings-.html)
+  - [ASCII Art](http://www.asciiworld.com/-Lord-of-the-Rings-.html)
   - [SIFT-elrond Desktop background](https://www.hdwallpaper.nu/wp-content/uploads/2015/04/rings_the_lord_of_the_rings_one_ring_hd_wallpaper.jpg)
 
 <!-- MARKDOWN LINKS & IMAGES -->

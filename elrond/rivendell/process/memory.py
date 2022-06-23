@@ -1,6 +1,5 @@
 #!/usr/bin/env python3 -tt
 import os
-import re
 import shutil
 import subprocess
 import time
@@ -72,6 +71,7 @@ def process_memory(
             verbosity,
             d,
             stage,
+            img,
             vss,
             vssimage,
             vssmem,
