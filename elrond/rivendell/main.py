@@ -243,6 +243,10 @@ def main(
             pass
     else:
         pass
+    if os.path.exists("/tmp/.profiles"):
+        os.remove("/tmp/.profiles")
+    else:
+        pass
     if len(directory) > 1:
         od = directory[1]
         if not od.endswith("/"):

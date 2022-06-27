@@ -2,6 +2,7 @@
 import os
 import re
 import time
+from collections import OrderedDict
 from datetime import datetime
 
 from rivendell.audit import write_audit_log_entry
@@ -331,6 +332,7 @@ def identify_pre_process_artefacts(
         "\n\n  -> \033[1;36mCommencing Processing Phase...\033[1;m\n  ----------------------------------------"
     )
     time.sleep(1)
+    imgs = OrderedDict(sorted(imgs.items(), key=lambda x: x[1]))
     for img in imgs:  # Identifying artefacts and Processing function
         if not img.split("::")[1].endswith(
             "memory"

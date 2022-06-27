@@ -103,6 +103,10 @@ def collect_process_keyword_analysis_timeline(
             )
         else:
             pass
+        if os.path.exists("/tmp/.profiles"):
+            os.remove("/tmp/.profiles")
+        else:
+            pass
     else:
         pass
     if keywords:

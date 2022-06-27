@@ -25,7 +25,17 @@ def unmount_images(elrond_mount, ewf_mount):
         for everyshadow in os.listdir("/mnt/shadow_mount/" + shadowimg):
             unmount_locations("/mnt/shadow_mount/" + shadowimg + "/" + everyshadow)
         remove_directories("/mnt/shadow_mount/" + shadowimg)
-    unmount_locations("/mnt/vss/")
+    for eachimg in os.listdir("/mnt/vss/"):
+        for eachvss in os.listdir("/mnt/vss/" + eachimg):
+            if os.path.exists("/mnt/vss/" + eachimg + "/" + eachvss):
+                unmount_locations("/mnt/vss/" + eachimg + "/" + eachvss)
+            else:
+                pass
+        if os.path.exists("/mnt/vss/" + eachimg):
+            unmount_locations("/mnt/vss/" + eachimg)
+            remove_directories("/mnt/vss/" + eachimg)
+        else:
+            pass
     for eachelrond in elrond_mount:
         if os.path.exists(eachelrond):
             unmount_locations(eachelrond)
@@ -379,8 +389,13 @@ def mount_images(
                         )
                     else:
                         pass
+                    os.mkdir("/mnt/vss/" + disk_file.split("::")[0] + "/")
                     subprocess.Popen(
-                        ["vshadowmount", intermediate_mount + "/ewf1", "/mnt/vss/"],
+                        [
+                            "vshadowmount",
+                            intermediate_mount + "/ewf1",
+                            "/mnt/vss/" + disk_file.split("::")[0] + "/",
+                        ],
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                     ).communicate()
@@ -414,7 +429,9 @@ def mount_images(
                             )
                     else:
                         os.mkdir("/mnt/shadow_mount/" + disk_file.split("::")[0] + "/")
-                        for i in os.listdir("/mnt/vss/"):
+                        for i in os.listdir(
+                            "/mnt/vss/" + disk_file.split("::")[0] + "/"
+                        ):
                             os.mkdir(
                                 "/mnt/shadow_mount/"
                                 + disk_file.split("::")[0]
@@ -427,7 +444,10 @@ def mount_images(
                                         "mount",
                                         "-o",
                                         "ro,loop,show_sys_files,streams_interface=windows",
-                                        "/mnt/vss/" + i,
+                                        "/mnt/vss/"
+                                        + disk_file.split("::")[0]
+                                        + "/"
+                                        + i,
                                         "/mnt/shadow_mount/"
                                         + disk_file.split("::")[0]
                                         + "/"

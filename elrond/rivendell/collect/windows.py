@@ -133,9 +133,7 @@ def collect_windows_artefacts(
                 os.makedirs(dest)
             if verbosity != "":
                 print(
-                    "     Collecting system registry hives{} for {}...".format(
-                        vsstext, vssimage
-                    )
+                    "     Collecting system registry hives for {}...".format(vssimage)
                 )
             else:
                 pass
