@@ -33,15 +33,6 @@ def extract_memory_artefacts(
             "{}Extracting artefacts from '{}' with {} '{}' for {}...".format(
                 volprefix, artefact.split("/")[-1], profmesginsrt, profile, vssimage
             )
-        )
-        entry, prnt = "{},{},extracting,{} ({})\n".format(
-            datetime.now().isoformat(), vssimage, artefact.split("/")[-1], profile
-        ), " -> {} -> extracting artefacts from '{}' ({}) for {}".format(
-            datetime.now().isoformat().replace("T", " "),
-            artefact.split("/")[-1],
-            profile,
-            vssimage,
-        )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
         return profile
 
@@ -411,18 +402,32 @@ def extract_memory_artefacts(
         else:
             pass
     vssmem = profile
-    entry, prnt = "{},{},artefact extraction complete,{} ({})\n".format(
-        datetime.now().isoformat(), vssimage, artefact.split("/")[-1], profile
-    ), " -> {} -> artefact extraction from '{}' ({}) completed for {}".format(
-        datetime.now().isoformat().replace("T", " "),
-        artefact.split("/")[-1],
-        profile,
-        vssimage,
-    )
-    print(
-        "{}Extraction of artefacts completed from '{}' for {}.".format(
-            volprefix, artefact.split("/")[-1], vssimage
+    if artefact.split("/")[-1] == vssimage:
+        print(
+            "{}Extraction of artefacts completed from '{}'.".format(
+                volprefix, artefact.split("/")[-1]
+            )
         )
-    )
+        entry, prnt = "{},{},artefact extraction complete,{} ({})\n".format(
+            datetime.now().isoformat(), vssimage, artefact.split("/")[-1], profile
+        ), " -> {} -> artefact extraction from '{}' ({}) completed".format(
+            datetime.now().isoformat().replace("T", " "),
+            artefact.split("/")[-1],
+            profile,
+        )
+    else:
+        print(
+            "{}Extraction of artefacts completed from '{}' for {}.".format(
+                volprefix, artefact.split("/")[-1], vssimage
+            )
+        )
+        entry, prnt = "{},{},artefact extraction complete,{} ({})\n".format(
+            datetime.now().isoformat(), vssimage, artefact.split("/")[-1], profile
+        ), " -> {} -> artefact extraction from '{}' ({}) completed for {}".format(
+            datetime.now().isoformat().replace("T", " "),
+            artefact.split("/")[-1],
+            profile,
+            vssimage,
+        )
     write_audit_log_entry(verbosity, output_directory, entry, prnt)
     return profile, vssmem
