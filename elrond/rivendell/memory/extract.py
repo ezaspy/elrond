@@ -29,9 +29,32 @@ def extract_memory_artefacts(
         profmesginsrt,
         vssimage,
     ):
-        print(
-            "{}Extracting artefacts from '{}' with {} '{}' for {}...".format(
-                volprefix, artefact.split("/")[-1], profmesginsrt, profile, vssimage
+        if artefact.split("/")[-1] == vssimage:
+            print(
+                "{}Extracting artefacts from '{}' with {} '{}'...".format(
+                    volprefix, artefact.split("/")[-1], profmesginsrt, profile
+                )
+            )
+            entry, prnt = "{},{},extracting,{} ({})\n".format(
+                datetime.now().isoformat(), vssimage, artefact.split("/")[-1], profile
+            ), " -> {} -> extracting artefacts from '{}' ({})".format(
+                datetime.now().isoformat().replace("T", " "),
+                artefact.split("/")[-1],
+                profile,
+            )
+        else:
+            print(
+                "{}Extracting artefacts from '{}' with {} '{}' for {}...".format(
+                    volprefix, artefact.split("/")[-1], profmesginsrt, profile, vssimage
+                )
+            )
+            entry, prnt = "{},{},extracting,{} ({})\n".format(
+                datetime.now().isoformat(), vssimage, artefact.split("/")[-1], profile
+            ), " -> {} -> extracting artefacts from '{}' ({}) for {}".format(
+                datetime.now().isoformat().replace("T", " "),
+                artefact.split("/")[-1],
+                profile,
+                vssimage,
             )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
         return profile
