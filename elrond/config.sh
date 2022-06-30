@@ -1,4 +1,5 @@
 #!/bin/bash
+../elrond/tools/scripts/./vmware.sh
 sudo apt update
 ../elrond/tools/scripts/./init.sh
 ../elrond/tools/scripts/./swap.sh
