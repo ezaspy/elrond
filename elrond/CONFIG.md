@@ -15,7 +15,9 @@ It is **highly recommended** to configure at least 4GB/4096MB RAM and also add a
         - Apply
 - Start SIFT (and do the next step immediately upon booting)<br>
     #### **Menu Bar -> Virtual Machine -> Reinstall VMware Tools... ->**
-  - Navigate to the newly mounted CD and copy VMware-<version_number>.tar.gz -> ~/Downloads<br>
+<br>
+
+- Navigate to the newly mounted CD and copy VMware-<version_number>.tar.gz -> ~/Downloads<br>
   - Open Terminal<br>
     - `cd ~/Downloads`<br>
     - `tar -xvf VMware-<version_number>.tar.gz`<br>
