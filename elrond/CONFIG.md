@@ -2,8 +2,10 @@
 
 - Download, import (adjust settings such as RAM if desired) and Start SIFT
 - Shutdown SIFT
-- It is **highly recommended** to configure at least 4GB/4096MB RAM and also add another HDD dedicated for linux-swap.<br>
-    #### **Menu Bar -> Virtual Machine -> Settings... ->**
+<br>
+
+It is **highly recommended** to configure at least 4GB/4096MB RAM and also add another HDD dedicated for linux-swap.<br>
+#### **Menu Bar -> Virtual Machine -> Settings... ->**
   - Add Device...
     - New Hard Disk...
       - Add...
@@ -19,22 +21,14 @@
     - `tar -xvf VMware-<version_number>.tar.gz`<br>
     - `cd vmware-tools-distrib`<br>
     - `sudo ./vmware-install.pl` (select **ENTER** to all except '...recover wasted disk space...' (last one))<br>
-- Done
-<br><br>
-
-## Configuration
-
-#### **Menu Bar -> Virtual Machine -> Settings... ->**
-
-- **'Network Adaptor' -> 'Bridged Networking (Autodetect)'**<br>
-
-#### **Menu Bar -> Virtual Machine -> Reinstall VMware Tools... ->**<br><br>
+- Reboot SIFT
+<br>
 
 `sudo git clone https://github.com/ezaspy/elrond.git /opt/elrond`<br>
 `cd /opt/elrond/`<br>
 `sudo ./make.sh`<br>
-When prompted, enter the keys in the following order:
-- **&darr; &darr; ENTER c g**
+- When prompted, enter the keys in the following order:
+  - **&darr; &darr; ENTER c g**
 
 <br>
 
