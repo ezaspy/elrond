@@ -16,8 +16,7 @@ It is **highly recommended** to configure at least 4GB/4096MB RAM and also add a
 - Start SIFT<br>
 
 `sudo git clone https://github.com/ezaspy/elrond.git /opt/elrond`<br>
-`cd /opt/elrond/`<br>
-`sudo ./make.sh`<br>
+`sudo /opt/elrond/./make.sh`<br>
 - When prompted, enter the keys in the following order:
   - **&darr; &darr; ENTER c g**
 

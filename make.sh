@@ -1,4 +1,5 @@
 #!/bin/bash
+cd /opt/elrond
 sudo chmod 744 -R /opt/elrond/
 sudo chown sansforensics:sansforensics -R /opt/elrond/
 export PATH=$PATH:/opt/elrond
