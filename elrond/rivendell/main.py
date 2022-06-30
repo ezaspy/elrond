@@ -66,6 +66,14 @@ def main(
     quotes,
     asciitext,
 ):
+    subprocess.Popen(
+            [
+                "sudo",
+                 "/opt/elrond/elrond/tools/scripts/./swap.sh",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate()
     subprocess.Popen(["clear"])
     time.sleep(2)
     print(

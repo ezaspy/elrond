@@ -17,19 +17,19 @@ parser.add_argument(
     "-K",
     "--keywords",
     nargs=1,
-    help="Search for keywords throughout image and artefacts based on provided Keyword File",
+    help="Search for keywords throughout image and artefacts based on provided Keyword File; Example syntax: -K /path/to/keyword_file.txt",
 )
 parser.add_argument(
     "-Y",
     "--yara",
     nargs=1,
-    help="Run Yara signatures against all files on disk image or just collected files",
+    help="Run Yara signatures against all files on disk image or just collected files; Example syntax: -Y /path/to/directory_of_yara_files",
 )
 parser.add_argument(
     "-F",
     "--collectfiles",
     nargs="?",
-    help="Collect files from disk including binaries, documents, scripts etc.; Optional: Provide an inclusion/exclusion file",
+    help="Collect files from disk including binaries, documents, scripts etc.; Optional: Provide an inclusion/exclusion file; Example syntax: -F include:/path/to/include_file.txt",
     const=True,
 )
 parser.add_argument(

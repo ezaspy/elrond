@@ -1,5 +1,7 @@
 #!/bin/bash
+sudo apt update
 ../elrond/tools/scripts/./init.sh
+../elrond/tools/scripts/./swap.sh
 ../elrond/tools/scripts/./sift.sh
 ../elrond/tools/scripts/./volatility3.sh
 ../elrond/tools/scripts/./dwarf2json.sh
@@ -8,7 +10,7 @@
 ../elrond/tools/scripts/./elastic.sh
 ../elrond/tools/scripts/./navigator.sh
 sudo updatedb
-sudo apt install mlocate build-essential yara john -y --fix-missing
+sudo apt install mlocate build-essential yara john gparted -y --fix-missing
 updatedb
 # configuring elrond
 sudo chmod -R 744 /opt/elrond/
