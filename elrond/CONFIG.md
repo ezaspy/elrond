@@ -1,20 +1,40 @@
 # Configuring SIFT Workstation
 
-## VMware Tools
-
-Download, import (adjust settings such as RAM if desired) and Start SIFT<br>
-Shutdown SIFT<br>
-
-Start SIFT (and do the next step immediately upon booting)<br>
-
-#### **Menu Bar -> Virtual Machine -> Reinstall VMware Tools... ->**
-
-Copy VMware-<version_number>.tar.gz -> ~/Downloads<br>
-`cd ~/Downloads`<br>
-`tar -xvf VMware-<version_number>.tar.gz`<br>
-`cd vmware-tools-distrib`<br>
-`sudo ./vmware-install.pl` (select **ENTER** to all except '...recover wasted disk space...' (last one))
-
+- Download, import (adjust settings such as RAM if desired) and Start SIFT
+- Shutdown SIFT
+- It is recommended to configure at least 4GB/4096MB RAM and also add another HDD dedicated for linux-swap.<br>
+    #### **Menu Bar -> Virtual Machine -> Settings... ->**
+  - Add Device...
+    - New Hard Disk...
+      - Add...
+        - File name: `Virtual Disk 2.vmdk`
+        - Disk Size: `20.00GB` (more, if desired)
+        - Advanced options: `None`
+        - Apply
+- Start SIFT (and do the next step immediately upon booting)<br>
+    #### **Menu Bar -> Virtual Machine -> Reinstall VMware Tools... ->**
+  - Navigate to the newly mounted CD and copy VMware-<version_number>.tar.gz -> ~/Downloads<br>
+  - Open Terminal<br>
+    - `cd ~/Downloads`<br>
+    - `tar -xvf VMware-<version_number>.tar.gz`<br>
+    - `cd vmware-tools-distrib`<br>
+    - `sudo ./vmware-install.pl` (select **ENTER** to all except '...recover wasted disk space...' (last one))<br>
+- Open Terminal NB: This process will be automated very soon and integrated into [make.sh](https://github.com/ezaspy/elrond/make.sh), so you'll just need to add the HDD above and the rest will be done for you...
+  - `sudo apt install gparted -y`
+  - Open GParted (and authenticate)
+  - Select `/dev/sdb`
+    - Device -> Create Partition Table
+      - Select new parition table type: `msdos`
+        - `Apply`
+    - Parition -> New
+      - File system: `linux_swap`
+      - Label: `swap`
+        - `Add`
+    - ✅
+    - `Apply`
+    - `Close`
+    - Close GParted
+- Done
 <br><br>
 
 ## Configuration

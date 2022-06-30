@@ -81,6 +81,14 @@ parser.add_argument(
     default=False,
 )
 parser.add_argument(
+    "-G",
+    "--gandalf",
+    help="Read artefacts acquired using gandalf",
+    action="store_const",
+    const=True,
+    default=False,
+)
+parser.add_argument(
     "-H",
     "--nsrl",
     help="Compare hashes against known-goods from NSRL database; connection to Internet required",
@@ -242,6 +250,7 @@ collect = args.collect
 vss = args.vss
 delete = args.delete
 elastic = args.elastic
+gandalf = args.gandalf
 collectfiles = args.collectfiles
 nsrl = args.nsrl
 extractiocs = args.extractiocs
@@ -407,6 +416,7 @@ if __name__ == "__main__":
         vss,
         delete,
         elastic,
+        gandalf,
         collectfiles,
         nsrl,
         extractiocs,

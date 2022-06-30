@@ -234,16 +234,20 @@ def convert_memory_image(
 
 
 def extract_profiles(artefact):
-    profiles = re.findall(
-        r"Suggested Profile\(s\) \: (?P<profiles>[\S\ ]+)",
-        str(
-            subprocess.Popen(
-                ["vol.py", "-f", os.path.realpath(artefact), "imageinfo"],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            ).communicate()[0]
-        ),
-    )
+    if artefact.endswith("hiberfil.sys"):
+        profiles = re.findall(
+            r"Suggested Profile\(s\) \: (?P<profiles>[\S\ ]+)",
+            str(
+                subprocess.Popen(
+                    ["vol.py", "-f", os.path.realpath(artefact), "imageinfo"],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                ).communicate()[0]
+            ),
+        )
+    else:
+        profiles = []
+        profiles.append("Win - No suggestion ")
     return profiles
 
 
@@ -379,7 +383,7 @@ def check_profile(
                 img.split("::")[0] in savedprofiles
             ):  # hiberfil exists in original and vss
                 orig_and_vss = "orig_and_vss"
-                for img_profile in savedprofiles.split("\\n"):
+                for img_profile in savedprofiles.split("\\n', '"):
                     original_img, original_profile = img_profile.split(">>")
                     if original_img in img:
                         profile = original_profile
@@ -432,7 +436,7 @@ def identify_profile(
 ):
     if "vss" not in img and "/vss" not in artefact:
         print(
-            "      Identifying likely profiles for '{}'...".format(
+            "      volatility2.6 is identifying likely profiles for '{}'...".format(
                 artefact.split("/")[-1]
             )
         )

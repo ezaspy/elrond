@@ -32,6 +32,7 @@ def main(
     vss,
     delete,
     elastic,
+    gandalf,
     collectfiles,
     nsrl,
     extractiocs,
@@ -72,20 +73,27 @@ def main(
             random.choice(quotes)
         )
     )
-    if not collect and not process:
+    if gandalf and collect:
+        print(
+            "\n  You cannot use the gandalf switch (-G) and the collect switch (-C).\n   If you have previously collected artefacts using gandalf, you must invoke the gandalf switch (-G).\n   If you are processing acquired disk and/or memory images, you must invoke the collect switch (-C).\n  Please try again.\n\n\n\n"
+        )
+        sys.exit()
+    else:
+        pass
+    if not process and (not collect or not gandalf):
         if volatility and not process:
             print(
-                "\n  If you are just processing memory images, you must invoke the process flag (-P) with the memory flag (-M).\n  Please try again.\n\n\n\n"
+                "\n  If you are just processing memory images, you must invoke the process switch (-P) with the memory switch (-M).\n  Please try again.\n\n\n\n"
             )
             sys.exit()
         else:
             print(
-                "\n  If you have previously collected artefacts but which to process them, you must invoke the process flag (-P) without the collect flag (-C).\n  Please try again.\n\n\n\n"
+                "\n  If you have previously collected artefacts using gandalf and wish to process them, you must invoke the process switch (-P) with the gandalf switch (-G).\n  If you have previously collected artefacts NOT using gandalf, and wish to process them, you must invoke the process switch (-P) without the collect switch (-C) and without the gandalf switch (-G).\n   Please try again.\n\n\n\n"
             )
             sys.exit()
     else:
         pass
-    if not collect and (
+    if (not collect or gandalf) and (
         vss
         or collectfiles
         or imageinfo
@@ -94,25 +102,29 @@ def main(
         or timeline
         or userprofiles
     ):
-        if not collect and vss:
-            collectand = "vss flag (-c)"
-        elif not collect and collectfiles:
-            collectand = "collectfiles flag (-F)"
-        elif not collect and imageinfo:
-            collectand = "imageinfo flag (-I)"
-        elif not collect and recover:
-            collectand = "recover flag (-R)"
-        elif not collect and symlinks:
-            collectand = "symlinks flag (-s)"
-        elif not collect and timeline:
-            collectand = "timeline flag (-T)"
-        elif not collect and userprofiles:
-            collectand = "userprofiles flag (-U)"
+        if gandalf:
+            gandalforcollect = "gandalf switch (-G)"
+        else:
+            gandalforcollect = "collect switch (-C)"
+        if (not collect or gandalf) and vss:
+            collectand = "vss switch (-c)"
+        elif (not collect or gandalf) and collectfiles:
+            collectand = "collectfiles switch (-F)"
+        elif (not collect or gandalf) and imageinfo:
+            collectand = "imageinfo switch (-I)"
+        elif (not collect or gandalf) and recover:
+            collectand = "recover switch (-R)"
+        elif (not collect or gandalf) and symlinks:
+            collectand = "symlinks switch (-s)"
+        elif (not collect or gandalf) and timeline:
+            collectand = "timeline switch (-t)"
+        elif (not collect or gandalf) and userprofiles:
+            collectand = "userprofiles switch (-U)"
         else:
             pass
         print(
-            "\n\n  In order to use the {}, you must also invoke the collect flag (-C). Please try again.\n\n\n\n".format(
-                collectand
+            "\n\n  In order to use the {}, you must also invoke the {}. Please try again.\n\n\n\n".format(
+                collectand, gandalforcollect
             )
         )
         sys.exit()
@@ -120,19 +132,19 @@ def main(
         pass
     if memorytimeline and not volatility:
         print(
-            "\n\n You cannot provide the memorytimeline Flag (-t) without provided the Volatility Flag (-M). Please try again.\n\n\n\n"
+            "\n\n You cannot provide the memorytimeline switch (-t) without provided the Volatility switch (-M). Please try again.\n\n\n\n"
         )
         sys.exit()
     if analysis and not process:
         print(
-            "\n\n You cannot provide the Analysis Flag (-A) without provided the Processing Flag (-P). Please try again.\n\n\n\n"
+            "\n\n You cannot provide the Analysis switch (-A) without provided the Processing switch (-P). Please try again.\n\n\n\n"
         )
         sys.exit()
     else:
         pass
     if not hashcollected and nsrl and (superquick or quick):
         print(
-            "\n\n In order to use the NSRL Flag (-H), you must either provide the hashcollected Flag (-o) - with or without the Superquick (-Q) and Quick Flags (-q).\n  Or, if not using the hashcollected Flag (-o), remove the Superquick (-Q) and Quick Flags (-q) altogether. Please try again.\n\n\n\n"
+            "\n\n In order to use the NSRL switch (-H), you must either provide the hashcollected switch (-o) - with or without the Superquick (-Q) and Quick Flags (-q).\n  Or, if not using the hashcollected switch (-o), remove the Superquick (-Q) and Quick Flags (-q) altogether. Please try again.\n\n\n\n"
         )
         sys.exit()
     else:
@@ -149,7 +161,7 @@ def main(
         pass
     if navigator and not splunk:
         print(
-            "\n\n You cannot provide the Navigator Flag (-N) without providing the Splunk Flag (-S). Please try again.\n\n\n\n"
+            "\n\n You cannot provide the Navigator switch (-N) without providing the Splunk switch (-S). Please try again.\n\n\n\n"
         )
         sys.exit()
     else:
@@ -338,71 +350,166 @@ def main(
         "\n  -> \033[1;36mCommencing Identification Phase...\033[1;m\n  ----------------------------------------"
     )
     time.sleep(1)
-    for root, _, files in os.walk(d):  # Mounting images
-        for f in files:
-            if os.path.exists(os.path.join(root, f)):  # Mounting images
-                if f.split(".E")[0] + ".E" not in str(foundimgs):
-                    path, imgformat, fsize = (
-                        os.path.join(root, f),
-                        str(
-                            subprocess.Popen(
-                                ["file", os.path.join(root, f)],
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE,
-                            ).communicate()[0]
-                        )[2:-3].split(": ")[1],
-                        os.stat(os.path.join(root, f)).st_size,
-                    )
-                    if fsize > 10000:
-                        if not os.path.isdir(output_directory + f):
-                            os.mkdir(output_directory + f)
-                            foundimgs.append(
-                                os.path.join(root, f)
-                                + "||"
-                                + root
-                                + "||"
-                                + f
-                                + "||"
-                                + imgformat
-                            )
-                        else:
-                            print(
-                                "\n    '{}' already exists in '{}'\n     Please remove it before trying again.\n\n\n".format(
-                                    f, output_directory
+    if not gandalf:  # collect artefacts from disk/memory images
+        for root, _, files in os.walk(d):  # Mounting images
+            for f in files:
+                if os.path.exists(os.path.join(root, f)):  # Mounting images
+                    if f.split(".E")[0] + ".E" not in str(foundimgs):
+                        path, imgformat, fsize = (
+                            os.path.join(root, f),
+                            str(
+                                subprocess.Popen(
+                                    ["file", os.path.join(root, f)],
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE,
+                                ).communicate()[0]
+                            )[2:-3].split(": ")[1],
+                            os.stat(os.path.join(root, f)).st_size,
+                        )
+                        if fsize > 10000:
+                            if not os.path.isdir(output_directory + f):
+                                os.mkdir(output_directory + f)
+                                foundimgs.append(
+                                    os.path.join(root, f)
+                                    + "||"
+                                    + root
+                                    + "||"
+                                    + f
+                                    + "||"
+                                    + imgformat
                                 )
-                            )
-                            sys.exit()
+                            else:
+                                print(
+                                    "\n    '{}' already exists in '{}'\n     Please remove it before trying again.\n\n\n".format(
+                                        f, output_directory
+                                    )
+                                )
+                                sys.exit()
+                        else:
+                            pass
                     else:
                         pass
                 else:
                     pass
-            else:
-                pass
-    for foundimg in foundimgs:
-        stage = "mounting"
-        path, root, f, imgformat = foundimg.split("||")
-        if (
-            "Expert Witness" in imgformat
-            or "VMDK" in imgformat
-            or ("VMware" and " disk image" in imgformat)
-            or (
-                "DOS/MBR boot sector" in imgformat
-                and (f.endswith(".raw") or f.endswith(".dd") or f.endswith(".img"))
-            )
-        ):
-            time.sleep(2)
-            if not auto:
-                wtm = input("  Do you wish to mount '{}'? Y/n [Y] ".format(f))
-            else:
-                wtm = "y"
-            if wtm != "n":
+        for foundimg in foundimgs:
+            stage = "mounting"
+            path, root, f, imgformat = foundimg.split("||")
+            if (
+                "Expert Witness" in imgformat
+                or "VMDK" in imgformat
+                or ("VMware" and " disk image" in imgformat)
+                or (
+                    "DOS/MBR boot sector" in imgformat
+                    and (f.endswith(".raw") or f.endswith(".dd") or f.endswith(".img"))
+                )
+            ):
+                time.sleep(2)
+                if not auto:
+                    wtm = input("  Do you wish to mount '{}'? Y/n [Y] ".format(f))
+                else:
+                    wtm = "y"
+                if wtm != "n":
+                    if not superquick and not quick:
+                        if not os.path.exists(output_directory + f + "/meta.audit"):
+                            with open(
+                                output_directory + f + "/meta.audit", "w"
+                            ) as metaimglog:
+                                metaimglog.write(
+                                    "Filename,SHA256,NSRL,Entropy,Filesize,LastWriteTime,LastAccessTime,LastInodeChangeTime,Permissions,FileType\n"
+                                )
+                        else:
+                            pass
+                        if verbosity != "":
+                            print(
+                                "    Calculating SHA256 hash for '{}', please stand by...".format(
+                                    f
+                                )
+                            )
+                        else:
+                            pass
+                        with open(path, "rb") as metaimg:
+                            buffer = metaimg.read(262144)
+                            while len(buffer) > 0:
+                                sha256.update(buffer)
+                                buffer = metaimg.read(262144)
+                            metaentry = (
+                                path
+                                + ","
+                                + sha256.hexdigest()
+                                + ",unknown,N/A,N/A,N/A,N/A,N/A,N/A,N/A\n"
+                            )
+                        with open(
+                            output_directory + f + "/meta.audit", "a"
+                        ) as metaimglog:
+                            metaimglog.write(metaentry)
+                        extract_metadata(
+                            verbosity,
+                            output_directory,
+                            f,
+                            path,
+                            "metadata",
+                            sha256,
+                            nsrl,
+                        )
+                    else:
+                        pass
+                    entry, prnt = (
+                        "LastWriteTime,elrond_host,elrond_stage,elrond_log_entry\n",
+                        " -> {} -> created audit log file for '{}'".format(
+                            datetime.now().isoformat().replace("T", " "), f
+                        ),
+                    )
+                    write_audit_log_entry(verbosity, output_directory, entry, prnt)
+                    print("   Attempting to mount '{}'...".format(f))
+                    entry, prnt = "{},{},{},commenced\n".format(
+                        datetime.now().isoformat(), f, stage
+                    ), " -> {} -> mounting '{}'".format(
+                        datetime.now().isoformat().replace("T", " "), f
+                    )
+                    write_audit_log_entry(verbosity, output_directory, entry, prnt)
+                    allimgs = mount_images(
+                        d,
+                        auto,
+                        verbosity,
+                        output_directory,
+                        path,
+                        f,
+                        elrond_mount,
+                        ewf_mount,
+                        allimgs,
+                        imageinfo,
+                        imgformat,
+                        vss,
+                        "mounting",
+                        cwd,
+                        quotes,
+                    )
+                    if len(allimgs) > 0:
+                        entry, prnt = "{},{},{},completed\n".format(
+                            datetime.now().isoformat(), f, "mounting"
+                        ), " -> {} -> mounted '{}'".format(
+                            datetime.now().isoformat().replace("T", " "), f
+                        )
+                        write_audit_log_entry(verbosity, output_directory, entry, prnt)
+                    else:
+                        entry, prnt = "{},{},{},failed\n".format(
+                            datetime.now().isoformat(), f, "mounting"
+                        ), " -> {} -> not mounted '{}'".format(
+                            datetime.now().isoformat().replace("T", " "), f
+                        )
+                        write_audit_log_entry(verbosity, output_directory, entry, prnt)
+                else:
+                    print("    OK. '{}' will not be mounted.\n".format(f))
+                allimgs = {**allimgs, **ot}
+                print()
+            elif volatility and "data" in imgformat:
                 if not superquick and not quick:
                     if not os.path.exists(output_directory + f + "/meta.audit"):
                         with open(
                             output_directory + f + "/meta.audit", "w"
                         ) as metaimglog:
                             metaimglog.write(
-                                "Filename,SHA256,NSRL,Entropy,Filesize,LastWriteTime,LastAccessTime,LastInodeChangeTime,Permissions,FileType\n"
+                                "Filename,SHA256,known-good,Entropy,Filesize,LastWriteTime,LastAccessTime,LastInodeChangeTime,Permissions,FileType\n"
                             )
                     else:
                         pass
@@ -438,120 +545,60 @@ def main(
                     )
                 else:
                     pass
-                entry, prnt = (
-                    "LastWriteTime,elrond_host,elrond_stage,elrond_log_entry\n",
-                    " -> {} -> created audit log file for '{}'".format(
-                        datetime.now().isoformat().replace("T", " "), f
-                    ),
-                )
-                write_audit_log_entry(verbosity, output_directory, entry, prnt)
-                print("   Attempting to mount '{}'...".format(f))
-                entry, prnt = "{},{},{},commenced\n".format(
-                    datetime.now().isoformat(), f, stage
-                ), " -> {} -> mounting '{}'".format(
-                    datetime.now().isoformat().replace("T", " "), f
-                )
-                write_audit_log_entry(verbosity, output_directory, entry, prnt)
-                allimgs = mount_images(
-                    d,
+                ot = identify_memory_image(
+                    verbosity,
+                    output_directory,
+                    flags,
                     auto,
-                    verbosity,
-                    output_directory,
-                    path,
-                    f,
-                    elrond_mount,
-                    ewf_mount,
-                    allimgs,
-                    imageinfo,
-                    imgformat,
-                    vss,
-                    "mounting",
+                    superquick,
+                    quick,
+                    hashcollected,
                     cwd,
-                    quotes,
-                )
-                if len(allimgs) > 0:
-                    entry, prnt = "{},{},{},completed\n".format(
-                        datetime.now().isoformat(), f, "mounting"
-                    ), " -> {} -> mounted '{}'".format(
-                        datetime.now().isoformat().replace("T", " "), f
-                    )
-                    write_audit_log_entry(verbosity, output_directory, entry, prnt)
-                else:
-                    entry, prnt = "{},{},{},failed\n".format(
-                        datetime.now().isoformat(), f, "mounting"
-                    ), " -> {} -> not mounted '{}'".format(
-                        datetime.now().isoformat().replace("T", " "), f
-                    )
-                    write_audit_log_entry(verbosity, output_directory, entry, prnt)
-            else:
-                print("    OK. '{}' will not be mounted.\n".format(f))
-            allimgs = {**allimgs, **ot}
-            print()
-        elif volatility and "data" in imgformat:
-            if not superquick and not quick:
-                if not os.path.exists(output_directory + f + "/meta.audit"):
-                    with open(output_directory + f + "/meta.audit", "w") as metaimglog:
-                        metaimglog.write(
-                            "Filename,SHA256,known-good,Entropy,Filesize,LastWriteTime,LastAccessTime,LastInodeChangeTime,Permissions,FileType\n"
-                        )
-                else:
-                    pass
-                if verbosity != "":
-                    print(
-                        "    Calculating SHA256 hash for '{}', please stand by...".format(
-                            f
-                        )
-                    )
-                else:
-                    pass
-                with open(path, "rb") as metaimg:
-                    buffer = metaimg.read(262144)
-                    while len(buffer) > 0:
-                        sha256.update(buffer)
-                        buffer = metaimg.read(262144)
-                    metaentry = (
-                        path
-                        + ","
-                        + sha256.hexdigest()
-                        + ",unknown,N/A,N/A,N/A,N/A,N/A,N/A,N/A\n"
-                    )
-                with open(output_directory + f + "/meta.audit", "a") as metaimglog:
-                    metaimglog.write(metaentry)
-                extract_metadata(
-                    verbosity,
-                    output_directory,
-                    f,
-                    path,
-                    "metadata",
                     sha256,
                     nsrl,
+                    f,
+                    ot,
+                    d,
+                    path,
+                    volchoice,
+                    vss,
+                    vssmem,
+                    memtimeline,
                 )
+                allimgs = {**allimgs, **ot}
+                print()
             else:
                 pass
-            ot = identify_memory_image(
-                verbosity,
-                output_directory,
-                flags,
-                auto,
-                superquick,
-                quick,
-                hashcollected,
-                cwd,
-                sha256,
-                nsrl,
-                f,
-                ot,
-                d,
-                path,
-                volchoice,
-                vss,
-                vssmem,
-                memtimeline,
-            )
-            allimgs = {**allimgs, **ot}
-            print()
-        else:
-            pass
+    else:  # populate allimgs and imgs dictionary from the hosts encountered using gandalf (directory names) - the directory structure output should be correct - reliant on gandalf outputting correctly
+        print(
+            "\n\n  gandalf is still in development and cannot be used as a switch (-G).\n  If you have collected artefacts already and are not reading from a disk and/or memory image, invoke the flags you want, without using the collect (-C) switch. Please try again.\n\n\n\n"
+        )
+        sys.exit()
+        for hostname in os.listdir(d):
+            if os.path.isdir(hostname):
+                hostinfo = os.path.join(d, hostname, "host.info")
+                if os.path.exists(hostinfo):
+                    with open(hostinfo) as hostinfo:
+                        platform = str(hostinfo.readlines()[0])
+                    hostname_platform = hostname + "::" + platform
+                    allimgs[hostname_platform] = d
+                else:  # prompt for OS?
+                    pass
+            else:
+                pass
+            if len(allimgs) == 0:
+                nohosts = input(
+                    "  No hosts exist in the provided directory.\n   Do you wish to continue? Y/n [Y] "
+                )
+                if nohosts == "n":
+                    print(
+                        "  ----------------------------------------\n  -> Completed Identification Phase.\n\n\n  ----------------------------------------\n   It looks like the '{}' directory is empty. Please review the path location and try again.\n  ----------------------------------------\n\n\n"
+                    )
+                    sys.exit()
+                else:
+                    pass
+            else:
+                pass
     allimgs = OrderedDict(sorted(allimgs.items(), key=lambda x: x[1]))
     if len(allimgs) > 0:
         for (
@@ -573,7 +620,7 @@ def main(
             )
             if nodisks == "n":
                 print(
-                    "  ----------------------------------------\n  -> Completed Identification Phase.\n\n\n  ----------------------------------------\n   If you are confident there are valid images in this directory, maybe try with the Memory flag (-M)?\n   Otherwise review the path location and ensure the images are supported by elrond.\n  ----------------------------------------\n\n\n"
+                    "  ----------------------------------------\n  -> Completed Identification Phase.\n\n\n  ----------------------------------------\n   If you are confident there are valid images in this directory, maybe try with the Memory switch (-M)?\n   Otherwise review the path location and ensure the images are supported by elrond.\n  ----------------------------------------\n\n\n"
                 )
                 sys.exit()
             else:
@@ -587,6 +634,7 @@ def main(
         collect_process_keyword_analysis_timeline(
             auto,
             collect,
+            gandalf,
             process,
             analysis,
             extractiocs,

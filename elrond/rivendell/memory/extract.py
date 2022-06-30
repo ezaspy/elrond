@@ -25,14 +25,19 @@ def extract_memory_artefacts(
         output_directory,
         artefact,
         volprefix,
+        volversion,
         profile,
         profmesginsrt,
         vssimage,
     ):
         if artefact.split("/")[-1] == vssimage:
             print(
-                "{}Extracting artefacts from '{}' with {} '{}'...".format(
-                    volprefix, artefact.split("/")[-1], profmesginsrt, profile
+                "{}{} is extracting artefacts from '{}' with {} '{}'...".format(
+                    volprefix,
+                    volversion,
+                    artefact.split("/")[-1],
+                    profmesginsrt,
+                    profile,
                 )
             )
             entry, prnt = "{},{},extracting,{} ({})\n".format(
@@ -44,8 +49,13 @@ def extract_memory_artefacts(
             )
         else:
             print(
-                "{}Extracting artefacts from '{}' with {} '{}' for {}...".format(
-                    volprefix, artefact.split("/")[-1], profmesginsrt, profile, vssimage
+                "{}{} is extracting artefacts from '{}' with {} '{}' for {}...".format(
+                    volprefix,
+                    volversion,
+                    artefact.split("/")[-1],
+                    profmesginsrt,
+                    profile,
+                    vssimage,
                 )
             )
             entry, prnt = "{},{},extracting,{} ({})\n".format(
@@ -66,6 +76,7 @@ def extract_memory_artefacts(
                 output_directory,
                 artefact,
                 volprefix,
+                "volatility3",
                 "Windows",
                 "symbol table",
                 vssimage,
@@ -76,6 +87,7 @@ def extract_memory_artefacts(
                 output_directory,
                 artefact,
                 volprefix,
+                "volatility2.6",
                 profile,
                 "symbol table",
                 vssimage,
@@ -184,6 +196,7 @@ def extract_memory_artefacts(
             output_directory,
             artefact,
             volprefix,
+            "volatility2.6",
             profile,
             "profile",
             vssimage,
@@ -238,7 +251,7 @@ def extract_memory_artefacts(
                 "userhandles",
                 "vadinfo",
                 "win10cookie",
-            ]
+            ]  # plugins - editbox
         elif (
             profile.startswith("Mac")
             or profile.startswith("mac")
@@ -426,31 +439,22 @@ def extract_memory_artefacts(
             pass
     vssmem = profile
     if artefact.split("/")[-1] == vssimage:
-        print(
-            "{}Extraction of artefacts completed from '{}'.".format(
-                volprefix, artefact.split("/")[-1]
-            )
-        )
-        entry, prnt = "{},{},artefact extraction complete,{} ({})\n".format(
-            datetime.now().isoformat(), vssimage, artefact.split("/")[-1], profile
-        ), " -> {} -> artefact extraction from '{}' ({}) completed".format(
-            datetime.now().isoformat().replace("T", " "),
-            artefact.split("/")[-1],
-            profile,
-        )
+        insertvssimage = " for " + vssimage
     else:
-        print(
-            "{}Extraction of artefacts completed from '{}' for {}.".format(
-                volprefix, artefact.split("/")[-1], vssimage
-            )
+        insertvssimage = ""
+    print(
+        "{}Extraction of artefacts completed from '{}'{}.".format(
+            volprefix, artefact.split("/")[-1], insertvssimage
         )
-        entry, prnt = "{},{},artefact extraction complete,{} ({})\n".format(
-            datetime.now().isoformat(), vssimage, artefact.split("/")[-1], profile
-        ), " -> {} -> artefact extraction from '{}' ({}) completed for {}".format(
-            datetime.now().isoformat().replace("T", " "),
-            artefact.split("/")[-1],
-            profile,
-            vssimage,
-        )
+    )
+    entry, prnt = "{},{},artefact extraction complete,{} ({})\n".format(
+        datetime.now().isoformat(), vssimage, artefact.split("/")[-1], profile
+    ), " -> {} -> artefact extraction from '{}' ({}) completed{}".format(
+        datetime.now().isoformat().replace("T", " "),
+        artefact.split("/")[-1],
+        profile,
+        vssimage,
+        insertvssimage,
+    )
     write_audit_log_entry(verbosity, output_directory, entry, prnt)
     return profile, vssmem
