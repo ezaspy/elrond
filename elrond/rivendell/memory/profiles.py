@@ -234,7 +234,7 @@ def convert_memory_image(
 
 
 def extract_profiles(artefact):
-    if artefact.endswith("hiberfil.sys"):
+    if not artefact.endswith("hiberfil.sys"):
         profiles = re.findall(
             r"Suggested Profile\(s\) \: (?P<profiles>[\S\ ]+)",
             str(
