@@ -13,18 +13,7 @@ It is **highly recommended** to configure at least 4GB/4096MB RAM and also add a
         - Disk Size: `20.00GB` (more, if desired)
         - Advanced options: `None`
         - Apply
-- Start SIFT (and do the next step immediately upon booting)<br>
-    #### **Menu Bar -> Virtual Machine -> Reinstall VMware Tools... ->**
-<br>
-
-Navigate to the newly mounted CD and copy VMware-<version_number>.tar.gz -> ~/Downloads<br>
-- Open Terminal<br>
-  - `cd ~/Downloads`<br>
-  - `tar -xvf VMware-<version_number>.tar.gz`<br>
-  - `cd vmware-tools-distrib`<br>
-  - `sudo ./vmware-install.pl` (select **ENTER** to all except '...recover wasted disk space...' (last one))<br>
-- Reboot SIFT
-<br>
+- Start SIFT<br>
 
 `sudo git clone https://github.com/ezaspy/elrond.git /opt/elrond`<br>
 `cd /opt/elrond/`<br>
