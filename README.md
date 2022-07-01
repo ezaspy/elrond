@@ -70,7 +70,7 @@ To invoke the script, simply follow the instructions in [CONFIG.md](https://gith
   - Note: SANS SIFT 18.04 is not supported.
 - See [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md) to install and configure the additional software for SIFT 20.04.
   - Please note the elrond also only supports x64 memory images.
-  - If you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [elrond/elrond/tools/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/scripts/)
+  - If you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [.../elrond/elrond/tools/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/scripts/)
 <br><br>
 
 Alternatviely, if you prefer to install the packages yourself... (bear in mind there may be additional dependency requirements)<br>
