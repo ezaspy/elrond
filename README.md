@@ -129,8 +129,7 @@ See the [support file](https://github.com/ezaspy/elrond/SUPPORT.md) for a list o
 
 ## Roadmap
 
-See the [open issues](https://github.com/ezaspy/elrond/issues) for a list of proposed features (and known issues).<br><br><br>
-
+See the [open issues](https://github.com/ezaspy/elrond/issues) for a list of proposed features (and known issues).<br> _If you do experience any issues, please try building a new SIFT Workstation VM and then raise an issue via the [issues](https://github.com/ezaspy/elrond/issues) page._<br><br><br>
 <!-- CONTRIBUTING -->
 
 ## Contributing

@@ -27,4 +27,6 @@ _Note, the following script will partition and format /dev/sdb. If you have not 
 
 #### **Menu Bar -> Virtual Machine -> Settings... ->**
 
-- **Network Adaptor -> Custom (Private)**<br><br><br>
+- **Network Adaptor -> Custom (Private)**<br><br>
+
+_If you experience any issues, please try building a new SIFT Workstation VM and then raise an issue inline with the instructions in the [README.md](https://github.com/ezaspy/elrond/blob/main/elrond/README.md)_<br>
