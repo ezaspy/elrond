@@ -107,8 +107,8 @@ def collect_process_keyword_analysis_timeline(
             )
         else:
             pass
-        if os.path.exists("/tmp/.profiles"):
-            os.remove("/tmp/.profiles")
+        if os.path.exists("/opt/elrond/elrond/tools/.profiles"):
+            os.remove("/opt/elrond/elrond/tools/.profiles")
         else:
             pass
     else:

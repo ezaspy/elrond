@@ -19,6 +19,7 @@ def extract_memory_artefacts(
     memext,
     vssimage,
     memtimeline,
+    mesginsrt,
 ):
     def print_extraction(
         verbosity,
@@ -27,7 +28,7 @@ def extract_memory_artefacts(
         volprefix,
         volversion,
         profile,
-        profmesginsrt,
+        mesginsrt,
         vssimage,
     ):
         if artefact.split("/")[-1] == vssimage:
@@ -36,7 +37,7 @@ def extract_memory_artefacts(
                     volprefix,
                     volversion,
                     artefact.split("/")[-1],
-                    profmesginsrt,
+                    mesginsrt,
                     profile,
                 )
             )
@@ -53,7 +54,7 @@ def extract_memory_artefacts(
                     volprefix,
                     volversion,
                     artefact.split("/")[-1],
-                    profmesginsrt,
+                    mesginsrt,
                     profile,
                     vssimage,
                 )
@@ -70,13 +71,13 @@ def extract_memory_artefacts(
         return profile
 
     if volver == "3":  # volatility3
-        if artefact.endswith("hiberfil.sys"):
+        if not artefact.endswith("hiberfil.sys"):
             print_extraction(
                 verbosity,
                 output_directory,
                 artefact,
                 volprefix,
-                "volatility3",
+                mesginsrt,
                 "Windows",
                 "symbol table",
                 vssimage,
@@ -87,7 +88,7 @@ def extract_memory_artefacts(
                 output_directory,
                 artefact,
                 volprefix,
-                "volatility2.6",
+                mesginsrt,
                 profile,
                 "symbol table",
                 vssimage,
@@ -196,7 +197,7 @@ def extract_memory_artefacts(
             output_directory,
             artefact,
             volprefix,
-            "volatility2.6",
+            mesginsrt,
             profile,
             "profile",
             vssimage,

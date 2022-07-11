@@ -263,8 +263,8 @@ def main(
             pass
     else:
         pass
-    if os.path.exists("/tmp/.profiles"):
-        os.remove("/tmp/.profiles")
+    if os.path.exists("/opt/elrond/elrond/tools/.profiles"):
+        os.remove("/opt/elrond/elrond/tools/.profiles")
     else:
         pass
     if len(directory) > 1:
@@ -930,7 +930,7 @@ def main(
                 str(hours), str(mins), str(secs)
             )
         elif hours == 1 and mins > 1 and secs == 1:
-            timetaken = "{} hour, {} minutes and {} seconds.".format(
+            timetaken = "{} hour, {} minutes and {} second.".format(
                 str(hours), str(mins), str(secs)
             )
         elif hours == 1 and mins == 1 and secs > 1:

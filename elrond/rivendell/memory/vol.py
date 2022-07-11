@@ -56,6 +56,7 @@ def assess_volatility_choice(
             memext,
             vssimage,
             memtimeline,
+            "volatility2.6"
         )
     elif volchoice == "3":
         profile, vssmem = extract_memory_artefacts(
@@ -69,6 +70,7 @@ def assess_volatility_choice(
             memext,
             vssimage,
             memtimeline,
+            "volatility3"
         )
     else:
         profile, vssmem = extract_memory_artefacts(
@@ -82,6 +84,7 @@ def assess_volatility_choice(
             memext,
             vssimage,
             memtimeline,
+            "volatility2.6"
         )
         profile, vssmem = extract_memory_artefacts(
             verbosity,
@@ -94,6 +97,7 @@ def assess_volatility_choice(
             memext,
             vssimage,
             memtimeline,
+            "volatility3"
         )
     return profile, vssmem
 

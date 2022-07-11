@@ -374,10 +374,10 @@ def check_profile(
     artefact,
 ):
     if state == "notvss":  # not vss image
-        with open("/tmp/.profiles", "a") as temp_profiles:
+        with open("/opt/elrond/elrond/tools/.profiles", "a") as temp_profiles:
             temp_profiles.write(img.split("::")[0] + ">>" + profile + "\n")
     else:  # vss image
-        with open("/tmp/.profiles", "r") as temp_profiles:
+        with open("/opt/elrond/elrond/tools/.profiles", "r") as temp_profiles:
             savedprofiles = str(temp_profiles.readlines())[2:-4]
             if (
                 img.split("::")[0] in savedprofiles
@@ -408,7 +408,7 @@ def check_profile(
                     memtimeline,
                 )
         if orig_and_vss == "only_vss":
-            with open("/tmp/.profiles", "a") as temp_profiles:
+            with open("/opt/elrond/elrond/tools/.profiles", "a") as temp_profiles:
                 if img.split("::")[0] not in temp_profiles.readlines():
                     temp_profiles.write(img.split("::")[0] + ">>" + profile + "\n")
                 else:
