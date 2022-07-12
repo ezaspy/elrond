@@ -349,7 +349,6 @@ def process_registry_system(
     artefact,
     jsondict,
     jsonlist,
-    cwd,
 ):
     regjsonlist = []
     if not os.path.exists(
@@ -398,7 +397,6 @@ def process_registry_system(
             artefact,
             jsondict,
             jsonlist,
-            cwd,
             regjsonlist,
         )
         print_done(verbosity)
@@ -416,7 +414,6 @@ def process_registry_user(
     artefact,
     jsondict,
     jsonlist,
-    cwd,
 ):
     regusr, regart = artefact.split("/")[-1].split("+")
     regjsonlist = []
@@ -470,7 +467,6 @@ def process_registry_user(
             artefact,
             jsondict,
             jsonlist,
-            cwd,
             regjsonlist,
             regusr,
             regart,

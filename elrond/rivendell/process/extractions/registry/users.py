@@ -10,7 +10,6 @@ def extract_registry_users(
     artefact,
     jsondict,
     jsonlist,
-    cwd,
     regjsonlist,
     regusr,
     regart,
@@ -32,9 +31,7 @@ def extract_registry_users(
                 [
                     "rip.pl",
                     "-r",
-                    cwd
-                    + "/"
-                    + output_directory
+                    output_directory
                     + img.split("::")[0]
                     + "/artefacts/raw"
                     + vssartefact

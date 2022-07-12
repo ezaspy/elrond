@@ -2,6 +2,8 @@ import json
 import re
 import subprocess
 
+import time
+
 
 def extract_registry_system(
     output_directory,
@@ -10,7 +12,6 @@ def extract_registry_system(
     artefact,
     jsondict,
     jsonlist,
-    cwd,
     regjsonlist,
 ):
     with open(
@@ -29,7 +30,7 @@ def extract_registry_system(
                     [
                         "rip.pl",
                         "-r",
-                        cwd + "/" + artefact,
+                        artefact,
                         "-f",
                         artefact.split("/")[-1].lower(),
                     ],

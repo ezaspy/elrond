@@ -100,7 +100,6 @@ def process_artefacts(
                 artefact,
                 jsondict,
                 jsonlist,
-                cwd,
             )
         elif artefact.endswith("+NTUSER.DAT") or artefact.endswith("+UsrClass.dat"):
             process_registry_user(
@@ -113,7 +112,6 @@ def process_artefacts(
                 artefact,
                 jsondict,
                 jsonlist,
-                cwd,
             )
         elif artefact.endswith(".evtx"):
             process_evtx(

@@ -23,6 +23,7 @@
     <a>
       <img src="https://img.shields.io/badge/subject-DFIR-red" alt="Subject">
     </a>
+    </a>
       <img src="https://img.shields.io/github/last-commit/ezaspy/elrond" alt="Last Commit">
     </a>
     <a href="https://github.com/psf/black">
