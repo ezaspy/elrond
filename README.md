@@ -17,9 +17,6 @@
     <a href="https://github.com/ezaspy/elrond/stargazers">
       <img src="https://img.shields.io/github/stars/ezaspy/elrond" alt="Stars">
     </a>
-    <a href="https://www.python.org">
-      <img src="https://img.shields.io/badge/language-python-pink" alt="Python">
-    </a>
     <a>
       <img src="https://img.shields.io/badge/subject-DFIR-red" alt="Subject">
     </a>
