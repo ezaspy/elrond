@@ -1,10 +1,10 @@
 #!/bin/bash
 sudo apt update
 ../elrond/tools/scripts/./init.sh
-#../elrond/tools/scripts/./sift.sh
+../elrond/tools/scripts/./sift.sh
+../elrond/tools/scripts/./apfs-fuse.sh
 ../elrond/tools/scripts/./volatility3.sh
 ../elrond/tools/scripts/./dwarf2json.sh
-../elrond/tools/scripts/./apfs-fuse.sh
 ../elrond/tools/scripts/./splunk.sh
 ../elrond/tools/scripts/./elastic.sh
 ../elrond/tools/scripts/./navigator.sh
