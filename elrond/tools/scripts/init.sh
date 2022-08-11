@@ -3,7 +3,8 @@ clear
 # installing vmware_tools
 sudo tar -xvf /opt/elrond/elrond/tools/VMwareTools-10.3.23-16594550.tar.gz
 cd vmware-tools-distrib
-sudo ./vmware-install.pl -y
+sudo ./vmware-install.pl -d -f
+cd ..
 sudo rm -rf vmware-tools-distrib
 sleep 1
 # creating linux_swap space

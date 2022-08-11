@@ -10,9 +10,9 @@ sudo /bin/systemctl daemon-reload
 sudo /bin/systemctl enable elasticsearch.service
 sudo sysctl -w vm.max_map_count=262144
 sudo apt update
-sudo apt install logstash
-sudo systemctl enable logstash.service
-sudo apt update
+#sudo apt install logstash
+#sudo systemctl enable logstash.service
+#sudo apt update
 sudo apt install kibana
 sudo /bin/systemctl daemon-reload
 sudo systemctl enable kibana.service
