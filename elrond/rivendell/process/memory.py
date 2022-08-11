@@ -20,6 +20,8 @@ from rivendell.memory.volatility3.Linux import Linux
 from rivendell.memory.volatility3.macOS1 import macOS1
 from rivendell.memory.volatility3.macOS2 import macOS2
 
+import sys
+
 
 def process_memory(
     output_directory,
@@ -197,7 +199,7 @@ def process_memory(
                     pass
                 else:
                     print(
-                        "    elrond has assessed that '{}' has likely originated from a Linux host and the symbol table is not currently imported.\n    You will need to create your own symbol table. More information is provided in SUPPORT.md\n    Once you have created the symbol table and placed it in the correct directory (.../volatility3/volatility3/symbols/linux/), return to elrond.".format(
+                        "    elrond has assessed that it is likely '{}' has originated from a Linux host and the symbol table is not currently imported.\n    You will need to create your own symbol table; information is provided in SUPPORT.md\n    Once you have created the symbol table and placed it in the correct directory (.../volatility3/volatility3/symbols/linux/), return to elrond.".format(
                             artefact
                         )
                     )

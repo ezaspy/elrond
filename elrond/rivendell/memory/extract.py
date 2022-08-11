@@ -252,7 +252,7 @@ def extract_memory_artefacts(
                 "userhandles",
                 "vadinfo",
                 "win10cookie",
-            ]  # plugins - editbox
+            ]  # plugins
         elif (
             profile.startswith("Mac")
             or profile.startswith("mac")
@@ -450,7 +450,7 @@ def extract_memory_artefacts(
     )
     entry, prnt = "{},{},artefact extraction complete,{} ({})\n".format(
         datetime.now().isoformat(), vssimage, artefact.split("/")[-1], profile
-    ), " -> {} -> artefact extraction from '{}' ({}) completed{}".format(
+    ), " -> {} -> artefact extraction from '{}' ({}) completed for {}".format(
         datetime.now().isoformat().replace("T", " "),
         artefact.split("/")[-1],
         profile,

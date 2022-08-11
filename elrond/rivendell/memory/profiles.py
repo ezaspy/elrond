@@ -18,7 +18,26 @@ from rivendell.memory.vol import (
 
 
 def select_volatility_profile(finalprofiles):
-    profilekey = input("\t  {}\t\t\t ".format(finalprofiles))
+    if " 09)" in str(finalprofiles):
+        finalprofiles = (
+            str(
+                str(finalprofiles.split("             09)"))
+                .replace("', '", "\n\t  09)")
+                .replace("\\n\\t", "\n\t")[2:-2]
+                .split("             05)")
+            )
+            .replace("', '", "\n\t  05)")
+            .replace("\\n\\t", "\n\t")[2:-2]
+        )
+    elif " 05)" in str(finalprofiles):
+        finalprofiles = (
+            str(finalprofiles.split("             05)"))
+            .replace("', '", "\n\t  05)")
+            .replace("\\n\\t", "\n\t")[2:-2]
+        )
+    else:
+        pass
+    profilekey = input("\t  {}\n\t\t\t\t\t ".format(finalprofiles))
     if profilekey + ")" in finalprofiles:
         if (
             profilekey == "1"
@@ -30,27 +49,36 @@ def select_volatility_profile(finalprofiles):
             or profilekey == "7"
             or profilekey == "8"
             or profilekey == "9"
+            or profilekey == "01"
+            or profilekey == "02"
+            or profilekey == "03"
+            or profilekey == "04"
+            or profilekey == "05"
+            or profilekey == "06"
+            or profilekey == "07"
+            or profilekey == "08"
+            or profilekey == "09"
             or profilekey == "10"
             or profilekey == "11"
             or profilekey == "12"
         ):
-            if profilekey == "1":
+            if profilekey == "1" or profilekey == "01":
                 profile = re.findall(r"1\)\ ([\S]+)", finalprofiles)[0]
-            elif profilekey == "2":
+            elif profilekey == "2" or profilekey == "02":
                 profile = re.findall(r"2\)\ ([\S]+)", finalprofiles)[0]
-            elif profilekey == "3":
+            elif profilekey == "3" or profilekey == "03":
                 profile = re.findall(r"3\)\ ([\S]+)", finalprofiles)[0]
-            elif profilekey == "4":
+            elif profilekey == "4" or profilekey == "04":
                 profile = re.findall(r"4\)\ ([\S]+)", finalprofiles)[0]
-            elif profilekey == "5":
+            elif profilekey == "5" or profilekey == "0%":
                 profile = re.findall(r"5\)\ ([\S]+)", finalprofiles)[0]
-            elif profilekey == "6":
+            elif profilekey == "6" or profilekey == "06":
                 profile = re.findall(r"6\)\ ([\S]+)", finalprofiles)[0]
-            elif profilekey == "7":
+            elif profilekey == "7" or profilekey == "07":
                 profile = re.findall(r"7\)\ ([\S]+)", finalprofiles)[0]
-            elif profilekey == "8":
+            elif profilekey == "8" or profilekey == "08":
                 profile = re.findall(r"8\)\ ([\S]+)", finalprofiles)[0]
-            elif profilekey == "9":
+            elif profilekey == "9" or profilekey == "09":
                 profile = re.findall(r"9\)\ ([\S]+)", finalprofiles)[0]
             elif profilekey == "10":
                 profile = re.findall(r"10\)\ ([\S]+)", finalprofiles)[0]
@@ -61,8 +89,8 @@ def select_volatility_profile(finalprofiles):
         else:
             pass
     else:
-        print("\tInvalid selction, please select a valid profile:")
-        select_volatility_profile(finalprofiles)
+        print("\tInvalid selection, please select a valid profile:")
+        profile = select_volatility_profile(finalprofiles)
     return profile
 
 
@@ -72,12 +100,12 @@ def suggest_volatility_profile(
 ):
     if "No suggestion " in profiles[0]:
         print(
-            "\tWhich of the following profiles applies to '{}'? e.g. 2:".format(
+            "\tWhich of the following profiles applies to '{}'? e.g. 2/02:".format(
                 artefact.split("/")[-1]
             )
         )
         profileselect = input(
-            "\t   1) Win10x64_15063\t    2) Win10x86_15063\t  3) Win10x64_14393\t  4) Win10x86_14393\t  5) Win10x64_10586\t  6) Win10x86_10586\n\t   7) Win8SP1x64_18340\t    8) Win7SP1x64_24000\t  9) Win7SP1x86_24000\t 10) Win7SP1x64_23418\t 11) Win7SP1x86_23418\n\t  12) Win2012R2x64_18340   13) Win2008R2SP1x64_23418\t\t\t "
+            "\t   1) Win10x64_15063\t    2) Win10x86_15063\t  3) Win10x64_14393\t  4) Win10x86_14393\t  5) Win10x64_10586\t  6) Win10x86_10586\n\t   7) Win8SP1x64_18340\t    8) Win7SP1x64_24000\t  9) Win7SP1x86_24000\t 10) Win7SP1x64_23418\t 11) Win7SP1x86_23418\n\t  12) Win2012R2x64_18340   13) Win2008R2SP1x64_23418\n\t\t\t\t\t "
         )
         if (
             profileselect == "1"
@@ -130,20 +158,31 @@ def suggest_volatility_profile(
             {},
         )
         for profile in str(profiles[0].split("\\n")[0]).split(", "):
-            eachprofile = re.findall(r"(?P<eachprofile>Win[\w]+SP\dx[\d\_]+)", profile)
-            if len(eachprofile) == 1:
+            eachprofile = re.findall(
+                r"(?P<eachprofile>Win[\w]+(?:SP\d)?x[\d\_]+)", profile
+            )
+            if "Instantiated" in profile:
+                preferred_profile = " (likely {})".format(eachprofile[0])
+            else:
+                preferred_profile = ""
+            newprofiles.append(eachprofile[0])
+            """if len(eachprofile) == 1:
                 newprofiles.append(eachprofile[0])
             else:
-                pass
+                pass"""  # comment - likely can remove, subject to further testing
         newprofilelist, counter = list(set(newprofiles)), 1
         for newprofile in sorted(newprofilelist):
-            if "Win10" in newprofile or "Win8" in newprofile or "Win7" in newprofile:
-                uadprofpairs.append(str(counter) + ") " + newprofile)
+            if len(str(counter)) == 1:
+                insertzero = "0"
             else:
-                svrprofpairs.append(str(counter) + ") " + newprofile)
-            profilepairs[str(counter)] = newprofile
+                insertzero = ""
+            if "Win10" in newprofile or "Win8" in newprofile or "Win7" in newprofile:
+                uadprofpairs.append(insertzero + str(counter) + ") " + newprofile)
+            else:
+                svrprofpairs.append(insertzero + str(counter) + ") " + newprofile)
+            profilepairs[insertzero + str(counter)] = newprofile
             counter += 1
-        if "1)" in uadprofpairs:
+        if "1)" in str(uadprofpairs):
             finalprofiles = (
                 str(uadprofpairs)[2:-2].replace("', '", "             ")
                 + "\n\t  "
@@ -156,11 +195,11 @@ def suggest_volatility_profile(
                 + str(uadprofpairs)[2:-2].replace("', '", "             ")
             )
         print(
-            "\tWhich of the following profiles applies to '{}'? e.g. 2:".format(
-                artefact.split("/")[-1]
+            "\tWhich of the following profiles applies to '{}'? e.g. 2/02:{}".format(
+                artefact.split("/")[-1], preferred_profile
             )
         )
-        select_volatility_profile(finalprofiles)
+        profile = select_volatility_profile(finalprofiles)
     return profiles, artefact, profile
 
 

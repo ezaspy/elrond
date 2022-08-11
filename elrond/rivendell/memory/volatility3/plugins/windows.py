@@ -5,9 +5,6 @@ import re
 import shutil
 
 
-import time
-
-
 def windows_vol3(
     output_directory,
     mempath,

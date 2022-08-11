@@ -1,5 +1,6 @@
 #!/usr/bin/env python3 -tt
 import os
+import time
 from datetime import datetime
 
 from rivendell.audit import write_audit_log_entry
@@ -8,15 +9,12 @@ from rivendell.process.memory import process_memory
 
 
 def identify_disk_image(verbosity, output_directory, disk_image, mount_location):
-    def print_identification(
-        verbosity, output_directory, disk_image, mount_location, osplatform
-    ):
+    def print_identification(verbosity, output_directory, disk_image, osplatform):
         print("   Identified platform of '{}' for '{}'.".format(osplatform, disk_image))
-        entry, prnt = "{},{},identified platform,{} ({})\n".format(
+        entry, prnt = "{},{},identified platform,{}\n".format(
             datetime.now().isoformat(),
-            osplatform,
             disk_image,
-            mount_location,
+            osplatform,
         ), " -> {} -> identified platform of '{}' for '{}'".format(
             datetime.now().isoformat().replace("T", " "),
             osplatform,
@@ -34,7 +32,7 @@ def identify_disk_image(verbosity, output_directory, disk_image, mount_location)
         ):
             if "MSOCache" in str(os.listdir(mount_location)):
                 print_identification(
-                    verbosity, output_directory, disk_image, mount_location, "Windows7"
+                    verbosity, output_directory, disk_image, "Windows7"
                 )
                 disk_image = disk_image + "::Windows7"
             else:
@@ -185,3 +183,21 @@ def identify_memory_image(
     else:
         print("    OK. '{}' will not be processed.\n".format(f))
     return ot
+
+
+def identify_gandalf_host(output_directory, verbosity, host_info_file):
+    time.sleep(2)
+    with open(host_info_file) as host_info:
+        gandalf_host, osplatform = host_info.readline().strip().split("::")
+    print("   Identified platform of '{}' for '{}'.".format(osplatform, gandalf_host))
+    (entry, prnt,) = "{},{},identified platform,{}\n".format(
+        datetime.now().isoformat(),
+        gandalf_host,
+        osplatform,
+    ), " -> {} -> identified platform of '{}' for '{}'".format(
+        datetime.now().isoformat().replace("T", " "),
+        osplatform,
+        gandalf_host,
+    )
+    write_audit_log_entry(verbosity, output_directory, entry, prnt)
+    return gandalf_host, osplatform

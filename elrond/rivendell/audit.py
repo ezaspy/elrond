@@ -1,6 +1,4 @@
 #!/usr/bin/env python3 -tt
-
-
 def print_done(verbosity):
     if verbosity != "":
         print("      Done.")
@@ -9,7 +7,7 @@ def print_done(verbosity):
 
 
 def write_audit_log_entry(verbosity, output_directory, entry, prnt):
-    if "timestamp,hostname,stage,log_entry" in entry:
+    if "LastWriteTime,elrond_host,elrond_stage,elrond_log_entry\n" in entry:
         writemode = "w"
     else:
         writemode = "a"
@@ -20,7 +18,7 @@ def write_audit_log_entry(verbosity, output_directory, entry, prnt):
         writemode,
     ) as logentry:
         logentry.write(entry.replace("'", ""))
-    if verbosity == "veryverbose":
+    if prnt != "" and verbosity == "veryverbose":
         print(prnt)
     else:
         pass
