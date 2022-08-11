@@ -49,8 +49,10 @@
 
 ## About The Project
 
-elrond has been created to help fellow digitial forensicators with the identification, collection, processing, analysis and outputting of forensic artefacts from a Windows E01 or VMDK, macOS DMG/E01 or VMDK, Linux dd or VMDK disk images as well as raw memory images and previously collected artefacts which can all be outputted into Splunk. I have spent many an incident repeating the same processes by mounting, collecting (mainly Windows) forensic artefacts and then attempting to correlate them together with other data sources and artefacts. Thus, as mentioned above elrond has been built to consolidate those seperate processes into one single script helping to accerlate and automate these otherwise repetitive, tedious and often occasionally-referenced commands. As elrond outputs the artefact information as either CSV or JSON, they can be processed by many commonly-used log file analysis tools, consequently, elrond does have the capability to stand up a local Splunk instance with a custom Splunk app, whereby the artefacts are automatically assigned and aligned with the MITRE ATT&CK® Framework. In addition, elrond can also populate a local ATT&CK Navigator instance providing a visual representation of potential attack techniques leveraged as part of said incident.
+elrond has been created to help fellow digitial forensicators with the identification, collection, processing, analysis and outputting of forensic artefacts from a Windows E01 or VMDK, macOS DMG/E01 or VMDK, Linux dd or VMDK disk images as well as raw memory images and previously collected artefacts which can all be outputted into Splunk. I have spent many an incident repeating the same processes by mounting, collecting (mainly Windows) forensic artefacts and then attempting to correlate them together with other data sources and artefacts. Thus, as mentioned above elrond has been built to consolidate those seperate processes into one single script helping to accerlate and automate these otherwise repetitive, tedious and often occasionally-referenced commands. As elrond outputs the artefact information as either CSV or JSON, they can be processed by many commonly-used log file analysis tools, consequently, elrond does have the capability to stand up a local [Splunk](https://www.splunk.com/) or [elastic](https://www.elastic.co/) instance, whereby the artefacts are automatically assigned and aligned with the [MITRE ATT&CK® Framework](https://attack.mitre.org/). In addition, elrond can also populate a local [ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/) instance providing a visual representation of potential attack techniques leveraged as part of said incident.
 elrond also provides additional features such as image and file hashing, metadata extraction, file recovery and carving, IOC extraction, keyword searching and timelining.<br>
+ or  instance whilst mapping the evidence within those artefacts to the  using , if desired.
+
 ### Related Projects
 
 elrond is responsible for the analysis-side of digital forensic, but what about acquisition? An acompanying script(s) called [gandalf](https://github.com/ezaspy/gandalf) can be deployed (locally or remotely) on either Windows, macOS or Linux hosts to acquire forensic artefacts. 
@@ -60,7 +62,7 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 
 ## Prerequisites
 
-There are several software package required for using elrond but almost all of them are contained within the SANS SIFT Worksation virtual machine OVA. However, for the software which is not included, I have provided a script ([make.sh](https://github.com/ezaspy/elrond/make.sh)) which installs and configures the additional software which will be potentially required during running elrond (volatility3, apfs-fuse etc.).<br>
+There are several software package required for using elrond but almost all of them are contained within the [SANS SIFT Worksation](https://www.sans.org/tools/sift-workstation/) virtual machine OVA. However, for the software which is not included, I have provided a script ([make.sh](https://github.com/ezaspy/elrond/make.sh)) which installs and configures the additional software which will be potentially required during running elrond (volatility3, apfs-fuse etc.).<br>
 To invoke the script, simply follow the instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md#configuration). **Please note, you will only need to run the make.sh script once, per SIFT instance**
 
 - [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (20.04)
@@ -81,45 +83,54 @@ Alternatviely, if you prefer to install the packages yourself... (bear in mind t
 
 ## Usage
 
-`python3 elrond.py <case_id> <directory> [<output_directory>] [-h] [-AaCcDEGHIiMoPpQqRrSsTtUVvZ] [-K <keyword_file>] [-Y <yara_dir>] -F (include|exclude):[<include/exclude_file>]`
+`python3 elrond.py <case_id> <directory> [<output_directory>] [-h] [-AaBCcDEGHIiMoPpQqRrSsTtUVvZ] [-K <keyword_file>] [-Y <yara_dir>] -F (include|exclude):[<include/exclude_file>]`
 
 <br>
 
-### Examples<br>
+### Collect (-C)<br>
+#### Examples<br>
 
-- Automatically (**-a**) and super-quietly (**-Q**) Collect (**-C**), Process (**-P**), Analyse (**-A**) and index all artefacts (including memory (**-M**)) in Splunk (**-S**)<br>
+- Invoking DBM (-B) flag (instead of using -acINoPQqRUVv), Process (**-P**) index artefacts in Splunk (**-S**) and conduct File Collection (-F) with inclusion list<br>
+
+`python3 elrond.py case_name /path/to/disk/images -BCPS  -F include:./include_file.txt`
+
+- Automatically (**-a**) and super-quietly (**-Q**) Collect (**-C**), Process (**-P**), Analyse (**-A**) and index artefacts (including memory (**-M**)) in Splunk (**-S**)<br>
 
 `python3 elrond.py case_name /path/to/disk_and_memory/images -aqQvVMCPAS`
+
+- Very verbosely (**-V**), automatically (**-a**), super-quietly (**-Q**) Collect (**-C**), Process (**-P**) and conduct IOC Extraction (**-I**)<br>
+
+`python3 elrond.py case_name /path/to/disk/images -avVqQCPI`
+<br><br>
+
+### Gandalf (-G)<br>
+#### Examples<br>
+
+- Automatically (**-a**) and superquietly (**-Q**) Process (**-P**), Analyse (**-A**) and index artefacts in Splunk (**-S**) (acquired using [gandalf](https://github.com/ezaspy/gandalf))<br>
+
+`python3 elrond.py case_name /path/to/disk/images -aqvVGPAS`
+
+- Invoking DBM (-B) flag (instead of using -acINoPQqRUVv), Process (**-P**) index artefacts in Splunk (**-S**) and conduct Keyword Searching (-K <file_name>)<br>
+
+`python3 elrond.py case_name /path/to/disk/images -BGPS -K keywords.txt`
+<br><br>
+
+
+### Not using Collect (-C) or Gandalf (-G)<br>
+#### Examples<br>
 
 - Automatically (**-a**) and quietly (**-q**) Process (**-P**), Analyse (**-A**) and index artefacts in Splunk (**-S**) (previously collected disk artefacts (no **-C**))<br>
 
 `python3 elrond.py case_name /path/to/disk/images -aqvVPAS`
 
-- Very verbosely (**-V**), obtain all Metadata (no **-Q**), Collect (**-C**), Process (**-P**) and index artefacts in Splunk (**-S**)<br>
+- Invoking DBM (-B) flag (instead of using -acINoPQqRUVv), Process (**-P**) index artefacts in Splunk (**-S**) and conduct Keyword Searching (-K <file_name>)<br>
 
-`python3 elrond.py case_name /path/to/disk/images -avVCPS`
-
-- Very verbosely (**-V**), automatically (**-a**), super-quietly (**-Q**) Collect (**-C**), Process (**-P**) and conduct IOC Extraction (**-I**)<br>
-
-`python3 elrond.py case_name /path/to/disk/images -avVqQCPI`
-
-- Verbosely (**-v**), automatically (**-a**), super-quietly (**-Q**) Collect (**-C**), Process (**-P**) and conduct Keyword Searching (-K <file_name>)<br>
-
-`python3 elrond.py case_name /path/to/disk/images -avqQCP -K keywords.txt`
-
-- Automatically (**-a**), super-quietly (**-Q**) Collect (**-C**), Process (**-P**) and conduct File Collection (-F)<br>
-
-`python3 elrond.py case_name /path/to/disk/images -aqQCPF`
-
-- Automatically (**-a**), super-quietly (**-Q**) Collect (**-C**), Process (**-P**) and conduct File Collection (-F) with inclusion list<br>
-
-`python3 elrond.py case_name /path/to/disk/images -aqQCP -F include:../path/to/include_file.txt`
-
-<br>
+`python3 elrond.py case_name /path/to/disk/images -BPS -Y <directory/of/yara/files>`
+<br><br>
 
 ### Support
 
-Please note that if you are NOT using the -C flag (i.e. your artefacts have already been collected via another means, or using [gandalf](https://github.com/ezaspy/gandalf)). Please ensure your folder structure is as follows: `<path_to_hostname(s)>`/folder/`<hostname(s)>/<artefacts(s)>`<br><br>
+Please note that if you are NOT using the -C flag (i.e. your artefacts have already been collected via another means, not using [gandalf](https://github.com/ezaspy/gandalf)). Please ensure your folder structure is as follows: `<path_to_folder>/`acquisitions`/<hostname(s)>/<artefacts(s)>`<br><br>
 See the [support file](https://github.com/ezaspy/elrond/SUPPORT.md) for a list of commands and additional third-party tools to help with preparing images or data for elrond.<br><br><br>
 
 <!-- ROADMAP -->
@@ -176,7 +187,9 @@ Other Projects: [https://github.com/ezaspy/](https://github.com/ezaspy/)
   - [The Volatility Foundation](https://github.com/volatilityfoundation)
   - [AVML](https://github.com/microsoft/avml)
   - [Jonathon Poling](https://ponderthebits.com/2017/02/osx-mac-memory-acquisition-and-analysis-using-osxpmem-and-volatility/)
-  - [@binaryz0ne](https://www.binary-zone.com/2019/06/20/acquiring-linux-memory-using-avml-and-using-it-with-volatility/)<br><br>
+  - [@binaryz0ne](https://www.binary-zone.com/2019/06/20/acquiring-linux-memory-using-avml-and-using-it-with-volatility/)
+  - [JPCERTCC](https://github.com/JPCERTCC/Windows-Symbol-Tables)
+  - [John - Python Awesome](https://pythonawesome.com/windows-symbol-tables-for-volatility-3-in-python/)<br><br>
 - Documentation
   - [Best-README-Template](https://github.com/othneildrew/Best-README-Template)
   - [hatchful](https://hatchful.shopify.com)

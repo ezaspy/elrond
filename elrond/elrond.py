@@ -49,6 +49,14 @@ parser.add_argument(
     default=False,
 )
 parser.add_argument(
+    "-B",
+    "--dogs",
+    help="'Dogs Bollocks Mode (DBM).' Invokes -acINoPQqRUVv. You MUST provide either -C (--collect), -G (--gandalf) or -O (--reorganise) depending on whether you've acquired disk images, leveraged gandalf or seperately acquired artefacts, respectively.",
+    action="store_const",
+    const=True,
+    default=False,
+)
+parser.add_argument(
     "-C",
     "--collect",
     help="Collect artefacts from disk image (artefacts have NOT been collected seperately)",
@@ -137,9 +145,17 @@ parser.add_argument(
     default=False,
 )
 parser.add_argument(
+    "-O",
+    "--reorganise",
+    help="Reorganise artefacts NOT collected using gandalf",
+    action="store_const",
+    const=True,
+    default=False,
+)
+parser.add_argument(
     "-o",
     "--hashcollected",
-    help="Only hash files which have been collected, processed & analysed (if applicable).",
+    help="Only hash files which have been collected, processed & analysed (if applicable)",
     action="store_const",
     const=True,
     default=False,
@@ -246,6 +262,7 @@ directory = args.directory
 case = args.case
 analysis = args.analysis
 auto = args.auto
+dogs = args.dogs
 collect = args.collect
 vss = args.vss
 delete = args.delete
@@ -259,6 +276,7 @@ lotr = args.lotr
 keywords = args.keywords
 volatility = args.volatility
 navigator = args.navigator
+reorganise = args.reorganise
 hashcollected = args.hashcollected
 process = args.process
 superquick = args.superquick
@@ -302,7 +320,6 @@ system_artefacts = [
     "/$Extend/$UsnJrnl",
     "/$Extend/$ObjId",
     "/$Extend/$Reparse",
-    "/$I30",
     "/$LogFile",
     "/$Recycle.Bin",
     "/Users/",
@@ -412,6 +429,7 @@ if __name__ == "__main__":
         case,
         analysis,
         auto,
+        dogs,
         collect,
         vss,
         delete,
@@ -425,6 +443,7 @@ if __name__ == "__main__":
         keywords,
         volatility,
         navigator,
+        reorganise,
         hashcollected,
         process,
         superquick,
