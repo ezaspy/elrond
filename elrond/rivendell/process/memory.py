@@ -20,7 +20,22 @@ from rivendell.memory.volatility3.Linux import Linux
 from rivendell.memory.volatility3.macOS1 import macOS1
 from rivendell.memory.volatility3.macOS2 import macOS2
 
-import sys
+
+def check_os(artefact, memext, plugin):
+    vol3oscheck = str(
+        subprocess.Popen(
+            [
+                "python3",
+                "/usr/local/lib/python3.8/dist-packages/volatility3/vol.py",
+                "-f",
+                artefact + memext,
+                plugin,
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate()[0]
+    )[2:-1]
+    return vol3oscheck
 
 
 def process_memory(
@@ -141,19 +156,7 @@ def process_memory(
             )
         else:
             pass
-        vol3oscheck = str(
-            subprocess.Popen(
-                [
-                    "python3",
-                    "/usr/local/lib/python3.8/dist-packages/volatility3/vol.py",
-                    "-f",
-                    artefact + memext,
-                    "windows.info.Info",
-                ],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            ).communicate()[0]
-        )[2:-1]
+        vol3oscheck = check_os(artefact, memext, "windows.info.Info")
         if (
             "Windows" in vol3oscheck
             and "windows" in vol3oscheck
@@ -163,48 +166,34 @@ def process_memory(
         else:
             profile, ziphexdump1, ziphexdump2 = "macOS", macOS1(), macOS2()
             dump_vol3_ziphex(d, profile, ziphexdump1 + ziphexdump2)
-            vol3oscheck = str(
-                subprocess.Popen(
-                    [
-                        "python3",
-                        "/usr/local/lib/python3.8/dist-packages/volatility3/vol.py",
-                        "-f",
-                        artefact + memext,
-                        "mac.list_files.List_Files",
-                    ],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                ).communicate()[0]
-            )[2:-1]
+            vol3oscheck = check_os(artefact, memext, "mac.list_files.List_Files")
             if "MacOS" in vol3oscheck and "/System/Library/" in vol3oscheck:
                 profileplatform = "macOS"
             else:
                 profile, ziphexdump = "Linux", Linux()
                 dump_vol3_ziphex(d, profile, ziphexdump)
                 profileplatform = "Linux"
-                vol3oscheck = str(
-                    subprocess.Popen(
-                        [
-                            "python3",
-                            "/usr/local/lib/python3.8/dist-packages/volatility3/vol.py",
-                            "-f",
-                            artefact + memext,
-                            "linux.elfs.Elfs",
-                        ],
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
-                    ).communicate()[0]
-                )[2:-1]
+                vol3oscheck = check_os(artefact, memext, "linux.elfs.Elfs")
                 if "linux" in vol3oscheck and "sudo" in vol3oscheck:
                     pass
                 else:
                     print(
-                        "    elrond has assessed that it is likely '{}' has originated from a Linux host and the symbol table is not currently imported.\n    You will need to create your own symbol table; information is provided in SUPPORT.md\n    Once you have created the symbol table and placed it in the correct directory (.../volatility3/volatility3/symbols/linux/), return to elrond.".format(
+                        "    elrond has identified that there is no available symbol table for this image.\n    You will need to create your own symbol table; information is provided in SUPPORT.md\n    Once you have created the symbol table and placed it in the respective directory (.../volatility3/volatility3/symbols[/windows/mac/linux]/), return to elrond.".format(
                             artefact
                         )
                     )
-                    time.sleep(10)
-                    profile = choose_custom_profile(volchoice)
+                    time.sleep(5)
+                    customprofile = choose_custom_profile(volchoice)
+                    if customprofile != "SKIPPED" and customprofile != "S":
+                        if "::Windows" in customprofile:
+                            profileplatform = "Windows"
+                        elif "::macOS" in customprofile:
+                            profileplatform = "macOS"
+                        else:
+                            profileplatform = "Linux"
+                        profile = customprofile.split("::")[0]
+                    else:
+                        profile, profileplatform = "", ""
         if os.path.exists(
             "/usr/local/lib/python3.8/dist-packages/volatility3/volatility3/symbols/__pycache__"
         ):
@@ -222,34 +211,52 @@ def process_memory(
         else:
             pass
         if stage != "processing":
-            entry, prnt = "{},identification,{},{} ({})\n".format(
-                datetime.now().isoformat(),
-                artefact.split("/")[-1],
-                profileplatform,
-                profile,
-            ), " -> {} -> identified platform as '{}' for '{}'".format(
-                datetime.now().isoformat().replace("T", " "),
-                profileplatform,
-                artefact.split("/")[-1],
-            )
-            print(
-                "   Identified platform of '{}' for '{}'.".format(
-                    profile, artefact.split("/")[-1]
+            if profile != "":
+                entry, prnt = "{},identification,{},{} ({})\n".format(
+                    datetime.now().isoformat(),
+                    artefact.split("/")[-1],
+                    profileplatform,
+                    profile,
+                ), " -> {} -> identified platform as '{}' for '{}'".format(
+                    datetime.now().isoformat().replace("T", " "),
+                    profileplatform,
+                    artefact.split("/")[-1],
                 )
-            )
-            write_audit_log_entry(verbosity, output_directory, entry, prnt)
+                print(
+                    "   Identified platform of '{}' for '{}'.".format(
+                        profile, artefact.split("/")[-1]
+                    )
+                )
+                write_audit_log_entry(verbosity, output_directory, entry, prnt)
+            else:
+                entry, prnt = "{},identification,{},SKIPPED\n".format(
+                    datetime.now().isoformat(),
+                    artefact.split("/")[-1],
+                ), " -> {} -> identification of platform SKIPPED for '{}'".format(
+                    datetime.now().isoformat().replace("T", " "),
+                    artefact.split("/")[-1],
+                )
+                print(
+                    "   Identification SKIPPED for '{}'.".format(
+                        artefact.split("/")[-1]
+                    )
+                )
+                write_audit_log_entry(verbosity, output_directory, entry, prnt)
         else:
             pass
-        assess_volatility_choice(
-            verbosity,
-            output_directory,
-            volchoice,
-            volprefix,
-            artefact,
-            profile,
-            mempath,
-            memext,
-            vssimage,
-            memtimeline,
-        )
+        if profile != "" and profileplatform != "":
+            assess_volatility_choice(
+                verbosity,
+                output_directory,
+                volchoice,
+                volprefix,
+                artefact,
+                profile,
+                mempath,
+                memext,
+                vssimage,
+                memtimeline,
+            )
+        else:
+            pass
     return profile, vssmem

@@ -22,7 +22,7 @@ def windows_vol(
             "************************************************************************"
         )[1:]:
             for eachkv in re.findall(
-                r"Hook\ mode\:\ (?P<HookMode>[^\']+)\'\,\ \'Hook\ type\:\ (?P<HookType>[^\']+)\'\,\ \'(?:Process\:\ (?P<PID>[^\(]+)\ \((?P<ProcessName>[^\']+)\)\'\,\ \')?Victim\ module\:\ (?P<VictimModule>[^\(]+)\ \((?P<ModuleAddressStart>[^\-]+)\ \-\ (?P<ModuleAddressEnd>[^\-]+)\)\'\,\ \'Function\:\ (?P<Function>[^\']+)\'\,\ \'Hook\ address\:\ (?P<HookAddress>[^\']+)\'\,\ \'Hooking\ module\:\ (?P<HookModule>[^\']+)\'\,\ \'\'\,\ \'Disassembly\S+\:\'\,\ \'(?P<Assembly>[\S\ ]+)",
+                r"Hook mode: (?P<HookMode>[^']+)', 'Hook type: (?P<HookType>[^']+)', '(?:Process: (?P<PID>[^\(]+) \((?P<ProcessName>[^']+)\)', ')?Victim module: (?P<VictimModule>[^\(]+) \((?P<ModuleAddressStart>[^\-]+) \- (?P<ModuleAddressEnd>[^\-]+)\)', 'Function: (?P<Function>[^']+)', 'Hook address: (?P<HookAddress>[^']+)', 'Hooking module: (?P<HookModule>[^']+)', '', 'Disassembly\S+:', '(?P<Assembly>[\S ]+)",
                 plugout,
             ):
                 kv = list(eachkv)
@@ -120,7 +120,7 @@ def windows_vol(
             "************************************************************************"
         )[1:]:
             for eachkv in re.findall(
-                r"^(?P<ProcessName>[\S\ ]+)\s+pid\:\s+(?P<PID>\d+)\'\,\ \'Command\ line\s+\:\s+(?P<CommandLine>[\S\ ]+)",
+                r"^(?P<ProcessName>[\S ]+)\s+pid:\s+(?P<PID>\d+)', 'Command line\s+:\s+(?P<CommandLine>[\S ]+)",
                 plugout,
             ):
                 kv = list(eachkv)
@@ -149,7 +149,7 @@ def windows_vol(
         ):
             if len(plugout.strip("']")[1:][2:-3]) > 0:
                 for eachkv in re.findall(
-                    r"(?P<k>[A-Za-z]+)\:(?P<v>[^\|\']+)",
+                    r"(?P<k>[A-Za-z]+):(?P<v>[^\|']+)",
                     plugout.strip("']")[1:][2:-3]
                     .split("', 'Cmd ")[0]
                     .replace(": ", ":")
@@ -163,7 +163,7 @@ def windows_vol(
                         pass
                 for pluginfo in plugout.strip("']")[1:][2:-3].split("', 'Cmd ")[1:]:
                     for eachkv in re.findall(
-                        r"(?P<CommandID>\#\d+)\ \@\ (?P<CommandMemoryOffset>0x[^\:]+)\:\ (?P<CommandLine>[\S\ ]+)",
+                        r"(?P<CommandID>\#\d+) \@ (?P<CommandMemoryOffset>0x[^:]+): (?P<CommandLine>[\S ]+)",
                         pluginfo,
                     ):
                         kv = list(eachkv)
@@ -209,12 +209,12 @@ def windows_vol(
                     dumpout = ""
                 if len(plugout.strip("']")[1:][2:-3]) > 0:
                     for eachkv in re.findall(
-                        r"(?P<k>[A-Za-z]+)\:(?P<v>\w[^\|\ ]*)",
+                        r"(?P<k>[A-Za-z]+):(?P<v>\w[^\| ]*)",
                         re.sub(
-                            r"(\w)\ ([A-Z]\w+\')",
+                            r"(\w) ([A-Z]\w+')",
                             r"\1\2",
                             re.sub(
-                                r"(AttachedProcess\:\ [^\ ]+\ )",
+                                r"(AttachedProcess: [^ ]+ )",
                                 r"\1AttachedProcess",
                                 str(plugout.split("Dump:")[0].replace(": ", ":")),
                             ),
@@ -251,7 +251,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<Pointer>\d+)\s+(?P<Handles>\d+)\s+(?P<Access>[RWXDrwxd\-]+)\s+(?P<Filename>[\S\ ]+)",
+                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<Pointer>\d+)\s+(?P<Handles>\d+)\s+(?P<Access>[RWXDrwxd\-]+)\s+(?P<Filename>[\S ]+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -296,9 +296,9 @@ def windows_vol(
                     .replace(" ----', '", ""),
                 )
                 jsondict["ProcessName"], jsondict["PID"] = re.findall(
-                    r"^\'\,\ \'(?P<Process>[^\:\']+)\'\,\ \'pid:\s+(\d+)",
+                    r"^', '(?P<Process>[^:']+)?', 'pid:\s+(\d+)",
                     re.sub(
-                        r"\ (pid\:)",
+                        r" (pid:)",
                         r"', '\1",
                         plugout.split("Base Size LoadCount LoadTime Path")[0],
                     ),
@@ -307,7 +307,7 @@ def windows_vol(
                     1
                 ].split("', '"):
                     for eachkv in re.findall(
-                        r"(?P<Base>[\S]+)\s+(?P<Size>[\S]+)\s+(?P<LoadCount>[\S]+)\s+(?P<Path>[\S\ ]+)",
+                        r"(?P<Base>[\S]+)\s+(?P<Size>[\S]+)\s+(?P<LoadCount>[\S]+)\s+(?P<LastWriteTime>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \S+) +(?P<Path>[\S ]+)?",
                         eachinfo.replace("\\\\ n", "\\\\n"),
                     ):
                         kv = list(eachkv)
@@ -328,7 +328,7 @@ def windows_vol(
             "--------------------------------------------------"
         ):
             for eachkv in re.findall(
-                r"^DriverName\:\s+(?P<DriverName>[^\']+)\'\,\ \'DriverStart\:\s+(?P<DriverStart>[^\']+)\'\,\ \'DriverSize\:\s+(?P<DriverSize>[^\']+)\'\,\ \'DriverStartIo\:\s+(?P<DriverStartIO>[^\']+)\'\,\ \'\s+(?P<DriverData>[\S\ ]+)",
+                r"^DriverName:\s+(?P<DriverName>[^']+)', 'DriverStart:\s+(?P<DriverStart>[^']+)', 'DriverSize:\s+(?P<DriverSize>[^']+)', 'DriverStartIo:\s+(?P<DriverStartIO>[^']+)', '\s+(?P<DriverData>[\S ]+)",
                 plugout[4:-4],
             ):
                 kv = list(eachkv)
@@ -390,7 +390,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<ModuleName>[\S\ ]+\.\w+)\s+(?P<DriverName>\S+)\s+(?P<DriverNameAlt>\S+)\s+(?P<ServiceKey>[\S\ ]+)",
+                    r"^(?P<ModuleName>[\S ]+\.\w+)\s+(?P<DriverName>\S+)\s+(?P<DriverNameAlt>\S+)\s+(?P<ServiceKey>[\S ]+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -456,7 +456,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"(?P<PID>\d+)\s+(?P<ProcessName>[\S\ ]+\.\w+)\s+(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<Variable>\S+)\s+(?P<Value>[\S\ ]+)",
+                    r"(?P<PID>\d+)\s+(?P<ProcessName>[\S ]+\.\w+)\s+(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<Variable>\S+)\s+(?P<Value>[\S ]+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -518,7 +518,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"(?P<Session>\d+)\s+(?P<Handle>0x[A-Fa-f\d]+)\s+(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<Thread>\d+)\s+(?P<ProcessName>[^\:]+)\:(?P<PID>\d+)\s+(?P<ID>0x[A-Fa-f\d]+)\s+(?P<Rate>\d+)\s+(?P<Countdown>\d+)\s+(?P<Function>0x[A-Fa-f\d]+)",
+                    r"(?P<Session>\d+)\s+(?P<Handle>0x[A-Fa-f\d]+)\s+(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<Thread>\d+)\s+(?P<ProcessName>[^:]+):(?P<PID>\d+)\s+(?P<ID>0x[A-Fa-f\d]+)\s+(?P<Rate>\d+)\s+(?P<Countdown>\d+)\s+(?P<Function>0x[A-Fa-f\d]+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -559,7 +559,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"\'(?P<SecurityID>S\-[\d\-]+)\'\:\s+\'(?P<Service>[^\']+)",
+                    r"'(?P<SecurityID>S\-[\d\-]+)':\s+'(?P<Service>[^']+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -584,7 +584,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Process>\S+)\s+\((?P<PID>\d+)\)\:\s+(?P<SecurityID>S\-[\d\-]+)\s+\((?P<SecurityGroup>[^\)]+)\)",
+                    r"^(?P<Process>\S+)\s+\((?P<PID>\d+)\):\s+(?P<SecurityID>S\-[\d\-]+)\s+\((?P<SecurityGroup>[^\)]+)\)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -613,7 +613,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<PID>\d+)\s+(?P<Handle>0x[A-Fa-f\d]+)\s+(?P<Access>0x[A-Fa-f\d]+)\s+(?P<Type>[\S\ ]+)\s+(?P<Details>[\S\ ]*)",
+                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<PID>\d+)\s+(?P<Handle>0x[A-Fa-f\d]+)\s+(?P<Access>0x[A-Fa-f\d]+)\s+(?P<Type>[\S ]+)\s+(?P<Details>[\S ]*)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -646,7 +646,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<AccountName>[^\:]+)\:(?P<AccountType>\d+)\:[^\:]+\:(?P<HashedPassword>[^\:]+)",
+                    r"^(?P<AccountName>[^:]+):(?P<AccountType>\d+):[^:]+:(?P<HashedPassword>[^:]+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -675,7 +675,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<VirtualOffset>0x[A-Fa-f\d]+)\s+(?P<PhysicalOffset>0x[A-Fa-f\d]+)\s+(?P<Filename>[\S\ ]*)",
+                    r"^(?P<VirtualOffset>0x[A-Fa-f\d]+)\s+(?P<PhysicalOffset>0x[A-Fa-f\d]+)\s+(?P<Filename>[\S ]*)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -702,7 +702,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"(?P<PID>\d+)\s+(?P<ProcessName>[\w\.\ ]+\w)\s+(?P<Base>0x[A-Fa-f\d]+)\s+(?P<InLoad>\w+)\s+(?P<InInit>\w+)\s+(?P<InMem>\w+)\s+(?P<MappedPath>[\S\ ]+)",
+                    r"(?P<PID>\d+)\s+(?P<ProcessName>[\w\. ]+\w)\s+(?P<Base>0x[A-Fa-f\d]+)\s+(?P<InLoad>\w+)\s+(?P<InInit>\w+)\s+(?P<InMem>\w+)\s+(?P<MappedPath>[\S ]+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -737,7 +737,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<ProcessName>[\S\ ]+\w)\s+(?P<PID>\d+)\s+(?P<PPID>\w+)\s+(?P<Name>\w+)\s+(?P<Path>\w+)\s+(?P<Priority>\w+)\s+(?P<CommandLine>\w+)\s+(?P<User>\w+)\s+(?P<Session>\w+)\s+(?P<Time>\w+)\s+(?P<Command>\w+)\s+(?P<ProcessHollow>\w+)\s+(?P<SessionPath>\w+)",
+                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<ProcessName>[\S ]+\w)\s+(?P<PID>\d+)\s+(?P<PPID>\w+)\s+(?P<Name>\w+)\s+(?P<Path>\w+)\s+(?P<Priority>\w+)\s+(?P<CommandLine>\w+)\s+(?P<User>\w+)\s+(?P<Session>\w+)\s+(?P<Time>\w+)\s+(?P<Command>\w+)\s+(?P<ProcessHollow>\w+)\s+(?P<SessionPath>\w+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -783,7 +783,7 @@ def windows_vol(
                         pass
                     jsonlist.append(json.dumps(jsondict))
                 for eachkv in re.findall(
-                    r"^PID\s+(?P<PID>\d+)\s+Offset\:\s+(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<ProcessName>[\S\ ]+\w)",
+                    r"^PID\s+(?P<PID>\d+)\s+Offset:\s+(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<ProcessName>[\S ]+\w)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -811,7 +811,7 @@ def windows_vol(
     elif plugin == "malfind":
         for plugout in str(plugoutlist).split("Process"):
             for eachkv in re.findall(
-                r"^\:\ (?P<ProcessName>.*)\ Pid\:\ (?P<PID>\d+)\s+Address\:\ (?P<Offset>0x[A-Fa-f\d]+)\'\,\ \'Vad Tag\:\ (?P<VadTag>\w+)\s+Protection\:\ (?P<Protection>\w+)\'\,\ \'Flags\:\ (?P<Flags>[^\']+)\'\,\ \'\'\,\ \'(?P<DataAssembly>[\S\s]+)",
+                r"^: (?P<ProcessName>.*) Pid: (?P<PID>\d+)\s+Address: (?P<Offset>0x[A-Fa-f\d]+)', 'Vad Tag: (?P<VadTag>\w+)\s+Protection: (?P<Protection>\w+)', 'Flags: (?P<Flags>[^']+)', '', '(?P<DataAssembly>[\S\s]+)",
                 plugout,
             ):
                 kv = list(eachkv)
@@ -886,7 +886,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<Session>\d+)\s+(?P<Desktop>\S+)\s+(?P<Thread>(?:\<any\>|\d+))\s+(?:\((?P<ProcessName>[\w\.\ ]+)\s+(?P<PID>\d+)\))?\s+(?P<Filter>\w+)\s+(?P<Flags>\w+)\s+(?P<Function>0x[A-Fa-f\d]+)\s+(?P<Module>[\S\ ]+)",
+                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<Session>\d+)\s+(?P<Desktop>\S+)\s+(?P<Thread>(?:\<any\>|\d+))\s+(?:\((?P<ProcessName>[\w\. ]+)\s+(?P<PID>\d+)\))?\s+(?P<Filter>\w+)\s+(?P<Flags>\w+)\s+(?P<Function>0x[A-Fa-f\d]+)\s+(?P<Module>[\S ]+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -956,7 +956,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<File>\S+)\s+(?P<Base>0x[A-Fa-f\d]+)\s+(?P<Size>0x[A-Fa-f\d]+)\s+(?P<Filename>[\S\ ]*)",
+                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<File>\S+)\s+(?P<Base>0x[A-Fa-f\d]+)\s+(?P<Size>0x[A-Fa-f\d]+)\s+(?P<Filename>[\S ]*)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -987,7 +987,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<ModuleName>[\S\ ]+\.\w+)\s+(?P<Base>0x[A-Fa-f\d]+)\s+(?P<Size>0x[A-Fa-f\d]+)\s+(?P<Filename>[\S\ ]+)",
+                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<ModuleName>[\S ]+\.\w+)\s+(?P<Base>0x[A-Fa-f\d]+)\s+(?P<Size>0x[A-Fa-f\d]+)\s+(?P<Filename>[\S ]+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -1018,7 +1018,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<Pointer>\d+)\s+(?P<Handle>\d+)\s+(?P<Signal>\d+)\s+(?P<Thread>0x[A-Fa-f\d]+)\s+(?P<CID>[\d\.]*)\s+(?P<MutexName>[\S\ ]*)",
+                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<Pointer>\d+)\s+(?P<Handle>\d+)\s+(?P<Signal>\d+)\s+(?P<Thread>0x[A-Fa-f\d]+)\s+(?P<CID>[\d\.]*)\s+(?P<MutexName>[\S ]*)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -1053,7 +1053,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<SourceMAC>[A-Fa-z\d\:]+)\s+(?P<DestinationMAC>[A-Fa-z\d\:]+)\s+(?P<Protocol>0x[A-Fa-z\d]+)\s+(?P<SourceIP>[A-Fa-z\d\.\:]+)\s+(?P<DestinationIP>[A-Fa-z\d\.\:]+)\s+(?P<SourcePort>\w+)\s+(?P<DestinationPort>\w+)\s+(?P<Flags>[\S\ ]+)",
+                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<SourceMAC>[A-Fa-z\d:]+)\s+(?P<DestinationMAC>[A-Fa-z\d:]+)\s+(?P<Protocol>0x[A-Fa-z\d]+)\s+(?P<SourceIP>[A-Fa-z\d\.:]+)\s+(?P<DestinationIP>[A-Fa-z\d\.:]+)\s+(?P<SourcePort>\w+)\s+(?P<DestinationPort>\w+)\s+(?P<Flags>[\S ]+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -1092,7 +1092,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<Protocol>\w+)\s+(?P<LocalAddress>[\d\.\:\-]+)\:(?P<LocalPort>\d+)\s+(?P<ForeignAddress>[\d\.\:\-\*]+)\:(?P<ForeignPort>[\d\*]+)\s+(?P<ConnectionState>\w*)\s+(?P<PID>\d+)\s+(?P<ProcessName>\S+)\s+(?P<TimeCreated>[\d\-\:\ ]*)",
+                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<Protocol>\w+)\s+(?P<LocalAddress>[\d\.:\-]+):(?P<LocalPort>\d+)\s+(?P<ForeignAddress>[\d\.:\-\*]+):(?P<ForeignPort>[\d\*]+)\s+(?P<ConnectionState>\w*)\s+(?P<PID>\d+)\s+(?P<ProcessName>\S+)\s+(?P<TimeCreated>[\d\-: ]*)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -1166,7 +1166,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"(?P<PID>\d+)\s+(?P<ProcessName>[\w\-\.]+)\s+(?P<ProcessValue>\d+)\s+(?P<PrivilegeName>[\w\-\.]+)\s+(?P<PrivilegeAttributes>[\w\,]*)\s+(?P<PrivilegeDescription>[\w\ ]+)",
+                    r"(?P<PID>\d+)\s+(?P<ProcessName>[\w\-\.]+)\s+(?P<ProcessValue>\d+)\s+(?P<PrivilegeName>[\w\-\.]+)\s+(?P<PrivilegeAttributes>[\w\,]*)\s+(?P<PrivilegeDescription>[\w ]+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -1199,7 +1199,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<ProcessName>[\w\-\.]+)\s+(?P<PID>\d+)\s+(?P<PPID>\d+)\s+(?P<Threads>\d+)\s+(?P<Handles>[\d\-]+)\s+(?P<Session>[\d\-]+)\s+(?P<WoW64>\d+)\s+(?P<StartTime>[\w\-\:\ \+]+)\ \w+\+\d+\s+(?:(?P<EndTime>[\w\-\:\ \+]+))?",
+                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<ProcessName>[\w\-\.]+)\s+(?P<PID>\d+)\s+(?P<PPID>\d+)\s+(?P<Threads>\d+)\s+(?P<Handles>[\d\-]+)\s+(?P<Session>[\d\-]+)\s+(?P<WoW64>\d+)\s+(?P<StartTime>[\w\-: \+]+) \w+\+\d+\s+(?:(?P<EndTime>[\w\-: \+]+))?",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -1228,21 +1228,21 @@ def windows_vol(
                             kv[8],
                             kv[9],
                             kv[4],
-                            kv[5].replace('"--------"', "--"),
-                            kv[6].replace('"------"', "--"),
+                            kv[5],
+                            kv[6],
                             kv[7],
                             kv[0],
                         )
                     else:
                         pass
                     jsonlist.append(json.dumps(jsondict))
-    elif plugin == "psscan":  # no artefacts available during testing - use psxview
+    elif plugin == "psscan":  # if no results available - use psxview
         pass
     elif plugin == "pstree":
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"(?P<TreeBranch>\.*)\ (?P<Offset>0x[A-Fa-f\d]+)\:(?P<ProcessName>[\w\-\.]*)\s+(?P<PID>\d+)\s+(?P<PPID>\d+)\s+(?P<Threads>[\d\-]+)\s+(?P<Handles>[\d\-]+)\s+(?P<StartTime>[\w\-\:\ \+]+)",
+                    r"(?P<TreeBranch>\.*) (?P<Offset>0x[A-Fa-f\d]+):(?P<ProcessName>[\w\-\.]*)\s+(?P<PID>\d+)\s+(?P<PPID>\d+)\s+(?P<Threads>[\d\-]+)\s+(?P<Handles>[\d\-]+)\s+(?P<StartTime>[\w\-: \+]+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -1279,7 +1279,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<ProcessName>[\w\-\.]+)\s+(?P<PID>\d+)\s+(?P<InPSList>\w+)\s+(?P<InPSScan>\w+)\s+(?P<Thread>\w+)\s+(?P<PspCid>\w+)\s+(?P<CSRSS>\w+)\s+(?P<Session>\w+)\s+(?P<DesktopThread>\w+)\s+(?P<EndTime>[\d\-\:\ ]*)",
+                    r"(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<ProcessName>[\w\-\.]+)\s+(?P<PID>\d+)\s+(?P<InPSList>\w+)\s+(?P<InPSScan>\w+)\s+(?P<Thread>\w+)\s+(?P<PspCid>\w+)\s+(?P<CSRSS>\w+)\s+(?P<Session>\w+)\s+(?P<DesktopThread>\w+)\s+(?P<EndTime>[\d\-: ]*)",
                     plugout.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -1323,7 +1323,7 @@ def windows_vol(
             "***************************************************************************"
         ):
             for eachkv in re.findall(
-                r"[A-Za-z\ ]+\:\s+(?P<RegistryHive>[^\']+)\'\,\ \'[A-Za-z\ ]+\:\s+(?P<RegistryKey>[^\']+)\'\,\ \'[A-Za-z\ ]+\:\s+(?P<LastWriteTime>[^\']+)\ ",
+                r"[A-Za-z ]+:\s+(?P<RegistryHive>[^']+)', '[A-Za-z ]+:\s+(?P<RegistryKey>[^']+)', '[A-Za-z ]+:\s+(?P<LastWriteTime>[^']+) ",
                 plugout.split(
                     "', 'Value   Mru   Entry Type     GUID                                     GUID Description     Folder IDs', '------- ----- -------------- ---------------------------------------- -------------------- ----------', '"
                 )[0],
@@ -1363,7 +1363,7 @@ def windows_vol(
                         not in eachinfo
                     ):
                         for eachkv in re.findall(
-                            r"^(?P<RegistryKeyValue>\d+)\s+(?P<MRU>\d+)\s+(?P<EntryType>[\w\ ]+\w)\s+(?P<GUID>[A-Za-z\d\-]+)\s+(?P<GUIDDescription>[\w\ ]+\w)\s+(?P<FolderIDs>[A-Z\_\,\ ]+)\ ",
+                            r"^(?P<RegistryKeyValue>\d+)\s+(?P<MRU>\d+)\s+(?P<EntryType>[\w ]+\w)\s+(?P<GUID>[A-Za-z\d\-]+)\s+(?P<GUIDDescription>[\w ]+\w)\s+(?P<FolderIDs>[A-Z\_\, ]+) ",
                             eachinfo,
                         ):
                             kv = list(eachkv)
@@ -1398,7 +1398,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"(?P<LastWriteTime>[\d\-\:\ ]+)\ \w+\+\d+\s+(?P<Filepath>.+)",
+                    r"(?P<LastWriteTime>[\d\-: ]+) \w+\+\d+\s+(?P<Filepath>.+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -1423,7 +1423,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"(?P<Order>\d+)\s+(?P<LastModified>[\d\-]+\ [\d\:]+)\s+(?P<LastUpdated>[\d\-]+\ [\d\:]+)?\s+(?P<ExecFlag>\w+)?\s+(?P<FileSize>[\w]+)?\s+(?P<Filepath>[\S\ ]+)",
+                    r"(?P<Order>\d+)\s+(?P<LastModified>[\d\-]+ [\d:]+)\s+(?P<LastUpdated>[\d\-]+ [\d:]+)?\s+(?P<ExecFlag>\w+)?\s+(?P<FileSize>[\w]+)?\s+(?P<Filepath>[\S ]+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -1455,7 +1455,7 @@ def windows_vol(
     elif plugin == "svcscan":
         for plugout in str(plugoutlist).split("', '', '"):
             for eachkv in re.findall(
-                r"Offset\:\s+(?P<Offset>0x[A-Fa-f\d]+)\'\,\ \'Order\:\ (?P<Order>[^\']+)\'\,\ \'Start\:\ (?P<StartType>[^\']+)\'\,\ \'Process\ ID\:\ (?P<PID>[^\']+)\'\,\ \'Service\ Name\:\ (?P<ServiceName>[^\']+)\'\,\ \'Display\ Name\:\ (?P<DisplayName>[^\']+)\'\,\ \'Service\ Type\:\ (?P<ServiceType>[^\']+)\'\,\ \'Service\ State\:\ (?P<ServiceState>[^\']+)\'\,\ \'Binary\ Path\:\ (?P<BinaryPath>[\S\ ]+)",
+                r"Offset:\s+(?P<Offset>0x[A-Fa-f\d]+)', 'Order: (?P<Order>[^']+)', 'Start: (?P<StartType>[^']+)', 'Process ID: (?P<PID>[^']+)', 'Service Name: (?P<ServiceName>[^']+)', 'Display Name: (?P<DisplayName>[^']+)', 'Service Type: (?P<ServiceType>[^']+)', 'Service State: (?P<ServiceState>[^']+)', 'Binary Path: (?P<BinaryPath>[\S ]+)",
                 plugout,
             ):
                 kv = list(eachkv)
@@ -1494,7 +1494,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<Pointer>\d+)\s+(?P<Handles>\d+)\s+(?P<StartTime>[\w\-\:\ \+]+)\ \w+\+\d+\s+(?P<Source>\S+)\s+(?P<Destination>\S+)\s+",
+                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<Pointer>\d+)\s+(?P<Handles>\d+)\s+(?P<StartTime>[\w\-: \+]+) \w+\+\d+\s+(?P<Source>\S+)\s+(?P<Destination>\S+)\s+",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -1523,11 +1523,11 @@ def windows_vol(
                     else:
                         pass
                     jsonlist.append(json.dumps(jsondict))
-    elif plugin == "systeminfo":  # some results do not warrant extraction
+    elif plugin == "systeminfo":
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"(?P<LastModified>\d{4}\-\d{2}\-\d{2}\ \d{2}\:\d{2}\:\d{2}(?:\ [\w\+]+)?)\\t(?P<Type>[^\\]+)\\t(?P<Summary>[\w\-\ ]+)?[^t]+t(?P<Source>[\S\ ]+)?",
+                    r"(?P<LastModified>\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}(?: [\w\+]+)?)\\t(?P<Type>[^\\]+)\\t(?P<Summary>[\w\- ]+)?[^t]+t(?P<Source>[\S ]+)?",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -1556,7 +1556,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<PID>\d+)\s+(?P<TID>\S+)\s+(?P<Base>0x[A-Fa-f\d]+)\s+(?P<StartTime>\d{4}\-\d{2}\-\d{2}\ \d{2}\:\d{2}\:\d{2}(?:\ [\w\+]+)?)\s+(?P<ExitTime>\d{4}\-\d{2}\-\d{2}\ \d{2}\:\d{2}\:\d{2}(?:\ [\w\+]+)?)?",
+                    r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<PID>\d+)\s+(?P<TID>\S+)\s+(?P<Base>0x[A-Fa-f\d]+)\s+(?P<StartTime>\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}(?: [\w\+]+)?)\s+(?P<ExitTime>\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}(?: [\w\+]+)?)?",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -1589,7 +1589,7 @@ def windows_vol(
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<ModuleName>[\w\.]+)\s+(?P<StartAddress>0x[A-Fa-f\d]+)\s+(?P<EndAddress>0x[A-Fa-f\d]+)\s+(?P<StartTime>\d{4}\-\d{2}\-\d{2}\ \d{2}\:\d{2}\:\d{2}(?:\ [\w\+]+)?)",
+                    r"^(?P<ModuleName>[\w\.]+)\s+(?P<StartAddress>0x[A-Fa-f\d]+)\s+(?P<EndAddress>0x[A-Fa-f\d]+)\s+(?P<StartTime>\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}(?: [\w\+]+)?)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -1619,7 +1619,7 @@ def windows_vol(
             str(plugoutlist).replace("\\\\", "\\").split("Found USB Drive: ")
         ):
             for eachkv in re.findall(
-                r"(?P<DeviceName>[^\']+)\'\,\ \'\\tSerial\ Number\:\\t(?P<SerialNumber>[^\']+)\'\,\ \'\\tVendor\:\\t(?P<Vendor>[^\']+)\'\,\ \'\\tProduct\:\\t(?P<Product>[^\']+)\'\,\ \'\\tRevision\:\\t(?P<Revision>[^\']+)\'\,\ \'\\tClassGUID\:\\t(?P<ClassGUID>[^\']+)\'\,\ \'\'\,\ \'\\tContainerID\:\\t(?P<ContainerID>[^\']+)\'\,\ \'\\tMounted\ Volume\:\\t(?P<MountedVolume>[^\']+)\'\,\ \'\\tDrive\ Letter\:\\t(?P<DriveLetter>[^\']+)\'\,\ \'\\tFriendly\ Name\:\\t(?P<FriendlyName>[^\']+)\'\,\ \'\\tUSB\ Name\:\\t(?P<USBName>[^\']+)\'\,\ \'\\tDevice\ Last\ Connected\:\\t(?P<LastConnected>[^\']+)\'\,\ \'\'\,\ \'\\tClass\:\\t(?P<Class>[^\']+)\'\,\ \'\\tService\:\\t(?P<Service>[^\']+)\'\,\ \'\\tDeviceDesc\:\\t(?P<DeviceDescription>[^\']+)\'\,\ \'\\tCapabilities\:\\t(?P<Capabilities>[^\']+)\'\,\ \'\\tMfg\:\\t(?P<Mfg>[^\']+)\'\,\ \'\\tConfigFlags\:\\t(?P<ConfigFlags>[^\']+)\'\,\ \'\\tDriver\:\\t(?P<Driver>[^\']+)\'\,\ \'\\tCompatible\ IDs\:\'\,\ \'\\t\\t(?P<CompatibleIDs>[\S\ ]+)\'\,\ \'\\t\\t\'\,\ \'\\t\\t\'\,\ \'\\tHardwareID\:\'\,\ \'\\t\\t(?P<HardwareIDs>[\S\ ]+)\'\,\ \'\\t\\t\'\,\ \'\\t\\t\'\,\ \'Windows\ Portable\ Devices[^\\]+\\t[^\\]+\\t(?P<WindowsPortableDevices>[\S\ ]+)",
+                r"(?P<DeviceName>[^']+)', '\\tSerial Number:\\t(?P<SerialNumber>[^']+)', '\\tVendor:\\t(?P<Vendor>[^']+)', '\\tProduct:\\t(?P<Product>[^']+)', '\\tRevision:\\t(?P<Revision>[^']+)', '\\tClassGUID:\\t(?P<ClassGUID>[^']+)', '', '\\tContainerID:\\t(?P<ContainerID>[^']+)', '\\tMounted Volume:\\t(?P<MountedVolume>[^']+)', '\\tDrive Letter:\\t(?P<DriveLetter>[^']+)', '\\tFriendly Name:\\t(?P<FriendlyName>[^']+)', '\\tUSB Name:\\t(?P<USBName>[^']+)', '\\tDevice Last Connected:\\t(?P<LastConnected>[^']+)', '', '\\tClass:\\t(?P<Class>[^']+)', '\\tService:\\t(?P<Service>[^']+)', '\\tDeviceDesc:\\t(?P<DeviceDescription>[^']+)', '\\tCapabilities:\\t(?P<Capabilities>[^']+)', '\\tMfg:\\t(?P<Mfg>[^']+)', '\\tConfigFlags:\\t(?P<ConfigFlags>[^']+)', '\\tDriver:\\t(?P<Driver>[^']+)', '\\tCompatible IDs:', '\\t\\t(?P<CompatibleIDs>[\S ]+)', '\\t\\t', '\\t\\t', '\\tHardwareID:', '\\t\\t(?P<HardwareIDs>[\S ]+)', '\\t\\t', '\\t\\t', 'Windows Portable Devices[^\\]+\\t[^\\]+\\t(?P<WindowsPortableDevices>[\S ]+)",
                 plugout,
             ):
                 kv = list(eachkv)
@@ -1710,7 +1710,7 @@ def windows_vol(
     elif plugin == "userassist":
         for plugout in str(plugoutlist).split("__--------------------------"):
             for eachkv in re.findall(
-                r"^Registry\:\ (?P<RegistryHive>[^\']+)\s+\'\,\ \'Path\:\ (?P<RegistryKey>[^\']+)\'\,\ \'Last\ updated\:\s+(?P<LastWriteTime>[\d\-\:\ ]+)\ ",
+                r"^Registry: (?P<RegistryHive>[^']+)\s+', 'Path: (?P<RegistryKey>[^']+)', 'Last updated:\s+(?P<LastWriteTime>[\d\-: ]+) ",
                 plugout.split("REG_BINARY    ")[0][4:],
             ):
                 kv = list(eachkv)
@@ -1734,7 +1734,7 @@ def windows_vol(
                     pass
             for eachinfo in plugout.split("REG_BINARY    ")[1:]:
                 for eachkv in re.findall(
-                    r"(?P<RegistryKeyValue>[^\']+)\ \:\ \'\,\ \'Count\:\s+(?P<ValueCount>\d+)\'\,\ \'Focus\ Count\:\s+(?P<FocusCount>\d+)\'\,\ \'Time Focused\:\s+(?P<TimeFocused>[\d\:\.]+)\'\,\ \'Last updated\:\s+(?P<LastWriteTime>[\d\-\:\ ]+)\ ",
+                    r"(?P<RegistryKeyValue>[^']+) : ', 'Count:\s+(?P<ValueCount>\d+)', 'Focus Count:\s+(?P<FocusCount>\d+)', 'Time Focused:\s+(?P<TimeFocused>[\d:\.]+)', 'Last updated:\s+(?P<LastWriteTime>[\d\-: ]+) ",
                     eachinfo,
                 ):
                     kv = list(eachkv)
@@ -1841,7 +1841,7 @@ def windows_vol(
                 )
                 for eachinfo in plugout.split("VAD node @ ")[1:]:
                     for eachkv in re.findall(
-                        r"^(?P<VADNode>0x[A-Fa-f\d]+)\s+Start\s+(?P<Start>0x[A-Fa-f\d]+)\s+End\s+(?P<End>0x[A-Fa-f\d]+)\s+Tag\s+(?P<Tag>[^\'\ ]+)\ ?\'\,\ \'Flags\:\s+(?P<Flags>[\S\ ]+)?\'\,\ \'Protection\:\s+(?P<Protection>[\S\ ]+)\'\,\ \'Vad\ Type\:\s+(?P<VADType>[\S\ ]+)\'\,\ \'ControlArea\s+(?P<ControlArea>[\S\ ]+)\s+Segment\s+(?P<Segment>[A-Fa-f\d]+)\'\,\ \'NumberOfSectionReferences\:\s+(?P<NumberofSectionReferences>\d+)\s+NumberOfPfnReferences\:\s+(?P<NumberofPfnReferences>\d+)\'\,\ \'NumberOfMappedViews\:\s+(?P<NumberofMappedViews>\d+)\s+NumberOfUserReferences\:\s+(?P<NumberofUserReferences>\d+)\'\,\ \'Control\ Flags\:\s+(?P<ControlFlags>[\S\ ]+)?\'\,\ \'First\ prototype\ PTE\:\s+(?P<FirstPrototypePTE>[A-Fa-f\d]+)\s+Last\ contiguous\ PTE\:\s+(?P<LastContiguousPTE>[A-Fa-f\d]+)\'\,\ \'Flags2\:\s+(?P<Flags2>[^\']+)?",
+                        r"^(?P<VADNode>0x[A-Fa-f\d]+)\s+Start\s+(?P<Start>0x[A-Fa-f\d]+)\s+End\s+(?P<End>0x[A-Fa-f\d]+)\s+Tag\s+(?P<Tag>[^' ]+) ?', 'Flags:\s+(?P<Flags>[\S ]+)?', 'Protection:\s+(?P<Protection>[\S ]+)', 'Vad Type:\s+(?P<VADType>[\S ]+)', 'ControlArea\s+(?P<ControlArea>[\S ]+)\s+Segment\s+(?P<Segment>[A-Fa-f\d]+)', 'NumberOfSectionReferences:\s+(?P<NumberofSectionReferences>\d+)\s+NumberOfPfnReferences:\s+(?P<NumberofPfnReferences>\d+)', 'NumberOfMappedViews:\s+(?P<NumberofMappedViews>\d+)\s+NumberOfUserReferences:\s+(?P<NumberofUserReferences>\d+)', 'Control Flags:\s+(?P<ControlFlags>[\S ]+)?', 'First prototype PTE:\s+(?P<FirstPrototypePTE>[A-Fa-f\d]+)\s+Last contiguous PTE:\s+(?P<LastContiguousPTE>[A-Fa-f\d]+)', 'Flags2:\s+(?P<Flags2>[^']+)?",
                         eachinfo,
                     ):
                         kv = list(eachkv)
@@ -1938,3 +1938,4 @@ def windows_vol(
                         jsonlist.append(json.dumps(jsondict))
     else:
         pass
+    return jsonlist

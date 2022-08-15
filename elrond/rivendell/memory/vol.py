@@ -102,7 +102,7 @@ def assess_volatility_choice(
     return profile, vssmem
 
 
-def doProfile(volchoice, artefact):
+def select_profile(volchoice, artefact):
     ziphexdump = ""
     profileselect = input(
         "\t   1) Win10x64_15063\t    2) Win10x86_15063\t  3) Win10x64_14393\t  4) Win10x86_14393\t  5) Win10x64_10586\t  6) Win10x86_10586\n\t   7) Win8SP1x64_18340\t    8) Win7SP1x64_24000\t  9) Win7SP1x86_24000\t 10) Win7SP1x64_23418\t 11) Win7SP1x86_23418\n\t  12) Win2012R2x64_18340   13) Win2008R2SP1x64_23418\n\t  14) macOS10.13.6\t   15) macOS10.12.6\n\t  16) RHELServer6.7x64\t   17) RHELServer5.9x64\t 18) CentOS7.3x64\n\t  19) Ubuntu18.04.3x64\t   20) Ubuntu16.04.5x64\t 21) Debian9.4x64\n\t  22) Custom macOS/Linux profile\t\t\t "
@@ -191,7 +191,7 @@ def doProfile(volchoice, artefact):
             profile = choose_custom_profile(volchoice)
     else:
         print("\tInvalid selection, please try again.\n")
-        doProfile(volchoice, artefact)
+        select_profile(volchoice, artefact)
     return profileselect, profile, ziphexdump
 
 
@@ -324,7 +324,7 @@ def dump_nix_ziphex(d, profileselect, profile, ziphexdump):
 
 
 def choose_custom_profile(volchoice):
-    customready, waitingquotes = input("     Ready? Y/n [Y] "), [
+    customready, waitingquotes = input("     Ready? Yes(Y)/No(N)/Skip(S) [Y] "), [
         "Ready when you are",
         "Take you time",
         "No rush",
@@ -337,20 +337,26 @@ def choose_custom_profile(volchoice):
             r"\ [^\ ]+\ [A-Z][a-z]{2}\ [\d\ +]{2}\ [^\ ]+\ (.*)\.json",
             re.IGNORECASE,
         )
-        imported = re.findall(
-            pattern,
-            str(
-                subprocess.Popen(
-                    [
-                        "ls",
-                        "-lah",
-                        "/usr/local/lib/python3.8/dist-packages/volatility3/volatility3/symbols/linux/",
-                    ],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                ).communicate()[0]
-            ),
-        )
+        imported = str(
+            re.findall(
+                pattern,
+                str(
+                    subprocess.Popen(
+                        [
+                            "ls",
+                            "-lah",
+                            "/usr/local/lib/python3.8/dist-packages/volatility3/volatility3/symbols/windows/ntkrnlmp.pdb/",
+                            "/usr/local/lib/python3.8/dist-packages/volatility3/volatility3/symbols/windows/ntkrpamp.pdb/",
+                            "/usr/local/lib/python3.8/dist-packages/volatility3/volatility3/symbols/windows/tcpip.pdb/",
+                            "/usr/local/lib/python3.8/dist-packages/volatility3/volatility3/symbols/mac/",
+                            "/usr/local/lib/python3.8/dist-packages/volatility3/volatility3/symbols/linux/",
+                        ],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                    ).communicate()[0]
+                ),
+            )
+        ).replace(".json.xz", "")
     else:
         symbolorprofile, pattern = "profile", re.compile(
             r"\w([^\\]+\w)\s+\-\sA Profile for (?:Mac|Linux)\s[^\s]+", re.IGNORECASE
@@ -365,42 +371,62 @@ def choose_custom_profile(volchoice):
                 ).communicate()[0]
             ),
         )
-    if customready == "n":
-        print("    OK. {}...".format(random.choice(waitingquotes)))
-        time.sleep(10)
+    if customready != "Y" and customready != "N" and customready != "S":
+        print("Invalid selection. You can select either Yes (Y), No (N) or Skip (S).")
         choose_custom_profile(volchoice)
     else:
-        customsymbolorprofile = process_custom_profile(
-            imported, symbolorprofile, " you have just created:"
-        )
-    return customsymbolorprofile
+        if customready == "N":
+            print("    OK. {}...".format(random.choice(waitingquotes)))
+            time.sleep(5)
+            choose_custom_profile(volchoice)
+        elif customready == "Y":
+            customsymbolorprofile = process_custom_profile(
+                imported, symbolorprofile, " you have just created:"
+            )
+            if "windows" in customsymbolorprofile:
+                profileplatform = "Windows"
+            elif "mac" in customsymbolorprofile:
+                profileplatform = "macOS"
+            else:
+                profileplatform = "Linux"
+            customprofile = "{}::{}".format(customsymbolorprofile, profileplatform)
+        else:
+            customprofile = "SKIPPED"
+    return customprofile
 
 
 def process_custom_profile(imported, symbolorprofile, customprofileinsert):
-    customsymbolorprofile = input(
-        "    Please provide the name of the custom {}{} ".format(
-            symbolorprofile, customprofileinsert
-        )
-    )
-    if customsymbolorprofile not in str(imported):
-        print(
-            "      Invalid {}. This {} does not match any which have been imported into volatility.".format(
-                symbolorprofile, symbolorprofile
+    if customprofileinsert != "":
+        customsymbolorprofile = input(
+            "    If importing a Windows symbol table, enter 'Windows' otherwise please provide the name of the custom {}{} ".format(
+                symbolorprofile, customprofileinsert
             )
         )
-        if len(imported) > 0:
+        if customsymbolorprofile != "Windows" and customsymbolorprofile not in str(
+            imported
+        ):
             print(
-                "       These are the currently imported and selectable {}s: {}".format(
-                    symbolorprofile, str(imported)[2:-2].replace("'", "")
+                "      Invalid {}. This {} does not match any which have been imported into volatility.".format(
+                    symbolorprofile, symbolorprofile
                 )
+            )
+            if len(imported) > 0:
+                print(
+                    "       These are the currently imported and selectable {}s: {}".format(
+                        symbolorprofile, str(imported)[2:-2].replace("'", "")
+                    )
+                )
+            else:
+                print(
+                    "      No valid {}s have been imported into volatility, please try again...".format(
+                        symbolorprofile
+                    )
+                )
+            customsymbolorprofile = process_custom_profile(
+                imported, symbolorprofile, ":"
             )
         else:
-            print(
-                "      No valid {}s have been imported into volatility, please try again...".format(
-                    symbolorprofile
-                )
-            )
-        customsymbolorprofile = process_custom_profile(imported, symbolorprofile, ":")
+            pass
     else:
         pass
     return customsymbolorprofile

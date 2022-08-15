@@ -310,3 +310,4 @@ def linux_vol3(
                     jsonlist.append(json.dumps(jsondict))
     else:
         pass
+    return jsonlist

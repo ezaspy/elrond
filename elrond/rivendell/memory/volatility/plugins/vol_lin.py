@@ -2,7 +2,8 @@
 import json
 import re
 
-def mac_vol(
+
+def linux_vol(
     volver,
     profile,
     symbolorprofile,
@@ -11,134 +12,39 @@ def mac_vol(
     jsondict,
     jsonlist,
 ):
-    if plugin == "mac_apihooks_kernel":
+    if plugin == "linux_arp":
         for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<TableName>\w+(?:\ \-\>)?)\ +(?P<Index>\d+)\ +(?P<Address>0x[A-Fa-f\d]+)\ +(?P<Symbol>\w+)?\ +(?P<Inlined>\w+)\ +(?P<Shadowed>\w+)\ +(?P<Permissions>\S+)\ +(?P<HookIn>\w+)",
+                    r"\[(?P<IPAddress>[A-Fa-f\d\.\:]+)\ +\]\ at\ (?P<MACAddress>[A-Fa-f\d\:]+)\ +on\ +(?P<Interface>\S+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
-                    if len(kv) > 0:
+                    if len(kv) > 2:
+                        print(kv)
                         (
                             jsondict["VolatilityVersion"],
                             jsondict[symbolorprofile],
                             jsondict["VolatilityPlugin"],
-                            jsondict["TableName"],
-                            jsondict["Index"],
-                            jsondict["HookIn"],
-                            jsondict["Offset"],
-                            jsondict["Inlined"],
-                            jsondict["Shadowed"],
-                            jsondict["Perms"],
-                            jsondict["Symbol"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[0],
-                            kv[1],
-                            kv[7],
-                            kv[2],
-                            kv[4],
-                            kv[5],
-                            kv[6],
-                            kv[3],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_apihooks":
-        for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
-                for eachkv in re.findall(
-                    r"^(?P<HookName>[^\d]+)\ +(?P<PID>\d+)\ +(?P<Symbol>\w+)\ +(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<LazyHook>\w+)\ +(?P<PointerHook>\w+)\ +(?P<APIHook>\w+)\ +(?P<HookType>\w+)?\ +(?P<HookOffset>0x[A-Fa-f\d]+)\ +(?P<HookLibrary>[\S\ ]+)",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
-                ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["HookName"],
-                            jsondict["HookLibrary"],
-                            jsondict["PID"],
-                            jsondict["Offset"],
-                            jsondict["Symbol"],
-                            jsondict["SymbolOffset"],
-                            jsondict["LazyHook"],
-                            jsondict["PointerHook"],
-                            jsondict["APIHook"],
-                            jsondict["HookType"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[0].strip(),
-                            kv[9],
-                            kv[1],
-                            kv[8],
-                            kv[2],
-                            kv[3],
-                            kv[4],
-                            kv[5],
-                            kv[6],
-                            kv[7],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_arp":
-        for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
-                for eachkv in re.findall(
-                    r"^(?P<SourceIP>[A-Fa-f\d\.\:]+)\ +(?P<DestinationIP>[A-Fa-f\d\.\:]+)\ +(?P<Interface>\w+)\ +(?P<PacketsSent>\d+)\ +(?P<PacketsReceived>\d+)\ +(?P<Time>\d{4}\-\d{2}\-\d{2}\ \d{2}\:\d{2}\:\d{2}\ \w+\+\d+)\ +(?P<Expiration>\w+)\ +(?P<Delta>\w+)",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
-                ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["Time"],
-                            jsondict["SourceIP"],
-                            jsondict["DestinationIP"],
+                            jsondict["IPAddress"],
+                            jsondict["MACAddress"],
                             jsondict["Interface"],
-                            jsondict["PacketsSent"],
-                            jsondict["PacketsReceived"],
-                            jsondict["Expiration"],
-                            jsondict["Delta"],
                         ) = (
                             volver,
                             profile,
                             plugin,
-                            kv[5],
                             kv[0],
                             kv[1],
                             kv[2],
-                            kv[3],
-                            kv[4],
-                            kv[6],
-                            kv[7],
                         )
                     else:
                         pass
                     jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_bash":
+    elif plugin == "linux_bash":
         for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"(?P<PID>\d+)\ +(?P<Process>\w+)\ +(?P<Time>\d{4}\-\d{2}\-\d{2}\ \d{2}\:\d{2}\:\d{2}\ \w+\+\d+)\ +(?P<Command>.*)",
+                    r"(?P<PID>\d+)\ +(?P<Environment>\S+)\ +(?P<CommandTime>\d{4}\-\d{2}\-\d{2}\ \d{2}\:\d{2}\:\d{2}(?:\ [\w\+]+)?)\ +(?P<Command>[\S\ ]+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -147,29 +53,82 @@ def mac_vol(
                             jsondict["VolatilityVersion"],
                             jsondict[symbolorprofile],
                             jsondict["VolatilityPlugin"],
-                            jsondict["Time"],
-                            jsondict["Process"],
-                            jsondict["PID"],
                             jsondict["Command"],
+                            jsondict["CommandTime"],
+                            jsondict["PID"],
+                            jsondict["Environment"],
                         ) = (
                             volver,
                             profile,
                             plugin,
-                            kv[2],
-                            kv[1],
-                            kv[0],
                             kv[3],
+                            kv[2],
+                            kv[0],
+                            kv[1],
                         )
                     else:
                         pass
                     jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_check_fop":
+    elif plugin == "linux_bash_env":
         for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<HandlerName>[\w\/]+)\ +(?P<Handler>0x[A-Fa-f\d]+)\ +(?P<Module>\w+)\ +(?P<HandlerSymbol>\w+)",
+                    r"(?P<PID>\d+)\ +(?P<Environment>\S+)\ +(?P<Vars>[\S\ ]+)",
+                    eachinfo.replace("\\\\ n", "\\\\n"),
+                ):
+                    kv = list(eachkv)
+                    if len(kv) > 2:
+                        print(kv)
+                        (
+                            jsondict["VolatilityVersion"],
+                            jsondict[symbolorprofile],
+                            jsondict["VolatilityPlugin"],
+                            jsondict["Environment"],
+                            jsondict["PID"],
+                            Vars,
+                        ) = (
+                            volver,
+                            profile,
+                            plugin,
+                            kv[1],
+                            kv[0],
+                            " " + kv[2],
+                        )
+                    else:
+                        pass
+                    vardict, varlist = {}, []
+                    if kv[2] != " ":
+                        Variables = re.sub(r"\ ([A-Z\d\_]+)", r"====\1", Vars)
+                        for eachvar in Variables.split("===="):
+                            for varkv in re.findall(
+                                r"(?P<VarKey>[^\=]+)\=(?P<VarVal>[\S\ ]+)",
+                                eachvar,
+                            ):
+                                if len(varkv) == 2:
+                                    vardict[varkv[0]] = (
+                                        varkv[1]
+                                        .replace(
+                                            "\\\\\\\\\\\\\\\\",
+                                            "\\\\\\\\",
+                                        )
+                                        .replace("\\\\\\\\", "\\\\")
+                                        .replace("\\\\", "\\")
+                                        .replace('\\\\\\"', '\\"')
+                                        .replace('\\"', '"')
+                                        .replace('"', "'")
+                                    )
+                                else:
+                                    pass
+                        varlist.append(json.dumps(vardict))
+                        jsondict["Variables"] = varlist
+                    else:
+                        pass
+                    jsonlist.append(json.dumps(jsondict))
+    elif plugin == "linux_bash_hash":
+        for plugout in plugoutlist:
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
+                for eachkv in re.findall(
+                    r"(?P<PID>\d+)\ +(?P<ProcessName>\S+)\ +(?P<Count>\d+)\ +(?P<Command>\S+)\ +(?P<CommandPath>[\S\ ]+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -178,60 +137,29 @@ def mac_vol(
                             jsondict["VolatilityVersion"],
                             jsondict[symbolorprofile],
                             jsondict["VolatilityPlugin"],
-                            jsondict["HandlerName"],
-                            jsondict["Handler"],
-                            jsondict["HandlerSymbol"],
-                            jsondict["Offset"],
-                            jsondict["Module"],
+                            jsondict["ProcessName"],
+                            jsondict["ProcessPath"],
+                            jsondict["Environment"],
+                            jsondict["PID"],
+                            jsondict["Count"],
                         ) = (
                             volver,
                             profile,
                             plugin,
-                            kv[1],
-                            kv[2],
+                            kv[3],
                             kv[4],
-                            kv[0],
-                            kv[3],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_check_mig_table":
-        for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
-                for eachkv in re.findall(
-                    r"(?P<Index>\d+)\ +(?P<RoutineName>[\w\/]+)\ +(?P<Handler>0x[A-Fa-f\d]+)",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
-                ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["RoutineName"],
-                            jsondict["Handler"],
-                            jsondict["Index"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
                             kv[1],
-                            kv[2],
                             kv[0],
+                            kv[2],
                         )
                     else:
                         pass
                     jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_check_syscalls":
+    elif plugin == "linux_check_idt":
         for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<TableName>\w+)\ +(?P<Index>\d+)\ +(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<Symbol>\w+)\ +(?P<Status>\w+)",
+                    r"(?P<Index>0x[A-Fa-f\d]+)\ +(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<Symbol>\S+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -240,103 +168,56 @@ def mac_vol(
                             jsondict["VolatilityVersion"],
                             jsondict[symbolorprofile],
                             jsondict["VolatilityPlugin"],
-                            jsondict["TableName"],
+                            jsondict["Index"],
+                            jsondict["Offset"],
                             jsondict["Symbol"],
-                            jsondict["Offset"],
-                            jsondict["Status"],
+                        ) = (
+                            volver,
+                            profile,
+                            plugin,
+                            kv[0],
+                            kv[1],
+                            kv[2],
+                        )
+                    else:
+                        pass
+                    jsonlist.append(json.dumps(jsondict))
+    elif plugin == "linux_check_syscall":
+        for plugout in plugoutlist:
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
+                for eachkv in re.findall(
+                    r"(?P<Table>\d+bit)\ +(?P<Index>\d+)\ +(?P<SystemCall>\S+)?\ +(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<Symbol>\S+)",
+                    eachinfo.replace("\\\\ n", "\\\\n"),
+                ):
+                    kv = list(eachkv)
+                    if len(kv) > 0:
+                        (
+                            jsondict["VolatilityVersion"],
+                            jsondict[symbolorprofile],
+                            jsondict["VolatilityPlugin"],
                             jsondict["Index"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[0],
-                            kv[3],
-                            kv[2],
-                            kv[4],
-                            kv[1],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_check_sysctl":
-        for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
-                for eachkv in re.findall(
-                    r"^(?P<Name>\w+)\ +(?P<Number>\d+)\ +(?P<Permisssions>[RWLXrwlx\-]+)\ +(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<Value>[\w\-\.\ ]+)?\ +(?P<Module>[\w\.]+)\ +(?P<Status>\w+)",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
-                ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["Name"],
-                            jsondict["Number"],
-                            jsondict["Value"],
                             jsondict["Offset"],
-                            jsondict["Permisssions"],
-                            jsondict["Module"],
-                            jsondict["Status"],
+                            jsondict["Symbol"],
+                            jsondict["Table"],
+                            jsondict["SystemCall"],
                         ) = (
                             volver,
                             profile,
                             plugin,
-                            kv[0],
                             kv[1],
-                            kv[4].strip(),
                             kv[3],
-                            kv[2],
-                            kv[5],
-                            kv[6],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_devfs":
-        for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
-                for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<Path>[\w\/]+)\ +(?P<Member>\w+)\ +(?P<HandlerOffset>0x[A-Fa-f\d]+)\ +(?P<Module>[\w\.]+)?\ +(?P<Handler>\w+)?",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
-                ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["Path"],
-                            jsondict["Offset"],
-                            jsondict["Member"],
-                            jsondict["Module"],
-                            jsondict["Handler"],
-                            jsondict["HandlerOffset"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[1],
-                            kv[0],
-                            kv[2],
                             kv[4],
-                            kv[5],
-                            kv[3],
+                            kv[0],
+                            kv[2],
                         )
                     else:
                         pass
                     jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_dyld_maps":
+    elif plugin == "linux_check_tty":
         for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<PID>\d+)\ +(?P<DYLDName>\w+)\ +(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<MapName>\S+)",
+                    r"(?P<TTY>tty\d+)\ +(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<Symbol>\S+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -345,142 +226,198 @@ def mac_vol(
                             jsondict["VolatilityVersion"],
                             jsondict[symbolorprofile],
                             jsondict["VolatilityPlugin"],
-                            jsondict["Name"],
+                            jsondict["TTY"],
+                            jsondict["Offset"],
+                            jsondict["Symbol"],
+                        ) = (
+                            volver,
+                            profile,
+                            plugin,
+                            kv[0],
+                            kv[1],
+                            kv[2],
+                        )
+                    else:
+                        pass
+                    jsonlist.append(json.dumps(jsondict))
+    elif plugin == "linux_dmesg":
+        for plugout in plugoutlist:
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
+                for eachkv in re.findall(
+                    r"^\[(?P<StartTimeDelta>[\d\.]+)\]\s+(?P<Message>[\S\ ]+)",
+                    eachinfo.replace("\\\\ n", "\\\\n"),
+                ):
+                    kv = list(eachkv)
+                    if len(kv) > 0:
+                        (
+                            jsondict["VolatilityVersion"],
+                            jsondict[symbolorprofile],
+                            jsondict["VolatilityPlugin"],
+                            jsondict["Message"],
+                            jsondict["StartTimeDelta"],
+                        ) = (
+                            volver,
+                            profile,
+                            plugin,
+                            kv[1],
+                            kv[0],
+                        )
+                    else:
+                        pass
+                    jsonlist.append(json.dumps(jsondict))
+    elif plugin == "linux_elfs":
+        for plugout in plugoutlist:
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
+                for eachkv in re.findall(
+                    r"(?P<PID>\d+)\ +(?P<ElfName>[\S\-]+)\ +(?P<StartAddress>0x[A-Fa-f\d]+)\ +(?P<EndAddress>0x[A-Fa-f\d]+)\ +(?P<ElfPath>[\S\ ]+\w)\ +(?P<Needed>[\S\ ]+)",
+                    eachinfo.replace("\\\\ n", "\\\\n"),
+                ):
+                    kv = list(eachkv)
+                    if len(kv) > 0:
+                        (
+                            jsondict["VolatilityVersion"],
+                            jsondict[symbolorprofile],
+                            jsondict["VolatilityPlugin"],
+                            jsondict["ElfName"],
+                            jsondict["ElfPath"],
                             jsondict["PID"],
-                            jsondict["Offset"],
-                            jsondict["MapName"],
+                            jsondict["Needed"],
+                            jsondict["StartAddress"],
+                            jsondict["EndAddress"],
                         ) = (
                             volver,
                             profile,
                             plugin,
                             kv[1],
-                            kv[0],
-                            kv[2],
-                            kv[3],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_ifconfig":
-        for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
-                for eachkv in re.findall(
-                    r"^(?P<Interface>[A-Fa-f\d\.\:]+)\ +(?P<SourceIP>[A-Fa-f\d\.\:]+)\ +(?P<MACAddess>\w+)\ +(?P<Promiscuous>\d+)",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
-                ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["SourceIP"],
-                            jsondict["DestinationIP"],
-                            jsondict["Interface"],
-                            jsondict["Promiscuous"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[1],
-                            kv[2],
-                            kv[0],
-                            kv[3],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_kernel_classes":
-        for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
-                for eachkv in re.findall(
-                    r"^(?P<Class>\w+)\ +(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<Module>\S+)\ +(?P<Handler>\w+)?",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
-                ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["Class"],
-                            jsondict["Module"],
-                            jsondict["Handler"],
-                            jsondict["Offset"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[0],
-                            kv[2],
-                            kv[3],
-                            kv[1],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_kevents":
-        for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
-                for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<EventName>\S+)\ +(?P<PID>\d+)\ +(?P<Identifier>\w+)\ +(?P<Filter>[\w\.]+)?\ +(?P<Context>.*)?",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
-                ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["EventName"],
-                            jsondict["PID"],
-                            jsondict["Identifier"],
-                            jsondict["Filter"],
-                            jsondict["Context"],
-                            jsondict["Offset"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[1],
-                            kv[2],
-                            kv[3],
                             kv[4],
+                            kv[0],
                             kv[5],
+                            kv[2],
+                            kv[3],
+                        )
+                    else:
+                        pass
+                    jsonlist.append(json.dumps(jsondict))
+    elif plugin == "linux_enumerate_files":
+        for plugout in plugoutlist:
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
+                for eachkv in re.findall(
+                    r"(?P<InodeAddress>0x[A-Fa-f\d]+)\ +(?P<Inode>[\d\-]+)\ +(?P<Filepath>[\S\ ]+)",
+                    eachinfo.replace("\\\\ n", "\\\\n"),
+                ):
+                    kv = list(eachkv)
+                    if len(kv) > 0:
+                        (
+                            jsondict["VolatilityVersion"],
+                            jsondict[symbolorprofile],
+                            jsondict["VolatilityPlugin"],
+                            jsondict["Inode"],
+                            jsondict["Filepath"],
+                            jsondict["InodeAddress"],
+                        ) = (
+                            volver,
+                            profile,
+                            plugin,
+                            kv[1],
+                            kv[2],
                             kv[0],
                         )
                     else:
                         pass
                     jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_keychaindump":
+    elif plugin == "linux_getcwd":
         for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Key>[A-Fa-f\d]{48})",
+                    r"(?P<ProcessName>\S+)\ +(?P<PID>\d+)\ +(?P<CWD>[\S\ ]+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
+                    kv = list(eachkv)
+                    if len(kv) > 1:
+                        (
+                            jsondict["VolatilityVersion"],
+                            jsondict[symbolorprofile],
+                            jsondict["VolatilityPlugin"],
+                            jsondict["ProcessName"],
+                            jsondict["PID"],
+                            jsondict["CWD"],
+                        ) = (
+                            volver,
+                            profile,
+                            plugin,
+                            kv[0],
+                            kv[1],
+                            kv[2],
+                        )
+                    else:
+                        pass
+                    jsonlist.append(json.dumps(jsondict))
+    elif plugin == "linux_ifconfig":
+        for plugout in plugoutlist:
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
+                for eachkv in re.findall(
+                    r"(?P<Interface>\S+)\ +(?P<IPAddress>[\d\.]+)\ +(?P<MACAddress>[A-Fa-f\d\:]+)\ +(?P<PromiscousMode>\S+)",
+                    eachinfo.replace("\\\\ n", "\\\\n"),
+                ):
+                    kv = list(eachkv)
+                    if len(kv) > 0:
+                        (
+                            jsondict["VolatilityVersion"],
+                            jsondict[symbolorprofile],
+                            jsondict["VolatilityPlugin"],
+                            jsondict[""],
+                        ) = (volver, profile, plugin, kv[0])
+                    else:
+                        pass
+                    jsonlist.append(json.dumps(jsondict))
+    elif plugin == "linux_info_regs":
+        for plugout in str(plugoutlist).split("Process Name: "):
+            for eachkv in re.findall(
+                r"^(?:\[(?P<ProcessName>[^\]]+)\])?\ \-\ PID\:\ (?P<PID>\d+)\'\,\ \'Registers\ \(per\ thread\)\:\'\,\ \'\ +Thread\ Name\:\ (?P<ThreadName>[^\']+)\'\,\ \'\ +(?P<RegisterValues>[\S\ ]+)",
+                plugout,
+            ):
+                kv = list(eachkv)
+                if len(kv) > 3:
                     (
                         jsondict["VolatilityVersion"],
                         jsondict[symbolorprofile],
                         jsondict["VolatilityPlugin"],
-                        jsondict["Key"],
-                    ) = (volver, profile, plugin, eachkv)
-                    jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_ldrmodules":
+                        jsondict["ProcessName"],
+                        jsondict["PID"],
+                        jsondict["ThreadName"],
+                        RegisterValues,
+                    ) = (
+                        volver,
+                        profile,
+                        plugin,
+                        kv[0],
+                        kv[1],
+                        kv[2],
+                        kv[3],
+                    )
+                else:
+                    pass
+                regdict, reglist = {}, []
+                if kv[3] != "', '', '":
+                    for eachreg in RegisterValues.split("', '"):
+                        for regkv in re.findall(
+                            r"(?P<Register>\w+)\ +\:\ +(?P<RegisterValue>[^\\]+)",
+                            eachreg,
+                        ):
+                            if len(regkv) == 2:
+                                regdict[regkv[0]] = regkv[1]
+                            else:
+                                pass
+                    reglist.append(json.dumps(regdict))
+                    jsondict["Registers"] = reglist
+                else:
+                    pass
+                jsonlist.append(json.dumps(jsondict))
+    elif plugin == "linux_ldrmodules":
         for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"(?P<PID>\d+)\ +(?P<ModuleName>.*)\ +(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<Filepath>\S+)\ +(?P<Kernel>\w+)\ +(?P<DyLibID>[\w\.]+)?",
+                    r"(?P<PID>\d+)\ +(?P<ModuleName>[\S\ ]+\w)\ +(?P<StartAddress>0x[A-Fa-f\d]+)\ +(?P<Filepath>[\S\ ]+\w)\ +(?P<Kernel>\w+)\ +(?P<Libc>\w+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -490,92 +427,86 @@ def mac_vol(
                             jsondict[symbolorprofile],
                             jsondict["VolatilityPlugin"],
                             jsondict["ModuleName"],
+                            jsondict["Filepath"],
                             jsondict["PID"],
+                            jsondict["StartAddress"],
+                            jsondict["Kernel"],
+                            jsondict["Libc"],
+                        ) = (
+                            volver,
+                            profile,
+                            plugin,
+                            kv[1],
+                            kv[3],
+                            kv[0],
+                            kv[2],
+                            kv[4],
+                            kv[5],
+                        )
+                    else:
+                        pass
+                    jsonlist.append(json.dumps(jsondict))
+    elif plugin == "linux_library_list":
+        for plugout in plugoutlist:
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
+                for eachkv in re.findall(
+                    r"(?P<Task>\S+)\ +(?P<PID>\d+)\ +(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<Filepath>[\S\ ]+)",
+                    eachinfo.replace("\\\\ n", "\\\\n"),
+                ):
+                    kv = list(eachkv)
+                    if len(kv) > 0:
+                        (
+                            jsondict["VolatilityVersion"],
+                            jsondict[symbolorprofile],
+                            jsondict["VolatilityPlugin"],
+                            jsondict["Task"],
+                            jsondict["Filepath"],
+                            jsondict["PID"],
+                            jsondict["Offset"],
+                        ) = (
+                            volver,
+                            profile,
+                            plugin,
+                            kv[0],
+                            kv[3],
+                            kv[1],
+                            kv[2],
+                        )
+                    else:
+                        pass
+                    jsonlist.append(json.dumps(jsondict))
+    elif plugin == "linux_lsof":
+        for plugout in plugoutlist:
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
+                for eachkv in re.findall(
+                    r"(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<ProcessName>\S+)\ +(?P<PID>\d+)\ +(?P<FileDescriptor>\d+)\ +(?P<Filepath>[\S\ ]+)",
+                    eachinfo.replace("\\\\ n", "\\\\n"),
+                ):
+                    kv = list(eachkv)
+                    if len(kv) > 0:
+                        (
+                            jsondict["VolatilityVersion"],
+                            jsondict[symbolorprofile],
+                            jsondict["VolatilityPlugin"],
+                            jsondict["ProcessName"],
+                            jsondict["PID"],
+                            jsondict["FileDescriptor"],
                             jsondict["Filepath"],
                             jsondict["Offset"],
-                            jsondict["Kernel"],
-                            jsondict["DyLibID"],
                         ) = (
                             volver,
                             profile,
                             plugin,
                             kv[1],
-                            kv[0],
+                            kv[2],
                             kv[3],
-                            kv[2],
                             kv[4],
-                            kv[5],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_list_sessions":
-        for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
-                for eachkv in re.findall(
-                    r"(?P<PID>\d+)\ +(?P<SessionName>\S+)\ +(?P<AccountName>[\w\.]+)?",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
-                ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["SessionName"],
-                            jsondict["AccountName"],
-                            jsondict["PID"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[1],
-                            kv[2],
                             kv[0],
                         )
                     else:
                         pass
                     jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_lsmod_iokit":
-        for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
-                for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<ModuleAddress>0x[A-Fa-f\d]+)\ +(?P<Size>\d+)\ +(?P<References>[\d\-]+)\ +(?P<Version>\d+)\ +(?P<ModuleName>[\w\.]+)\ +(?P<Path>\S+)",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
-                ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["Name"],
-                            jsondict["Version"],
-                            jsondict["References"],
-                            jsondict["Path"],
-                            jsondict["Offset"],
-                            jsondict["ModuleAddress"],
-                            jsondict["Size"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[5],
-                            kv[4],
-                            kv[3],
-                            kv[7],
-                            kv[0],
-                            kv[1],
-                            kv[2],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_malfind":
+    elif plugin == "linux_malfind":
         for plugout in str(plugoutlist).split("Process"):
             for eachkv in re.findall(
                 r"^\:\ (?P<ProcessName>.*)\ Pid\:\ (?P<PID>\d+)\ Address\:\ (?P<Offset>0x[A-Fa-f\d]+)\ File\:\ (?P<File>\w+)\'\,\ \'Protection\:\ (?P<Protection>\w+)\'\,\ \'\'\,\ \'(?P<DataAssembly>[\S\s]+)",
@@ -615,16 +546,10 @@ def mac_vol(
                     asmlist,
                     allasm,
                 ) = ({}, [], "", "", {}, [], "")
-                for eachdata in DataAssembly.split("', '', '")[0].split(
-                    "', '"
-                ):
-                    hexdata = hexdata + str(eachdata)[12:60].replace(
-                        " ", ""
-                    )
+                for eachdata in DataAssembly.split("', '', '")[0].split("', '"):
+                    hexdata = hexdata + str(eachdata)[12:60].replace(" ", "")
                     asciidata = asciidata + str(eachdata)[63:81]
-                for eachasm in DataAssembly.split("', '', '")[1].split(
-                    "', '"
-                ):
+                for eachasm in DataAssembly.split("', '', '")[1].split("', '"):
                     for asmkv in re.findall(
                         r"^(?P<Offset>0x[A-Fa-f\d]+)\s+(?P<Hex>\w+)\s+(?P<Instruction>.*)",
                         eachasm,
@@ -653,13 +578,11 @@ def mac_vol(
                 datalist.append(json.dumps(datadict))
                 jsondict["Data"] = datalist
                 jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_mount":
+    elif plugin == "linux_mount":
         for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Device>\/(?:[\w\/]+\w(?:\ \w+)*)?)\ +(?P<MountPoint>[\S\ ]+\w+)\ +(?P<Type>\w+)",
+                    r"(?P<Device>\S+)\ +(?P<MountPoint>[\S\ ]+\w)\ +(?P<FileSystem>\S+)\ +(?P<Flags>\S+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -670,7 +593,8 @@ def mac_vol(
                             jsondict["VolatilityPlugin"],
                             jsondict["Device"],
                             jsondict["MountPoint"],
-                            jsondict["Type"],
+                            jsondict["FileSystem"],
+                            jsondict["Flags"],
                         ) = (
                             volver,
                             profile,
@@ -678,17 +602,155 @@ def mac_vol(
                             kv[0],
                             kv[1],
                             kv[2],
+                            kv[3],
                         )
                     else:
                         pass
                     jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_netstat":
+    elif plugin == "linux_netscan":
         for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Protocol>[\S]+)\ +(?P<LocalAddress>[A-Fa-f\d\.\:]+)\ +(?P<LocalPort>\d+)\ +(?P<ForeignAddress>[A-Fa-f\d\.\:]+)\ +(?P<ForeignPort>\d+)\ +(?P<ConnectionState>\S+)?\ +(?P<ProcessName>\S+)\/(?P<PID>\d+)",
+                    r"(?P<Offset>[A-Fa-f\d]+)\ +(?P<Protocol>\w+)\ +(?P<SourceIP>[A-Fa-z\d\.\:]+)\ +\:\ *(?P<SourcePort>\d+)\ +(?P<DestinationIP>[A-Fa-z\d\.\:]+)\ +\:\ *(?P<DestinationPort>\d+)\ +(?P<State>\w+)?",
+                    eachinfo.replace("\\\\ n", "\\\\n"),
+                ):
+                    kv = list(eachkv)
+                    if len(kv) > 0:
+                        (
+                            jsondict["VolatilityVersion"],
+                            jsondict[symbolorprofile],
+                            jsondict["VolatilityPlugin"],
+                            jsondict["SourceIP"],
+                            jsondict["SourcePort"],
+                            jsondict["DestinationIP"],
+                            jsondict["DestinationPort"],
+                            jsondict["Protocol"],
+                            jsondict["State"],
+                            jsondict["Offset"],
+                        ) = (
+                            volver,
+                            profile,
+                            plugin,
+                            kv[2],
+                            kv[3],
+                            kv[4],
+                            kv[5],
+                            kv[1],
+                            kv[6],
+                            kv[0],
+                        )
+                    else:
+                        pass
+                    jsonlist.append(json.dumps(jsondict))
+    elif plugin == "linux_netstat":
+        for plugout in plugoutlist:
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
+                if (
+                    eachinfo.startswith("UNIX")
+                    or eachinfo.startswith("Unix")
+                    or eachinfo.startswith("unix")
+                ):
+                    for eachkv in re.findall(
+                        r"(?P<Protocol>UNIX|Unix|unix)\ +(?P<Count>\d+)\ +(?P<Flags>\S+)?\ +(?P<Type>\S+)?\ +(?P<Description>\S+)\ +(?P<Inode>\d+)?\ +(?P<Path>[\S\ ]+)?",
+                        eachinfo.replace("\\\\ n", "\\\\n"),
+                    ):
+                        kv = list(eachkv)
+                        if len(kv) > 0:
+                            (
+                                jsondict["VolatilityVersion"],
+                                jsondict[symbolorprofile],
+                                jsondict["VolatilityPlugin"],
+                                jsondict["Protocol"],
+                                jsondict["Desciption"],
+                                jsondict["Type"],
+                                jsondict["Flags"],
+                                jsondict["Path"],
+                                jsondict["Inode"],
+                                jsondict["Count"],
+                            ) = (
+                                volver,
+                                profile,
+                                plugin,
+                                kv[0],
+                                kv[4],
+                                kv[3],
+                                kv[2],
+                                kv[6],
+                                kv[5],
+                                kv[1],
+                            )
+                        else:
+                            pass
+                        jsonlist.append(json.dumps(jsondict))
+                else:
+                    for eachkv in re.findall(
+                        r"(?P<Protocol>\w+)\ +(?P<SourceIP>[\d\.\:]+)\ +\:\ *(?P<SourcePort>\d+)\ +(?P<DestinationIP>[\d\.\:]+)\ +\:\ *(?P<DestinationPort>\d+)\ +(?P<Description>[\S\ ]+)",
+                        eachinfo.replace("\\\\ n", "\\\\n"),
+                    ):
+                        kv = list(eachkv)
+                        if len(kv) > 0:
+                            (
+                                jsondict["VolatilityVersion"],
+                                jsondict[symbolorprofile],
+                                jsondict["VolatilityPlugin"],
+                                jsondict["Protocol"],
+                                jsondict["Desciption"],
+                                jsondict["SourceIP"],
+                                jsondict["SourcePort"],
+                                jsondict["DestinationIP"],
+                                jsondict["DestinationPort"],
+                            ) = (
+                                volver,
+                                profile,
+                                plugin,
+                                kv[0],
+                                kv[5],
+                                kv[1],
+                                kv[2],
+                                kv[3],
+                                kv[4],
+                            )
+                        else:
+                            pass
+                        jsonlist.append(json.dumps(jsondict))
+    elif plugin == "linux_plthook":
+        for plugout in plugoutlist:
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
+                for eachkv in re.findall(
+                    r"(?P<TaskNumber>\w+)\ +(?P<StartAddress>0x[A-Fa-f\d]+)\ +(?P<ElfName>\S+)\ +(?P<Symbol>\S+)?\ +(?P<EndAddress>0x[A-Fa-f\d]+)(?:\ \S)?\ +(?P<TargetInfo>[\S\ ]+)",
+                    eachinfo.replace("\\\\ n", "\\\\n"),
+                ):
+                    kv = list(eachkv)
+                    if len(kv) > 0:
+                        (
+                            jsondict["VolatilityVersion"],
+                            jsondict[symbolorprofile],
+                            jsondict["VolatilityPlugin"],
+                            jsondict["ElfName"],
+                            jsondict["TaskNumber"],
+                            jsondict["Symbol"],
+                            jsondict["TargetInfo"],
+                            jsondict["StartAddress"],
+                            jsondict["EndAddress"],
+                        ) = (
+                            volver,
+                            profile,
+                            plugin,
+                            kv[2],
+                            kv[0],
+                            kv[3],
+                            kv[5],
+                            kv[1],
+                            kv[4],
+                        )
+                    else:
+                        pass
+                    jsonlist.append(json.dumps(jsondict))
+    elif plugin == "linux_proc_maps" or plugin == "linux_proc_maps_rb":
+        for plugout in plugoutlist:
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
+                for eachkv in re.findall(
+                    r"(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<PID>\d+)\ +(?P<ProcessName>\w+)\ +(?P<StartAddress>0x[A-Fa-f\d]+)\ +(?P<EndAddress>0x[A-Fa-f\d]+)\ +(?P<Flags>[RWXrwx\-]+)\ +(?P<PageOffset>0x[A-Fa-f\d]+)\ +(?P<Major>\d+)\ +(?P<Minor>\d+)\ +(?P<Inode>\d+)\ +(?P<Filepath>[\S\ ]+)?",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -698,73 +760,40 @@ def mac_vol(
                             jsondict[symbolorprofile],
                             jsondict["VolatilityPlugin"],
                             jsondict["ProcessName"],
-                            jsondict["LocalAddress"],
-                            jsondict["LocalPort"],
-                            jsondict["ForeignAddress"],
-                            jsondict["ForeignPort"],
                             jsondict["PID"],
-                            jsondict["Protocol"],
-                            jsondict["ConnectionState"],
+                            jsondict["Filepath"],
+                            jsondict["Flags"],
+                            jsondict["Inode"],
+                            jsondict["Major"],
+                            jsondict["Minor"],
+                            jsondict["StartAddress"],
+                            jsondict["EndAddress"],
+                            jsondict["Offset"],
+                            jsondict["PageOffset"],
                         ) = (
                             volver,
                             profile,
                             plugin,
-                            kv[6],
-                            kv[1],
                             kv[2],
-                            kv[3],
-                            kv[4],
+                            kv[1],
+                            kv[10],
+                            kv[5],
+                            kv[9],
                             kv[7],
-                            kv[0],
-                            kv[5],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_network_conns":
-        for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
-                for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<Protocol>\w+)\ +(?P<LocalAddress>[\d\.\:\-]+)\ +(?P<LocalPort>\d+)\ +(?P<ForeignAddress>[\d\.\:\-\*]+)\ +(?P<ForeignPort>[\d\*]+)\ +(?P<ConnectionState>\w+)?",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
-                ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["LocalAddress"],
-                            jsondict["LocalPort"],
-                            jsondict["ForeignAddress"],
-                            jsondict["ForeignPort"],
-                            jsondict["Protocol"],
-                            jsondict["ConnectionState"],
-                            jsondict["Offset"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[2],
+                            kv[8],
                             kv[3],
                             kv[4],
-                            kv[5],
-                            kv[1],
+                            kv[0],
                             kv[6],
-                            kv[0],
                         )
                     else:
                         pass
                     jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_notifiers":
+    elif plugin == "linux_psaux":
         for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<Key>\w+)\ +(?P<Matches>\S+)\ +(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<Module>[\w\.]+)\ +(?P<Status>\w+)",
+                    r"(?P<PID>\d+)\ +(?P<UserID>\d+)\ +(?P<GroupID>\d+)\ +(?P<Command>[\S\ ]+)?",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -773,66 +802,27 @@ def mac_vol(
                             jsondict["VolatilityVersion"],
                             jsondict[symbolorprofile],
                             jsondict["VolatilityPlugin"],
-                            jsondict["Key"],
-                            jsondict["Matches"],
-                            jsondict["Module"],
-                            jsondict["Status"],
-                            jsondict["Offset"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[0],
-                            kv[1],
-                            kv[3],
-                            kv[4],
-                            kv[2],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_orphan_threads":
-        for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
-                for eachkv in re.findall(
-                    r"(?P<PID>\d+)\ +(?P<ProcessName>\S+)\ +(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<Mapping>[\w\.]+)\ +(?P<ThreadName>\w[\S\ ]+\w)?\ +(?P<Status>\S+)$",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
-                ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["ThreadName"],
-                            jsondict["Status"],
-                            jsondict["Offset"],
-                            jsondict["Mapping"],
-                            jsondict["ProcessName"],
                             jsondict["PID"],
+                            jsondict["UserID"],
+                            jsondict["GroupID"],
+                            jsondict["CommandArguments"],
                         ) = (
                             volver,
                             profile,
                             plugin,
-                            kv[4],
-                            kv[5],
+                            kv[0],
+                            kv[1],
                             kv[2],
                             kv[3],
-                            kv[1],
-                            kv[0],
                         )
                     else:
                         pass
                     jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_proc_maps":
+    elif plugin == "linux_psenv":
         for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"^(?P<PID>\d+)\ +(?P<ProcessName>\w+)\ +(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<OffsetEnd>0x[A-Fa-f\d]+)\ +(?P<Permisssions>[RWLXrwlx\-]+)\ +(?P<MapName>[\S\ ]+)?",
+                    r"(?P<PID>\d+)\ +(?P<Item>\S+)\ +(?P<Vars>[\S\ ]+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -841,101 +831,52 @@ def mac_vol(
                             jsondict["VolatilityVersion"],
                             jsondict[symbolorprofile],
                             jsondict["VolatilityPlugin"],
-                            jsondict["Name"],
+                            jsondict["Item"],
                             jsondict["PID"],
-                            jsondict["Permissions"],
-                            jsondict["MapName"],
-                            jsondict["Offset"],
-                            jsondict["OffsetName"],
+                            Vars,
                         ) = (
                             volver,
                             profile,
                             plugin,
                             kv[1],
                             kv[0],
-                            kv[4],
-                            kv[5],
-                            kv[2],
-                            kv[3],
+                            " " + kv[2],
                         )
                     else:
                         pass
-                    jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_psaux":
-        for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
-                for eachkv in re.findall(
-                    r"(?P<PID>\d+)\ +(?P<ProcessName>\S+)\ +(?P<Bits>\w+)\ +(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<Length>\d+)\ +(?P<Status>\d+)\ +(?P<Arguments>.*)",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
-                ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["ProcessName"],
-                            jsondict["PID"],
-                            jsondict["Offset"],
-                            jsondict["Status"],
-                            jsondict["Arguments"],
-                            jsondict["Length"],
-                            jsondict["Bits"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[1],
-                            kv[0],
-                            kv[3],
-                            kv[5],
-                            kv[6],
-                            kv[4],
-                            kv[2],
-                        )
+                    vardict, varlist = {}, []
+                    if kv[2] != " ":
+                        Variables = re.sub(r"\ ([A-Z\d\_]+)", r"====\1", Vars)
+                        for eachvar in Variables.split("===="):
+                            for varkv in re.findall(
+                                r"(?P<VarKey>[^\=]+)\=(?P<VarVal>[\S\ ]+)",
+                                eachvar,
+                            ):
+                                if len(varkv) == 2:
+                                    vardict[varkv[0]] = (
+                                        varkv[1]
+                                        .replace(
+                                            "\\\\\\\\\\\\\\\\",
+                                            "\\\\\\\\",
+                                        )
+                                        .replace("\\\\\\\\", "\\\\")
+                                        .replace("\\\\", "\\")
+                                        .replace('\\\\\\"', '\\"')
+                                        .replace('\\"', '"')
+                                        .replace('"', "'")
+                                    )
+                                else:
+                                    pass
+                        varlist.append(json.dumps(vardict))
+                        jsondict["Variables"] = varlist
                     else:
                         pass
                     jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_psenv":
+    elif plugin == "linux_pslist":
         for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
-                    r"(?P<PID>\d+)\ +(?P<ProcessName>\S+)\ +(?P<Bits>\w+)\ +(?P<Arguments>.*)",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
-                ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["ProcessName"],
-                            jsondict["PID"],
-                            jsondict["Arguments"],
-                            jsondict["Bits"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[1],
-                            kv[0],
-                            kv[3],
-                            kv[2],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_pslist" or plugin == "mac_tasks":
-        for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
-                for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<ProcessName>[\w\.]+)\ +(?P<PID>\d+)\ +(?P<UID>\d+)\ +(?P<GID>\d+)\ +(?P<PGID>\d+)\ +(?P<Bits>\w+)\ +(?P<DTB>0x[A-Fa-f\d]+)\ +(?P<Time>\d{4}\-\d{2}\-\d{2}\ \d{2}\:\d{2}\:\d{2}\ \w+\+\d+)",
+                    r"^(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<ProcessName>\S+)\ +(?P<PID>\d+)\ +(?P<PPID>\d+)\ +(?P<UID>\d+)\ +(?P<GID>\d+)\ +(?P<DTB>(?:0x[A-Fa-f\d]+|\-+))\ +(?P<Time>\d{4}\-\d{2}\-\d{2}\ \d{2}\:\d{2}\:\d{2}\ \w+\+\d+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
                 ):
                     kv = list(eachkv)
@@ -950,9 +891,8 @@ def mac_vol(
                             jsondict["Time"],
                             jsondict["UserID"],
                             jsondict["GroupID"],
-                            jsondict["PGID"],
+                            jsondict["PPID"],
                             jsondict["DTB"],
-                            jsondict["Bits"],
                         ) = (
                             volver,
                             profile,
@@ -960,21 +900,55 @@ def mac_vol(
                             kv[1],
                             kv[2],
                             kv[0],
-                            kv[8],
-                            kv[3],
+                            kv[7],
                             kv[4],
                             kv[5],
-                            kv[7],
+                            kv[3],
                             kv[6],
                         )
                     else:
                         pass
                     jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_pstree":
+    elif plugin == "linux_psscan":
         for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
+                for eachkv in re.findall(
+                    r"^(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<ProcessName>\S+)?\ +(?P<PID>\d+)\ +(?P<PPID>[\d\-]+)\ +(?P<UID>[\d\-]+)\ +(?P<GID>[\d\-]+)\ +(?P<DTB>(?:0x[A-Fa-f\d]+|\-+))\ +(?P<Time>\d{4}\-\d{2}\-\d{2}\ \d{2}\:\d{2}\:\d{2}\ \w+\+\d+)?",
+                    eachinfo.replace("\\\\ n", "\\\\n"),
+                ):
+                    kv = list(eachkv)
+                    if len(kv) > 0:
+                        (
+                            jsondict["VolatilityVersion"],
+                            jsondict[symbolorprofile],
+                            jsondict["VolatilityPlugin"],
+                            jsondict["ProcessName"],
+                            jsondict["PID"],
+                            jsondict["Offset"],
+                            jsondict["Time"],
+                            jsondict["UserID"],
+                            jsondict["GroupID"],
+                            jsondict["PPID"],
+                            jsondict["DTB"],
+                        ) = (
+                            volver,
+                            profile,
+                            plugin,
+                            kv[1],
+                            kv[2],
+                            kv[0],
+                            kv[7],
+                            kv[4],
+                            kv[5],
+                            kv[3],
+                            kv[6],
+                        )
+                    else:
+                        pass
+                    jsonlist.append(json.dumps(jsondict))
+    elif plugin == "linux_pstree":
+        for plugout in plugoutlist:
+            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):
                 for eachkv in re.findall(
                     r"^(?P<ProcessName>\S+)\ +(?P<PID>\d+)\ +(?P<UID>[\d\-]+)",
                     eachinfo.replace("\\\\ n", "\\\\n"),
@@ -999,116 +973,47 @@ def mac_vol(
                     else:
                         pass
                     jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_psxview":
-        for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
+    elif plugin == "linux_threads":
+        for plugout in str(plugoutlist).split("Process Name: "):
+            for eachkv in re.findall(
+                r"^(?P<ProcessName>[^\]]+)\'\,\ \'Process\ ID\:\ (?P<PID>\d+)\'\,\ \'Thread\ PID\ +Thread\ Name\ +\'\,\ \'\-+\ \-+\'\,\ \'(?P<Threads>[\S\ ]+)",
+                plugout,
             ):
-                for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<ProcessName>[\w\.]+)\ +(?P<PID>\d+)\ +(?P<pslist>\w+)\ +(?P<Parents>\w+)\ +(?P<PIDHash>\w+)\ +(?P<ProcessGroupHashTable>\w+)\ +(?P<SessionLeaders>\w+)\ +(?P<TaskProcesses>\w+)",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
-                ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["ProcessName"],
-                            jsondict["PID"],
-                            jsondict["Offset"],
-                            jsondict["pslist"],
-                            jsondict["Parents"],
-                            jsondict["PIDHash"],
-                            jsondict["ProcessGroupHashTable"],
-                            jsondict["SessionLeaders"],
-                            jsondict["TaskProcesses"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[1],
-                            kv[2],
-                            kv[0],
-                            kv[3],
-                            kv[4],
-                            kv[5],
-                            kv[6],
-                            kv[7],
-                            kv[8],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_socket_filters":
-        for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
-                for eachkv in re.findall(
-                    r"^(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<FilterName>[\w\.]+)\ +(?P<FilterNumber>[\w\.]+)\ +(?P<Socket>0x[A-Fa-f\d]+)\ +(?P<Handler>0x[A-Fa-f\d]+)\ +(?P<Module>[\w\.]+)\ +(?P<Status>\w+)",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
-                ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["FilterName"],
-                            jsondict["FilterNumber"],
-                            jsondict["Socket"],
-                            jsondict["Handler"],
-                            jsondict["Module"],
-                            jsondict["Status"],
-                            jsondict["Offset"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[1],
-                            kv[2],
-                            kv[3],
-                            kv[4],
-                            kv[5],
-                            kv[6],
-                            kv[0],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
-    elif plugin == "mac_trustedbsd":
-        for plugout in plugoutlist:
-            for eachinfo in plugout.replace("\\\\n", "\\\\ n").split(
-                "\n"
-            ):
-                for eachkv in re.findall(
-                    r"^(?P<Check>\w+)\ +(?P<Name>\w+)\ +(?P<Offset>0x[A-Fa-f\d]+)\ +(?P<Module>[\w\.]+)\ +(?P<Status>\w+)",
-                    eachinfo.replace("\\\\ n", "\\\\n"),
-                ):
-                    kv = list(eachkv)
-                    if len(kv) > 0:
-                        (
-                            jsondict["VolatilityVersion"],
-                            jsondict[symbolorprofile],
-                            jsondict["VolatilityPlugin"],
-                            jsondict["Name"],
-                            jsondict["Check"],
-                            jsondict["Offset"],
-                            jsondict["Module"],
-                            jsondict["Status"],
-                        ) = (
-                            volver,
-                            profile,
-                            plugin,
-                            kv[1],
-                            kv[0],
-                            kv[2],
-                            kv[3],
-                            kv[4],
-                        )
-                    else:
-                        pass
-                    jsonlist.append(json.dumps(jsondict))
+                kv = list(eachkv)
+                if len(kv) > 0:
+                    (
+                        jsondict["VolatilityVersion"],
+                        jsondict[symbolorprofile],
+                        jsondict["VolatilityPlugin"],
+                        jsondict["ProcessName"],
+                        jsondict["PID"],
+                        Threads,
+                    ) = (
+                        volver,
+                        profile,
+                        plugin,
+                        kv[0],
+                        kv[1],
+                        kv[2],
+                    )
+                else:
+                    pass
+                if kv[2] != "', '', '":
+                    for eachthrd in Threads.split("', '"):
+                        for thrdkv in re.findall(
+                            r"(?P<ThreadID>\d+)\s+(?P<ThreadName>[\S]+)",
+                            eachthrd,
+                        ):
+                            if len(thrdkv) == 2:
+                                (
+                                    jsondict["ThreadName"],
+                                    jsondict["ThreadID"],
+                                ) = (thrdkv[1], thrdkv[0])
+                                jsonlist.append(json.dumps(jsondict))
+                            else:
+                                pass
+                else:
+                    pass
     else:
         pass
+    return jsonlist

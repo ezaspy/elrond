@@ -7,7 +7,7 @@ import subprocess
 import sys
 import time
 
-from rivendell.identify import identify_disk_image
+from rivendell.core.identify import identify_disk_image
 
 
 def unmount_images(elrond_mount, ewf_mount):

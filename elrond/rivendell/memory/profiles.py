@@ -13,7 +13,7 @@ from rivendell.memory.vol import (
     dump_nix_ziphex,
 )
 from rivendell.memory.vol import (
-    doProfile,
+    select_profile,
 )
 
 
@@ -166,10 +166,10 @@ def suggest_volatility_profile(
             else:
                 preferred_profile = ""
             newprofiles.append(eachprofile[0])
-            """if len(eachprofile) == 1:
+            if len(eachprofile) > 0:
                 newprofiles.append(eachprofile[0])
             else:
-                pass"""  # comment - likely can remove, subject to further testing
+                pass
         newprofilelist, counter = list(set(newprofiles)), 1
         for newprofile in sorted(newprofilelist):
             if len(str(counter)) == 1:
@@ -369,7 +369,7 @@ def process_profiles(
             )
             if correctprofile == "n":
                 print("\tOK. Please select a supported profile e.g. 2:")
-                profileselect, profile, ziphexdump = doProfile(volchoice, artefact)
+                profileselect, profile, ziphexdump = select_profile(volchoice, artefact)
                 dump_nix_ziphex(d, profileselect, profile, ziphexdump)
             else:
                 pass
@@ -379,7 +379,7 @@ def process_profiles(
                     artefact.split("/")[-1]
                 )
             )
-            profileselect, profile, ziphexdump = doProfile(volchoice, artefact)
+            profileselect, profile, ziphexdump = select_profile(volchoice, artefact)
             dump_nix_ziphex(d, profileselect, profile, ziphexdump)
         assess_volatility_choice(
             verbosity,

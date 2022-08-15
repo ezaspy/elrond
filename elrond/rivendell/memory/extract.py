@@ -8,6 +8,9 @@ from rivendell.audit import write_audit_log_entry
 from rivendell.memory.plugins import use_plugins
 
 
+import time
+
+
 def extract_memory_artefacts(
     verbosity,
     output_directory,
@@ -170,7 +173,15 @@ def extract_memory_artefacts(
         for plugin in volplugins:
             try:
                 use_plugins(
-                    output_directory, artefact, volver, memext, mempath, profile, plugin
+                    output_directory,
+                    verbosity,
+                    vssimage,
+                    artefact,
+                    volver,
+                    memext,
+                    mempath,
+                    profile,
+                    plugin,
                 )
             except:
                 pass
@@ -180,6 +191,8 @@ def extract_memory_artefacts(
                 try:
                     use_plugins(
                         output_directory,
+                        verbosity,
+                        vssimage,
                         artefact,
                         volver,
                         memext,
@@ -328,10 +341,31 @@ def extract_memory_artefacts(
         for plugin in volplugins:
             try:
                 use_plugins(
-                    output_directory, artefact, volver, memext, mempath, profile, plugin
+                    output_directory,
+                    verbosity,
+                    vssimage,
+                    artefact,
+                    volver,
+                    memext,
+                    mempath,
+                    profile,
+                    plugin,
                 )
             except:
-                pass
+                entry, prnt = "{},{},evidence extraction failed {},{} ({})\n".format(
+                    datetime.now().isoformat(),
+                    vssimage,
+                    plugin,
+                    artefact.split("/")[-1],
+                    profile,
+                ), " -> {} -> evidence extraction or '{}' failed from {}".format(
+                    datetime.now().isoformat().replace("T", " "),
+                    plugin,
+                    vssimage,
+                )
+                write_audit_log_entry(
+                    verbosity, output_directory, entry, prnt
+                )  # failed to extract no evidence of plugin
         if profile.startswith("Win"):
             if memtimeline:
                 if not os.path.exists(output_directory + mempath + "timeliner.csv"):
@@ -400,7 +434,7 @@ def extract_memory_artefacts(
                 output_directory + mempath + "/memory_" + "iehistory.json"
             ):
                 with open(
-                    output_directory + mempath + "/memory_" + "iehistory.txt", "w"
+                    output_directory + mempath + "/memory_" + "iehistory.json", "w"
                 ) as plugout:
                     plugoutlist = str(
                         subprocess.Popen(
