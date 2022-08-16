@@ -6,9 +6,9 @@ from datetime import datetime
 
 from rivendell.audit import write_audit_log_entry
 from rivendell.memory.plugins import use_plugins
-
-
-import time
+from rivendell.process.extractions.registry.dumpreg import extract_dumpreg_guess
+from rivendell.process.extractions.registry.dumpreg import extract_dumpreg_profile
+from rivendell.process.extractions.registry.dumpreg import extract_dumpreg_system
 
 
 def extract_memory_artefacts(
@@ -170,6 +170,16 @@ def extract_memory_artefacts(
                 "linux.pstree.Pstree",
                 "linux.tty_check.tty_check",
             ]
+        if memtimeline:
+            plugin_count = str(len(volplugins) + 1)
+        else:
+            plugin_count = str(len(volplugins))
+        print(
+            "    Attempting to extract {} types of evidence from '{}'...".format(
+                plugin_count,
+                artefact.split("/")[-1],
+            )
+        )
         for plugin in volplugins:
             try:
                 use_plugins(
@@ -236,6 +246,7 @@ def extract_memory_artefacts(
                 "handles",
                 "hashdump",
                 "hivelist",
+                "iehistory",
                 "ldrmodules",
                 "malfind",
                 "malprocfind",
@@ -338,6 +349,16 @@ def extract_memory_artefacts(
                 "linux_pstree",
                 "linux_threads",
             ]
+        if memtimeline:
+            plugin_count = str(len(volplugins) + 2)
+        else:
+            plugin_count = str(len(volplugins) + 1)
+        print(
+            "    Attempting to extract {} types of evidence from '{}'...".format(
+                plugin_count,
+                artefact.split("/")[-1],
+            )
+        )
         for plugin in volplugins:
             try:
                 use_plugins(
@@ -368,93 +389,89 @@ def extract_memory_artefacts(
                 )  # failed to extract no evidence of plugin
         if profile.startswith("Win"):
             if memtimeline:
-                if not os.path.exists(output_directory + mempath + "timeliner.csv"):
-                    with open(
-                        output_directory + mempath + "timeliner.csv", "a"
-                    ) as timeliner:
-                        timeline = str(
-                            subprocess.Popen(
-                                [
-                                    "vol.py",
-                                    "-f",
-                                    artefact + memext,
-                                    "--profile=" + profile,
-                                    "timeliner",
-                                ],
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE,
-                            ).communicate()[0]
-                        )[2:-1].split("\\n")
-                        timeliner.write(
-                            "LastWriteTime,ActionType,RegistryKey,Process,ProcessName,PID,PPID,Offset,Base,Registry,VolatilityPlugin,VolatilityProfile\n"
-                        )
-                        for line in timeline:
-                            if "/P" in line:
-                                entries = re.findall(
-                                    r"^(?P<LastWriteTime>[^\|]+)\|(?P<ActionType>[^\|]+)(?:\|(?P<RegistryKey>[\w\-\ \.\&\(\)]+\/[\w\-\ \.\&\(\)\/]+)?)?\|(?P<Process>[^\|]+)(?:\|Process\:\ (?P<ProcessName>[^\|]+))?\|PID\:\ (?P<PID>[^\|]+)\|PPID\:\ (?P<PPID>[^\|]+)\|P(?:rocess)?Offset\:\ (?P<Offset>[^\|]+)(?:\|Base\:\ (?P<Base>0x\S+))?$",
-                                    str(
-                                        str(line.strip())
-                                        .replace("/P", "|P")
-                                        .replace(" | ", "|")
-                                        .replace("| ", "|")
-                                        .replace("\\\\", "/")
-                                        .replace(" PID:", "|PID:")
-                                        .replace("Process PO", "ProcessO")
-                                        .replace("/DLL B", "|B")
-                                        .replace("||", "|")
-                                    ),
-                                )
-                                if len(str(entries)) > 2:
-                                    if len(entries[0][2]) > 0:
-                                        timelinerow = str(entries[0])[1:-1].replace(
-                                            "''", "'-'"
-                                        ).replace(", ", ",").replace(
-                                            "'", ""
-                                        ) + ",{},timeliner,{}\n".format(
-                                            str(entries[0][2]).lower(), profile
-                                        )
+                try:
+                    if not os.path.exists(output_directory + mempath + "timeliner.csv"):
+                        with open(
+                            output_directory + mempath + "timeliner.csv", "a"
+                        ) as timeliner:
+                            timeline = str(
+                                subprocess.Popen(
+                                    [
+                                        "vol.py",
+                                        "-f",
+                                        artefact + memext,
+                                        "--profile=" + profile,
+                                        "timeliner",
+                                    ],
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE,
+                                ).communicate()[0]
+                            )[2:-1].split("\\n")
+                            timeliner.write(
+                                "LastWriteTime,ActionType,RegistryKey,Process,ProcessName,PID,PPID,Offset,Base,Registry,VolatilityPlugin,VolatilityProfile\n"
+                            )
+                            for line in timeline:
+                                if "/P" in line:
+                                    entries = re.findall(
+                                        r"^(?P<LastWriteTime>[^\|]+)\|(?P<ActionType>[^\|]+)(?:\|(?P<RegistryKey>[\w\-\ \.\&\(\)]+\/[\w\-\ \.\&\(\)\/]+)?)?\|(?P<Process>[^\|]+)(?:\|Process\:\ (?P<ProcessName>[^\|]+))?\|PID\:\ (?P<PID>[^\|]+)\|PPID\:\ (?P<PPID>[^\|]+)\|P(?:rocess)?Offset\:\ (?P<Offset>[^\|]+)(?:\|Base\:\ (?P<Base>0x\S+))?$",
+                                        str(
+                                            str(line.strip())
+                                            .replace("/P", "|P")
+                                            .replace(" | ", "|")
+                                            .replace("| ", "|")
+                                            .replace("\\\\", "/")
+                                            .replace(" PID:", "|PID:")
+                                            .replace("Process PO", "ProcessO")
+                                            .replace("/DLL B", "|B")
+                                            .replace("||", "|")
+                                        ),
+                                    )
+                                    if len(str(entries)) > 2:
+                                        if len(entries[0][2]) > 0:
+                                            timelinerow = str(entries[0])[1:-1].replace(
+                                                "''", "'-'"
+                                            ).replace(", ", ",").replace(
+                                                "'", ""
+                                            ) + ",{},timeliner,{}\n".format(
+                                                str(entries[0][2]).lower(), profile
+                                            )
+                                        else:
+                                            timelinerow = str(entries[0])[1:-1].replace(
+                                                "''", "'-'"
+                                            ).replace(", ", ",").replace(
+                                                "'", ""
+                                            ) + ",-,timeliner,{}\n".format(
+                                                profile
+                                            )
+                                        timeliner.write(timelinerow)
                                     else:
-                                        timelinerow = str(entries[0])[1:-1].replace(
-                                            "''", "'-'"
-                                        ).replace(", ", ",").replace(
-                                            "'", ""
-                                        ) + ",-,timeliner,{}\n".format(
-                                            profile
-                                        )
-                                    timeliner.write(timelinerow)
+                                        pass
                                 else:
                                     pass
-                            else:
-                                pass
-                else:
-                    pass
+                    else:
+                        pass
+                except:
+                    (
+                        entry,
+                        prnt,
+                    ) = "{},{},evidence extraction failed {},{} ({})\n".format(
+                        datetime.now().isoformat(),
+                        vssimage,
+                        "timeliner",
+                        artefact.split("/")[-1],
+                        profile,
+                    ), " -> {} -> evidence extraction or '{}' failed from {}".format(
+                        datetime.now().isoformat().replace("T", " "),
+                        "timeliner",
+                        vssimage,
+                    )
+                    write_audit_log_entry(
+                        verbosity, output_directory, entry, prnt
+                    )  # failed to extract no evidence of plugin
             else:
                 pass
-            if not os.path.exists(
-                output_directory + mempath + "/memory_" + "iehistory.json"
-            ):
-                with open(
-                    output_directory + mempath + "/memory_" + "iehistory.json", "w"
-                ) as plugout:
-                    plugoutlist = str(
-                        subprocess.Popen(
-                            [
-                                "vol.py",
-                                "-f",
-                                artefact + memext,
-                                "--profile=" + profile,
-                                "iehistory",
-                            ],
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE,
-                        ).communicate()[0]
-                    )[2:-1].split("\\n")
-                    for plug in plugoutlist:
-                        plugout.write(plug + "\n")
-            else:
-                pass
-            if not os.path.exists(output_directory + mempath + "/dumpreg/"):
-                os.makedirs(output_directory + mempath + "/dumpreg/")
+            if not os.path.exists(os.path.join(output_directory, mempath, "dumpreg")):
+                os.makedirs(os.path.join(output_directory, mempath, "dumpreg"))
                 subprocess.Popen(
                     [
                         "vol.py",
@@ -468,6 +485,82 @@ def extract_memory_artefacts(
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                 ).communicate()
+                for dumpregroot, _, dumpregfiles in os.walk(
+                    os.path.join(output_directory, mempath, "dumpreg")
+                ):
+                    for dumpregfile in dumpregfiles:
+                        dumpreg = os.path.join(dumpregroot, dumpregfile)
+                        if os.path.isfile(dumpreg) and (
+                            "SAM" in dumpreg.split("/")[-1].upper()
+                            or "SECURITY" in dumpreg.split("/")[-1].upper()
+                            or "SOFTWARE" in dumpreg.split("/")[-1].upper()
+                            or "SYSTEM" in dumpreg.split("/")[-1].upper()
+                            or "ntuser" in dumpreg.split("/")[-1].lower()
+                            or "usrclass" in dumpreg.split("/")[-1].lower()
+                        ):
+                            if os.path.isfile(dumpreg) and (
+                                "SAM" in dumpreg.split("/")[-1].upper()
+                                or "SECURITY" in dumpreg.split("/")[-1].upper()
+                                or "SOFTWARE" in dumpreg.split("/")[-1].upper()
+                                or "SYSTEM" in dumpreg.split("/")[-1].upper()
+                            ):
+                                extract_dumpreg_system(
+                                    dumpreg,
+                                    {},
+                                    [],
+                                    [],
+                                )
+                                (
+                                    entry,
+                                    prnt,
+                                ) = "{},{},dumped registry ({}),{} ({})\n".format(
+                                    datetime.now().isoformat(),
+                                    vssimage,
+                                    dumpregfile,
+                                    artefact.split("/")[-1],
+                                    profile,
+                                ), " -> {} -> extracted evidence via 'dumpreg' ({}) from {}".format(
+                                    datetime.now().isoformat().replace("T", " "),
+                                    dumpregfile,
+                                    vssimage,
+                                )
+                                write_audit_log_entry(
+                                    verbosity, output_directory, entry, prnt
+                                )  # evidence of plugin found
+                            else:
+                                extract_dumpreg_profile(
+                                    dumpreg,
+                                    {},
+                                    [],
+                                    [],
+                                )
+                        else:
+                            guessed_hive = extract_dumpreg_guess(
+                                dumpreg,
+                                {},
+                                [],
+                                [],
+                            )
+                            if guessed_hive != "":
+                                (
+                                    entry,
+                                    prnt,
+                                ) = "{},{},dumped registry ({}),{} ({})\n".format(
+                                    datetime.now().isoformat(),
+                                    vssimage,
+                                    dumpregfile,
+                                    artefact.split("/")[-1],
+                                    profile,
+                                ), " -> {} -> extracted evidence via 'dumpreg' ({}) from {}".format(
+                                    datetime.now().isoformat().replace("T", " "),
+                                    dumpregfile,
+                                    vssimage,
+                                )
+                                write_audit_log_entry(
+                                    verbosity, output_directory, entry, prnt
+                                )  # evidence of plugin found
+                            else:
+                                pass
             else:
                 pass
         else:

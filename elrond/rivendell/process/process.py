@@ -23,7 +23,7 @@ from rivendell.process.windows import process_pagefile
 from rivendell.process.windows import (
     process_registry_system,
 )
-from rivendell.process.windows import process_registry_user
+from rivendell.process.windows import process_registry_profile
 from rivendell.process.windows import process_shimcache
 from rivendell.process.windows import process_usb
 
@@ -34,7 +34,6 @@ def process_artefacts(
     volatility,
     d,
     stage,
-    cwd,
     img,
     vssimage,
     vssartefact,
@@ -102,7 +101,7 @@ def process_artefacts(
                 jsonlist,
             )
         elif artefact.endswith("+NTUSER.DAT") or artefact.endswith("+UsrClass.dat"):
-            process_registry_user(
+            process_registry_profile(
                 verbosity,
                 vssimage,
                 output_directory,
@@ -420,7 +419,6 @@ def identify_pre_process_artefacts(
                         volatility,
                         d,
                         stage,
-                        cwd,
                         img,
                         vssimage,
                         "/"
@@ -445,7 +443,6 @@ def identify_pre_process_artefacts(
                         volatility,
                         d,
                         stage,
-                        cwd,
                         img,
                         vssimage,
                         "/",
@@ -481,7 +478,6 @@ def identify_pre_process_artefacts(
                             volatility,
                             d,
                             stage,
-                            cwd,
                             img,
                             vssimage,
                             "/",

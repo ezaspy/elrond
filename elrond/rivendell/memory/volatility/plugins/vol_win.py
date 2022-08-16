@@ -2,9 +2,6 @@
 import json
 import re
 
-import time
-import sys
-
 
 def windows_vol(
     volver,
@@ -698,6 +695,46 @@ def windows_vol(
                     else:
                         pass
                     jsonlist.append(json.dumps(jsondict))
+    elif plugin == "iehistory":
+        for plugout in str(plugoutlist).split(
+            "**************************************************"
+        )[1:]:
+            for eachkv in re.findall(
+                r"', 'Process: (\d+) ([^']+)', '.*', 'Location: ([^']+)', 'Last modified: (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [^']+)', 'Last accessed: (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [^']+)', 'File Offset: (0x\d+), Data Offset: (0x\d+), Data Length: (0x\d+)', 'File: ([^']+)', '",
+                plugout,
+            ):
+                kv = list(eachkv)
+                if len(kv) > 1:
+                    (
+                        jsondict["VolatilityVersion"],
+                        jsondict[symbolorprofile],
+                        jsondict["VolatilityPlugin"],
+                        jsondict["ProcessName"],
+                        jsondict["PID"],
+                        jsondict["FileName"],
+                        jsondict["Location"],
+                        jsondict["FileOffset"],
+                        jsondict["LastWriteTime"],
+                        jsondict["LastAccessTime"],
+                        jsondict["DataOffset"],
+                        jsondict["DataLength"],
+                    ) = (
+                        volver,
+                        profile,
+                        plugin,
+                        kv[0],
+                        kv[1],
+                        kv[8],
+                        kv[2],
+                        kv[5],
+                        kv[3],
+                        kv[4],
+                        kv[6],
+                        kv[7],
+                    )
+                else:
+                    pass
+                jsonlist.append(json.dumps(jsondict))
     elif plugin == "ldrmodules":
         for plugout in plugoutlist:
             for eachinfo in plugout.replace("\\\\n", "\\\\ n").split("\n"):

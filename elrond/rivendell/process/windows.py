@@ -8,8 +8,8 @@ from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 from rivendell.process.memory import process_memory
 from rivendell.process.extractions.evtx import extract_evtx
+from rivendell.process.extractions.registry.profile import extract_registry_profile
 from rivendell.process.extractions.registry.system import extract_registry_system
-from rivendell.process.extractions.registry.users import extract_registry_users
 from rivendell.process.extractions.shimcache import extract_shimcache
 from rivendell.process.extractions.usb import extract_usb
 
@@ -404,7 +404,7 @@ def process_registry_system(
         pass
 
 
-def process_registry_user(
+def process_registry_profile(
     verbosity,
     vssimage,
     output_directory,
@@ -460,7 +460,7 @@ def process_registry_user(
             vssimage,
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
-        extract_registry_users(
+        extract_registry_profile(
             output_directory,
             img,
             vssartefact,
