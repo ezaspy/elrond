@@ -28,6 +28,9 @@ from rivendell.process.windows import process_shimcache
 from rivendell.process.windows import process_usb
 
 
+import sys
+
+
 def process_artefacts(
     output_directory,
     verbosity,

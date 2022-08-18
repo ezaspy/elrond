@@ -255,7 +255,6 @@ def assess_gandalf(
                     )
                     print()
                 allimgs[gandalf_host + "::" + osplatform] = d
-                imgs[gandalf_host + "::" + osplatform] = d
             else:
                 pass
     for file_root, file_dirs, _ in os.walk(output_directory):
@@ -304,8 +303,6 @@ def assess_gandalf(
                                     vssmem,
                                     memtimeline,
                                 )
-                                print("ot")
-                                print(ot)
                                 allimgs = {**allimgs, **ot}
                             else:
                                 pass
@@ -324,14 +321,4 @@ def assess_gandalf(
                     pass
     else:
         pass
-
-    print("allimgs")
     allimgs = {**allimgs, **ot}
-    print("imgs")
-    imgs = {**imgs, **ot}
-    print()
-    print(
-        allimgs
-    )  # populate allimgs with memory images, and populate imgs with JUST disks dictionaries with gandalf hosts
-    print(imgs)
-    sys.exit()

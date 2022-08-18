@@ -37,21 +37,17 @@ def identify_disk_image(verbosity, output_directory, disk_image, mount_location)
                 disk_image = disk_image + "::Windows7"
             else:
                 print_identification(
-                    verbosity, output_directory, disk_image, mount_location, "Windows10"
+                    verbosity, output_directory, disk_image, "Windows10"
                 )
                 disk_image = disk_image + "::Windows10"
         elif "root" in str(os.listdir(mount_location)) and "media" in str(
             os.listdir(mount_location)
         ):
-            print_identification(
-                verbosity, output_directory, disk_image, mount_location, "Linux"
-            )
+            print_identification(verbosity, output_directory, disk_image, "Linux")
             disk_image = disk_image + "::Linux"
         elif os.path.exists(mount_location + "root"):
             if "Applications" in str(os.listdir(mount_location + "root")):
-                print_identification(
-                    verbosity, output_directory, disk_image, mount_location, "macOS"
-                )
+                print_identification(verbosity, output_directory, disk_image, "macOS")
                 disk_image = disk_image + "::macOS"
             else:
                 pass

@@ -424,12 +424,26 @@ asciitext = [
 
 
 if __name__ == "__main__":
+    if dogs:
+        auto = True
+        vss = True
+        sxtractiocs = True
+        navigator = True
+        hashcollected = True
+        process = True
+        superquick = True
+        quick = True
+        recover = True
+        userprofiles = True
+        veryverbose = True
+        verbose = True
+    else:
+        pass
     main(
         directory,
         case,
         analysis,
         auto,
-        dogs,
         collect,
         vss,
         delete,

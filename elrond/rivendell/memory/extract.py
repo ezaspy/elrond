@@ -97,7 +97,8 @@ def extract_memory_artefacts(
                 vssimage,
             )
         if "Windows" in profile or profile.startswith("Win"):
-            volplugins = [
+            volplugins = ["windows.info.Info"]
+            """volplugins = [
                 "windows.cmdline.CmdLine",
                 "windows.dlllist.DllList",
                 "windows.driverscan.DriverScan",
@@ -125,7 +126,7 @@ def extract_memory_artefacts(
                 "windows.ssdt.SSDT",
                 "windows.symlinkscan.SymlinkScan",
                 "windows.vadinfo.VadInfo",
-            ]
+            ]"""
         elif (
             "macOS" in profile or profile.startswith("Mac") or profile.startswith("mac")
         ):
@@ -226,7 +227,8 @@ def extract_memory_artefacts(
             vssimage,
         )
         if profile.startswith("Win"):
-            volplugins = [
+            volplugins = ["iehistory"]
+            """volplugins = [
                 "apihooks",
                 "apihooksdeep",
                 "cmdline",
@@ -276,7 +278,7 @@ def extract_memory_artefacts(
                 "userhandles",
                 "vadinfo",
                 "win10cookie",
-            ]  # plugins
+            ]  # plugins"""
         elif (
             profile.startswith("Mac")
             or profile.startswith("mac")
@@ -585,4 +587,5 @@ def extract_memory_artefacts(
         insertvssimage,
     )
     write_audit_log_entry(verbosity, output_directory, entry, prnt)
+    print()
     return profile, vssmem

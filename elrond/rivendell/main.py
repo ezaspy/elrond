@@ -29,7 +29,6 @@ def main(
     case,
     analysis,
     auto,
-    dogs,
     collect,
     vss,
     delete,
@@ -629,9 +628,14 @@ def main(
             else:
                 pass
         time.sleep(1)
-        print(
-            "  ----------------------------------------\n  -> Completed Identification Phase.\n"
-        )
+        if volatility:
+            print(
+                "  ----------------------------------------\n  -> Completed Identification & Extraction Phase.\n"
+            )
+        else:
+            print(
+                "  ----------------------------------------\n  -> Completed Identification Phase.\n"
+            )
     else:
         if not auto:
             nodisks = input(

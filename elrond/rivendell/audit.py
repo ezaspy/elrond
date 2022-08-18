@@ -1,4 +1,7 @@
 #!/usr/bin/env python3 -tt
+from datetime import datetime
+
+
 def print_done(verbosity):
     if verbosity != "":
         print("      Done.")
@@ -22,3 +25,21 @@ def write_audit_log_entry(verbosity, output_directory, entry, prnt):
         print(prnt)
     else:
         pass
+
+
+def manage_error(output_directory, verbosity, error, state, img, item, vsstext):
+    entry, prnt = "{},{},{} failed ({}),'{}'\n".format(
+        datetime.now().isoformat(),
+        img.split("::")[0],
+        state,
+        error,
+        item.split("/")[-1],
+    ), " -> {} -> ERROR: {}; {} failed for '{}'{} from '{}'".format(
+        datetime.now().isoformat().replace("T", " "),
+        error,
+        state,
+        item.split("/")[-1],
+        vsstext.replace("vss", "volume shadow copy #"),
+        img.split("::")[0],
+    )
+    write_audit_log_entry(verbosity, output_directory, entry, prnt)

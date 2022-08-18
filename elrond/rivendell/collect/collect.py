@@ -7,6 +7,7 @@ from collections import OrderedDict
 from datetime import datetime
 
 from rivendell.analysis.keywords import prepare_keywords
+from rivendell.audit import manage_error
 from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 from rivendell.collect.linux import collect_linux_artefacts
@@ -392,107 +393,118 @@ def collect_artefacts(
                     artefact_directory + "/raw/",
                     "",
                 )
-                if (
-                    img.split("::")[0] in artefact_directory
-                    and img.split("::")[1].startswith("Windows")
-                    and "memory" not in img.split("::")[1]
-                ):  # Windows Collection
-                    item = mnt + system_artefact
-                    if "vss" in item:
-                        dest, vsstext = (
-                            artefact_directory + "/raw/" + item.split("/")[4] + "/",
-                            " from " + item.split("/")[4],
-                        )
+                try:
+                    if (
+                        img.split("::")[0] in artefact_directory
+                        and img.split("::")[1].startswith("Windows")
+                        and "memory" not in img.split("::")[1]
+                    ):  # Windows Collection
+                        item = mnt + system_artefact
+                        if "vss" in item:
+                            dest, vsstext = (
+                                artefact_directory + "/raw/" + item.split("/")[4] + "/",
+                                " from " + item.split("/")[4],
+                            )
+                        else:
+                            pass
+                        if not os.path.exists(dest):
+                            os.makedirs(dest)
+                        else:
+                            pass
+                        if os.path.exists(item):  # Collection
+                            collect_windows_artefacts(
+                                artefact_directory,
+                                dest,
+                                img,
+                                item,
+                                mnt,
+                                output_directory,
+                                stage,
+                                symlinkvalue,
+                                userprofiles,
+                                verbosity,
+                                volatility,
+                                vssimage,
+                                vsstext,
+                            )
+                        else:
+                            pass
+                    elif (
+                        img.split("::")[0] in artefact_directory
+                        and img.split("::")[1] == "macOS"
+                        and "memory" not in img.split("::")[1]
+                    ):  # macOS Collection
+                        item = mnt + "/root" + system_artefact
+                        if not os.path.exists(dest):
+                            os.makedirs(dest)
+                        else:
+                            pass
+                        if os.path.exists(item):  # Collection
+                            collect_mac_artefacts(
+                                dest,
+                                img,
+                                item,
+                                mnt + "/root",
+                                output_directory,
+                                sha256,
+                                stage,
+                                symlinkvalue,
+                                userprofiles,
+                                verbosity,
+                                volatility,
+                                vssimage,
+                                vsstext,
+                            )
+                        else:
+                            pass
+                    elif (
+                        img.split("::")[0] in artefact_directory
+                        and img.split("::")[1] == "Linux"
+                        and "memory" not in img.split("::")[1]
+                    ):  # Linux Collection
+                        item = mnt + system_artefact
+                        if not os.path.exists(dest):
+                            os.makedirs(dest)
+                        else:
+                            pass
+                        if os.path.exists(item):  # Collection
+                            collect_linux_artefacts(
+                                dest,
+                                img,
+                                item,
+                                mnt,
+                                output_directory,
+                                stage,
+                                symlinkvalue,
+                                userprofiles,
+                                verbosity,
+                                volatility,
+                                vssimage,
+                                vsstext,
+                            )
+                        else:
+                            pass
                     else:
                         pass
-                    if not os.path.exists(dest):
-                        os.makedirs(dest)
-                    else:
-                        pass
-                    if os.path.exists(item):  # Collection
-                        collect_windows_artefacts(
-                            artefact_directory,
-                            dest,
-                            img,
-                            item,
-                            mnt,
-                            output_directory,
-                            stage,
-                            symlinkvalue,
-                            userprofiles,
-                            verbosity,
-                            volatility,
-                            vssimage,
-                            vsstext,
-                        )
-                    else:
-                        pass
-                elif (
-                    img.split("::")[0] in artefact_directory
-                    and img.split("::")[1] == "macOS"
-                    and "memory" not in img.split("::")[1]
-                ):  # macOS Collection
-                    item = mnt + "/root" + system_artefact
-                    if not os.path.exists(dest):
-                        os.makedirs(dest)
-                    else:
-                        pass
-                    if os.path.exists(item):  # Collection
-                        collect_mac_artefacts(
-                            dest,
-                            img,
-                            item,
-                            mnt + "/root",
-                            output_directory,
-                            sha256,
-                            stage,
-                            symlinkvalue,
-                            userprofiles,
-                            verbosity,
-                            volatility,
-                            vssimage,
-                            vsstext,
-                        )
-                    else:
-                        pass
-                elif (
-                    img.split("::")[0] in artefact_directory
-                    and img.split("::")[1] == "Linux"
-                    and "memory" not in img.split("::")[1]
-                ):  # Linux Collection
-                    item = mnt + system_artefact
-                    if not os.path.exists(dest):
-                        os.makedirs(dest)
-                    else:
-                        pass
-                    if os.path.exists(item):  # Collection
-                        collect_linux_artefacts(
-                            dest,
-                            img,
-                            item,
-                            mnt,
-                            output_directory,
-                            stage,
-                            symlinkvalue,
-                            userprofiles,
-                            verbosity,
-                            volatility,
-                            vssimage,
-                            vsstext,
-                        )
-                    else:
-                        pass
-                else:
-                    pass
+                except OSError as error:
+                    manage_error(
+                        output_directory,
+                        verbosity,
+                        error,
+                        "collection",
+                        img,
+                        item,
+                        vsstext,
+                    )
         if not auto:
-            yes_collect_recover = input(
+            collect_recover = input(
                 "  Do you wish to collect, recover and/or carve files from '{}'? Y/n [Y] ".format(
                     img.split("::")[0]
                 )
             )
         else:
             pass
-        if auto or yes_collect_recover != "n":
+        if auto or collect_recover != "n":
             if collectfiles or recover:
                 select_files(
                     output_directory,

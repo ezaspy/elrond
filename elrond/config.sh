@@ -9,7 +9,10 @@ sudo apt update
 ../elrond/tools/scripts/./elastic.sh
 ../elrond/tools/scripts/./navigator.sh
 sudo updatedb
-sudo apt install mlocate build-essential yara john gparted -y --fix-missing
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install python3.9 python3-pip mlocate build-essential yara john gparted -y --fix-missing
+pip install construct==2.10.68
 updatedb
 # configuring elrond
 sudo chmod -R 744 /opt/elrond/
