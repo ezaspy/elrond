@@ -302,8 +302,7 @@ def collect_artefacts(
         symlinkvalue = False
     else:
         symlinkvalue = True
-    for each in imgs:  # Collection
-        img, mnt = [each, imgs[each]]
+    for mnt, img in imgs.items():  # Collection
         if "vss" in img.split("::")[1]:
             vssimage = (
                 "'"
@@ -486,7 +485,9 @@ def collect_artefacts(
                             pass
                     else:
                         pass
-                except OSError as error:
+                except OSError as error:  # if item is list, cycle through using loop
+                    print(item)
+                    print(type(item))
                     manage_error(
                         output_directory,
                         verbosity,

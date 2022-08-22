@@ -53,6 +53,7 @@ def main(
     timeline,
     memorytimeline,
     userprofiles,
+    unmount,
     veryverbose,
     verbose,
     yara,
@@ -68,14 +69,6 @@ def main(
     quotes,
     asciitext,
 ):
-    subprocess.Popen(
-        [
-            "sudo",
-            "/opt/elrond/elrond/tools/scripts/./swap.sh",
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    ).communicate()
     subprocess.Popen(["clear"])
     time.sleep(2)
     print(
@@ -100,17 +93,11 @@ def main(
         sys.exit()
     else:
         pass
-    if not process and (not collect or not gandalf):
-        if volatility and not process:
-            print(
-                "\n  If you are just processing memory images, you must invoke the process switch (-P) with the memory switch (-M).\n  Please try again.\n\n\n\n"
-            )
-            sys.exit()
-        else:
-            print(
-                "\n  If you have previously collected artefacts using gandalf and wish to process them, you must invoke the process switch (-P) with the gandalf switch (-G).\n  If you have previously collected artefacts NOT using gandalf, and wish to process them, you must invoke the process switch (-P) without the collect switch (-C) and without the gandalf switch (-G).\n   Please try again.\n\n\n\n"
-            )
-            sys.exit()
+    if volatility and not process:
+        print(
+            "\n  If you are just processing memory images, you must invoke the process switch (-P) with the memory switch (-M).\n  Please try again.\n\n\n\n"
+        )
+        sys.exit()
     else:
         pass
     if (not collect or gandalf) and (
@@ -193,10 +180,11 @@ def main(
         time.sleep(2)
     else:
         pass
-    starttime, ot, imgs, foundimgs, d, vssmem = (
+    starttime, ot, imgs, foundimgs, doneimgs, d, vssmem = (
         datetime.now().isoformat(),
         {},
         {},
+        [],
         [],
         directory[0],
         "",
@@ -335,7 +323,10 @@ def main(
         sys.exit()
     else:
         pass
-    unmount_images(elrond_mount, ewf_mount)
+    if not unmount:
+        unmount_images(elrond_mount, ewf_mount)
+    else:
+        pass
     if volatility:
         volchoice, volcheck = (
             "2.6",
@@ -374,10 +365,28 @@ def main(
     )
     time.sleep(1)
     if collect:  # collect artefacts from disk/memory images
+        print("      Collating valid images...\r")
         for root, _, files in os.walk(d):  # Mounting images
             for f in files:
                 if os.path.exists(os.path.join(root, f)):  # Mounting images
-                    if f.split(".E")[0] + ".E" not in str(foundimgs):
+                    if (
+                        ".FA" not in f
+                        and ".FB" not in f
+                        and ".FC" not in f
+                        and ".FD" not in f
+                        and ".FE" not in f
+                        and ".FF" not in f
+                        and (
+                            (
+                                f.split(".E")[0] + ".E" not in str(foundimgs)
+                                and f.split(".e")[0] + ".e" not in str(foundimgs)
+                            )
+                            and (
+                                f.split(".F")[0] + ".F" not in str(foundimgs)
+                                and f.split(".f")[0] + ".f" not in str(foundimgs)
+                            )
+                        )
+                    ):
                         path, imgformat, fsize = (
                             os.path.join(root, f),
                             str(
@@ -389,7 +398,7 @@ def main(
                             )[2:-3].split(": ")[1],
                             os.stat(os.path.join(root, f)).st_size,
                         )
-                        if fsize > 10000:
+                        if fsize > 1073741824:  # larger than 1GB
                             if not os.path.isdir(output_directory + f):
                                 os.mkdir(output_directory + f)
                                 foundimgs.append(
@@ -592,6 +601,7 @@ def main(
                 print()
             else:
                 pass
+        print("      Collated valid images\r")
     elif gandalf:  # populate allimgs and imgs dictionaries
         assess_gandalf(
             auto,
@@ -620,11 +630,11 @@ def main(
     allimgs = OrderedDict(sorted(allimgs.items(), key=lambda x: x[1]))
     if len(allimgs) > 0:
         for (
-            image_name,
             image_location,
+            image_name,
         ) in allimgs.items():  # populating just a 'disk image' dictionary
             if "::" in image_name and "::memory_" not in image_name:
-                imgs[image_name] = image_location
+                imgs[image_location] = image_name
             else:
                 pass
         time.sleep(1)
@@ -695,11 +705,25 @@ def main(
         OrderedDict(sorted(imgs.items(), key=lambda x: x[1])),
         [
             "/mnt/elrond_mount",
-            "/mnt/elrond_mount1",
-            "/mnt/elrond_mount2",
-            "/mnt/elrond_mount3",
-            "/mnt/elrond_mount4",
-            "/mnt/elrond_mount5",
+            "/mnt/elrond_mount01",
+            "/mnt/elrond_mount02",
+            "/mnt/elrond_mount03",
+            "/mnt/elrond_mount04",
+            "/mnt/elrond_mount05",
+            "/mnt/elrond_mount06",
+            "/mnt/elrond_mount07",
+            "/mnt/elrond_mount08",
+            "/mnt/elrond_mount09",
+            "/mnt/elrond_mount10",
+            "/mnt/elrond_mount11",
+            "/mnt/elrond_mount12",
+            "/mnt/elrond_mount13",
+            "/mnt/elrond_mount14",
+            "/mnt/elrond_mount15",
+            "/mnt/elrond_mount16",
+            "/mnt/elrond_mount17",
+            "/mnt/elrond_mount18",
+            "/mnt/elrond_mount19",
         ],
     )
     if (

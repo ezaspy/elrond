@@ -12,7 +12,12 @@ sudo updatedb
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt update
 sudo apt install python3.9 python3-pip mlocate build-essential yara john gparted -y --fix-missing
-pip install construct==2.10.68
+PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
+python3.9 -m pip install setuptools construct==2.10.68
+/usr/bin/python3.9 -m pip install --upgrade pip
+/usr/bin/python3 -m pip install --upgrade pip
+/usr/bin/python -m pip install --upgrade pip
+git clone https://github.com/harelsegev/INDXRipper /opt/elrond/elrond/tools/INDXRipper
 updatedb
 # configuring elrond
 sudo chmod -R 744 /opt/elrond/

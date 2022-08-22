@@ -427,7 +427,7 @@ def windows_users(
                         else:
                             pass
                 else:
-                    for every in os.path.exists(
+                    for every in os.listdir(
                         item
                         + each
                         + "/AppData/Local/Microsoft/Windows/Temporary Internet Files/"
@@ -438,7 +438,9 @@ def windows_users(
                             or every == "Low"
                         ):
                             try:
-                                os.stat(dest + each + "/IE/Temporary Internet Files/")
+                                os.stat(
+                                    dest + each + "/IE/Temporary Internet Files/"
+                                )
                             except:
                                 os.makedirs(
                                     dest + each + "/IE/Temporary Internet Files/"

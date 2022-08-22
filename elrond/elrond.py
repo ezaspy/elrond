@@ -233,6 +233,14 @@ parser.add_argument(
     default=False,
 )
 parser.add_argument(
+    "-u",
+    "--unmount",
+    help="Do not unmount, currently mounted images (in /mnt/elrond_mountX)",
+    action="store_const",
+    const=True,
+    default=False,
+)
+parser.add_argument(
     "-V",
     "--veryverbose",
     help="Show detailed logging",
@@ -287,6 +295,7 @@ symlinks = args.symlinks
 timeline = args.timeline
 memorytimeline = args.memorytimeline
 userprofiles = args.userprofiles
+unmount = args.unmount
 veryverbose = args.veryverbose
 verbose = args.verbose
 yara = args.yara
@@ -300,19 +309,47 @@ allimgs = {}
 flags = []
 elrond_mount = [
     "/mnt/elrond_mount",
-    "/mnt/elrond_mount1",
-    "/mnt/elrond_mount2",
-    "/mnt/elrond_mount3",
-    "/mnt/elrond_mount4",
-    "/mnt/elrond_mount5",
+    "/mnt/elrond_mount01",
+    "/mnt/elrond_mount02",
+    "/mnt/elrond_mount03",
+    "/mnt/elrond_mount04",
+    "/mnt/elrond_mount05",
+    "/mnt/elrond_mount06",
+    "/mnt/elrond_mount07",
+    "/mnt/elrond_mount08",
+    "/mnt/elrond_mount09",
+    "/mnt/elrond_mount10",
+    "/mnt/elrond_mount11",
+    "/mnt/elrond_mount12",
+    "/mnt/elrond_mount13",
+    "/mnt/elrond_mount14",
+    "/mnt/elrond_mount15",
+    "/mnt/elrond_mount16",
+    "/mnt/elrond_mount17",
+    "/mnt/elrond_mount18",
+    "/mnt/elrond_mount19",
 ]
 ewf_mount = [
     "/mnt/ewf_mount",
-    "/mnt/ewf_mount1",
-    "/mnt/ewf_mount2",
-    "/mnt/ewf_mount3",
-    "/mnt/ewf_mount4",
-    "/mnt/ewf_mount5",
+    "/mnt/ewf_mount01",
+    "/mnt/ewf_mount02",
+    "/mnt/ewf_mount03",
+    "/mnt/ewf_mount04",
+    "/mnt/ewf_mount05",
+    "/mnt/ewf_mount06",
+    "/mnt/ewf_mount07",
+    "/mnt/ewf_mount08",
+    "/mnt/ewf_mount09",
+    "/mnt/ewf_mount10",
+    "/mnt/ewf_mount11",
+    "/mnt/ewf_mount12",
+    "/mnt/ewf_mount13",
+    "/mnt/ewf_mount14",
+    "/mnt/ewf_mount15",
+    "/mnt/ewf_mount16",
+    "/mnt/ewf_mount17",
+    "/mnt/ewf_mount18",
+    "/mnt/ewf_mount19",
 ]
 system_artefacts = [
     "/",
@@ -468,6 +505,7 @@ if __name__ == "__main__":
         timeline,
         memorytimeline,
         userprofiles,
+        unmount,
         veryverbose,
         verbose,
         yara,

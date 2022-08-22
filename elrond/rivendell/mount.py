@@ -53,144 +53,151 @@ def unmount_images(elrond_mount, ewf_mount):
             pass
 
 
-def mount_images(
-    d,
-    auto,
-    verbosity,
-    output_directory,
-    path,
-    disk_file,
-    elrond_mount,
-    ewf_mount,
-    allimgs,
-    imageinfo,
-    imgformat,
-    vss,
-    stage,
-    cwd,
-    quotes,
-):
-    def collect_ewfinfo(path, intermediate_mount):
-        ewfinfo = list(
-            re.findall(
-                r"ewfinfo[^\\]+\\n\\n.*Acquisition\sdate\:\\t(?P<aquisition_date>[^\\]+)\\n.*Operating\ssystem\sused\:\\t(?P<os_used>[^\\]+)\\n.*Sectors\sper\schunk\:\\t(?P<sector_chunks>[^\\]+)\\n.*Bytes\sper\ssector\:\\t(?P<bps>[^\\]+)\\n\\tNumber\sof\ssectors\:\\t(?P<nos>[^\\]+)\\n\\tMedia\ssize\:\\t\\t(?P<media_size>[^\\]+)\\n",
-                str(
-                    subprocess.Popen(
-                        ["ewfinfo", path],
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
-                    ).communicate()[0]
-                ),
-            )[0]
-        )
-        os.chdir(intermediate_mount)
-        subprocess.Popen(
-            ["ewfmount", path, intermediate_mount + "/"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        ).communicate()[0]
-        rawinfo = list(
-            re.findall(
-                r"Disk\sidentifier\:\s(?P<rawdiskid>[^\\]+)\\n",
-                str(
-                    subprocess.Popen(
-                        ["fdisk", "-l", "ewf1"],
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
-                    ).communicate()[0]
-                )[2:-3],
-            )[0]
-        )
-        print(
-            "\n  -> Information for '{}'\n\n   Acquisition date/time:\t{}\n   Operating system:\t\t{}\n   Image size:\t\t\t{}\n   Identifier:\t\t\t{}\n   No. of sectors:\t\t{}\n   Size of sector chunks:\t{}\n   Bytes per sector:\t\t{}\n".format(
-                path,
-                ewfinfo[0],
-                ewfinfo[1],
-                ewfinfo[5],
-                rawinfo[0],
-                ewfinfo[2],
-                ewfinfo[3],
-                ewfinfo[4],
-            )
-        )
-        os.chdir(cwd)
-        conelrond = input(
-            "    Typically, the --information flag is used before forensic analysis commences.\n     Do you want to continue with the forensic analysis? Y/n [Y] "
-        )
-        if conelrond == "n":
-            unmount_images(elrond_mount, ewf_mount)
-            print("\n\n     " + random.choice(quotes) + "\n\n")
-            sys.exit()
-        else:
-            pass
-
-    def obtain_offset(intermediate_mount):
-        offset_value = re.findall(
-            r"\\n[\w\-\.\/]+(?:(?:ewf1p2)|\.(?:raw|dd|img)\d)[\ \*]+(?P<offset>\d+)[\w\d\.\ \*]+\s+(?:NTFS|Microsoft\ basic\ data|HPFS|Linux|exFAT)",
+def collect_ewfinfo(elrond_mount, ewf_mount, path, intermediate_mount, cwd):
+    ewfinfo = list(
+        re.findall(
+            r"ewfinfo[^\\]+\\n\\n.*Acquisition\sdate\:\\t(?P<aquisition_date>[^\\]+)\\n.*Operating\ssystem\sused\:\\t(?P<os_used>[^\\]+)\\n.*Sectors\sper\schunk\:\\t(?P<sector_chunks>[^\\]+)\\n.*Bytes\sper\ssector\:\\t(?P<bps>[^\\]+)\\n\\tNumber\sof\ssectors\:\\t(?P<nos>[^\\]+)\\n\\tMedia\ssize\:\\t\\t(?P<media_size>[^\\]+)\\n",
             str(
                 subprocess.Popen(
-                    ["fdisk", "-l", intermediate_mount],
+                    ["ewfinfo", path],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                ).communicate()[0]
+            ),
+        )[0]
+    )
+    os.chdir(intermediate_mount)
+    mount_ewf(path, intermediate_mount + "/")
+    rawinfo = list(
+        re.findall(
+            r"Disk\sidentifier\:\s(?P<rawdiskid>[^\\]+)\\n",
+            str(
+                subprocess.Popen(
+                    ["fdisk", "-l", "ewf1"],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                 ).communicate()[0]
             )[2:-3],
+        )[0]
+    )
+    print(
+        "\n  -> Information for '{}'\n\n   Acquisition date/time:\t{}\n   Operating system:\t\t{}\n   Image size:\t\t\t{}\n   Identifier:\t\t\t{}\n   No. of sectors:\t\t{}\n   Size of sector chunks:\t{}\n   Bytes per sector:\t\t{}\n".format(
+            path,
+            ewfinfo[0],
+            ewfinfo[1],
+            ewfinfo[5],
+            rawinfo[0],
+            ewfinfo[2],
+            ewfinfo[3],
+            ewfinfo[4],
         )
-        return offset_value
+    )
+    os.chdir(cwd)
+    conelrond = input(
+        "    Typically, the --information flag is used before forensic analysis commences.\n     Do you want to continue with the forensic analysis? Y/n [Y] "
+    )
+    if conelrond == "n":
+        unmount_images(elrond_mount, ewf_mount)
+        sys.exit()
+    else:
+        pass
 
-    def mounted_image(allimgs, disk_image, destination_mount):
+
+def obtain_offset(
+    intermediate_mount,
+):  # comment - not mounting disks with multiple valid partitions
+    offset_values = re.findall(
+        r"\\n[\w\-\.\/]+(?:(?:ewf1p\d+)|\.(?:raw|dd|img)\d)[\ \*]+(?P<offset>\d+)[\w\d\.\ \*]+\s+(?:NTFS|Microsoft\ basic\ data|HPFS|Linux|exFAT)",
+        str(
+            subprocess.Popen(
+                ["fdisk", "-l", intermediate_mount],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).communicate()[0]
+        )[2:-3],
+    )
+    return offset_values
+
+
+def mounted_image(allimgs, disk_image, destination_mount, disk_file, index):
+    if index == "0":
+        partition = ""
+    elif index == 0:
+        partition = " (first partition)"
+    elif index == 1:
+        partition = " (second partition)"
+    elif index == 2:
+        partition = " (third partition)"
+    elif index == 3:
+        partition = " (forth partition)"
+    elif index == 4:
+        partition = " (fifth partition)"
+    if "::Windows" in disk_image or "::macOS" in disk_image or "::Linux" in disk_image:
+        allimgs[destination_mount] = disk_image
+        print(
+            "   Mounted '{}'{} successfully at '{}'".format(
+                disk_file, partition, destination_mount
+            )
+        )
+    else:
+        print("   '{}'{} could not be mounted.".format(disk_image, partition))
+
+
+def doVMDKConvert(intermediate_mount):
+    subprocess.Popen(
+        [
+            "qemu-img",
+            "convert",
+            "-O",
+            "raw",
+            intermediate_mount,
+            intermediate_mount + ".raw",
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ).communicate()
+
+
+def mount_vmdk_image(
+    verbosity,
+    output_directory,
+    intermediate_mount,
+    destination_mount,
+    disk_file,
+    allimgs,
+):
+    try:
+        apfs = str(
+            subprocess.Popen(
+                [
+                    "/usr/local/bin/apfs-fuse/build/./apfs-fuse",
+                    "-o",
+                    "allow_other",
+                    intermediate_mount,
+                    destination_mount,
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).communicate()[1]
+        )
+    except:
         if (
-            "::Windows" in disk_image
-            or "::macOS" in disk_image
-            or "::Linux" in disk_image
+            input(
+                "  apfs-fuse and associated libraries are not installed. This is required for macOS disk images.\n   Continue? Y/n [Y] "
+            )
+            == "n"
         ):
-            allimgs[disk_image] = destination_mount
-            print(
-                "   Mounted '{}' successfully at '{}'".format(
-                    disk_file, destination_mount
-                )
-            )
-        else:
-            print("   '{}' could not be mounted.".format(disk_image))
-
-    def mount_vmdk_image(
-        verbosity,
-        output_directory,
-        intermediate_mount,
-        destination_mount,
-        disk_file,
-        allimgs,
-    ):
-        try:
-            apfs = str(
-                subprocess.Popen(
-                    [
-                        "/usr/local/bin/apfs-fuse/build/./apfs-fuse",
-                        "-o",
-                        "allow_other",
-                        intermediate_mount,
-                        destination_mount,
-                    ],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                ).communicate()[1]
-            )
-        except:
-            if (
-                input(
-                    "  apfs-fuse and associated libraries are not installed. This is required for macOS disk images.\n   Continue? Y/n [Y] "
-                )
-                == "n"
-            ):
-                if os.path.exists("/usr/local/bin/apfs"):
-                    shutil.rmtree("/usr/local/bin/apfs")
-                else:
-                    pass
-                sys.exit()
+            if os.path.exists("/usr/local/bin/apfs"):
+                shutil.rmtree("/usr/local/bin/apfs")
             else:
-                apfs = ""
-        if apfs != "":
-            offset_value = obtain_offset(intermediate_mount)
-            if len(offset_value) > 0:
+                pass
+            sys.exit()
+        else:
+            apfs = ""
+    if apfs != "":
+        offset_values = obtain_offset(intermediate_mount)
+        if len(offset_values) > 0:
+            for offset_value in offset_values:
                 if (
                     str(
                         subprocess.Popen(
@@ -200,7 +207,7 @@ def mount_images(
                                 "ext4",
                                 "-o",
                                 "ro,norecovery,loop,offset="
-                                + str(int(offset_value[0]) * 512),
+                                + str(int(offset_value) * 512),
                                 intermediate_mount,
                                 destination_mount,
                             ],
@@ -213,7 +220,9 @@ def mount_images(
                     disk_image = identify_disk_image(
                         verbosity, output_directory, disk_file, destination_mount
                     )
-                    mounted_image(allimgs, disk_image, destination_mount)
+                    mounted_image(
+                        allimgs, disk_image, destination_mount, disk_file, "0"
+                    )
                 elif (
                     str(
                         subprocess.Popen(
@@ -223,7 +232,7 @@ def mount_images(
                                 "ntfs",
                                 "-o",
                                 "ro,loop,show_sys_files,streams_interface=windows,offset="
-                                + str(int(offset_value[0]) * 512),
+                                + str(int(offset_value) * 512),
                                 intermediate_mount,
                                 destination_mount,
                             ],
@@ -236,7 +245,9 @@ def mount_images(
                     disk_image = identify_disk_image(
                         verbosity, output_directory, disk_file, destination_mount
                     )
-                    mounted_image(allimgs, disk_image, destination_mount)
+                    mounted_image(
+                        allimgs, disk_image, destination_mount, disk_file, "0"
+                    )
                 else:
                     print(
                         "   An error occured when mounting '{}'.\n    Perhaps this is a macOS-based image and requires apfs-fuse? Visit https://github.com/ezaspy/apfs-fuse and try again.\n   If this does not work, the disk may not be supported and/or may be corrupt? Feel free to raise an issue via https://github.com/ezaspy/elrond/issues".format(
@@ -268,14 +279,40 @@ def mount_images(
                         sys.exit()
                     else:
                         pass
-            else:
-                disk_image = identify_disk_image(
-                    verbosity, output_directory, disk_file, destination_mount
-                )
-                mounted_image(allimgs, disk_image, destination_mount)
         else:
-            pass
+            disk_image = identify_disk_image(
+                verbosity, output_directory, disk_file, destination_mount
+            )
+            mounted_image(allimgs, disk_image, destination_mount, disk_file, "0")
+    else:
+        pass
 
+
+def mount_ewf(path, intermediate_mount):
+    subprocess.Popen(
+        ["ewfmount", path, intermediate_mount],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ).communicate()[1],
+
+
+def mount_images(
+    d,
+    auto,
+    verbosity,
+    output_directory,
+    path,
+    disk_file,
+    elrond_mount,
+    ewf_mount,
+    allimgs,
+    imageinfo,
+    imgformat,
+    vss,
+    stage,
+    cwd,
+    quotes,
+):
     if not os.path.exists(elrond_mount[0]):
         try:
             os.makedirs(elrond_mount[0])
@@ -342,18 +379,13 @@ def mount_images(
                 )
             else:
                 pass
-            destination_mount, intermediate_mount, _ = (
-                elrond_mount[0],
-                ewf_mount[0],
-                subprocess.Popen(
-                    ["ewfmount", path, ewf_mount[0]],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                ).communicate()[1],
-            )
+            destination_mount, intermediate_mount = elrond_mount[0], ewf_mount[0]
+            mount_ewf(path, intermediate_mount)
             if imageinfo:
                 try:
-                    collect_ewfinfo(path, intermediate_mount)
+                    collect_ewfinfo(
+                        elrond_mount, ewf_mount, path, intermediate_mount, cwd
+                    )
                 except:
                     print(
                         "  -> Information for '{}' could not be obtained".format(path)
@@ -379,7 +411,7 @@ def mount_images(
                 disk_image = identify_disk_image(
                     verbosity, output_directory, disk_file, destination_mount
                 )
-                mounted_image(allimgs, disk_image, destination_mount)
+                mounted_image(allimgs, disk_image, destination_mount, disk_file, "0")
                 if vss:
                     if verbosity != "":
                         print(
@@ -473,22 +505,7 @@ def mount_images(
             elif (
                 "unknown filesystem type 'apfs'" in mounterr
                 or "wrong fs type" in mounterr
-            ):
-
-                def successfull_mount(
-                    verbosity, output_directory, disk_file, destination_mount, allimgs
-                ):
-                    if verbosity != "":
-                        disk_image = identify_disk_image(
-                            verbosity,
-                            output_directory,
-                            disk_file,
-                            destination_mount,
-                        )
-                        mounted_image(allimgs, disk_image, destination_mount)
-                    else:
-                        pass
-
+            ):  # mounting images with multiple valid partitions
                 if "unknown filesystem type 'apfs'" in mounterr:
                     try:
                         attempt_to_mount = str(
@@ -505,51 +522,85 @@ def mount_images(
                             ).communicate()[1]
                         )
                         if attempt_to_mount == "b''":
-                            successfull_mount(
-                                verbosity,
-                                output_directory,
-                                disk_file,
-                                destination_mount,
-                                allimgs,
-                            )
+                            if verbosity != "":
+                                disk_image = identify_disk_image(
+                                    verbosity,
+                                    output_directory,
+                                    disk_file,
+                                    destination_mount,
+                                )
+                                mounted_image(
+                                    allimgs,
+                                    disk_image,
+                                    destination_mount,
+                                    disk_file,
+                                    "0",
+                                )
+                            else:
+                                pass
                         elif "mountpoint is not empty" in attempt_to_mount:
                             pass
                         else:
                             pass
                     except:
                         pass
-                else:
-                    pass
-                if "wrong fs type" in mounterr:
-                    offset_value = obtain_offset(intermediate_mount + "/ewf1")
-                    attempt_to_mount = str(
-                        subprocess.Popen(
-                            [
-                                "mount",
-                                "-o",
-                                "ro,loop,show_sys_files,streams_interface=windows,offset="
-                                + str(int(offset_value[0]) * 512),
-                                intermediate_mount + "/ewf1",
-                                destination_mount,
-                            ],
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE,
-                        ).communicate()[1]
-                    )
-                    if attempt_to_mount == "b''":
-                        successfull_mount(
-                            verbosity,
-                            output_directory,
-                            disk_file,
-                            destination_mount,
-                            allimgs,
-                        )
-                    elif "mountpoint is not empty" in attempt_to_mount:
-                        pass
+                else:  # mounting images with multiple valid partitions
+                    offset_values = obtain_offset(intermediate_mount + "/ewf1")
+                    if len(offset_values) > 0:
+                        for offset_value in offset_values:
+                            destination_mount, intermediate_mount = (
+                                elrond_mount[0],
+                                ewf_mount[0],
+                            )
+                            if not os.path.exists(intermediate_mount):
+                                os.mkdir(intermediate_mount)
+                            else:
+                                pass
+                            mount_ewf(path, intermediate_mount)
+                            if not os.path.exists(destination_mount):
+                                os.mkdir(destination_mount)
+                            else:
+                                pass
+                            attempt_to_mount = str(
+                                subprocess.Popen(
+                                    [
+                                        "mount",
+                                        "-o",
+                                        "ro,loop,show_sys_files,streams_interface=windows,offset="
+                                        + str(int(offset_value) * 512),
+                                        intermediate_mount + "/ewf1",
+                                        destination_mount,
+                                    ],
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE,
+                                ).communicate()[1]
+                            )
+                            if len(os.listdir(destination_mount)) > 0:
+                                if (
+                                    verbosity != ""
+                                    and offset_values.index(offset_value) == 0
+                                ):
+                                    disk_image = identify_disk_image(
+                                        verbosity,
+                                        output_directory,
+                                        disk_file,
+                                        destination_mount,
+                                    )
+                                else:
+                                    pass
+                                mounted_image(
+                                    allimgs,
+                                    disk_image,
+                                    destination_mount,
+                                    disk_file,
+                                    offset_values.index(offset_value),
+                                )
+                            else:
+                                pass
+                            elrond_mount.pop(0)
+                            ewf_mount.pop(0)
                     else:
                         pass
-                else:
-                    pass
             elif "is already mounted." in mounterr:
                 pass
             else:
@@ -562,21 +613,6 @@ def mount_images(
                 or disk_file.endswith(".img")
             )
         ):
-
-            def doVMDKConvert(intermediate_mount):
-                subprocess.Popen(
-                    [
-                        "qemu-img",
-                        "convert",
-                        "-O",
-                        "raw",
-                        intermediate_mount,
-                        intermediate_mount + ".raw",
-                    ],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                ).communicate()
-
             if d.startswith("/"):
                 destination_mount, intermediate_mount, = (
                     elrond_mount[0],

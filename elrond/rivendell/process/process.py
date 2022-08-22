@@ -1,6 +1,7 @@
 #!/usr/bin/env python3 -tt
 import os
 import re
+import subprocess
 import time
 from collections import OrderedDict
 from datetime import datetime
@@ -26,9 +27,6 @@ from rivendell.process.windows import (
 from rivendell.process.windows import process_registry_profile
 from rivendell.process.windows import process_shimcache
 from rivendell.process.windows import process_usb
-
-
-import sys
 
 
 def process_artefacts(
@@ -457,6 +455,35 @@ def identify_pre_process_artefacts(
                     )
                 else:
                     pass
+            if "Windows" in img.split("::")[1] and "memory_" not in img.split("::")[1]:
+                print(d, img, img.split("::")[0])
+                indxripper = str(
+                    subprocess.Popen(
+                        [
+                            "python3.9",
+                            "/opt/elrond/elrond/tools/INDXRipper/INDXRipper.py",
+                            "-w",
+                            "csv",
+                            img.split("::")[0],
+                            img.split("::")[0] + ".csv",
+                        ],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                    ).communicate()[0]
+                )
+                print(indxripper)
+                entry, prnt = "{},{},{},$I30 records\n".format(
+                    datetime.now().isoformat(),
+                    vssimage.replace("'", ""),
+                    stage,
+                ), " -> {} -> {} $I30 records from {}".format(
+                    datetime.now().isoformat().replace("T", " "),
+                    stage,
+                    vssimage,
+                )
+                write_audit_log_entry(verbosity, output_directory, entry, prnt)
+            else:
+                pass
             if collectfiles:
                 process_list.clear()
                 if os.path.exists(

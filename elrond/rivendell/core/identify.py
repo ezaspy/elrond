@@ -8,27 +8,30 @@ from rivendell.meta import extract_metadata
 from rivendell.process.memory import process_memory
 
 
-def identify_disk_image(verbosity, output_directory, disk_image, mount_location):
-    def print_identification(verbosity, output_directory, disk_image, osplatform):
-        print("   Identified platform of '{}' for '{}'.".format(osplatform, disk_image))
-        entry, prnt = "{},{},identified platform,{}\n".format(
-            datetime.now().isoformat(),
-            disk_image,
-            osplatform,
-        ), " -> {} -> identified platform of '{}' for '{}'".format(
-            datetime.now().isoformat().replace("T", " "),
-            osplatform,
-            disk_image,
-        )
-        write_audit_log_entry(verbosity, output_directory, entry, prnt)
+def print_identification(verbosity, output_directory, disk_image, osplatform):
+    print("   Identified platform of '{}' for '{}'.".format(osplatform, disk_image))
+    entry, prnt = "{},{},identified platform,{}\n".format(
+        datetime.now().isoformat(),
+        disk_image,
+        osplatform,
+    ), " -> {} -> identified platform of '{}' for '{}'".format(
+        datetime.now().isoformat().replace("T", " "),
+        osplatform,
+        disk_image,
+    )
+    write_audit_log_entry(verbosity, output_directory, entry, prnt)
 
+
+def identify_disk_image(verbosity, output_directory, disk_image, mount_location):
     if not mount_location.endswith("/"):
         mount_location = mount_location + "/"
     else:
         pass
     if len(os.listdir(mount_location)) > 0:
-        if "Users" in str(os.listdir(mount_location)) and "MFTMirr" in str(
-            os.listdir(mount_location)
+        if "MFTMirr" in str(os.listdir(mount_location)) and (
+            "Users" in str(os.listdir(mount_location))
+            or ("Bitmap" in str(os.listdir(mount_location)))
+            or ("LogFile" in str(os.listdir(mount_location)))
         ):
             if "MSOCache" in str(os.listdir(mount_location)):
                 print_identification(
@@ -185,15 +188,5 @@ def identify_gandalf_host(output_directory, verbosity, host_info_file):
     time.sleep(2)
     with open(host_info_file) as host_info:
         gandalf_host, osplatform = host_info.readline().strip().split("::")
-    print("   Identified platform of '{}' for '{}'.".format(osplatform, gandalf_host))
-    (entry, prnt,) = "{},{},identified platform,{}\n".format(
-        datetime.now().isoformat(),
-        gandalf_host,
-        osplatform,
-    ), " -> {} -> identified platform of '{}' for '{}'".format(
-        datetime.now().isoformat().replace("T", " "),
-        osplatform,
-        gandalf_host,
-    )
-    write_audit_log_entry(verbosity, output_directory, entry, prnt)
+    print_identification(verbosity, output_directory, gandalf_host, osplatform)
     return gandalf_host, osplatform
