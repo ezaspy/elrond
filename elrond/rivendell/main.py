@@ -365,7 +365,6 @@ def main(
     )
     time.sleep(1)
     if collect:  # collect artefacts from disk/memory images
-        print("      Collating valid images...\r")
         for root, _, files in os.walk(d):  # Mounting images
             for f in files:
                 if os.path.exists(os.path.join(root, f)):  # Mounting images
@@ -601,7 +600,6 @@ def main(
                 print()
             else:
                 pass
-        print("      Collated valid images\r")
     elif gandalf:  # populate allimgs and imgs dictionaries
         assess_gandalf(
             auto,
@@ -704,7 +702,7 @@ def main(
         OrderedDict(sorted(allimgs.items(), key=lambda x: x[1])),
         OrderedDict(sorted(imgs.items(), key=lambda x: x[1])),
         [
-            "/mnt/elrond_mount",
+            "/mnt/elrond_mount00",
             "/mnt/elrond_mount01",
             "/mnt/elrond_mount02",
             "/mnt/elrond_mount03",

@@ -28,6 +28,8 @@ from rivendell.process.windows import process_registry_profile
 from rivendell.process.windows import process_shimcache
 from rivendell.process.windows import process_usb
 
+import sys
+
 
 def process_artefacts(
     output_directory,
@@ -248,7 +250,67 @@ def process_artefacts(
     return vssmem
 
 
-def identify_pre_process_artefacts(
+def select_artefacts_to_process(img, process_list, artefacts_list):
+    for each in process_list:
+        for root, _, files in os.walk(each):
+            for f in files:  # Identifying artefacts for processing
+                if img.split("::")[0] in root:
+                    if (
+                        f.endswith("MFT")
+                        or f.endswith("LogFile")
+                        or f.endswith("UsnJrnl")
+                        or f.endswith("ObjId")
+                        or f.endswith("Reparse")
+                        or f.endswith("SAM")
+                        or f.endswith("SECURITY")
+                        or f.endswith("SOFTWARE")
+                        or f.endswith("SYSTEM")
+                        or f.endswith("NTUSER.DAT")
+                        or f.endswith("UsrClass.dat")
+                        or f.endswith(".evtx")
+                        or f.endswith("setupapi.dev.log")
+                        or f.endswith("hiberfil.sys")
+                        or f.endswith("MEMORY.DMP")
+                        or f.endswith("pagefile.sys")
+                        or f.endswith("swapfile.sys")
+                        or f.endswith("-ms")
+                        or f.endswith(".pf")
+                        or f.endswith(".db")
+                        or f.endswith(".bcf")
+                        or f.endswith(".hve")
+                        or "/S-1-5-21-" in root + "/" + f
+                        or f.endswith("+bash_aliases")
+                        or f.endswith("+bash_history")
+                        or f.endswith("+bash_logout")
+                        or f.endswith("+bashrc")
+                        or f.endswith("crontab")
+                        or f.endswith("hosts")
+                        or f.endswith("group")
+                        or f.endswith("passwd")
+                        or f.endswith("shadow")
+                        or f.endswith("log")
+                        or "log.1" in f
+                        or "__audit_" in f
+                        or "+audit_" in f
+                        or f.endswith(".plist")
+                        or f.endswith(".conf")
+                        or f.split("/")[-1].startswith("job.")
+                        or f.endswith(".service")
+                        or f.endswith(".target")
+                        or f.endswith(".socket")
+                        or "/raw/mail" in root + "/" + f
+                        or "/raw/browsers" in root + "/" + f
+                        or "/carved/" in root
+                    ):
+                        artefacts_list.append(each + ": " + root + "/" + f)
+                    else:
+                        pass
+                else:
+                    pass
+    return artefacts_list
+
+
+def select_pre_process_artefacts(
     output_directory,
     verbosity,
     d,
@@ -265,65 +327,6 @@ def identify_pre_process_artefacts(
     memtimeline,
     collectfiles,
 ):
-    def identify_artefacts_to_process(img, process_list):
-        for each in process_list:
-            for root, _, files in os.walk(each):
-                for f in files:  # Identifying artefacts for processing
-                    if img.split("::")[0] in root:
-                        if (
-                            f.endswith("MFT")
-                            or f.endswith("LogFile")
-                            or f.endswith("UsnJrnl")
-                            or f.endswith("ObjId")
-                            or f.endswith("Reparse")
-                            or f.endswith("SAM")
-                            or f.endswith("SECURITY")
-                            or f.endswith("SOFTWARE")
-                            or f.endswith("SYSTEM")
-                            or f.endswith("NTUSER.DAT")
-                            or f.endswith("UsrClass.dat")
-                            or f.endswith(".evtx")
-                            or f.endswith("setupapi.dev.log")
-                            or f.endswith("hiberfil.sys")
-                            or f.endswith("MEMORY.DMP")
-                            or f.endswith("pagefile.sys")
-                            or f.endswith("swapfile.sys")
-                            or f.endswith("-ms")
-                            or f.endswith(".pf")
-                            or f.endswith(".db")
-                            or f.endswith(".bcf")
-                            or f.endswith(".hve")
-                            or "/S-1-5-21-" in root + "/" + f
-                            or f.endswith("+bash_aliases")
-                            or f.endswith("+bash_history")
-                            or f.endswith("+bash_logout")
-                            or f.endswith("+bashrc")
-                            or f.endswith("crontab")
-                            or f.endswith("hosts")
-                            or f.endswith("group")
-                            or f.endswith("passwd")
-                            or f.endswith("shadow")
-                            or f.endswith("log")
-                            or "log.1" in f
-                            or "__audit_" in f
-                            or "+audit_" in f
-                            or f.endswith(".plist")
-                            or f.endswith(".conf")
-                            or f.split("/")[-1].startswith("job.")
-                            or f.endswith(".service")
-                            or f.endswith(".target")
-                            or f.endswith(".socket")
-                            or "/raw/mail" in root + "/" + f
-                            or "/raw/browsers" in root + "/" + f
-                            or "/carved/" in root
-                        ):
-                            artefacts_list.append(each + ": " + root + "/" + f)
-                        else:
-                            pass
-                    else:
-                        pass
-        return artefacts_list
-
     stage = "processing"
     process_list, artefacts_list = [], []
     print(
@@ -331,7 +334,7 @@ def identify_pre_process_artefacts(
     )
     time.sleep(1)
     imgs = OrderedDict(sorted(imgs.items(), key=lambda x: x[1]))
-    for img in imgs:  # Identifying artefacts and Processing function
+    for _, img in imgs.items():  # Identifying artefacts and Processing function
         if not img.split("::")[1].endswith(
             "memory"
         ):  # Identifying artefacts for processing
@@ -380,8 +383,8 @@ def identify_pre_process_artefacts(
                 os.remove(".temp.log")
             except:
                 pass
-            artefacts_list = identify_artefacts_to_process(
-                img, process_list
+            artefacts_list = select_artefacts_to_process(
+                img, process_list, artefacts_list
             )  # Identifying artefacts for processing
             if len(artefacts_list) == 0:
                 print("    No artefacts were collected.\n    Please try again.\n\n")
@@ -498,7 +501,7 @@ def identify_pre_process_artefacts(
                         os.path.join(output_directory + img.split("::")[0] + "/carved/")
                     )
                     artefacts_list.clear()
-                    artefacts_list = identify_artefacts_to_process(img, process_list)
+                    artefacts_list = select_artefacts_to_process(img, process_list)
                     for each in artefacts_list:
                         ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
                         artefact = str(ia[0][1])

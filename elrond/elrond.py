@@ -308,7 +308,7 @@ sha256 = hashlib.sha256()
 allimgs = {}
 flags = []
 elrond_mount = [
-    "/mnt/elrond_mount",
+    "/mnt/elrond_mount00",
     "/mnt/elrond_mount01",
     "/mnt/elrond_mount02",
     "/mnt/elrond_mount03",
@@ -330,7 +330,7 @@ elrond_mount = [
     "/mnt/elrond_mount19",
 ]
 ewf_mount = [
-    "/mnt/ewf_mount",
+    "/mnt/ewf_mount00",
     "/mnt/ewf_mount01",
     "/mnt/ewf_mount02",
     "/mnt/ewf_mount03",

@@ -9,7 +9,7 @@ from rivendell.analysis.keywords import prepare_keywords
 from rivendell.audit import write_audit_log_entry
 from rivendell.collect.collect import collect_artefacts
 from rivendell.collect.reorganise import reorganise_artefacts
-from rivendell.process.process import identify_pre_process_artefacts
+from rivendell.process.process import select_pre_process_artefacts
 from rivendell.process.timeline import create_plaso_timeline
 
 
@@ -88,7 +88,7 @@ def collect_process_keyword_analysis_timeline(
         else:
             pass
         if process:
-            identify_pre_process_artefacts(
+            select_pre_process_artefacts(
                 output_directory,
                 verbosity,
                 d,
