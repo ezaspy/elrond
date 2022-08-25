@@ -94,13 +94,11 @@ def recover_files(
                         output_directory, img, str(int(eachoffset) * 512)
                     )
                     if "construct.core.StreamError" in str(indxripper_result[1])[2:-3]:
-                        entry, prnt = "{},{},{},$I30 records (failed)\n".format(
+                        entry, prnt = "{},{},recovery,$I30 records (failed)\n".format(
                             datetime.now().isoformat(),
                             vssimage.replace("'", ""),
-                            stage,
-                        ), " -> {} -> {} of $I30 records failed from {}".format(
+                        ), " -> {} -> recovery of $I30 records failed from {}".format(
                             datetime.now().isoformat().replace("T", " "),
-                            stage,
                             vssimage,
                         )
                         write_audit_log_entry(verbosity, output_directory, entry, prnt)

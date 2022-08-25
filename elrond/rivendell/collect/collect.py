@@ -498,7 +498,7 @@ def collect_artefacts(
         recover_files(
             output_directory,
             verbosity,
-            "recovery",
+            "recovered",
             d,
             img,
             vssimage,

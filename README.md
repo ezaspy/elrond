@@ -82,14 +82,14 @@ Alternatviely, if you prefer to install the packages yourself... (bear in mind t
 
 ## Usage
 
-`python3 elrond.py <case_id> <directory> [<output_directory>] [-h] [-AaBCcDEGHIiMoPpQqRrSsTtUVvZ] [-K <keyword_file>] [-Y <yara_dir>] -F (include|exclude):[<include/exclude_file>]`
+`python3 elrond.py <case_id> <directory> [<output_directory>] [-h] [-AaBCcDEGHIiMoPpQqRSsTtUVvZ] [-K <keyword_file>] [-Y <yara_dir>] -F (include|exclude):[<include/exclude_file>]`
 
 <br>
 
 ### Collect (-C)<br>
 #### Examples<br>
 
-- Invoking DBM (-B) flag (instead of using -acINoPQqRUVv), Process (**-P**) index artefacts in Splunk (**-S**) and conduct File Collection (-F) with inclusion list<br>
+- Invoking DBM (-B) flag (instead of using -acINoPQqUVv), Process (**-P**) index artefacts in Splunk (**-S**) and conduct File Collection (-F) with inclusion list<br>
 
 `python3 elrond.py case_name /path/to/disk/images -BCPS  -F include:./include_file.txt`
 
@@ -109,22 +109,22 @@ Alternatviely, if you prefer to install the packages yourself... (bear in mind t
 
 `python3 elrond.py case_name /path/to/disk/images -aqvVGPAS`
 
-- Invoking DBM (-B) flag (instead of using -acINoPQqRUVv), Process (**-P**) index artefacts in Splunk (**-S**) and conduct Keyword Searching (-K <file_name>)<br>
+- Invoking DBM (-B) flag (instead of using -acINoPQqUVv), Process (**-P**) index artefacts in Splunk (**-S**) and conduct Keyword Searching (-K <file_name>)<br>
 
 `python3 elrond.py case_name /path/to/disk/images -BGPS -K keywords.txt`
 <br><br>
 
 
-### Reorganise (-O)<br>
+### Reorganise (-R)<br>
 #### Examples<br>
 
-- Automatically (**-a**) and quietly (**-q**) Process (**-P**), Analyse (**-A**) and index artefacts in Splunk (**-S**) (previously collected disk artefacts (no **-C**))<br>
+- Automatically (**-a**) and quietly (**-q**) Process (**-P**), Analyse (**-A**) and index artefacts in Splunk (**-S**) (reorganise previously collected disk artefacts (**-R**))<br>
 
-`python3 elrond.py case_name /path/to/disk/images -aqvVPAS`
+`python3 elrond.py case_name /path/to/disk/images -aqvVRPAS`
 
-- Invoking DBM (-B) flag (instead of using -acINoPQqRUVv), Process (**-P**) index artefacts in Splunk (**-S**) and conduct Keyword Searching (-K <file_name>)<br>
+- Invoking DBM (-B) flag (instead of using -acINoPQqUVv), Process (**-P**) index artefacts in Splunk (**-S**) and conduct Yara Searching (-Y <yara_dir>)<br>
 
-`python3 elrond.py case_name /path/to/disk/images -BPS -Y <directory/of/yara/files>`
+`python3 elrond.py case_name /path/to/disk/images -BRPS -Y <directory/of/yara/files>`
 <br><br>
 
 ### Support
