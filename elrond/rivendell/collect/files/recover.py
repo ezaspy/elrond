@@ -41,7 +41,7 @@ def rip_i30(output_directory, img, offset):
             stderr=subprocess.PIPE,
         ).communicate()
     else:
-        indxripper_result = ""
+        indxripper_result = ["", ""]
     return indxripper_result
 
 
@@ -53,7 +53,12 @@ def recover_files(
     img,
     vssimage,
 ):
-    if "Windows" in img.split("::")[1] and "memory_" not in img.split("::")[1]:
+    if ("Windows" in img.split("::")[1] and "memory_" not in img.split("::")[1]) and (
+        "I30_"
+        not in str(
+            os.listdir(output_directory + img.split("::")[0] + "/" + "artefacts")
+        )
+    ):
         if verbosity != "":
             print(
                 "     Recovering '$I30' records from '{}'...".format(img.split("::")[0])
@@ -101,12 +106,20 @@ def recover_files(
                     "/mnt/i30_{}/ewf1".format(img.split("::")[0])
                 )
                 for eachoffset in offset_values:
+                    if verbosity != "":
+                        print(
+                            "      Recovering '$I30' records from offset '#{}' for '{}'...".format(
+                                eachoffset, img.split("::")[0]
+                            )
+                        )
+                    else:
+                        pass
                     indxripper_result = rip_i30(output_directory, img, str(eachoffset))
                     if str(indxripper_result[1]) != "b''":
                         entry, prnt = "{},{},recovery,$I30 records (failed)\n".format(
                             datetime.now().isoformat(),
                             vssimage.replace("'", ""),
-                        ), " -> {} -> recovery of $I30 records failed from {}".format(
+                        ), "  -> {} -> recovery of $I30 records failed from {}".format(
                             datetime.now().isoformat().replace("T", " "),
                             vssimage,
                         )
@@ -117,7 +130,7 @@ def recover_files(
                             vssimage.replace("'", ""),
                             stage,
                             eachoffset,
-                        ), " -> {} -> {} $I30 records (#{}) from {}".format(
+                        ), "  -> {} -> {} $I30 records (#{}) from {}".format(
                             datetime.now().isoformat().replace("T", " "),
                             stage,
                             eachoffset,
