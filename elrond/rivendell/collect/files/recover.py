@@ -17,26 +17,31 @@ def check_i30directory(i30directory, img):
 
 
 def rip_i30(output_directory, img, offset):
-    indxripper_result = subprocess.Popen(
-        [
-            "sudo",
-            "python3.9",
-            "/opt/elrond/elrond/tools/INDXRipper/INDXRipper.py",
-            "-w",
-            "csv",
-            "-o",
-            "{}".format(offset),
-            "/mnt/i30_{}/ewf1".format(img.split("::")[0]),
-            output_directory
-            + "artefacts/"
-            + img.split("::")[0]
-            + "/"
-            + img.split("::")[0]
-            + ".csv",
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    ).communicate()
+    if not os.path.exists(
+        output_directory + img.split("::")[0] + "/" + "artefacts/I30_" + offset + ".csv"
+    ):
+        indxripper_result = subprocess.Popen(
+            [
+                "sudo",
+                "python3.9",
+                "/opt/elrond/elrond/tools/INDXRipper/INDXRipper.py",
+                "-w",
+                "csv",
+                "-o",
+                "{}".format(offset),
+                "/mnt/i30_{}/ewf1".format(img.split("::")[0]),
+                output_directory
+                + img.split("::")[0]
+                + "/"
+                + "artefacts/I30_"
+                + offset
+                + ".csv",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate()
+    else:
+        indxripper_result = ""
     return indxripper_result
 
 
@@ -49,6 +54,12 @@ def recover_files(
     vssimage,
 ):
     if "Windows" in img.split("::")[1] and "memory_" not in img.split("::")[1]:
+        if verbosity != "":
+            print(
+                "     Recovering '$I30' records from '{}'...".format(img.split("::")[0])
+            )
+        else:
+            pass
         try:
             for image_directory in os.listdir(d):
                 i30imagepath = check_i30directory(
@@ -90,15 +101,26 @@ def recover_files(
                     "/mnt/i30_{}/ewf1".format(img.split("::")[0])
                 )
                 for eachoffset in offset_values:
-                    indxripper_result = rip_i30(
-                        output_directory, img, str(int(eachoffset) * 512)
-                    )
-                    if "construct.core.StreamError" in str(indxripper_result[1])[2:-3]:
+                    indxripper_result = rip_i30(output_directory, img, str(eachoffset))
+                    if str(indxripper_result[1]) != "b''":
                         entry, prnt = "{},{},recovery,$I30 records (failed)\n".format(
                             datetime.now().isoformat(),
                             vssimage.replace("'", ""),
                         ), " -> {} -> recovery of $I30 records failed from {}".format(
                             datetime.now().isoformat().replace("T", " "),
+                            vssimage,
+                        )
+                        write_audit_log_entry(verbosity, output_directory, entry, prnt)
+                    elif str(indxripper_result[1]) == "b''":
+                        entry, prnt = "{},{},{},$I30 records (#{})\n".format(
+                            datetime.now().isoformat(),
+                            vssimage.replace("'", ""),
+                            stage,
+                            eachoffset,
+                        ), " -> {} -> {} $I30 records (#{}) from {}".format(
+                            datetime.now().isoformat().replace("T", " "),
+                            stage,
+                            eachoffset,
                             vssimage,
                         )
                         write_audit_log_entry(verbosity, output_directory, entry, prnt)
