@@ -7,7 +7,7 @@ import subprocess
 import time
 from zipfile import ZipFile
 
-from rivendell.memory.extract import (
+from rivendell.memory.plugins import (
     extract_memory_artefacts,
 )
 from rivendell.memory.volatility.CentOS73 import CentOS73

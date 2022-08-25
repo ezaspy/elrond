@@ -19,10 +19,20 @@ def windows_users(
     vssimage,
     vsstext,
 ):
-    (item_list, regdest, jumpdest, maildest, bwsrdest, userdest, mail_dirs,) = (
+    (
+        item_list,
+        regdest,
+        jumpdest,
+        clipdest,
+        maildest,
+        bwsrdest,
+        userdest,
+        mail_dirs,
+    ) = (
         os.listdir(item),
         dest + "registry/",
         dest + "jumplists",
+        dest + "clipboard/",
         dest + "mail/",
         dest + "browsers/",
         dest + "user_profiles/",
@@ -104,6 +114,108 @@ def windows_users(
                     regdest + "/" + each + "+UsrClass.dat",
                 )
             except:
+                pass
+            print_done(verbosity)
+            try:
+                os.stat(clipdest)
+            except:
+                os.makedirs(clipdest)
+            if verbosity != "":
+                print(
+                    "     Collecting clipboard artefacts for '{}' for {}...".format(
+                        each, vssimage
+                    )
+                )
+            else:
+                pass
+            (entry, prnt,) = "{},{},{},'{}' clipboard\n".format(
+                datetime.now().isoformat(),
+                img.split("::")[0],
+                stage,
+                each,
+            ), " -> {} -> {} clipboard artefacts for profile '{}'{} for '{}'".format(
+                datetime.now().isoformat().replace("T", " "),
+                stage,
+                each,
+                vsstext.replace("vss", "volume shadow copy #"),
+                img.split("::")[0],
+            )
+            write_audit_log_entry(
+                verbosity,
+                output_directory,
+                entry,
+                prnt,
+            )
+            if os.path.exists(item + each + "/AppData/Local/ConnectedDevicesPlatform/"):
+                for clipboard in os.listdir(
+                    item + each + "/AppData/Local/ConnectedDevicesPlatform/"
+                ):
+                    if os.path.isfile(
+                        item
+                        + each
+                        + "/AppData/Local/ConnectedDevicesPlatform/"
+                        + clipboard
+                    ) and (
+                        clipboard == "ActivitiesCache.db"
+                        or clipboard == "ActivitiesCache.db-shm"
+                        or clipboard == "ActivitiesCache.db-wal"
+                    ):
+                        try:
+                            shutil.copy2(
+                                item
+                                + each
+                                + "/AppData/Local/ConnectedDevicesPlatform/"
+                                + clipboard,
+                                clipdest + "/" + each + "+" + clipboard,
+                            )
+                        except:
+                            pass
+                    else:
+                        if os.path.isdir(
+                            item
+                            + each
+                            + "/AppData/Local/ConnectedDevicesPlatform/"
+                            + clipboard
+                        ):
+                            for clipboardfile in os.listdir(
+                                item
+                                + each
+                                + "/AppData/Local/ConnectedDevicesPlatform/"
+                                + clipboard
+                            ):
+                                if os.path.isfile(
+                                    item
+                                    + each
+                                    + "/AppData/Local/ConnectedDevicesPlatform/"
+                                    + clipboard
+                                    + "/"
+                                    + clipboardfile
+                                ) and (
+                                    clipboardfile == "ActivitiesCache.db"
+                                    or clipboardfile == "ActivitiesCache.db-shm"
+                                    or clipboardfile == "ActivitiesCache.db-wal"
+                                ):
+                                    try:
+                                        shutil.copy2(
+                                            item
+                                            + each
+                                            + "/AppData/Local/ConnectedDevicesPlatform/"
+                                            + clipboard
+                                            + "/"
+                                            + clipboardfile,
+                                            clipdest
+                                            + "/"
+                                            + each
+                                            + "+"
+                                            + clipboard
+                                            + "_"
+                                            + clipboardfile,
+                                        )
+                                    except:
+                                        pass
+                        else:
+                            pass
+            else:
                 pass
             print_done(verbosity)
             try:
@@ -439,11 +551,11 @@ def windows_users(
                         ):
                             try:
                                 os.stat(
-                                    dest + each + "/IE/Temporary Internet Files/"
+                                    bwsrdest + each + "/IE/Temporary Internet Files/"
                                 )
                             except:
                                 os.makedirs(
-                                    dest + each + "/IE/Temporary Internet Files/"
+                                    bwsrdest + each + "/IE/Temporary Internet Files/"
                                 )
                             if (
                                 len(
@@ -462,7 +574,7 @@ def windows_users(
                                         + each
                                         + "/AppData/Local/Microsoft/Windows/Temporary Internet Files/"
                                         + every,
-                                        dest
+                                        bwsrdest
                                         + each
                                         + "/IE/Temporary Internet Files/"
                                         + every,

@@ -231,6 +231,210 @@ def collect_windows_artefacts(
                 pass
         else:
             pass
+        if item == mnt + "/Windows/System32/wbem/Repository/":
+            item_list, dest = (
+                os.listdir(item),
+                dest + "wbem/",
+            )
+            try:
+                os.stat(dest)
+            except:
+                os.makedirs(dest)
+            if len(item_list) > 0:
+                if verbosity != "":
+                    print(
+                        "     Collecting Web-Based Enterprise Management (WBEM) evidence for {}...".format(
+                            vssimage
+                        )
+                    )
+                else:
+                    pass
+                for each in item_list:
+                    (entry, prnt,) = "{},{},{},'{}' WBEM evidence\n".format(
+                        datetime.now().isoformat(),
+                        img.split("::")[0],
+                        stage,
+                        each,
+                    ), " -> {} -> {} WBEM evidence '{}'{} from '{}'".format(
+                        datetime.now().isoformat().replace("T", " "),
+                        stage,
+                        each,
+                        vsstext.replace("vss", "volume shadow copy #"),
+                        img.split("::")[0],
+                    )
+                    write_audit_log_entry(
+                        verbosity,
+                        output_directory,
+                        entry,
+                        prnt,
+                    )
+                    try:
+                        shutil.copy2(item + each, dest)
+                    except:
+                        pass
+                print_done(verbosity)
+            else:
+                pass
+        else:
+            pass
+        if item == mnt + "/Windows/System32/LogFiles/WMI/":
+            item_list, dest = (
+                os.listdir(item),
+                dest + "wmi/",
+            )
+            try:
+                os.stat(dest)
+            except:
+                os.makedirs(dest)
+            if len(item_list) > 0:
+                if verbosity != "":
+                    print(
+                        "     Collecting Windows Management Instrumentation (WMI) artefacts for {}...".format(
+                            vssimage
+                        )
+                    )
+                else:
+                    pass
+                for each in item_list:
+                    (entry, prnt,) = "{},{},{},'{}' WMI artefact\n".format(
+                        datetime.now().isoformat(),
+                        img.split("::")[0],
+                        stage,
+                        each,
+                    ), " -> {} -> {} WMI artefact '{}'{} from '{}'".format(
+                        datetime.now().isoformat().replace("T", " "),
+                        stage,
+                        each,
+                        vsstext.replace("vss", "volume shadow copy #"),
+                        img.split("::")[0],
+                    )
+                    write_audit_log_entry(
+                        verbosity,
+                        output_directory,
+                        entry,
+                        prnt,
+                    )
+                    try:
+                        shutil.copy2(item + each, dest)
+                    except:
+                        pass
+                if os.path.exists(item + "RtBackup"):
+                    backup_list = os.listdir(item + "RtBackup")
+                    if len(backup_list) > 0:
+                        for each_backup in backup_list:
+                            (entry, prnt,) = "{},{},{},'{}' WMI artefact\n".format(
+                                datetime.now().isoformat(),
+                                img.split("::")[0],
+                                stage,
+                                each_backup,
+                            ), " -> {} -> {} WMI artefact '{}'{} from '{}'".format(
+                                datetime.now().isoformat().replace("T", " "),
+                                stage,
+                                each_backup,
+                                vsstext.replace("vss", "volume shadow copy #"),
+                                img.split("::")[0],
+                            )
+                            write_audit_log_entry(
+                                verbosity,
+                                output_directory,
+                                entry,
+                                prnt,
+                            )
+                            try:
+                                shutil.copy2(item + each_backup, dest)
+                            except:
+                                pass
+                        if os.path.exists(item + "RtBackup/EtwRT"):
+                            etwrt_list = os.listdir(item + "RtBackup/EtwRT")
+                            if len(etwrt_list) > 0:
+                                for each_etwrt in etwrt_list:
+                                    (
+                                        entry,
+                                        prnt,
+                                    ) = "{},{},{},'{}' WMI artefact\n".format(
+                                        datetime.now().isoformat(),
+                                        img.split("::")[0],
+                                        stage,
+                                        each_etwrt,
+                                    ), " -> {} -> {} WMI artefact '{}'{} from '{}'".format(
+                                        datetime.now().isoformat().replace("T", " "),
+                                        stage,
+                                        each_etwrt,
+                                        vsstext.replace("vss", "volume shadow copy #"),
+                                        img.split("::")[0],
+                                    )
+                                    write_audit_log_entry(
+                                        verbosity,
+                                        output_directory,
+                                        entry,
+                                        prnt,
+                                    )
+                                    try:
+                                        shutil.copy2(item + each_etwrt, dest)
+                                    except:
+                                        pass
+                            else:
+                                pass
+                        else:
+                            pass
+                    else:
+                        pass
+                else:
+                    pass
+                print_done(verbosity)
+            else:
+                pass
+        else:
+            pass
+        if item == mnt + "/Windows/System32/LogFiles/":
+            item_list, dest = (
+                os.listdir(item),
+                dest + "ual/",
+            )
+            try:
+                os.stat(dest)
+            except:
+                os.makedirs(dest)
+            if len(item_list) > 0 and ".mdb" in str(os.listdir(item)):
+                if verbosity != "":
+                    print(
+                        "     Collecting User Access Logging (UAL) evidence for {}...".format(
+                            vssimage
+                        )
+                    )
+                else:
+                    pass
+                for each in item_list:
+                    if each.startswith("Sum") and each.endswith(".mdb"):
+                        (entry, prnt,) = "{},{},{},'{}' UAL evidence\n".format(
+                            datetime.now().isoformat(),
+                            img.split("::")[0],
+                            stage,
+                            each,
+                        ), " -> {} -> {} UAL evidence '{}'{} from '{}'".format(
+                            datetime.now().isoformat().replace("T", " "),
+                            stage,
+                            each,
+                            vsstext.replace("vss", "volume shadow copy #"),
+                            img.split("::")[0],
+                        )
+                        write_audit_log_entry(
+                            verbosity,
+                            output_directory,
+                            entry,
+                            prnt,
+                        )
+                        try:
+                            shutil.copy2(item + each, dest)
+                        except:
+                            pass
+                    else:
+                        pass
+                print_done(verbosity)
+            else:
+                pass
+        else:
+            pass
         if item == mnt + "/$Recycle.Bin":
             item_list, dest = (
                 os.listdir(item),

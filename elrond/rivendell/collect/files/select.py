@@ -10,20 +10,15 @@ from rivendell.audit import write_audit_log_entry
 from rivendell.collect.files.carve import carve_files
 from rivendell.collect.files.compare import compare_include_exclude
 from rivendell.collect.files.files import collect_files
-from rivendell.collect.files.recover import recover_files
-
-import time
 
 
 def select_files(
     output_directory, verbosity, d, mnt, img, vssimage, collectfiles, recover
 ):
-    if collectfiles and recover:
-        stage = "collecting & recovering"
-    elif collectfiles:
+    if collectfiles:
         stage = "collecting"
     else:
-        stage = "recovering"
+        pass
     print(
         "\n       \033[1;33m{} files from {}...\033[1;m".format(
             stage.title().replace(",", " &"), vssimage
@@ -51,55 +46,22 @@ def select_files(
             or "M" in file_selection
             or "V" in file_selection
         ):
-            for recovered_file_root, _, recovered_files in os.walk(
+            for collected_file_root, _, collected_files in os.walk(
                 mnt
             ):  # processing file selection
-                for recovered_file in recovered_files:
-                    if collectfiles and recover:
-                        collect_files(
-                            output_directory,
-                            verbosity,
-                            "collected",
-                            img,
-                            vssimage,
-                            recovered_file_root,
-                            recovered_file,
-                            1,
-                            collectfiles,
-                            file_selection,
-                        )
-                        recover_files(
-                            output_directory,
-                            verbosity,
-                            "recovered",
-                            img,
-                            vssimage,
-                            recovered_file_root,
-                            recovered_file,
-                        )
-                    elif collectfiles:
-                        collect_files(
-                            output_directory,
-                            verbosity,
-                            "collected",
-                            img,
-                            vssimage,
-                            recovered_file_root,
-                            recovered_file,
-                            1,
-                            collectfiles,
-                            file_selection,
-                        )
-                    else:
-                        recover_files(
-                            output_directory,
-                            verbosity,
-                            "recovered",
-                            img,
-                            vssimage,
-                            recovered_file_root,
-                            recovered_file,
-                        )
+                for collected_file in collected_files:
+                    collect_files(
+                        output_directory,
+                        verbosity,
+                        "collected",
+                        img,
+                        vssimage,
+                        collected_file_root,
+                        collected_file,
+                        1,
+                        collectfiles,
+                        file_selection,
+                    )
             if "L" in file_selection or "A" in file_selection:
                 link_files = subprocess.Popen(
                     [
@@ -152,7 +114,7 @@ def select_files(
                             vssimage
                         )
                     )
-                    for recovered_file in os.listdir(recoverpath):
+                    for collected_file in os.listdir(recoverpath):
                         zaout = str(
                             subprocess.Popen(
                                 [
@@ -161,12 +123,12 @@ def select_files(
                                     output_directory
                                     + img.split("::")[0]
                                     + "/files/archives/"
-                                    + recovered_file,
+                                    + collected_file,
                                     "-o"
                                     + output_directory
                                     + img.split("::")[0]
                                     + "/files/archives/"
-                                    + recovered_file.split(".")[0]
+                                    + collected_file.split(".")[0]
                                     + "/",
                                     "-y",
                                     "-p ",
@@ -180,11 +142,11 @@ def select_files(
                                 datetime.now().isoformat(),
                                 vssimage.replace("'", ""),
                                 "extracted content",
-                                recovered_file,
+                                collected_file,
                             ), " -> {} -> {} {}, from {}".format(
                                 datetime.now().isoformat().replace("T", " "),
                                 "extracted content of",
-                                recovered_file,
+                                collected_file,
                                 vssimage,
                             )
                             write_audit_log_entry(
@@ -193,7 +155,7 @@ def select_files(
                         else:
                             print(
                                 "      '{}' could not be extracted, it may be invalid/corrupted or password protected".format(
-                                    recovered_file
+                                    collected_file
                                 )
                             )
                     print_done(verbosity)
@@ -221,28 +183,28 @@ def select_files(
                             vssimage
                         )
                     )
-                    for recovered_file in os.listdir(recoverpath):
+                    for collected_file in os.listdir(recoverpath):
                         if (
-                            recovered_file.endswith(".doc")
-                            or recovered_file.endswith(".docx")
-                            or recovered_file.endswith(".docm")
-                            or recovered_file.endswith(".xls")
-                            or recovered_file.endswith(".xlsx")
-                            or recovered_file.endswith(".xlsm")
-                            or recovered_file.endswith(".ppt")
-                            or recovered_file.endswith(".pptx")
-                            or recovered_file.endswith(".pptm")
+                            collected_file.endswith(".doc")
+                            or collected_file.endswith(".docx")
+                            or collected_file.endswith(".docm")
+                            or collected_file.endswith(".xls")
+                            or collected_file.endswith(".xlsx")
+                            or collected_file.endswith(".xlsm")
+                            or collected_file.endswith(".ppt")
+                            or collected_file.endswith(".pptx")
+                            or collected_file.endswith(".pptm")
                         ):
                             try:
                                 filezip, ziptmp = (
-                                    ZipFile(recoverpath + "/" + recovered_file),
-                                    recoverpath + "/" + recovered_file[:-5],
+                                    ZipFile(recoverpath + "/" + collected_file),
+                                    recoverpath + "/" + collected_file[:-5],
                                 )
                                 ZipFile.extractall(filezip, ziptmp)
                                 for (
-                                    recovered_file_root,
+                                    collected_file_root,
                                     recdirs,
-                                    recovered_files,
+                                    collected_files,
                                 ) in os.walk(recoverpath):
                                     if len(recdirs) > 0:
                                         for eachrecdir in recdirs:
@@ -269,7 +231,7 @@ def select_files(
                                                             .replace("T", " "),
                                                             "extracted embedded file",
                                                             contentfile,
-                                                            recovered_file,
+                                                            collected_file,
                                                             vssimage,
                                                         )
                                                         write_audit_log_entry(
@@ -285,7 +247,7 @@ def select_files(
                             except:
                                 print(
                                     "      '{}' could not be extracted, it may be invalid/corrupted or password protected".format(
-                                        recovered_file
+                                        collected_file
                                     )
                                 )
                         else:
@@ -325,10 +287,10 @@ def select_files(
                         output_directory + img.split("::")[0] + "/files/scripts"
                     )
                     if len(os.listdir(recoverpath)) > 0:
-                        for recovered_file in os.listdir(recoverpath):
+                        for collected_file in os.listdir(recoverpath):
                             try:
                                 with open(
-                                    os.path.join(recoverpath, recovered_file),
+                                    os.path.join(recoverpath, collected_file),
                                 ) as scriptfile:
                                     lineno = 0
                                     for line in scriptfile:
@@ -345,14 +307,14 @@ def select_files(
                                                 vssimage.replace("'", ""),
                                                 "potential script obfuscation",
                                                 str(lineno),
-                                                recovered_file,
+                                                collected_file,
                                             ), " -> {} -> {} on line {} found in '{}' from {}".format(
                                                 datetime.now()
                                                 .isoformat()
                                                 .replace("T", " "),
                                                 "potential script obfuscation",
                                                 str(lineno),
-                                                recovered_file,
+                                                collected_file,
                                                 vssimage,
                                             )
                                             write_audit_log_entry(
@@ -365,7 +327,7 @@ def select_files(
                                 pass
                             try:
                                 with open(
-                                    os.path.join(recoverpath, recovered_file),
+                                    os.path.join(recoverpath, collected_file),
                                     encoding="ISO-8859-1",
                                 ) as scriptfile:
                                     lineno = 0
@@ -383,14 +345,14 @@ def select_files(
                                                 vssimage.replace("'", ""),
                                                 "potential script obfuscation",
                                                 str(lineno),
-                                                recovered_file,
+                                                collected_file,
                                             ), " -> {} -> {} on line {} found in '{}' from {}".format(
                                                 datetime.now()
                                                 .isoformat()
                                                 .replace("T", " "),
                                                 "potential script obfuscation",
                                                 str(lineno),
-                                                recovered_file,
+                                                collected_file,
                                                 vssimage,
                                             )
                                             write_audit_log_entry(

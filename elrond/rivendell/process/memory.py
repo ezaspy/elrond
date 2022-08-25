@@ -7,13 +7,13 @@ from datetime import datetime
 
 from rivendell.audit import write_audit_log_entry
 from rivendell.memory.profiles import identify_profile
-from rivendell.memory.vol import (
+from rivendell.memory.volcore import (
     assess_volatility_choice,
 )
-from rivendell.memory.vol import (
+from rivendell.memory.volcore import (
     dump_vol3_ziphex,
 )
-from rivendell.memory.vol import (
+from rivendell.memory.volcore import (
     choose_custom_profile,
 )
 from rivendell.memory.volatility3.Linux import Linux

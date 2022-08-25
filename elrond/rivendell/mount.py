@@ -1,6 +1,5 @@
 #!/usr/bin/env python3 -tt
 import os
-import random
 import re
 import shutil
 import subprocess
@@ -105,7 +104,7 @@ def collect_ewfinfo(elrond_mount, ewf_mount, path, intermediate_mount, cwd):
 
 def obtain_offset(
     intermediate_mount,
-):  # comment - not mounting disks with multiple valid partitions
+):
     offset_values = re.findall(
         r"\\n[\w\-\.\/]+(?:(?:ewf1p\d+)|\.(?:raw|dd|img)\d)[\ \*]+(?P<offset>\d+)[\w\d\.\ \*]+\s+(?:NTFS|Microsoft\ basic\ data|HPFS|Linux|exFAT)",
         str(
@@ -318,7 +317,7 @@ def mount_images(
             os.makedirs(elrond_mount[0])
         except:
             print(
-                "\n    An error occured creating the '{}' directory for '{}'.\n    This scipt needs to be run as 'root' please try again...\n\n".format(
+                "\n    An error occured creating the '{}' directory for '{}'.\n    This scipt needs to be run as 'root', please try again...\n\n".format(
                     elrond_mount[0], disk_file.split("::")[0]
                 )
             )

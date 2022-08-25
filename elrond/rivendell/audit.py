@@ -32,13 +32,14 @@ def manage_error(output_directory, verbosity, error, state, img, item, vsstext):
         datetime.now().isoformat(),
         img.split("::")[0],
         state,
-        error,
-        item.split("/")[-1],
-    ), " -> {} -> ERROR: {}; {} failed for '{}'{} from '{}'".format(
+        str(error).split("] ")[-1],
+        item.strip("/").split("/")[-1],
+    ), " -> {} -> ERROR - {}: {}; {} failed for '{}'{} from '{}'".format(
         datetime.now().isoformat().replace("T", " "),
-        error,
+        str(error).split("] ")[-1].split(": ")[0],
+        "'" + str(error).split("] ")[-1].split(": ")[1].strip("'")[19:] + "'",
         state,
-        item.split("/")[-1],
+        item.strip("/").split("/")[-1],
         vsstext.replace("vss", "volume shadow copy #"),
         img.split("::")[0],
     )

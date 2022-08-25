@@ -241,54 +241,54 @@ def process_browser_index(
             pass
 
 
+def format_browser_entries(artefact, browsertype, eachentry):
+    if artefact.endswith("/Edge/History") or artefact.endswith("/chrome/History"):
+        bwsrtime = eachentry[1:-1].split(",")[-1]
+    elif artefact.endswith("places.sqlite"):
+        if str(eachentry)[1:-1].split(",")[-1] != "None":
+            bwsrtime = str(
+                datetime.fromtimestamp(float(str(eachentry)[1:-1].split(",")[-1][:-6]))
+            )
+        else:
+            bwsrtime = "0"
+    elif "safari" in artefact and artefact.endswith("History.db"):
+        bwsrtime = str(
+            datetime.fromtimestamp(
+                float(int(str(eachentry).split(",")[-1].split(".")[0]) + 978307200)
+            )
+        )
+    else:
+        pass
+    if browsertype == "history" and (
+        "', '" in str(eachentry)
+        or '", "' in str(eachentry)
+        or "', \"" in str(eachentry)
+        or "\", '" in str(eachentry)
+    ):
+        bwsrstart, bwsrmid, bwsrend = re.findall(
+            r"(§[^\,]+)', '([^\']*)([\S\s]+)",
+            str(eachentry)
+            .replace(' "', " '")
+            .replace('",', "',")
+            .replace(",", "%2C")
+            .replace("%2C ", ", ")
+            .replace("'", "§")
+            .replace(", §", ", '")
+            .replace("§,", "',"),
+        )[0]
+        entry = "{},{},{}".format(
+            bwsrstart[1:],
+            bwsrmid.replace("§", "'").replace(",", "%2C"),
+            bwsrend[:-1],
+        )
+    else:
+        entry = str(eachentry)[1:-1]
+    return entry, bwsrtime
+
+
 def process_browser(
     verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
 ):
-    def format_browser_entries(browsertype, eachentry):
-        if artefact.endswith("/Edge/History") or artefact.endswith("/chrome/History"):
-            bwsrtime = eachentry[1:-1].split(",")[-1]
-        elif artefact.endswith("places.sqlite"):
-            if str(eachentry)[1:-1].split(",")[-1] != "None":
-                bwsrtime = str(
-                    datetime.fromtimestamp(
-                        float(str(eachentry)[1:-1].split(",")[-1][:-6])
-                    )
-                )
-            else:
-                bwsrtime = "0"
-        elif "safari" in artefact and artefact.endswith("History.db"):
-            bwsrtime = str(
-                datetime.fromtimestamp(
-                    float(int(str(eachentry).split(",")[-1].split(".")[0]) + 978307200)
-                )
-            )
-        else:
-            pass
-        if browsertype == "history" and (
-            "', '" in str(eachentry)
-            or '", "' in str(eachentry)
-            or "', \"" in str(eachentry)
-            or "\", '" in str(eachentry)
-        ):
-            bwsrstart, bwsrmid, bwsrend = re.findall(
-                r"(§[^\,]+)', '([^\']*)([\S\s]+)",
-                str(eachentry)
-                .replace(' "', " '")
-                .replace('",', "',")
-                .replace(",", "%2C")
-                .replace("%2C ", ", ")
-                .replace("'", "§")
-                .replace(", §", ", '")
-                .replace("§,", "',"),
-            )[0]
-            entry = "{},{},{}".format(
-                bwsrstart[1:],
-                bwsrmid.replace("§", "'").replace(",", "%2C"),
-                bwsrend[:-1],
-            )
-        else:
-            entry = str(eachentry)[1:-1]
-        return entry, bwsrtime
 
     if not os.path.exists(
         output_directory
@@ -560,7 +560,7 @@ def process_browser(
     else:
         pass
     for eachentry in bwsrhist:
-        hist, histtime = format_browser_entries("history", eachentry)
+        hist, histtime = format_browser_entries(artefact, "history", eachentry)
         with open(
             output_directory
             + img.split("::")[0]
@@ -586,7 +586,9 @@ def process_browser(
             )
     if bwsrdwnlds != "":
         for eachentry in bwsrdwnlds:
-            download, downloadtime = format_browser_entries("downloads", eachentry)
+            download, downloadtime = format_browser_entries(
+                artefact, "downloads", eachentry
+            )
             with open(
                 output_directory
                 + img.split("::")[0]

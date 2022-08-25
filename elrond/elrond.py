@@ -145,14 +145,6 @@ parser.add_argument(
     default=False,
 )
 parser.add_argument(
-    "-O",
-    "--reorganise",
-    help="Reorganise artefacts NOT collected using gandalf",
-    action="store_const",
-    const=True,
-    default=False,
-)
-parser.add_argument(
     "-o",
     "--hashcollected",
     help="Only hash files which have been collected, processed & analysed (if applicable)",
@@ -186,8 +178,8 @@ parser.add_argument(
 )
 parser.add_argument(
     "-R",
-    "--recover",
-    help="Recover deleted files outside of the traditional Trash locations",
+    "--reorganise",
+    help="Reorganise artefacts NOT collected using gandalf",
     action="store_const",
     const=True,
     default=False,
@@ -284,12 +276,11 @@ lotr = args.lotr
 keywords = args.keywords
 volatility = args.volatility
 navigator = args.navigator
-reorganise = args.reorganise
 hashcollected = args.hashcollected
 process = args.process
 superquick = args.superquick
 quick = args.quick
-recover = args.recover
+reorganise = args.reorganise
 splunk = args.splunk
 symlinks = args.symlinks
 timeline = args.timeline
@@ -365,6 +356,9 @@ system_artefacts = [
     "/Windows/AppCompat/Programs/Amcache.hve",
     "/Windows/inf/setupapi.dev.log",
     "/Windows/System32/config/",
+    "/Windows/System32/LogFiles/",
+    "/Windows/System32/LogFiles/WMI/",
+    "/Windows/System32/wbem/Repository/",
     "/Windows/System32/winevt/Logs/",
     "/.Trashes",
     "/Library/Logs",
@@ -464,13 +458,12 @@ if __name__ == "__main__":
     if dogs:
         auto = True
         vss = True
-        sxtractiocs = True
+        extractiocs = True
         navigator = True
         hashcollected = True
         process = True
         superquick = True
         quick = True
-        recover = True
         userprofiles = True
         veryverbose = True
         verbose = True
@@ -494,12 +487,11 @@ if __name__ == "__main__":
         keywords,
         volatility,
         navigator,
-        reorganise,
         hashcollected,
         process,
         superquick,
         quick,
-        recover,
+        reorganise,
         splunk,
         symlinks,
         timeline,

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3 -tt
 import os
 import re
-import subprocess
 import time
 from collections import OrderedDict
 from datetime import datetime
@@ -15,6 +14,7 @@ from rivendell.process.nix import process_email
 from rivendell.process.nix import process_group
 from rivendell.process.nix import process_logs
 from rivendell.process.nix import process_service
+from rivendell.process.windows import process_clipboard
 from rivendell.process.windows import process_evtx
 from rivendell.process.windows import process_hiberfil
 from rivendell.process.windows import process_jumplists
@@ -27,8 +27,6 @@ from rivendell.process.windows import (
 from rivendell.process.windows import process_registry_profile
 from rivendell.process.windows import process_shimcache
 from rivendell.process.windows import process_usb
-
-import sys
 
 
 def process_artefacts(
@@ -117,6 +115,18 @@ def process_artefacts(
             )
         elif artefact.endswith(".evtx"):
             process_evtx(
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vssartefact,
+                stage,
+                artefact,
+                jsondict,
+                jsonlist,
+            )
+        elif artefact.endswith("_ActivitiesCache.db"):
+            process_clipboard(
                 verbosity,
                 vssimage,
                 output_directory,
@@ -268,6 +278,7 @@ def select_artefacts_to_process(img, process_list, artefacts_list):
                         or f.endswith("NTUSER.DAT")
                         or f.endswith("UsrClass.dat")
                         or f.endswith(".evtx")
+                        or f.endswith("_ActivitiesCache.db")
                         or f.endswith("setupapi.dev.log")
                         or f.endswith("hiberfil.sys")
                         or f.endswith("MEMORY.DMP")
@@ -387,7 +398,11 @@ def select_pre_process_artefacts(
                 img, process_list, artefacts_list
             )  # Identifying artefacts for processing
             if len(artefacts_list) == 0:
-                print("    No artefacts were collected.\n    Please try again.\n\n")
+                print(
+                    "    No artefacts were collected for {}.\n    Please try again.\n\n".format(
+                        img.split("::")[1]
+                    )
+                )
             else:
                 pass
             if "vss" in img.split("::")[1]:
@@ -458,35 +473,6 @@ def select_pre_process_artefacts(
                     )
                 else:
                     pass
-            if "Windows" in img.split("::")[1] and "memory_" not in img.split("::")[1]:
-                print(d, img, img.split("::")[0])
-                indxripper = str(
-                    subprocess.Popen(
-                        [
-                            "python3.9",
-                            "/opt/elrond/elrond/tools/INDXRipper/INDXRipper.py",
-                            "-w",
-                            "csv",
-                            img.split("::")[0],
-                            img.split("::")[0] + ".csv",
-                        ],
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
-                    ).communicate()[0]
-                )
-                print(indxripper)
-                entry, prnt = "{},{},{},$I30 records\n".format(
-                    datetime.now().isoformat(),
-                    vssimage.replace("'", ""),
-                    stage,
-                ), " -> {} -> {} $I30 records from {}".format(
-                    datetime.now().isoformat().replace("T", " "),
-                    stage,
-                    vssimage,
-                )
-                write_audit_log_entry(verbosity, output_directory, entry, prnt)
-            else:
-                pass
             if collectfiles:
                 process_list.clear()
                 if os.path.exists(

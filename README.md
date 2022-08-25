@@ -115,7 +115,7 @@ Alternatviely, if you prefer to install the packages yourself... (bear in mind t
 <br><br>
 
 
-### Not using Collect (-C) or Gandalf (-G)<br>
+### Reorganise (-O)<br>
 #### Examples<br>
 
 - Automatically (**-a**) and quietly (**-q**) Process (**-P**), Analyse (**-A**) and index artefacts in Splunk (**-S**) (previously collected disk artefacts (no **-C**))<br>
@@ -154,7 +154,7 @@ Contributions are what make the open source community such an amazing place to b
 
 ## License
 
-Distributed under the MIT License. See [LICENSE](https://github.com/ezaspy/elrond/LICENSE.txt) for more information.
+Distributed under the [MIT](https://choosealicense.com/licenses/mit/) License. See [LICENSE](https://github.com/ezaspy/elrond/LICENSE.txt) for more information.
 <br><br><br>
 
 <!-- CONTACT -->

@@ -6,18 +6,27 @@ sudo apt update
 ../elrond/tools/scripts/./volatility3.sh
 ../elrond/tools/scripts/./dwarf2json.sh
 ../elrond/tools/scripts/./splunk.sh
-../elrond/tools/scripts/./elastic.sh
+#../elrond/tools/scripts/./elastic.sh
 ../elrond/tools/scripts/./navigator.sh
 sudo updatedb
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt update
 sudo apt install python3.9 python3-pip mlocate build-essential yara john gparted -y --fix-missing
 PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
-python3.9 -m pip install setuptools construct==2.10.68
+git clone https://github.com/harelsegev/INDXRipper /opt/elrond/elrond/tools/INDXRipper
 /usr/bin/python3.9 -m pip install --upgrade pip
 /usr/bin/python3 -m pip install --upgrade pip
 /usr/bin/python -m pip install --upgrade pip
-git clone https://github.com/harelsegev/INDXRipper /opt/elrond/elrond/tools/INDXRipper
+sudo python3.9 -m pip install setuptools
+sudo python3.9 -m pip install construct==2.10.68
+python3.9 -m pip install setuptools
+python3.9 -m pip install construct==2.10.68
+#cd /opt/elrond/elrond/tools/INDXRipper
+#python3.9 -m pip install virtualenv
+#python3.9 -m virtualenv venv
+#source venv/bin/activate
+#pip install construct==2.10.68
+#sudo venv/bin/python INDXRipper.py -V
 updatedb
 # configuring elrond
 sudo chmod -R 744 /opt/elrond/

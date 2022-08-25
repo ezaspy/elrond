@@ -42,12 +42,11 @@ def main(
     keywords,
     volatility,
     navigator,
-    reorganise,
     hashcollected,
     process,
     superquick,
     quick,
-    recover,
+    reorganise,
     splunk,
     symlinks,
     timeline,
@@ -76,38 +75,39 @@ def main(
             random.choice(quotes)
         )
     )
+    if not collect and not gandalf and not reorganise:
+        print(
+            "\n  You MUST use the collect switch (-C), gandalf switch (-G) or the reorganise switch (-O).\n   If you are processing acquired disk and/or memory images, you must invoke the collect switch (-C).\n   If you have previously collected artefacts using gandalf, you must invoke the gandalf switch (-G).\n   If you have previously collected artefacts NOT using gandalf, you must invoke the reorganise switch (-O).\n\n  Please try again.\n\n\n"
+        )
+        sys.exit()
+    else:
+        pass
     if collect and gandalf:
         print(
-            "\n  You cannot use the collect switch (-C) and the collect gandalf (-G).\n   If you are processing acquired disk and/or memory images, you must invoke the collect switch (-C).\n   If you have previously collected artefacts using gandalf, you must invoke the gandalf switch (-G).\n  Please try again.\n\n\n\n"
+            "\n  You cannot use the collect switch (-C) and the collect gandalf (-G).\n   If you are processing acquired disk and/or memory images, you must invoke the collect switch (-C).\n   If you have previously collected artefacts using gandalf, you must invoke the gandalf switch (-G).\n\n  Please try again.\n\n\n"
         )
         sys.exit()
     if collect and reorganise:
         print(
-            "\n  You cannot use the collect switch (-C) and the reorganise switch (-O).\n   If you are processing acquired disk and/or memory images, you must invoke the collect switch (-C).\n   If you have previously collected artefacts NOT using gandalf, you must invoke the reorganise switch (-O).\n  Please try again.\n\n\n\n"
+            "\n  You cannot use the collect switch (-C) and the reorganise switch (-O).\n   If you are processing acquired disk and/or memory images, you must invoke the collect switch (-C).\n   If you have previously collected artefacts NOT using gandalf, you must invoke the reorganise switch (-O).\n\n  Please try again.\n\n\n"
         )
         sys.exit()
     if gandalf and reorganise:
         print(
-            "\n  You cannot use the gandalf switch (-G) and the reorganise switch (-O).\n   If you have previously collected artefacts using gandalf, you must invoke the gandalf switch (-G).\n   If you have previously collected artefacts NOT using gandalf, you must invoke the reorganise switch (-O).\n  Please try again.\n\n\n\n"
+            "\n  You cannot use the gandalf switch (-G) and the reorganise switch (-O).\n   If you have previously collected artefacts using gandalf, you must invoke the gandalf switch (-G).\n   If you have previously collected artefacts NOT using gandalf, you must invoke the reorganise switch (-O).\n\n  Please try again.\n\n\n"
         )
         sys.exit()
     else:
         pass
     if volatility and not process:
         print(
-            "\n  If you are just processing memory images, you must invoke the process switch (-P) with the memory switch (-M).\n  Please try again.\n\n\n\n"
+            "\n  If you are just processing memory images, you must invoke the process switch (-P) with the memory switch (-M).\n\n  Please try again.\n\n\n"
         )
         sys.exit()
     else:
         pass
     if (not collect or gandalf) and (
-        vss
-        or collectfiles
-        or imageinfo
-        or recover
-        or symlinks
-        or timeline
-        or userprofiles
+        vss or collectfiles or imageinfo or symlinks or timeline or userprofiles
     ):
         if gandalf:
             gandalforcollect = "gandalf switch (-G)"
@@ -119,8 +119,6 @@ def main(
             collectand = "collectfiles switch (-F)"
         elif (not collect or gandalf) and imageinfo:
             collectand = "imageinfo switch (-I)"
-        elif (not collect or gandalf) and recover:
-            collectand = "recover switch (-R)"
         elif (not collect or gandalf) and symlinks:
             collectand = "symlinks switch (-s)"
         elif (not collect or gandalf) and timeline:
@@ -678,7 +676,6 @@ def main(
             hashcollected,
             superquick,
             quick,
-            recover,
             symlinks,
             userprofiles,
             verbose,
@@ -1056,8 +1053,8 @@ def main(
             more_than_one_phase = "phase"
         if len(allimgs) > 0:
             print("      {} {} completed for...".format(flags, more_than_one_phase))
-            for eachimg in allimgs:
-                doneimgs.append(eachimg.split("::")[0].split("/")[-1])
+            for _, eachimg in allimgs.items():
+                doneimgs.append(eachimg.split("::")[0])
         else:
             pass
     else:

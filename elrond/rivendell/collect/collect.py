@@ -13,6 +13,7 @@ from rivendell.audit import write_audit_log_entry
 from rivendell.collect.linux import collect_linux_artefacts
 from rivendell.collect.mac import collect_mac_artefacts
 from rivendell.collect.files.select import select_files
+from rivendell.collect.files.recover import recover_files
 from rivendell.collect.windows import collect_windows_artefacts
 from rivendell.meta import extract_metadata
 from rivendell.process.memory import process_memory
@@ -28,7 +29,6 @@ def collect_artefacts(
     hashcollected,
     superquick,
     quick,
-    recover,
     symlinks,
     userprofiles,
     verbose,
@@ -485,9 +485,7 @@ def collect_artefacts(
                             pass
                     else:
                         pass
-                except OSError as error:  # if item is list, cycle through using loop
-                    print(item)
-                    print(type(item))
+                except OSError as error:
                     manage_error(
                         output_directory,
                         verbosity,
@@ -497,16 +495,24 @@ def collect_artefacts(
                         item,
                         vsstext,
                     )
+        recover_files(
+            output_directory,
+            verbosity,
+            "recovery",
+            d,
+            img,
+            vssimage,
+        )
         if not auto:
-            collect_recover = input(
-                "  Do you wish to collect, recover and/or carve files from '{}'? Y/n [Y] ".format(
+            do_collect = input(
+                "  Do you wish to collect files from '{}'? Y/n [Y] ".format(
                     img.split("::")[0]
                 )
             )
         else:
             pass
-        if auto or collect_recover != "n":
-            if collectfiles or recover:
+        if auto or do_collect != "n":
+            if collectfiles:
                 select_files(
                     output_directory,
                     verbosity,
@@ -515,7 +521,6 @@ def collect_artefacts(
                     img,
                     vssimage,
                     collectfiles,
-                    recover,
                 )
             else:
                 pass

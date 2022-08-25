@@ -6,13 +6,13 @@ import time
 from datetime import datetime
 
 from rivendell.audit import write_audit_log_entry
-from rivendell.memory.vol import (
+from rivendell.memory.volcore import (
     assess_volatility_choice,
 )
-from rivendell.memory.vol import (
+from rivendell.memory.volcore import (
     dump_nix_ziphex,
 )
-from rivendell.memory.vol import (
+from rivendell.memory.volcore import (
     select_profile,
 )
 
