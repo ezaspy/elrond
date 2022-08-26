@@ -495,37 +495,37 @@ def collect_artefacts(
                         item,
                         vsstext,
                     )
-        recover_files(
-            output_directory,
-            verbosity,
-            "recovered",
-            d,
-            img,
-            vssimage,
-        )
-        if not auto:
-            do_collect = input(
-                "  Do you wish to collect files from '{}'? Y/n [Y] ".format(
-                    img.split("::")[0]
-                )
+            recover_files(
+                output_directory,
+                verbosity,
+                "recovered",
+                d,
+                img,
+                vssimage,
             )
-        else:
-            pass
-        if auto or do_collect != "n":
-            if collectfiles:
-                select_files(
-                    output_directory,
-                    verbosity,
-                    d,
-                    mnt,
-                    img,
-                    vssimage,
-                    collectfiles,
+            if not auto:
+                do_collect = input(
+                    "  Do you wish to collect files from '{}'? Y/n [Y] ".format(
+                        img.split("::")[0]
+                    )
                 )
             else:
                 pass
-        else:
-            pass
+            if auto or do_collect != "n":
+                if collectfiles:
+                    select_files(
+                        output_directory,
+                        verbosity,
+                        d,
+                        mnt,
+                        img,
+                        vssimage,
+                        collectfiles,
+                    )
+                else:
+                    pass
+            else:
+                pass
         if symlinks and verbose:
             print(
                 "     Tidying artefacts for {}...\n     Please be patient...".format(
