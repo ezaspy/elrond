@@ -277,9 +277,7 @@ def collect_windows_artefacts(
                 pass
         else:
             pass
-        if (
-            item == mnt + "/Windows/System32/LogFiles/WMI/"
-        ):  # comment - confirm backup location
+        if item == mnt + "/Windows/System32/LogFiles/WMI/": # comment - confirm backup location
             item_list, dest = (
                 os.listdir(item),
                 dest + "wmi/",
