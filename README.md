@@ -45,7 +45,7 @@
 
 <br><br>
 
-<!-- ABOUT THE PROJECT -->
+<!-- ABOUT -->
 
 ## About The Project
 
@@ -57,7 +57,7 @@ elrond also provides additional features such as image and file hashing, metadat
 elrond is responsible for the analysis-side of digital forensic, but what about acquisition? An acompanying script called [gandalf](https://github.com/ezaspy/gandalf) can be deployed (locally or remotely) on either Windows (PowerShell), macOS or Linux (Python) hosts to acquire forensic artefacts. 
 <br><br><br>
 
-<!-- Prerequisites -->
+<!-- PREREQUISITES -->
 
 ## Prerequisites
 
@@ -69,14 +69,14 @@ To invoke the script, simply follow the instructions in [CONFIG.md](https://gith
 - See [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md) to install and configure the additional software for SIFT 20.04.
   - Please note the elrond also only supports x64 memory images.
   - If you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [.../elrond/elrond/tools/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/scripts/)
-<br><br>
+<br>
 
 Alternatviely, if you prefer to install the packages yourself... (bear in mind there may be additional dependency requirements)<br>
 
 - [volatility3](https://github.com/volatilityfoundation/volatility3/) - (optional)
 - [dwarfdump](https://manpages.ubuntu.com/manpages/trusty/man1/dwarfdump.1.html) - processing Linux memory images in volatility3
 - [apfs-fuse](https://github.com/ezaspy/apfs-fuse) - macOS disk analysis
-  <br><br>
+<br><br><br>
 
 <!-- USAGE EXAMPLES -->
 
@@ -129,14 +129,14 @@ Alternatviely, if you prefer to install the packages yourself... (bear in mind t
 
 ### Support
 
-Please note that if you are NOT using the -C flag (i.e. your artefacts have already been collected via another means, not using [gandalf](https://github.com/ezaspy/gandalf)). Please ensure your folder structure is as follows: `<path_to_folder>/`acquisitions`/<hostname(s)>/<artefacts(s)>`<br><br>
-See the [support file](https://github.com/ezaspy/elrond/SUPPORT.md) for a list of commands and additional third-party tools to help with preparing images or data for elrond.<br><br><br>
+See the [support file](https://github.com/ezaspy/elrond/SUPPORT.md) for a list of commands and additional third-party tools to help with preparing images or data for elrond.
+<br><br>
 
-<!-- ROADMAP -->
+### Notices
 
-## Roadmap
+Please note that if you notice 'nixCommand' or 'nixProcess' in files processed from a Windows OS, this is somewhat intentional. I debated with myself whether to try and change these to 'WinCommand' and 'WinProcess', respectively but also considered the situation of Windows Subsystem for Linux (WSL) being installed. As a result, I have left them as they are. If you know of a way to identify whether a file belongs inside the Linux element of WSL based on file path, file type, file content etc. please raise an [issue](https://github.com/ezaspy/elrond/issues) and let me know.
+<br><br><br>
 
-See the [open issues](https://github.com/ezaspy/elrond/issues) for a list of proposed features (and known issues).<br> _If you do experience any issues, please try building a new SIFT Workstation VM and then raise an issue via the [issues](https://github.com/ezaspy/elrond/issues) page._<br><br><br>
 <!-- CONTRIBUTING -->
 
 ## Contributing
@@ -148,24 +148,11 @@ Contributions are what make the open source community such an amazing place to b
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-   <br><br><br>
+<br><br>
 
-<!-- LICENSE -->
-
-## License
-
-Distributed under the [MIT](https://choosealicense.com/licenses/mit/) License. See [LICENSE](https://github.com/ezaspy/elrond/LICENSE.txt) for more information.
-<br><br><br>
-
-<!-- CONTACT -->
-
-## Contact
+### Contact
 
 ezaspy - ezaspython (at) gmail (dot) com
-
-Project Link: [https://github.com/ezaspy/elrond](https://github.com/ezaspy/elrond)
-
-Other Projects: [https://github.com/ezaspy/](https://github.com/ezaspy/)
 <br><br><br>
 
 <!-- ACKNOWLEDGEMENTS -->
@@ -182,6 +169,7 @@ Other Projects: [https://github.com/ezaspy/](https://github.com/ezaspy/)
   - [williballenthin](https://github.com/williballenthin)
   - [dkovar](https://github.com/dkovar)
   - [Richard Penman](https://github.com/richardpenman)
+  - [harelsegev](https://github.com/harelsegev/INDXRipper)
   - [mnrkbys](https://github.com/mnrkbys/macosac)
   - [The Volatility Foundation](https://github.com/volatilityfoundation)
   - [AVML](https://github.com/microsoft/avml)
