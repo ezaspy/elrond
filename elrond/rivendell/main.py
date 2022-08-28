@@ -721,7 +721,6 @@ def main(
             "/mnt/elrond_mount19",
         ],
     )
-    sys.exit()
     if (
         len(allimgs) > 0
     ):  # Post-processing metadata, YARA, Splunk, Elastic, Archive, Deletion
