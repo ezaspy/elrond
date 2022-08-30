@@ -82,7 +82,7 @@ def process_browser_index(
                 )
             else:
                 pass
-            with open(
+            if not os.path.exists(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
@@ -91,10 +91,23 @@ def process_browser_index(
                 + indexuser
                 + "+"
                 + artefact.split("/")[-1]
-                + ".csv",
-                "w",
-            ) as indexout:
-                indexout.write("Profile,Protocol,Domain,url,Description\n")
+                + ".csv"
+            ):
+                with open(
+                    output_directory
+                    + img.split("::")[0]
+                    + "/artefacts/cooked"
+                    + vssartefact
+                    + "browsers/IE/"
+                    + indexuser
+                    + "+"
+                    + artefact.split("/")[-1]
+                    + ".csv",
+                    "w",
+                ) as indexout:
+                    indexout.write("Profile,Protocol,Domain,url,Description\n")
+            else:
+                pass
             with open(
                 output_directory
                 + img.split("::")[0]
@@ -380,7 +393,7 @@ def process_browser(
         )
     else:
         pass
-    with open(
+    if not os.path.exists(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
@@ -391,11 +404,26 @@ def process_browser(
         + artefact.split("/raw/")[1].split("/")[1]
         + "+"
         + artefact.split("/")[-1]
-        + ".csv",
-        "w",
-    ) as bwsr:
-        bwsr.write("url,title,visit_count,from_visit,visit_date,LastWriteTime\n")
-    with open(
+        + ".csv"
+    ):
+        with open(
+            output_directory
+            + img.split("::")[0]
+            + "/artefacts/cooked"
+            + vssartefact
+            + "browsers/"
+            + artefact.split("/raw/")[1].split("/")[2]
+            + "/"
+            + artefact.split("/raw/")[1].split("/")[1]
+            + "+"
+            + artefact.split("/")[-1]
+            + ".csv",
+            "w",
+        ) as bwsr:
+            bwsr.write("url,title,visit_count,from_visit,visit_date,LastWriteTime\n")
+    else:
+        pass
+    if not os.path.exists(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
@@ -406,12 +434,27 @@ def process_browser(
         + artefact.split("/raw/")[1].split("/")[1]
         + "+"
         + artefact.split("/")[-1]
-        + "_downloads.csv",
-        "w",
-    ) as downloads:
-        downloads.write(
-            "url,downloaded_file,received_bytes,total_bytes,start_time,end_time,LastWriteTime\n"
-        )
+        + ".csv"
+    ):
+        with open(
+            output_directory
+            + img.split("::")[0]
+            + "/artefacts/cooked"
+            + vssartefact
+            + "browsers/"
+            + artefact.split("/raw/")[1].split("/")[2]
+            + "/"
+            + artefact.split("/raw/")[1].split("/")[1]
+            + "+"
+            + artefact.split("/")[-1]
+            + "_downloads.csv",
+            "w",
+        ) as downloads:
+            downloads.write(
+                "url,downloaded_file,received_bytes,total_bytes,start_time,end_time,LastWriteTime\n"
+            )
+    else:
+        pass
     if artefact.endswith("/Edge/History") or artefact.endswith("/chrome/History"):
         cursor_items = (
             sqlite3.connect(artefact)

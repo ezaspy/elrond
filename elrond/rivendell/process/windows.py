@@ -70,9 +70,18 @@ def process_mft(verbosity, vssimage, output_directory, img, vssartefact, stage):
             + ".journal_mft.csv",
             "a",
         ) as mftwrite:
-            mftwrite.write(
-                "record,state,active,record_type,seq_number,parent_file_record,parent_file_record_seq,std_info_creation_date,std_info_modification_date,std_info_access_date,std_info_entry_date,object_id,birth_volume_id,birth_object_id,birth_domain_id,std_info,attribute_list,has_filename,has_object_id,volume_name,volume_info,data,index_root,index_allocation,bitmap,reparse_point,ea_information,ea,property_set,logged_utility_stream,log/notes,stf_fn_shift,usec_zero,ads,possible_copy,possible_volume_move,Filename,fn_info_creation_date,fn_info_modification_date,fn_info_access_date,fn_info_entry_date,LastWriteTime\n"
-            )
+            if not os.path.exists(
+                output_directory
+                + img.split("::")[0]
+                + "/artefacts/cooked"
+                + vssartefact
+                + "journal_mft.csv"
+            ):
+                mftwrite.write(
+                    "record,state,active,record_type,seq_number,parent_file_record,parent_file_record_seq,std_info_creation_date,std_info_modification_date,std_info_access_date,std_info_entry_date,object_id,birth_volume_id,birth_object_id,birth_domain_id,std_info,attribute_list,has_filename,has_object_id,volume_name,volume_info,data,index_root,index_allocation,bitmap,reparse_point,ea_information,ea,property_set,logged_utility_stream,log/notes,stf_fn_shift,usec_zero,ads,possible_copy,possible_volume_move,Filename,fn_info_creation_date,fn_info_modification_date,fn_info_access_date,fn_info_entry_date,LastWriteTime\n"
+                )
+            else:
+                pass
             with open(
                 output_directory
                 + img.split("::")[0]
@@ -566,7 +575,9 @@ def process_clipboard(
         if verbosity != "":
             print(
                 "     Processing '{}' ({}) clipboard evidence for {}...".format(
-                    artefact.split("/")[-1].split("_")[-1], artefact.split("/")[-1].split("+")[0], vssimage
+                    artefact.split("/")[-1].split("_")[-1],
+                    artefact.split("/")[-1].split("+")[0],
+                    vssimage,
                 )
             )
         else:

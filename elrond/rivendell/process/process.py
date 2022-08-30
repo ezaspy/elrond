@@ -394,9 +394,11 @@ def select_pre_process_artefacts(
                 os.remove(".temp.log")
             except:
                 pass
+            print("TEST1")
             artefacts_list = select_artefacts_to_process(
                 img, process_list, artefacts_list
             )  # Identifying artefacts for processing
+            print("TEST2")
             if len(artefacts_list) == 0:
                 print(
                     "    No artefacts were collected for {}.\n    Please try again.\n\n".format(
