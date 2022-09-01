@@ -122,15 +122,25 @@ def mounted_image(allimgs, disk_image, destination_mount, disk_file, index):
     if index == "0":
         partition = ""
     elif index == 0:
-        partition = " (first partition)"
+        partition = " (zeroth partition)"
     elif index == 1:
-        partition = " (second partition)"
+        partition = " (first partition)"
     elif index == 2:
-        partition = " (third partition)"
+        partition = " (second partition)"
     elif index == 3:
-        partition = " (forth partition)"
+        partition = " (third partition)"
     elif index == 4:
+        partition = " (forth partition)"
+    elif index == 5:
         partition = " (fifth partition)"
+    elif index == 6:
+        partition = " (sixth partition)"
+    elif index == 7:
+        partition = " (seventh partition)"
+    elif index == 8:
+        partition = " (eighth partition)"
+    elif index == 9:
+        partition = " (ninth partition)"
     if "::Windows" in disk_image or "::macOS" in disk_image or "::Linux" in disk_image:
         allimgs[destination_mount] = disk_image
         print(
