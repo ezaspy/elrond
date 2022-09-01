@@ -14,7 +14,7 @@ def ingest_splunk_data(
     allimgs,
     postpath,
 ):
-    for img in allimgs:
+    for _, img in allimgs.items():
         if "vss" in img.split("::")[1]:
             vssimage, vsstext = "'" + img.split("::")[0] + "' (" + img.split("::")[
                 1
