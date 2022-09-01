@@ -45,7 +45,7 @@ def overwrite_splunk_index(
         )
     else:
         case = input("    Name of new index: ").strip("\n")
-    for everyimg in allimgs:
+    for _, everyimg in allimgs.items():
         entry, prnt = "{},{},adding {} index {}, {}".format(
             datetime.now().isoformat(),
             stage,
