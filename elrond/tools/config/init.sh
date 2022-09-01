@@ -1,7 +1,7 @@
 #!/bin/bash
 clear
 # installing vmware_tools
-sudo tar -xvf /opt/elrond/elrond/tools/VMwareTools-10.3.23-16594550.tar.gz
+sudo tar -xvf /opt/elrond/elrond/tools/config/VMwareTools-10.3.23-16594550.tar.gz
 cd vmware-tools-distrib
 sudo ./vmware-install.pl
 cd ..

@@ -1,13 +1,13 @@
 #!/bin/bash
 sudo apt update
-../elrond/tools/scripts/./init.sh
-../elrond/tools/scripts/./sift.sh
-../elrond/tools/scripts/./apfs-fuse.sh
-../elrond/tools/scripts/./volatility3.sh
-../elrond/tools/scripts/./dwarf2json.sh
-../elrond/tools/scripts/./splunk.sh
-#../elrond/tools/scripts/./elastic.sh
-../elrond/tools/scripts/./navigator.sh
+../elrond/tools/config/scripts/./init.sh
+../elrond/tools/config/scripts/./sift.sh
+../elrond/tools/config/scripts/./apfs-fuse.sh
+../elrond/tools/config/scripts/./volatility3.sh
+../elrond/tools/config/scripts/./dwarf2json.sh
+../elrond/tools/config/scripts/./splunk.sh
+#../elrond/tools/config/scripts/./elastic.sh
+../elrond/tools/config/scripts/./navigator.sh
 sudo updatedb
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt update

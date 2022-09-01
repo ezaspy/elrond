@@ -124,7 +124,7 @@ def compare_iocs(
                                     )
                                 ):
                                     with open(
-                                        "/opt/elrond/elrond/tools/ioc_exclusions"
+                                        "/opt/elrond/elrond/rivendell/analysis/ioc_exclusions"
                                     ) as ioc_exclusions:
                                         match = []
                                         for each_exclusion in ioc_exclusions:
