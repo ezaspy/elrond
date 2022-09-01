@@ -250,11 +250,13 @@ def process_artefacts(
     return vssmem
 
 
-def select_artefacts_to_process(img, process_list, artefacts_list):
+def select_artefacts_to_process(img, process_list, artefacts_list, processed_artefacts):
     for each in process_list:
         for root, _, files in os.walk(each):
             for f in files:  # Identifying artefacts for processing
-                if img.split("::")[0] in root:
+                if (img.split("::")[0] in root) and (
+                    root + "/" + f not in str(processed_artefacts)
+                ):
                     if (
                         f.endswith("MFT")
                         or f.endswith("LogFile")
@@ -303,7 +305,9 @@ def select_artefacts_to_process(img, process_list, artefacts_list):
                         or "/raw/browsers" in root + "/" + f
                         or "/carved/" in root
                     ):
+                        print(root + "/" + f)
                         artefacts_list.append(each + ": " + root + "/" + f)
+                        processed_artefacts.append(root + "/" + f)
                     else:
                         pass
                 else:
@@ -335,6 +339,7 @@ def select_pre_process_artefacts(
     )
     time.sleep(1)
     imgs = OrderedDict(sorted(imgs.items(), key=lambda x: x[1]))
+    processed_artefacts = []
     for _, img in imgs.items():  # Identifying artefacts and Processing function
         if not img.split("::")[1].endswith(
             "memory"
@@ -385,7 +390,7 @@ def select_pre_process_artefacts(
             except:
                 pass
             artefacts_list = select_artefacts_to_process(
-                img, process_list, artefacts_list
+                img, process_list, artefacts_list, processed_artefacts
             )  # Identifying artefacts for processing
             if len(artefacts_list) == 0:
                 print(
@@ -477,7 +482,9 @@ def select_pre_process_artefacts(
                         os.path.join(output_directory + img.split("::")[0] + "/carved/")
                     )
                     artefacts_list.clear()
-                    artefacts_list = select_artefacts_to_process(img, process_list)
+                    artefacts_list = select_artefacts_to_process(
+                        img, process_list, artefacts_list, processed_artefacts
+                    )
                     for each in artefacts_list:
                         ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
                         artefact = str(ia[0][1])
