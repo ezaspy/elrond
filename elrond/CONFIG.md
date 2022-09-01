@@ -19,7 +19,9 @@ _Note, the following script will partition and format /dev/sdb. If you have not 
 `sudo git clone https://github.com/ezaspy/elrond.git/ /opt/elrond`<br>
 `sudo /opt/elrond/./make.sh`<br>
 - When prompted, enter the keys in the following order:
-  - **&darr; &darr; ENTER c g**
+  - **ENTER** x15 (VMware Tools) - type 'no' when asked to recover disk space
+  - **&darr; &darr; ENTER c g** (cmake)
+  - **ENTER** (python)
 
 <br>
 
