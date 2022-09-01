@@ -729,7 +729,7 @@ def main(
                 "\n\n  -> \033[1;36mCommencing Metadata phase for proccessed artefacts...\033[1;m\n  ----------------------------------------"
             )
             time.sleep(1)
-            for img in allimgs:
+            for _, img in allimgs.items():
                 print(
                     "\n    Collecting metadata from processed artefacts for '{}'...".format(
                         img.split("::")[0]
@@ -812,7 +812,7 @@ def main(
                 else:
                     pass
                 print(
-                    "\n    Completed collection of metadata from processed artefacts for '{}'...".format(
+                    "     Completed collection of metadata from processed artefacts for '{}'".format(
                         img.split("::")[0]
                     )
                 )
