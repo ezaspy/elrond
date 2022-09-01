@@ -47,13 +47,7 @@ def process_artefacts(
     jsondict = {}
     jsonlist = []
     if img.split("::")[0] in artefact:
-        if artefact.endswith("setupapi.dev.log") and not os.path.exists(
-            output_directory
-            + img.split("::")[0]
-            + "/artefacts/cooked"
-            + vssartefact
-            + "usb.log.json"
-        ):
+        if artefact.endswith("setupapi.dev.log"):
             process_usb(
                 verbosity,
                 vssimage,
@@ -65,14 +59,10 @@ def process_artefacts(
                 jsondict,
                 jsonlist,
             )
-        elif artefact.endswith("$MFT") and not os.path.exists(
-            output_directory
-            + img.split("::")[0]
-            + "/artefacts/cooked"
-            + vssartefact
-            + "MFT.csv"
-        ):
-            process_mft(verbosity, vssimage, output_directory, img, vssartefact, stage)
+        elif artefact.endswith("$MFT"):
+            process_mft(
+                verbosity, vssimage, output_directory, img, artefact, vssartefact, stage
+            )
         elif artefact.endswith(".SYSTEM") and not os.path.exists(
             output_directory
             + img.split("::")[0]
@@ -394,11 +384,9 @@ def select_pre_process_artefacts(
                 os.remove(".temp.log")
             except:
                 pass
-            print("TEST1")
             artefacts_list = select_artefacts_to_process(
                 img, process_list, artefacts_list
             )  # Identifying artefacts for processing
-            print("TEST2")
             if len(artefacts_list) == 0:
                 print(
                     "    No artefacts were collected for {}.\n    Please try again.\n\n".format(

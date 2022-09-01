@@ -8,6 +8,18 @@ from rivendell.audit import write_audit_log_entry
 from rivendell.collect.users.windows import windows_users
 
 
+def check_existence(item, dest, occurance):
+    dest = os.path.join(dest, "#{}{}".format(str(occurance), item.split("/")[-1]))
+    if os.path.exists(dest):
+        occurance += 1
+        split_dest = dest.split("/")
+        split_dest.pop()
+        dest = check_existence(item, "/".join(split_dest), str(occurance))
+    else:
+        pass
+    return dest
+
+
 def collect_windows_artefacts(
     artefact_directory,
     dest,
@@ -52,6 +64,10 @@ def collect_windows_artefacts(
                 img.split("::")[0],
             )
             write_audit_log_entry(verbosity, output_directory, entry, prnt)
+            if os.path.exists(os.path.join(dest, item.split("/")[-1])):
+                dest = check_existence(item, dest, 1)
+            else:
+                pass
             try:
                 shutil.copy2(item, dest)
             except:
@@ -75,6 +91,10 @@ def collect_windows_artefacts(
                 img.split("::")[0],
             )
             write_audit_log_entry(verbosity, output_directory, entry, prnt)
+            if os.path.exists(os.path.join(dest, item.split("/")[-1])):
+                dest = check_existence(item, dest, 1)
+            else:
+                pass
             try:
                 shutil.copy2(item, dest)
             except:
@@ -107,6 +127,10 @@ def collect_windows_artefacts(
                 img.split("::")[0],
             )
             write_audit_log_entry(verbosity, output_directory, entry, prnt)
+            if os.path.exists(os.path.join(dest, item.split("/")[-1])):
+                dest = check_existence(item, dest, 1)
+            else:
+                pass
             try:
                 shutil.copy2(item, dest)
                 if "vss" in mnt:
@@ -140,22 +164,22 @@ def collect_windows_artefacts(
             item_list = os.listdir(item)
             for each in item_list:
                 if (
-                    each == "SAM"
-                    or each == "SECURITY"
-                    or each == "SOFTWARE"
-                    or each == "SYSTEM"
-                    or each == "SAM.LOG"
-                    or each == "SECURITY.LOG"
-                    or each == "SOFTWARE.LOG"
-                    or each == "SYSTEM.LOG"
-                    or each == "SAM.LOG1"
-                    or each == "SECURITY.LOG1"
-                    or each == "SOFTWARE.LOG1"
-                    or each == "SYSTEM.LOG1"
-                    or each == "SAM.LOG2"
-                    or each == "SECURITY.LOG2"
-                    or each == "SOFTWARE.LOG2"
-                    or each == "SYSTEM.LOG2"
+                    each.endswith("SAM")
+                    or each.endswith("SECURITY")
+                    or each.endswith("SOFTWARE")
+                    or each.endswith("SYSTEM")
+                    or each.endswith("SAM.LOG")
+                    or each.endswith("SECURITY.LOG")
+                    or each.endswith("SOFTWARE.LOG")
+                    or each.endswith("SYSTEM.LOG")
+                    or each.endswith("SAM.LOG1")
+                    or each.endswith("SECURITY.LOG1")
+                    or each.endswith("SOFTWARE.LOG1")
+                    or each.endswith("SYSTEM.LOG1")
+                    or each.endswith("SAM.LOG2")
+                    or each.endswith("SECURITY.LOG2")
+                    or each.endswith("SOFTWARE.LOG2")
+                    or each.endswith("SYSTEM.LOG2")
                 ):
                     try:
                         (entry, prnt,) = "{},{},{},'{}' registry hive\n".format(
@@ -179,6 +203,14 @@ def collect_windows_artefacts(
                             entry,
                             prnt,
                         )
+                        if os.path.exists(
+                            os.path.join(dest, item.split("/")[-1], each)
+                        ):
+                            dest = check_existence(
+                                os.path.join(item.split("/")[-1], each), dest, 1
+                            )
+                        else:
+                            pass
                         shutil.copy2(item + each, dest)
                     except:
                         pass
@@ -204,25 +236,33 @@ def collect_windows_artefacts(
                 else:
                     pass
                 for each in item_list:
-                    (entry, prnt,) = "{},{},{},'{}' event log\n".format(
-                        datetime.now().isoformat(),
-                        img.split("::")[0],
-                        stage,
-                        each,
-                    ), " -> {} -> {} event log '{}'{} from '{}'".format(
-                        datetime.now().isoformat().replace("T", " "),
-                        stage,
-                        each,
-                        vsstext.replace("vss", "volume shadow copy #"),
-                        img.split("::")[0],
-                    )
-                    write_audit_log_entry(
-                        verbosity,
-                        output_directory,
-                        entry,
-                        prnt,
-                    )
                     try:
+                        (entry, prnt,) = "{},{},{},'{}' event log\n".format(
+                            datetime.now().isoformat(),
+                            img.split("::")[0],
+                            stage,
+                            each,
+                        ), " -> {} -> {} event log '{}'{} from '{}'".format(
+                            datetime.now().isoformat().replace("T", " "),
+                            stage,
+                            each,
+                            vsstext.replace("vss", "volume shadow copy #"),
+                            img.split("::")[0],
+                        )
+                        write_audit_log_entry(
+                            verbosity,
+                            output_directory,
+                            entry,
+                            prnt,
+                        )
+                        if os.path.exists(
+                            os.path.join(dest, item.split("/")[-1], each)
+                        ):
+                            dest = check_existence(
+                                os.path.join(item.split("/")[-1], each), dest, 1
+                            )
+                        else:
+                            pass
                         shutil.copy2(item + each, dest)
                     except:
                         pass
@@ -250,25 +290,33 @@ def collect_windows_artefacts(
                 else:
                     pass
                 for each in item_list:
-                    (entry, prnt,) = "{},{},{},'{}' WBEM evidence\n".format(
-                        datetime.now().isoformat(),
-                        img.split("::")[0],
-                        stage,
-                        each,
-                    ), " -> {} -> {} WBEM evidence '{}'{} from '{}'".format(
-                        datetime.now().isoformat().replace("T", " "),
-                        stage,
-                        each,
-                        vsstext.replace("vss", "volume shadow copy #"),
-                        img.split("::")[0],
-                    )
-                    write_audit_log_entry(
-                        verbosity,
-                        output_directory,
-                        entry,
-                        prnt,
-                    )
                     try:
+                        (entry, prnt,) = "{},{},{},'{}' WBEM evidence\n".format(
+                            datetime.now().isoformat(),
+                            img.split("::")[0],
+                            stage,
+                            each,
+                        ), " -> {} -> {} WBEM evidence '{}'{} from '{}'".format(
+                            datetime.now().isoformat().replace("T", " "),
+                            stage,
+                            each,
+                            vsstext.replace("vss", "volume shadow copy #"),
+                            img.split("::")[0],
+                        )
+                        write_audit_log_entry(
+                            verbosity,
+                            output_directory,
+                            entry,
+                            prnt,
+                        )
+                        if os.path.exists(
+                            os.path.join(dest, item.split("/")[-1], each)
+                        ):
+                            dest = check_existence(
+                                os.path.join(item.split("/")[-1], each), dest, 1
+                            )
+                        else:
+                            pass
                         shutil.copy2(item + each, dest)
                     except:
                         pass
@@ -277,7 +325,9 @@ def collect_windows_artefacts(
                 pass
         else:
             pass
-        if item == mnt + "/Windows/System32/LogFiles/WMI/": # comment - confirm backup location
+        if (
+            item == mnt + "/Windows/System32/LogFiles/WMI/"
+        ):  # comment - confirm backup location
             item_list, dest = (
                 os.listdir(item),
                 dest + "wmi/",
@@ -296,25 +346,33 @@ def collect_windows_artefacts(
                 else:
                     pass
                 for each in item_list:
-                    (entry, prnt,) = "{},{},{},'{}' WMI artefact\n".format(
-                        datetime.now().isoformat(),
-                        img.split("::")[0],
-                        stage,
-                        each,
-                    ), " -> {} -> {} WMI artefact '{}'{} from '{}'".format(
-                        datetime.now().isoformat().replace("T", " "),
-                        stage,
-                        each,
-                        vsstext.replace("vss", "volume shadow copy #"),
-                        img.split("::")[0],
-                    )
-                    write_audit_log_entry(
-                        verbosity,
-                        output_directory,
-                        entry,
-                        prnt,
-                    )
                     try:
+                        (entry, prnt,) = "{},{},{},'{}' WMI artefact\n".format(
+                            datetime.now().isoformat(),
+                            img.split("::")[0],
+                            stage,
+                            each,
+                        ), " -> {} -> {} WMI artefact '{}'{} from '{}'".format(
+                            datetime.now().isoformat().replace("T", " "),
+                            stage,
+                            each,
+                            vsstext.replace("vss", "volume shadow copy #"),
+                            img.split("::")[0],
+                        )
+                        write_audit_log_entry(
+                            verbosity,
+                            output_directory,
+                            entry,
+                            prnt,
+                        )
+                        if os.path.exists(
+                            os.path.join(dest, item.split("/")[-1], each)
+                        ):
+                            dest = check_existence(
+                                os.path.join(item.split("/")[-1], each), dest, 1
+                            )
+                        else:
+                            pass
                         shutil.copy2(item + each, dest)
                     except:
                         pass
@@ -322,55 +380,79 @@ def collect_windows_artefacts(
                     backup_list = os.listdir(item + "RtBackup")
                     if len(backup_list) > 0:
                         for each_backup in backup_list:
-                            (entry, prnt,) = "{},{},{},'{}' WMI artefact\n".format(
-                                datetime.now().isoformat(),
-                                img.split("::")[0],
-                                stage,
-                                each_backup,
-                            ), " -> {} -> {} WMI artefact '{}'{} from '{}'".format(
-                                datetime.now().isoformat().replace("T", " "),
-                                stage,
-                                each_backup,
-                                vsstext.replace("vss", "volume shadow copy #"),
-                                img.split("::")[0],
-                            )
-                            write_audit_log_entry(
-                                verbosity,
-                                output_directory,
-                                entry,
-                                prnt,
-                            )
                             try:
-                                shutil.copy2(item + each_backup, dest)
+                                (entry, prnt,) = "{},{},{},'{}' WMI artefact\n".format(
+                                    datetime.now().isoformat(),
+                                    img.split("::")[0],
+                                    stage,
+                                    each_backup,
+                                ), " -> {} -> {} WMI artefact '{}'{} from '{}'".format(
+                                    datetime.now().isoformat().replace("T", " "),
+                                    stage,
+                                    each_backup,
+                                    vsstext.replace("vss", "volume shadow copy #"),
+                                    img.split("::")[0],
+                                )
+                                write_audit_log_entry(
+                                    verbosity,
+                                    output_directory,
+                                    entry,
+                                    prnt,
+                                )
+                                if os.path.exists(
+                                    os.path.join(dest, item.split("/")[-1], each)
+                                ):
+                                    dest = check_existence(
+                                        os.path.join(item.split("/")[-1], each), dest, 1
+                                    )
+                                else:
+                                    pass
+                                shutil.copy2(item + each, dest)
                             except:
                                 pass
                         if os.path.exists(item + "RtBackup/EtwRT"):
                             etwrt_list = os.listdir(item + "RtBackup/EtwRT")
                             if len(etwrt_list) > 0:
                                 for each_etwrt in etwrt_list:
-                                    (
-                                        entry,
-                                        prnt,
-                                    ) = "{},{},{},'{}' WMI artefact\n".format(
-                                        datetime.now().isoformat(),
-                                        img.split("::")[0],
-                                        stage,
-                                        each_etwrt,
-                                    ), " -> {} -> {} WMI artefact '{}'{} from '{}'".format(
-                                        datetime.now().isoformat().replace("T", " "),
-                                        stage,
-                                        each_etwrt,
-                                        vsstext.replace("vss", "volume shadow copy #"),
-                                        img.split("::")[0],
-                                    )
-                                    write_audit_log_entry(
-                                        verbosity,
-                                        output_directory,
-                                        entry,
-                                        prnt,
-                                    )
                                     try:
-                                        shutil.copy2(item + each_etwrt, dest)
+                                        (
+                                            entry,
+                                            prnt,
+                                        ) = "{},{},{},'{}' WMI artefact\n".format(
+                                            datetime.now().isoformat(),
+                                            img.split("::")[0],
+                                            stage,
+                                            each_etwrt,
+                                        ), " -> {} -> {} WMI artefact '{}'{} from '{}'".format(
+                                            datetime.now()
+                                            .isoformat()
+                                            .replace("T", " "),
+                                            stage,
+                                            each_etwrt,
+                                            vsstext.replace(
+                                                "vss", "volume shadow copy #"
+                                            ),
+                                            img.split("::")[0],
+                                        )
+                                        write_audit_log_entry(
+                                            verbosity,
+                                            output_directory,
+                                            entry,
+                                            prnt,
+                                        )
+                                        if os.path.exists(
+                                            os.path.join(
+                                                dest, item.split("/")[-1], each
+                                            )
+                                        ):
+                                            dest = check_existence(
+                                                os.path.join(item.split("/")[-1], each),
+                                                dest,
+                                                1,
+                                            )
+                                        else:
+                                            pass
+                                        shutil.copy2(item + each, dest)
                                     except:
                                         pass
                             else:
@@ -406,25 +488,33 @@ def collect_windows_artefacts(
                     pass
                 for each in item_list:
                     if each.startswith("Sum") and each.endswith(".mdb"):
-                        (entry, prnt,) = "{},{},{},'{}' UAL evidence\n".format(
-                            datetime.now().isoformat(),
-                            img.split("::")[0],
-                            stage,
-                            each,
-                        ), " -> {} -> {} UAL evidence '{}'{} from '{}'".format(
-                            datetime.now().isoformat().replace("T", " "),
-                            stage,
-                            each,
-                            vsstext.replace("vss", "volume shadow copy #"),
-                            img.split("::")[0],
-                        )
-                        write_audit_log_entry(
-                            verbosity,
-                            output_directory,
-                            entry,
-                            prnt,
-                        )
                         try:
+                            (entry, prnt,) = "{},{},{},'{}' UAL evidence\n".format(
+                                datetime.now().isoformat(),
+                                img.split("::")[0],
+                                stage,
+                                each,
+                            ), " -> {} -> {} UAL evidence '{}'{} from '{}'".format(
+                                datetime.now().isoformat().replace("T", " "),
+                                stage,
+                                each,
+                                vsstext.replace("vss", "volume shadow copy #"),
+                                img.split("::")[0],
+                            )
+                            write_audit_log_entry(
+                                verbosity,
+                                output_directory,
+                                entry,
+                                prnt,
+                            )
+                            if os.path.exists(
+                                os.path.join(dest, item.split("/")[-1], each)
+                            ):
+                                dest = check_existence(
+                                    os.path.join(item.split("/")[-1], each), dest, 1
+                                )
+                            else:
+                                pass
                             shutil.copy2(item + each, dest)
                         except:
                             pass
@@ -485,25 +575,33 @@ def collect_windows_artefacts(
                 else:
                     pass
                 for each in item_list:
-                    (entry, prnt,) = "{},{},{},'{}' prefetch file\n".format(
-                        datetime.now().isoformat(),
-                        img.split("::")[0],
-                        stage,
-                        each,
-                    ), " -> {} -> {} prefetch file '{}'{} from '{}'".format(
-                        datetime.now().isoformat().replace("T", " "),
-                        stage,
-                        each,
-                        vsstext.replace("vss", "volume shadow copy #"),
-                        img.split("::")[0],
-                    )
-                    write_audit_log_entry(
-                        verbosity,
-                        output_directory,
-                        entry,
-                        prnt,
-                    )
                     try:
+                        (entry, prnt,) = "{},{},{},'{}' prefetch file\n".format(
+                            datetime.now().isoformat(),
+                            img.split("::")[0],
+                            stage,
+                            each,
+                        ), " -> {} -> {} prefetch file '{}'{} from '{}'".format(
+                            datetime.now().isoformat().replace("T", " "),
+                            stage,
+                            each,
+                            vsstext.replace("vss", "volume shadow copy #"),
+                            img.split("::")[0],
+                        )
+                        write_audit_log_entry(
+                            verbosity,
+                            output_directory,
+                            entry,
+                            prnt,
+                        )
+                        if os.path.exists(
+                            os.path.join(dest, item.split("/")[-1], each)
+                        ):
+                            dest = check_existence(
+                                os.path.join(item.split("/")[-1], each), dest, 1
+                            )
+                        else:
+                            pass
                         shutil.copy2(item + each, dest)
                     except:
                         pass

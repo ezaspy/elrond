@@ -12,8 +12,8 @@ from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 from rivendell.collect.linux import collect_linux_artefacts
 from rivendell.collect.mac import collect_mac_artefacts
+from rivendell.collect.files.i30 import extract_i30
 from rivendell.collect.files.select import select_files
-from rivendell.collect.files.recover import recover_files
 from rivendell.collect.windows import collect_windows_artefacts
 from rivendell.meta import extract_metadata
 from rivendell.process.memory import process_memory
@@ -410,24 +410,21 @@ def collect_artefacts(
                             os.makedirs(dest)
                         else:
                             pass
-                        if os.path.exists(item):  # Collection
-                            collect_windows_artefacts(
-                                artefact_directory,
-                                dest,
-                                img,
-                                item,
-                                mnt,
-                                output_directory,
-                                stage,
-                                symlinkvalue,
-                                userprofiles,
-                                verbosity,
-                                volatility,
-                                vssimage,
-                                vsstext,
-                            )
-                        else:
-                            pass
+                        collect_windows_artefacts(
+                            artefact_directory,
+                            dest,
+                            img,
+                            item,
+                            mnt,
+                            output_directory,
+                            stage,
+                            symlinkvalue,
+                            userprofiles,
+                            verbosity,
+                            volatility,
+                            vssimage,
+                            vsstext,
+                        )  # Collection
                     elif (
                         img.split("::")[0] in artefact_directory
                         and img.split("::")[1] == "macOS"
@@ -438,24 +435,21 @@ def collect_artefacts(
                             os.makedirs(dest)
                         else:
                             pass
-                        if os.path.exists(item):  # Collection
-                            collect_mac_artefacts(
-                                dest,
-                                img,
-                                item,
-                                mnt + "/root",
-                                output_directory,
-                                sha256,
-                                stage,
-                                symlinkvalue,
-                                userprofiles,
-                                verbosity,
-                                volatility,
-                                vssimage,
-                                vsstext,
-                            )
-                        else:
-                            pass
+                        collect_mac_artefacts(
+                            dest,
+                            img,
+                            item,
+                            mnt + "/root",
+                            output_directory,
+                            sha256,
+                            stage,
+                            symlinkvalue,
+                            userprofiles,
+                            verbosity,
+                            volatility,
+                            vssimage,
+                            vsstext,
+                        )  # Collection
                     elif (
                         img.split("::")[0] in artefact_directory
                         and img.split("::")[1] == "Linux"
@@ -466,23 +460,20 @@ def collect_artefacts(
                             os.makedirs(dest)
                         else:
                             pass
-                        if os.path.exists(item):  # Collection
-                            collect_linux_artefacts(
-                                dest,
-                                img,
-                                item,
-                                mnt,
-                                output_directory,
-                                stage,
-                                symlinkvalue,
-                                userprofiles,
-                                verbosity,
-                                volatility,
-                                vssimage,
-                                vsstext,
-                            )
-                        else:
-                            pass
+                        collect_linux_artefacts(
+                            dest,
+                            img,
+                            item,
+                            mnt,
+                            output_directory,
+                            stage,
+                            symlinkvalue,
+                            userprofiles,
+                            verbosity,
+                            volatility,
+                            vssimage,
+                            vsstext,
+                        )  # Collection
                     else:
                         pass
                 except OSError as error:
@@ -495,14 +486,14 @@ def collect_artefacts(
                         item,
                         vsstext,
                     )
-            recover_files(
+            """extract_i30(
                 output_directory,
                 verbosity,
                 "recovered",
                 d,
                 img,
                 vssimage,
-            )
+            )"""
             if not auto:
                 do_collect = input(
                     "  Do you wish to collect files from '{}'? Y/n [Y] ".format(

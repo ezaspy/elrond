@@ -470,6 +470,7 @@ def windows_users(
                                 pass
                         else:
                             pass
+                    print_done(verbosity)
                 elif os.path.exists(
                     item + each + "/AppData/Local/Microsoft/Windows/History/"
                 ):
@@ -538,7 +539,35 @@ def windows_users(
                                 pass
                         else:
                             pass
+                    print_done(verbosity)
                 else:
+                    if verbosity != "":
+                        print(
+                            "     Collecting Temporary Internet Files for '{}' for {}...".format(
+                                each, vssimage
+                            )
+                        )
+                    else:
+                        pass
+                    (entry, prnt,) = "{},{},{},Temporary Internet Files\n".format(
+                        datetime.now().isoformat(),
+                        img.split("::")[0],
+                        stage,
+                    ), " -> {} -> {} Temporary Internet Files{} for '{}'".format(
+                        datetime.now().isoformat().replace("T", " "),
+                        stage,
+                        vsstext.replace(
+                            "vss",
+                            "volume shadow copy #",
+                        ),
+                        img.split("::")[0],
+                    )
+                    write_audit_log_entry(
+                        verbosity,
+                        output_directory,
+                        entry,
+                        prnt,
+                    )
                     for every in os.listdir(
                         item
                         + each
@@ -586,7 +615,7 @@ def windows_users(
                                 pass
                         else:
                             pass
-                print_done(verbosity)
+                    print_done(verbosity)
             else:
                 pass
             if os.path.exists(
