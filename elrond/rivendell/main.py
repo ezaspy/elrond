@@ -729,6 +729,7 @@ def main(
                 "\n\n  -> \033[1;36mCommencing Metadata phase for proccessed artefacts...\033[1;m\n  ----------------------------------------"
             )
             time.sleep(1)
+            imgs_metad = []
             for _, img in allimgs.items():
                 print(
                     "\n    Collecting metadata from processed artefacts for '{}'...".format(
@@ -809,6 +810,10 @@ def main(
                         sha256,
                         nsrl,
                     )
+                else:
+                    pass
+                if img.split("::")[0] not in str(imgs_metad):
+                    imgs_metad.append(img.split("::")[0])
                 else:
                     pass
                 print(

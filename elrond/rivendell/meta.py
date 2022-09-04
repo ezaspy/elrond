@@ -8,7 +8,9 @@ from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
-def extract_metadata(verbosity, output_directory, img, imgloc, stage, sha256, nsrl):
+def extract_metadata(
+    verbosity, output_directory, img, imgloc, stage, sha256, nsrl
+):  # comment - do not meta file multiple times
     for hr, _, hf in os.walk(imgloc):
         for intgfile in hf:
             metaimg, metapath, unknowngoods = (
@@ -221,3 +223,4 @@ def extract_metadata(verbosity, output_directory, img, imgloc, stage, sha256, ns
                         pass
                 except:
                     pass
+    

@@ -270,7 +270,7 @@ def configure_splunk_stack(
                 splunk_deb_file = "/opt/elrond/elrond/tools/" + eachfile
             else:
                 pass
-        print("     Splunk is not installed, please stand by...")
+        print("    Splunk is not installed, please stand by...")
         splunkuser, splunkpswd = install_splunk_stack(
             verbosity,
             output_directory,
