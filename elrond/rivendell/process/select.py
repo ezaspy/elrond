@@ -100,7 +100,9 @@ def select_pre_process_artefacts(
     imgs = OrderedDict(sorted(imgs.items(), key=lambda x: x[1]))
     processed_imgs, processed_artefacts = [], []
     for _, img in imgs.items():  # identifying artefacts and processing function
-        if img.split("::")[0] not in str(processed_imgs) and not img.split("::")[1].endswith(
+        if img.split("::")[0] not in str(processed_imgs) and not img.split("::")[
+            1
+        ].endswith(
             "memory"
         ):  # identifying artefacts for processing
             for each in os.listdir(output_directory):
@@ -442,16 +444,16 @@ def select_pre_process_artefacts(
                     pass
             else:
                 pass
+            print("  -> Completed Processing Phase for {}".format(vssimage))
+            entry, prnt = "{},{},{},completed\n".format(
+                datetime.now().isoformat(), vssimage.replace("'", ""), stage
+            ), " -> {} -> processing completed for {}".format(
+                datetime.now().isoformat().replace("T", " "), vssimage
+            )
+            write_audit_log_entry(verbosity, output_directory, entry, prnt)
+            print()
         else:
             pass
-        print("  -> Completed Processing Phase for {}".format(vssimage))
-        entry, prnt = "{},{},{},completed\n".format(
-            datetime.now().isoformat(), vssimage.replace("'", ""), stage
-        ), " -> {} -> processing completed for {}".format(
-            datetime.now().isoformat().replace("T", " "), vssimage
-        )
-        write_audit_log_entry(verbosity, output_directory, entry, prnt)
-        print()
         processed_imgs.append(img.split("::")[0])
     else:
         pass
