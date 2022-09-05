@@ -97,14 +97,6 @@ parser.add_argument(
     default=False,
 )
 parser.add_argument(
-    "-H",
-    "--nsrl",
-    help="Compare hashes against known-goods from NSRL database; connection to Internet required",
-    action="store_const",
-    const=True,
-    default=False,
-)
-parser.add_argument(
     "-I",
     "--extractiocs",
     help="Extract IOCs from processed files collected from disk; WARNING: This can take a long time!",
@@ -137,6 +129,14 @@ parser.add_argument(
     default=False,
 )
 parser.add_argument(
+    "-m",
+    "--metacollected",
+    help="Only hash artefacts which have been collected, processed & analysed (if applicable) and extract metadata from collected files (if applicable)",
+    action="store_const",
+    const=True,
+    default=False,
+)
+parser.add_argument(
     "-N",
     "--navigator",
     help="Map identified artefacts to MITRE ATT&CK® navigator (requires Splunk (-S) flag)",
@@ -145,9 +145,9 @@ parser.add_argument(
     default=False,
 )
 parser.add_argument(
-    "-o",
-    "--hashcollected",
-    help="Only hash files which have been collected, processed & analysed (if applicable)",
+    "-n",
+    "--nsrl",
+    help="Compare hashes against known-goods from NSRL database; connection to Internet required",
     action="store_const",
     const=True,
     default=False,
@@ -269,14 +269,14 @@ delete = args.delete
 elastic = args.elastic
 gandalf = args.gandalf
 collectfiles = args.collectfiles
-nsrl = args.nsrl
 extractiocs = args.extractiocs
 imageinfo = args.imageinfo
 lotr = args.lotr
 keywords = args.keywords
 volatility = args.volatility
+metacollected = args.metacollected
 navigator = args.navigator
-hashcollected = args.hashcollected
+nsrl = args.nsrl
 process = args.process
 superquick = args.superquick
 quick = args.quick
@@ -459,8 +459,8 @@ if __name__ == "__main__":
         auto = True
         vss = True
         extractiocs = True
+        metacollected = True
         navigator = True
-        hashcollected = True
         process = True
         superquick = True
         quick = True
@@ -480,14 +480,14 @@ if __name__ == "__main__":
         elastic,
         gandalf,
         collectfiles,
-        nsrl,
         extractiocs,
         imageinfo,
         lotr,
         keywords,
         volatility,
+        metacollected,
         navigator,
-        hashcollected,
+        nsrl,
         process,
         superquick,
         quick,

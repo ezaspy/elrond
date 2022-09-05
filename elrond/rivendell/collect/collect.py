@@ -26,7 +26,7 @@ def collect_artefacts(
     nsrl,
     keywords,
     volatility,
-    hashcollected,
+    metacollected,
     superquick,
     quick,
     symlinks,
@@ -96,7 +96,7 @@ def collect_artefacts(
                 pass
         else:
             pass
-        if not superquick and not quick and not hashcollected:
+        if not superquick and not quick and not metacollected:
             print(
                 "\n\n  -> \033[1;36mCommencing Metadata Phase...\033[1;m\n  ----------------------------------------"
             )

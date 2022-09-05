@@ -68,7 +68,7 @@ def identify_memory_image(
     auto,
     superquick,
     quick,
-    hashcollected,
+    metacollected,
     cwd,
     sha256,
     nsrl,
@@ -86,7 +86,7 @@ def identify_memory_image(
     else:
         wtm = "y"
     if wtm != "n":
-        if not superquick and not quick and not hashcollected:
+        if not superquick and not quick and not metacollected:
             extract_metadata(
                 verbosity,
                 output_directory,

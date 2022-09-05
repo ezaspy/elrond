@@ -42,7 +42,7 @@ def main(
     keywords,
     volatility,
     navigator,
-    hashcollected,
+    metacollected,
     process,
     superquick,
     quick,
@@ -147,9 +147,9 @@ def main(
         sys.exit()
     else:
         pass
-    if not hashcollected and nsrl and (superquick or quick):
+    if not metacollected and nsrl and (superquick or quick):
         print(
-            "\n\n In order to use the NSRL switch (-H), you must either provide the hashcollected switch (-o) - with or without the Superquick (-Q) and Quick Flags (-q).\n  Or, if not using the hashcollected switch (-o), remove the Superquick (-Q) and Quick Flags (-q) altogether. Please try again.\n\n\n\n"
+            "\n\n In order to use the NSRL switch (-H), you must either provide the metacollected switch (-o) - with or without the Superquick (-Q) and Quick Flags (-q).\n  Or, if not using the metacollected switch (-o), remove the Superquick (-Q) and Quick Flags (-q) altogether. Please try again.\n\n\n\n"
         )
         sys.exit()
     else:
@@ -581,7 +581,7 @@ def main(
                     auto,
                     superquick,
                     quick,
-                    hashcollected,
+                    metacollected,
                     cwd,
                     sha256,
                     nsrl,
@@ -605,7 +605,7 @@ def main(
             vss,
             nsrl,
             volatility,
-            hashcollected,
+            metacollected,
             superquick,
             quick,
             ot,
@@ -673,7 +673,7 @@ def main(
             nsrl,
             keywords,
             volatility,
-            hashcollected,
+            metacollected,
             superquick,
             quick,
             symlinks,
@@ -724,7 +724,7 @@ def main(
     if (
         len(allimgs) > 0
     ):  # Post-processing metadata, YARA, Splunk, Elastic, Archive, Deletion
-        if not superquick or hashcollected:
+        if not superquick or metacollected:
             print(
                 "\n\n  -> \033[1;36mCommencing Metadata phase for proccessed artefacts...\033[1;m\n  ----------------------------------------"
             )

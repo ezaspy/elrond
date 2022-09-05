@@ -134,56 +134,19 @@ def extract_metadata(
                                 metaentry = metaentry + "unknown,"
                         except:
                             metaentry = metaentry + "N/A,N/A,"
-                        try:
-                            eout = subprocess.Popen(
-                                ["densityscout", "-r", metapath],
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE,
-                            ).communicate()[0]
-                            entry, prnt = "{},{},{},{}\n".format(
-                                datetime.now().isoformat(),
-                                metaimage,
-                                "metadata",
-                                str(eout)[88:-5].split("\\n(")[1].split(")")[0],
-                            ), " -> {} -> assessing entropy for '{}' from  {}".format(
-                                datetime.now().isoformat().replace("T", " "),
-                                intgfile,
-                                metaimage,
-                            )
-                            write_audit_log_entry(
-                                verbosity, output_directory, entry, prnt
-                            )
-                            if str(eout)[2:-1] != "" and "\\n(" in str(eout)[88:-5]:
-                                metaentry = (
-                                    metaentry
-                                    + str(eout)[88:-5].split("\\n(")[1].split(")")[0]
-                                    + ","
-                                )
-                            else:
-                                metaentry = metaentry + "N/A,"
-                        except:
-                            metaentry = metaentry + "N/A,"
-                        try:
-                            mout, exifinfo = (
-                                subprocess.Popen(
-                                    ["exiftool", metapath],
+                        if "/files/binaries/" in metapath or "/files/documents/" in metapath or "/files/archives/" in metapath or "/files/scripts/" in metapath or "/files/lnk/" in metapath or "/files/web/" in metapath or "/files/mail/" in metapath or "/files/virtual/" in metapath or "{}/user_profiles/".format(img.split("::")[0]) in metapath:  # do not assess entropy or extract metadata from raw or cooked artefacts - only files
+                            try:
+                                eout = subprocess.Popen(
+                                    ["densityscout", "-r", metapath],
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE,
-                                ).communicate()[0],
-                                [],
-                            )
-                            if str(mout)[2:-3] != "":
-                                mout = (
-                                    "File Size" + str(mout)[2:-3].split("File Size")[1]
-                                )
+                                ).communicate()[0]
                                 entry, prnt = "{},{},{},{}\n".format(
                                     datetime.now().isoformat(),
                                     metaimage,
                                     "metadata",
-                                    str(exifinfo)
-                                    .replace(", ", "||")
-                                    .replace("'", "")[1:-1],
-                                ), " -> {} -> extracting exif metadata for '{}' from {}".format(
+                                    str(eout)[88:-5].split("\\n(")[1].split(")")[0],
+                                ), " -> {} -> assessing entropy for '{}' from  {}".format(
                                     datetime.now().isoformat().replace("T", " "),
                                     intgfile,
                                     metaimage,
@@ -191,32 +154,72 @@ def extract_metadata(
                                 write_audit_log_entry(
                                     verbosity, output_directory, entry, prnt
                                 )
-                                for meta in mout.split("\\n"):
-                                    exifinfo.append(
-                                        meta.replace("   ", "")
-                                        .replace("  ", "")
-                                        .replace(" : ", ": ")
-                                        .replace(": ", ":")
+                                if str(eout)[2:-1] != "" and "\\n(" in str(eout)[88:-5]:
+                                    metaentry = (
+                                        metaentry
+                                        + str(eout)[88:-5].split("\\n(")[1].split(")")[0]
+                                        + ","
                                     )
-                                metaentry = (
-                                    metaentry
-                                    + str(
-                                        str(exifinfo)
-                                        .replace(", ", ",")
-                                        .replace("'", "")
-                                        .replace("File Size:", "")
-                                        .replace("File Modification Date/Time:", "")
-                                        .replace("File Access Date/Time:", "")
-                                        .replace("File Inode Change Date/Time:", "")
-                                        .replace("File Permissions:", "")
-                                        .replace("Error:", "")
-                                        .replace(" file type", "")[1:-1]
-                                    ).lower()
+                                else:
+                                    metaentry = metaentry + "N/A,"
+                            except:
+                                metaentry = metaentry + "N/A,"
+                            try:
+                                mout, exifinfo = (
+                                    subprocess.Popen(
+                                        ["exiftool", metapath],
+                                        stdout=subprocess.PIPE,
+                                        stderr=subprocess.PIPE,
+                                    ).communicate()[0],
+                                    [],
                                 )
-                            else:
+                                if str(mout)[2:-3] != "":
+                                    mout = (
+                                        "File Size" + str(mout)[2:-3].split("File Size")[1]
+                                    )
+                                    entry, prnt = "{},{},{},{}\n".format(
+                                        datetime.now().isoformat(),
+                                        metaimage,
+                                        "metadata",
+                                        str(exifinfo)
+                                        .replace(", ", "||")
+                                        .replace("'", "")[1:-1],
+                                    ), " -> {} -> extracting exif metadata for '{}' from {}".format(
+                                        datetime.now().isoformat().replace("T", " "),
+                                        intgfile,
+                                        metaimage,
+                                    )
+                                    write_audit_log_entry(
+                                        verbosity, output_directory, entry, prnt
+                                    )
+                                    for meta in mout.split("\\n"):
+                                        exifinfo.append(
+                                            meta.replace("   ", "")
+                                            .replace("  ", "")
+                                            .replace(" : ", ": ")
+                                            .replace(": ", ":")
+                                        )
+                                    metaentry = (
+                                        metaentry
+                                        + str(
+                                            str(exifinfo)
+                                            .replace(", ", ",")
+                                            .replace("'", "")
+                                            .replace("File Size:", "")
+                                            .replace("File Modification Date/Time:", "")
+                                            .replace("File Access Date/Time:", "")
+                                            .replace("File Inode Change Date/Time:", "")
+                                            .replace("File Permissions:", "")
+                                            .replace("Error:", "")
+                                            .replace(" file type", "")[1:-1]
+                                        ).lower()
+                                    )
+                                else:
+                                    metaentry = metaentry + "N/A,N/A,N/A,N/A,N/A,N/A"
+                            except:
                                 metaentry = metaentry + "N/A,N/A,N/A,N/A,N/A,N/A"
-                        except:
-                            metaentry = metaentry + "N/A,N/A,N/A,N/A,N/A,N/A"
+                        else:
+                            pass
                         metaimglog.write(metaentry + "\n")
                         print_done(verbosity)
                     else:
