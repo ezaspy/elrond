@@ -156,7 +156,7 @@ def select_pre_process_artefacts(
             if len(artefacts_list) == 0:
                 print(
                     "    No artefacts were collected for {}.\n    Please try again.\n\n".format(
-                        img.split("::")[1]
+                        img.split("::")[0]
                     )
                 )
             else:
