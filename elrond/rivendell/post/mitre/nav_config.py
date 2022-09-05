@@ -63,7 +63,7 @@ def configure_navigator(case, splunkuser, splunkpswd):
     )
     if len(subtechniques) > 0:
         print(
-            "    Evidence of {} MITRE ATT&CK® techniques identified.".format(
+            "     Evidence of {} MITRE ATT&CK® techniques identified.".format(
                 str(len(subtechniques))
             )
         )
