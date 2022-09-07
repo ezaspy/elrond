@@ -1,5 +1,7 @@
 #!/bin/bash
-printf "\n [+] Installing & configuring the elastic stack...\n\n"
+sleep 1
+clear
+printf "\n  -> Installing & configuring the elastic stack...\n\n"
 sudo apt install curl jq openjdk-16-jre-headless -y
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 sudo apt install apt-transport-https -y
@@ -17,5 +19,4 @@ sudo apt install kibana
 sudo /bin/systemctl daemon-reload
 sudo systemctl enable kibana.service
 sudo updatedb
-clear
-sleep 2
+sleep 1
