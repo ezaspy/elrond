@@ -21,7 +21,7 @@ from rivendell.memory.volatility3.macOS1 import macOS1
 from rivendell.memory.volatility3.macOS2 import macOS2
 
 
-def check_os(artefact, memext, plugin):
+def vol3_check_os(artefact, memext, plugin):
     vol3oscheck = str(
         subprocess.Popen(
             [
@@ -156,7 +156,7 @@ def process_memory(
             )
         else:
             pass
-        vol3oscheck = check_os(artefact, memext, "windows.info.Info")
+        vol3oscheck = vol3_check_os(artefact, memext, "windows.info.Info")
         if (
             "Windows" in vol3oscheck
             and "windows" in vol3oscheck
@@ -166,14 +166,14 @@ def process_memory(
         else:
             profile, ziphexdump1, ziphexdump2 = "macOS", macOS1(), macOS2()
             dump_vol3_ziphex(d, profile, ziphexdump1 + ziphexdump2)
-            vol3oscheck = check_os(artefact, memext, "mac.list_files.List_Files")
+            vol3oscheck = vol3_check_os(artefact, memext, "mac.list_files.List_Files")
             if "MacOS" in vol3oscheck and "/System/Library/" in vol3oscheck:
                 profileplatform = "macOS"
             else:
                 profile, ziphexdump = "Linux", Linux()
                 dump_vol3_ziphex(d, profile, ziphexdump)
                 profileplatform = "Linux"
-                vol3oscheck = check_os(artefact, memext, "linux.elfs.Elfs")
+                vol3oscheck = vol3_check_os(artefact, memext, "linux.elfs.Elfs")
                 if "linux" in vol3oscheck and "sudo" in vol3oscheck:
                     pass
                 else:
