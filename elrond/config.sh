@@ -1,6 +1,7 @@
 #!/bin/bash
 sleep 1
 clear
+sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt update
 ../elrond/tools/config/scripts/./init.sh
 ../elrond/tools/config/scripts/./sift.sh
