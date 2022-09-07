@@ -1,6 +1,6 @@
 # Configuring SIFT Workstation
 
-- Download, import (adjust settings such as RAM if desired)<br>
+- Download and import SIFT (adjust settings such as RAM if desired)<br>
 
 It is **highly recommended** to configure at least 4GB/4096MB RAM and also add another HDD dedicated for linux-swap.<br>
 #### **Menu Bar -> Virtual Machine -> Settings... ->**
