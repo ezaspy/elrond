@@ -628,18 +628,18 @@ def collect_windows_artefacts(
         if volatility and item == mnt + "/":
             item_list = os.listdir(item)
             if len(item_list) > 0:
-                if verbosity != "":
-                    print("     Collecting memory files...")
-                else:
-                    pass
-                for each in item_list:
-                    if (
-                        item + each == mnt + "/hiberfil.sys"
-                        or item + each == mnt + "/pagefile.sys"
-                        or item + each == mnt + "/swapfile.sys"
-                        or item + each == mnt + "/MEMORY.DMP"
-                        or item + each == mnt + "/Windows/MEMORY.DMP"
-                    ):
+                if (
+                    item + each == mnt + "/hiberfil.sys"
+                    or item + each == mnt + "/pagefile.sys"
+                    or item + each == mnt + "/swapfile.sys"
+                    or item + each == mnt + "/MEMORY.DMP"
+                    or item + each == mnt + "/Windows/MEMORY.DMP"
+                ):
+                    if verbosity != "":
+                        print("     Collecting memory files...")
+                    else:
+                        pass
+                    for each in item_list:
                         if not os.path.exists(dest + each):
                             (entry, prnt,) = "{},{},{},'{}' memory file\n".format(
                                 datetime.now().isoformat(),
