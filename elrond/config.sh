@@ -1,6 +1,7 @@
 #!/bin/bash
 sleep 1
 clear
+cd /opt/elrond/elrond
 ../elrond/tools/config/scripts/./init.sh
 ../elrond/tools/config/scripts/./sift.sh
 ../elrond/tools/config/scripts/./apfs-fuse.sh
