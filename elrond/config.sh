@@ -1,4 +1,6 @@
 #!/bin/bash
+sleep 1
+clear
 sudo apt update
 ../elrond/tools/config/scripts/./init.sh
 ../elrond/tools/config/scripts/./sift.sh
@@ -27,10 +29,10 @@ sudo chmod -R 744 /opt/elrond/
 export PATH=$PATH:/opt/elrond
 sudo chmod +x /opt/elrond/elrond.py
 sudo updatedb
-sleep 2
+sleep 1
 clear
-printf "\n\n [+] SIFT has been successfully configured for elrond. Press ENTER to continue..."
+printf "\n\n  -> SIFT has been successfully configured for elrond. Press ENTER to continue..."
 read answer
-sleep 2
 cd /opt/elrond/elrond/
 clear
+sleep 1
