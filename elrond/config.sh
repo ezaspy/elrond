@@ -1,15 +1,13 @@
 #!/bin/bash
 sleep 1
 clear
-sudo add-apt-repository ppa:deadsnakes/ppa
-sudo apt update
 ../elrond/tools/config/scripts/./init.sh
 ../elrond/tools/config/scripts/./sift.sh
 ../elrond/tools/config/scripts/./apfs-fuse.sh
 ../elrond/tools/config/scripts/./volatility3.sh
 ../elrond/tools/config/scripts/./dwarf2json.sh
 ../elrond/tools/config/scripts/./splunk.sh
-#../elrond/tools/config/scripts/./elastic.sh
+../elrond/tools/config/scripts/./elastic.sh
 ../elrond/tools/config/scripts/./navigator.sh
 updatedb
 # configuring elrond
