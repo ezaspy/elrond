@@ -13,6 +13,5 @@ sudo python3.9 -m pip install setuptools
 sudo python3.9 -m pip install construct==2.10.68
 python3.9 -m pip install setuptools
 python3.9 -m pip install construct==2.10.68
-echo "[Wallet]\nEnabled=false" > /home/sansforensics/.config/kwalletrc
 sudo updatedb
 sleep 1
