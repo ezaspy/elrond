@@ -21,12 +21,6 @@ sudo python3.9 -m pip install setuptools
 sudo python3.9 -m pip install construct==2.10.68
 python3.9 -m pip install setuptools
 python3.9 -m pip install construct==2.10.68
-#cd /opt/elrond/elrond/tools/INDXRipper
-#python3.9 -m pip install virtualenv
-#python3.9 -m virtualenv venv
-#source venv/bin/activate
-#pip install construct==2.10.68
-#sudo venv/bin/python INDXRipper.py -V
 updatedb
 # configuring elrond
 sudo chmod -R 744 /opt/elrond/
