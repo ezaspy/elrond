@@ -16,7 +16,7 @@ from rivendell.collect.files.i30 import extract_i30
 from rivendell.collect.files.select import select_files
 from rivendell.collect.windows import collect_windows_artefacts
 from rivendell.meta import extract_metadata
-from rivendell.process.memory import process_memory
+from rivendell.memory.memory import process_memory
 
 
 def collect_artefacts(
