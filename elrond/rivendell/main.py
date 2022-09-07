@@ -137,19 +137,19 @@ def main(
         pass
     if memorytimeline and not volatility:
         print(
-            "\n\n You cannot provide the memorytimeline switch (-t) without provided the Volatility switch (-M). Please try again.\n\n\n\n"
+            "\n\n  You cannot provide the memorytimeline switch (-t) without provided the Volatility switch (-M). Please try again.\n\n\n\n"
         )
         sys.exit()
     if analysis and not process:
         print(
-            "\n\n You cannot provide the Analysis switch (-A) without provided the Processing switch (-P). Please try again.\n\n\n\n"
+            "\n\n  You cannot provide the Analysis switch (-A) without provided the Processing switch (-P). Please try again.\n\n\n\n"
         )
         sys.exit()
     else:
         pass
     if not metacollected and nsrl and (superquick or quick):
         print(
-            "\n\n In order to use the NSRL switch (-H), you must either provide the metacollected switch (-o) - with or without the Superquick (-Q) and Quick Flags (-q).\n  Or, if not using the metacollected switch (-o), remove the Superquick (-Q) and Quick Flags (-q) altogether. Please try again.\n\n\n\n"
+            "\n\n  In order to use the NSRL switch (-H), you must either provide the metacollected switch (-o) - with or without the Superquick (-Q) and Quick Flags (-q).\n  Or, if not using the metacollected switch (-o), remove the Superquick (-Q) and Quick Flags (-q) altogether. Please try again.\n\n\n\n"
         )
         sys.exit()
     else:
@@ -157,7 +157,7 @@ def main(
     if yara:
         if not os.path.isdir(yara[0]):
             print(
-                "\n\n '{}' is not a valid directory or does not exist. Please try again.\n\n\n\n".format(
+                "\n\n  '{}' is not a valid directory or does not exist. Please try again.\n\n\n\n".format(
                     yara[0]
                 )
             )
@@ -166,7 +166,7 @@ def main(
         pass
     if navigator and not splunk:
         print(
-            "\n\n You cannot provide the Navigator switch (-N) without providing the Splunk switch (-S). Please try again.\n\n\n\n"
+            "\n\n  You cannot provide the Navigator switch (-N) without providing the Splunk switch (-S). Please try again.\n\n\n\n"
         )
         sys.exit()
     else:
@@ -373,6 +373,26 @@ def main(
                         and ".FD" not in f
                         and ".FE" not in f
                         and ".FF" not in f
+                        and ".FG" not in f
+                        and ".FH" not in f
+                        and ".FI" not in f
+                        and ".FJ" not in f
+                        and ".FK" not in f
+                        and ".FL" not in f
+                        and ".FM" not in f
+                        and ".FN" not in f
+                        and ".FO" not in f
+                        and ".FP" not in f
+                        and ".FQ" not in f
+                        and ".FR" not in f
+                        and ".FS" not in f
+                        and ".FT" not in f
+                        and ".FU" not in f
+                        and ".FV" not in f
+                        and ".FW" not in f
+                        and ".FX" not in f
+                        and ".FY" not in f
+                        and ".FZ" not in f
                         and (
                             (
                                 f.split(".E")[0] + ".E" not in str(foundimgs)
