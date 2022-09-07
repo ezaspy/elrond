@@ -2,6 +2,7 @@
 sleep 1
 clear
 printf "\n  -> Running initialization script for elrond...\n\n"
+echo "[Wallet]\nEnabled=false" > /home/sansforensics/.config/kwalletrc
 # installing vmware_tools
 sudo tar -xvf /opt/elrond/elrond/tools/config/VMwareTools-10.3.23-16594550.tar.gz
 sleep 2
