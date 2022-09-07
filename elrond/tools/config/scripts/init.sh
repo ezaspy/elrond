@@ -20,7 +20,7 @@ sudo chmod 777 /etc/fstab
 echo "/dev/sdb swap swap defaults 0 0" >> /etc/fstab
 sudo chmod 664 /etc/fstab
 ../elrond/tools/config/scripts/./splunk.sh
-sudo apt install python3.9 python3-pip mlocate build-essential yara john gparted -y --fix-missing
+sudo apt install mlocate build-essential yara john gparted -y --fix-missing
 sudo updatedb
 # configuring elrond
 sudo chmod -R 744 /opt/elrond/
