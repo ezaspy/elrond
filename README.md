@@ -82,24 +82,24 @@ Alternatviely, if you prefer to install the packages yourself... (bear in mind t
 
 ## Usage
 
-`python3 elrond.py <case_id> <directory> [<output_directory>] [-h] [-AaBCcDEGHIiMoPpQqRSsTtUVvZ] [-K <keyword_file>] [-Y <yara_dir>] -F (include|exclude):[<include/exclude_file>]`
+`python3 elrond.py <case_id> <directory> [<output_directory>] [-h] [-AaBCcDEGHIiMoPpQqRSsTtUZ] [-K <keyword_file>] [-Y <yara_dir>] -F (include|exclude):[<include/exclude_file>]`
 
 <br>
 
 ### Collect (-C)<br>
 #### Examples<br>
 
-- Invoking DBM (-B) flag (instead of using -acINoPQqUVv), Process (**-P**) index artefacts in Splunk (**-S**) and conduct File Collection (-F) with inclusion list<br>
+- Invoking DBM (-B) flag (instead of using -AacINoPQqU), Process (**-P**) index artefacts in Splunk (**-S**) and conduct File Collection (-F) with inclusion list<br>
 
 `python3 elrond.py case_name /path/to/disk/images -BCPS  -F include:./include_file.txt`
 
 - Automatically (**-a**) and super-quietly (**-Q**) Collect (**-C**), Process (**-P**), Analyse (**-A**) and index artefacts (including memory (**-M**)) in Splunk (**-S**)<br>
 
-`python3 elrond.py case_name /path/to/disk_and_memory/images -aqQvVMCPAS`
+`python3 elrond.py case_name /path/to/disk_and_memory/images -aqQMCPAS`
 
-- Very verbosely (**-V**), automatically (**-a**), super-quietly (**-Q**) Collect (**-C**), Process (**-P**) and conduct IOC Extraction (**-I**)<br>
+- Automatically (**-a**), super-quietly (**-Q**) Collect (**-C**), Process (**-P**) and conduct IOC Extraction (**-I**)<br>
 
-`python3 elrond.py case_name /path/to/disk/images -avVqQCPI`
+`python3 elrond.py case_name /path/to/disk/images -aqQCPI`
 <br><br>
 
 ### Gandalf (-G)<br>
@@ -107,9 +107,9 @@ Alternatviely, if you prefer to install the packages yourself... (bear in mind t
 
 - Automatically (**-a**) and superquietly (**-Q**) Process (**-P**), Analyse (**-A**) and index artefacts in Splunk (**-S**) (acquired using [gandalf](https://github.com/ezaspy/gandalf))<br>
 
-`python3 elrond.py case_name /path/to/disk/images -aqvVGPAS`
+`python3 elrond.py case_name /path/to/disk/images -aqGPAS`
 
-- Invoking DBM (-B) flag (instead of using -acINoPQqUVv), Process (**-P**) index artefacts in Splunk (**-S**) and conduct Keyword Searching (-K <file_name>)<br>
+- Invoking DBM (-B) flag (instead of using -AacINoPQqU), Process (**-P**) index artefacts in Splunk (**-S**) and conduct Keyword Searching (-K <file_name>)<br>
 
 `python3 elrond.py case_name /path/to/disk/images -BGPS -K keywords.txt`
 <br><br>
@@ -120,9 +120,9 @@ Alternatviely, if you prefer to install the packages yourself... (bear in mind t
 
 - Automatically (**-a**) and quietly (**-q**) Process (**-P**), Analyse (**-A**) and index artefacts in Splunk (**-S**) (reorganise previously collected disk artefacts (**-R**))<br>
 
-`python3 elrond.py case_name /path/to/disk/images -aqvVRPAS`
+`python3 elrond.py case_name /path/to/disk/images -aqRPAS`
 
-- Invoking DBM (-B) flag (instead of using -acINoPQqUVv), Process (**-P**) index artefacts in Splunk (**-S**) and conduct Yara Searching (-Y <yara_dir>)<br>
+- Invoking DBM (-B) flag (instead of using -AacINoPQqU), Process (**-P**) index artefacts in Splunk (**-S**) and conduct Yara Searching (-Y <yara_dir>)<br>
 
 `python3 elrond.py case_name /path/to/disk/images -BRPS -Y <directory/of/yara/files>`
 <br><br>
