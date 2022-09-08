@@ -51,7 +51,7 @@ parser.add_argument(
 parser.add_argument(
     "-B",
     "--dogs",
-    help="'Dogs Bollocks Mode (DBM).' Invokes -acINoPQqRUVv. You MUST provide either -C (--collect), -G (--gandalf) or -O (--reorganise) depending on whether you've acquired disk images, leveraged gandalf or seperately acquired artefacts, respectively.",
+    help="'Dogs Bollocks Mode (DBM).' Invokes -AacINoPQqRU. You MUST provide either -C (--collect), -G (--gandalf) or -O (--reorganise) depending on whether you've acquired disk images, leveraged gandalf or seperately acquired artefacts, respectively.",
     action="store_const",
     const=True,
     default=False,
@@ -227,23 +227,7 @@ parser.add_argument(
 parser.add_argument(
     "-u",
     "--unmount",
-    help="Do not unmount, currently mounted images (in /mnt/elrond_mountX)",
-    action="store_const",
-    const=True,
-    default=False,
-)
-parser.add_argument(
-    "-V",
-    "--veryverbose",
-    help="Show detailed logging",
-    action="store_const",
-    const=True,
-    default=False,
-)
-parser.add_argument(
-    "-v",
-    "--verbose",
-    help="Show logging",
+    help="Do not unmount, currently mounted images (in /mnt/elrond_mountXX)",
     action="store_const",
     const=True,
     default=False,
@@ -287,8 +271,6 @@ timeline = args.timeline
 memorytimeline = args.memorytimeline
 userprofiles = args.userprofiles
 unmount = args.unmount
-veryverbose = args.veryverbose
-verbose = args.verbose
 yara = args.yara
 archive = args.archive
 
@@ -456,6 +438,7 @@ asciitext = [
 
 if __name__ == "__main__":
     if dogs:
+        analysis = True
         auto = True
         vss = True
         extractiocs = True
@@ -465,10 +448,10 @@ if __name__ == "__main__":
         superquick = True
         quick = True
         userprofiles = True
-        veryverbose = True
-        verbose = True
     else:
         pass
+    veryverbose = True
+    verbose = True
     main(
         directory,
         case,
