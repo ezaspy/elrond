@@ -7,8 +7,6 @@ from datetime import datetime
 
 from rivendell.audit import write_audit_log_entry
 
-import sys
-
 
 def validate_yara(verbosity, output_directory, img, yara_file, binary_dir):
     yara_valid = str(

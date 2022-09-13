@@ -230,8 +230,7 @@ def prepare_keywords(verbosity, output_directory, auto, imgs, flags, keywords, s
                 "\n\n  -> \033[1;36mCommencing Keyword Searching Phase...\033[1;m\n  ----------------------------------------"
             )
             time.sleep(1)
-            for each in imgs:
-                img, mnt = [each, imgs[each]]
+            for mnt, img in imgs.items():
                 stage = "keyword searching"
                 if "vss" in img.split("::")[1]:
                     vssimage, vsstext = (

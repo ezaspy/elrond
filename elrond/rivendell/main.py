@@ -16,6 +16,7 @@ from rivendell.core.identify import identify_memory_image
 from rivendell.meta import extract_metadata
 from rivendell.mount import mount_images
 from rivendell.mount import unmount_images
+from rivendell.post.clam import run_clamscan
 from rivendell.post.clean import archive_artefacts
 from rivendell.post.clean import delete_artefacts
 from rivendell.post.elastic.config import configure_elastic_stack
@@ -35,14 +36,14 @@ def main(
     elastic,
     gandalf,
     collectfiles,
-    nsrl,
     extractiocs,
     imageinfo,
     lotr,
     keywords,
     volatility,
-    navigator,
     metacollected,
+    navigator,
+    nsrl,
     process,
     superquick,
     quick,
@@ -53,6 +54,7 @@ def main(
     memorytimeline,
     userprofiles,
     unmount,
+    clamav,
     veryverbose,
     verbose,
     yara,
@@ -137,19 +139,19 @@ def main(
         pass
     if memorytimeline and not volatility:
         print(
-            "\n\n You cannot provide the memorytimeline switch (-t) without provided the Volatility switch (-M). Please try again.\n\n\n\n"
+            "\n\n  You cannot provide the memorytimeline switch (-t) without provided the Volatility switch (-M). Please try again.\n\n\n\n"
         )
         sys.exit()
     if analysis and not process:
         print(
-            "\n\n You cannot provide the Analysis switch (-A) without provided the Processing switch (-P). Please try again.\n\n\n\n"
+            "\n\n  You cannot provide the Analysis switch (-A) without provided the Processing switch (-P). Please try again.\n\n\n\n"
         )
         sys.exit()
     else:
         pass
     if not metacollected and nsrl and (superquick or quick):
         print(
-            "\n\n In order to use the NSRL switch (-H), you must either provide the metacollected switch (-o) - with or without the Superquick (-Q) and Quick Flags (-q).\n  Or, if not using the metacollected switch (-o), remove the Superquick (-Q) and Quick Flags (-q) altogether. Please try again.\n\n\n\n"
+            "\n\n  In order to use the NSRL switch (-H), you must either provide the metacollected switch (-o) - with or without the Superquick (-Q) and Quick Flags (-q).\n  Or, if not using the metacollected switch (-o), remove the Superquick (-Q) and Quick Flags (-q) altogether. Please try again.\n\n\n\n"
         )
         sys.exit()
     else:
@@ -157,7 +159,7 @@ def main(
     if yara:
         if not os.path.isdir(yara[0]):
             print(
-                "\n\n '{}' is not a valid directory or does not exist. Please try again.\n\n\n\n".format(
+                "\n\n  '{}' is not a valid directory or does not exist. Please try again.\n\n\n\n".format(
                     yara[0]
                 )
             )
@@ -166,7 +168,7 @@ def main(
         pass
     if navigator and not splunk:
         print(
-            "\n\n You cannot provide the Navigator switch (-N) without providing the Splunk switch (-S). Please try again.\n\n\n\n"
+            "\n\n  You cannot provide the Navigator switch (-N) without providing the Splunk switch (-S). Please try again.\n\n\n\n"
         )
         sys.exit()
     else:
@@ -373,6 +375,26 @@ def main(
                         and ".FD" not in f
                         and ".FE" not in f
                         and ".FF" not in f
+                        and ".FG" not in f
+                        and ".FH" not in f
+                        and ".FI" not in f
+                        and ".FJ" not in f
+                        and ".FK" not in f
+                        and ".FL" not in f
+                        and ".FM" not in f
+                        and ".FN" not in f
+                        and ".FO" not in f
+                        and ".FP" not in f
+                        and ".FQ" not in f
+                        and ".FR" not in f
+                        and ".FS" not in f
+                        and ".FT" not in f
+                        and ".FU" not in f
+                        and ".FV" not in f
+                        and ".FW" not in f
+                        and ".FX" not in f
+                        and ".FY" not in f
+                        and ".FZ" not in f
                         and (
                             (
                                 f.split(".E")[0] + ".E" not in str(foundimgs)
@@ -622,7 +644,7 @@ def main(
             memtimeline,
         )
     else:
-        print(reorganise)
+        f, path, stage = "", "", "reorganise"
     allimgs = OrderedDict(sorted(allimgs.items(), key=lambda x: x[1]))
     if len(allimgs) > 0:
         for (
@@ -657,13 +679,10 @@ def main(
         else:
             pass
     time.sleep(1)
-    if (
-        collect or process
-    ):  # Collection/Reorganisation, Processing, Keyword Searching, Analysis & Timelining
+    if (collect or reorganise):  # Collection/Reorganisation, Processing, Keyword Searching, Analysis & Timelining
         collect_process_keyword_analysis_timeline(
             auto,
             collect,
-            gandalf,
             process,
             analysis,
             extractiocs,
@@ -676,6 +695,7 @@ def main(
             metacollected,
             superquick,
             quick,
+            reorganise,
             symlinks,
             userprofiles,
             verbose,
@@ -827,42 +847,67 @@ def main(
             time.sleep(1)
         else:
             pass
+        if clamav:
+            print(
+                "\n\n  -> \033[1;36mCommencing ClamAV Phase...\033[1;m\n  ----------------------------------------"
+            )
+            time.sleep(1)
+            for loc, img in imgs.items():
+                if not auto:
+                    yes_clam = input(
+                        "  Do you wish to conduct ClamAV scanning for '{}'? Y/n [Y] ".format(
+                            img.split("::")[0]
+                        )
+                    )
+                else:
+                    pass
+                if auto or yes_clam != "n":
+                    run_clamscan(verbosity, output_directory, loc, img, collectfiles)
+                else:
+                    pass
+            flags.append("06clam")
+            print(
+                "  ----------------------------------------\n  -> Completed ClamAV Phase.\n"
+            )
+            time.sleep(1)
+        else:
+            pass
         if yara:
-            if not auto:
-                yes_yara = input(
-                    "  Do you wish to conduct Yara analysis for '{}'? Y/n [Y] ".format(
-                        img.split("::")[0]
+            print(
+                "\n\n  -> \033[1;36mCommencing Yara Phase...\033[1;m\n  ----------------------------------------"
+            )
+            time.sleep(1)
+            yara_files = []
+            for yroot, _, yfiles in os.walk(yara[0]):
+                for yfile in yfiles:
+                    if yfile.endswith(".yara"):
+                        yara_files.append(os.path.join(yroot, yfile))
+                    else:
+                        pass
+            for loc, img in imgs.items():
+                if not auto:
+                    yes_yara = input(
+                        "  Do you wish to conduct Yara analysis for '{}'? Y/n [Y] ".format(
+                            img.split("::")[0]
+                        )
                     )
-                )
-            else:
-                pass
-            if auto or yes_yara != "n":
-                print(
-                    "\n\n  -> \033[1;36mCommencing Yara Phase...\033[1;m\n  ----------------------------------------"
-                )
-                time.sleep(1)
-                yara_files = []
-                for yroot, _, yfiles in os.walk(yara[0]):
-                    for yfile in yfiles:
-                        if yfile.endswith(".yara"):
-                            yara_files.append(os.path.join(yroot, yfile))
-                        else:
-                            pass
-                for img, loc in imgs.items():
+                else:
+                    pass
+                if auto or yes_yara != "n":
                     run_yara_signatures(
-                        verbosity, output_directory, img, loc, collectfiles, yara_files
+                        verbosity, output_directory, loc, img, collectfiles, yara_files
                     )
-                flags.append("06yara")
-                print(
-                    "  ----------------------------------------\n  -> Completed Yara Phase.\n"
-                )
-                time.sleep(1)
-            else:
-                pass
+                else:
+                    pass
+            flags.append("07yara")
+            print(
+                "  ----------------------------------------\n  -> Completed Yara Phase.\n"
+            )
+            time.sleep(1)
         else:
             pass
         if splunk:
-            splunkuser, splunkpswd = configure_splunk_stack(
+            usercred, pswdcred = configure_splunk_stack(
                 verbosity,
                 output_directory,
                 case,
@@ -872,7 +917,7 @@ def main(
                 timeline,
                 yara,
             )
-            flags.append("07splunk")
+            flags.append("08splunk")
             print(
                 "  ----------------------------------------\n  -> Completed Splunk Phase.\n"
             )
@@ -880,7 +925,7 @@ def main(
         else:
             pass
         if elastic:
-            configure_elastic_stack(
+            usercred, pswdcred = configure_elastic_stack(
                 verbosity,
                 output_directory,
                 case,
@@ -890,26 +935,26 @@ def main(
                 timeline,
                 yara,
             )
-            print(
-                "   Kibana is available at:            127.0.0.1:5601"
-            )  # adjust if custom location
-            flags.append("08elastic")
+            flags.append("09elastic")
             print(
                 "  ----------------------------------------\n  -> Completed Elastic Phase.\n"
             )
             time.sleep(1)
         else:
             pass
-        if splunk and navigator:  # mapping to attack-navigator
+        if (splunk or elastic) and navigator:  # mapping to attack-navigator
             print(
                 "\n\n  -> \033[1;36mBuilding ATT&CK® Navigator...\033[1;m\n  ----------------------------------------"
             )
             time.sleep(1)
-            configure_navigator(case, splunkuser, splunkpswd)
-            print(
-                "\n   ATT&CK® Navigator is available at:     127.0.0.1/attack-navigator\n"
-            )
-            flags.append("10navigator")
+            navresults = configure_navigator(case, usercred, pswdcred)
+            if navresults != "":
+                print(
+                    "\n   ATT&CK® Navigator is available at:     127.0.0.1/attack-navigator\n"
+                )
+                flags.append("10navigator")
+            else:
+                pass
             print(
                 "  ----------------------------------------\n  -> Completed ATT&CK® Navigator Phase.\n"
             )

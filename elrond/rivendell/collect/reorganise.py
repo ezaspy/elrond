@@ -7,15 +7,14 @@ from datetime import datetime
 
 from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
+from rivendell.core.identify import print_identification
 
 
-def reorganise_artefacts(output_directory, verbosity, allimgs, flags, auto, volatility):
-    reorgedfiles = [""]
-    for eachdir in os.listdir(output_directory):
-        shutil.rmtree(output_directory + "/" + eachdir)
-
-    def doReorganise(
-        verbosity, allimgs, d, output_directory, f
+def reorganise_artefacts(
+    output_directory, verbosity, d, allimgs, flags, auto, volatility
+):
+    def organise_artefacts(
+        verbosity, allimgs, d, output_directory, img
     ):  # reorganise artefacts
         def doCopy(source, destination):
             try:
@@ -23,665 +22,474 @@ def reorganise_artefacts(output_directory, verbosity, allimgs, flags, auto, vola
             except:
                 pass
 
-        entry, prnt = (
-            "LastWriteTime,elrond_host,elrond_stage,elrond_log_entry\n",
-            " -> {} -> created audit log file for '{}'".format(
-                datetime.now().isoformat().replace("T", " "), f
-            ),
-        )
-        write_audit_log_entry(verbosity, output_directory, entry, prnt)
-        entry, prnt = "{},{},{},commenced\n".format(
-            datetime.now().isoformat(), f, "reorganising"
-        ), " -> {} -> {} artefacts for '{}'".format(
-            datetime.now().isoformat().replace("T", " "), "reorganising", f
-        )
-        write_audit_log_entry(verbosity, output_directory, entry, prnt)
-        for root, dirs, _ in os.walk(d):
-            for img in dirs:
-                imgcontent = os.listdir(os.path.join(root, img))
-                dest = os.path.join(output_directory, img, "artefacts/raw/")
-                for imgroot, _, imgfiles in os.walk(os.path.join(root, img)):
-                    for eachfile in imgfiles:
-                        for _ in reorgedfiles:
-                            if img in os.path.join(imgroot, eachfile) and os.path.join(
-                                imgroot, eachfile
-                            ) not in str(reorgedfiles):
-                                if (
-                                    eachfile.startswith("$MFT")
-                                    or eachfile.startswith("$LogFile")
-                                    or eachfile.startswith("$UsnJrnl")
-                                    or eachfile.startswith("$ObjId")
-                                    or eachfile.startswith("$Reparse")
-                                    or eachfile.startswith("hiberfil.sys")
-                                    or eachfile.startswith("pagefile.sys")
-                                    or eachfile.endswith("MFT")
-                                    or eachfile.endswith("LogFile")
-                                    or eachfile.endswith("UsnJrnl")
-                                    or eachfile.endswith("ObjId")
-                                    or eachfile.endswith("Reparse")
-                                    or eachfile.endswith("hiberfil.sys")
-                                    or eachfile.endswith("pagefile.sys")
-                                    or eachfile.endswith("setupapi.dev.log")
-                                    or eachfile.endswith("RecentFileCache.bcf")
-                                    or eachfile.endswith("Amcache.hve")
-                                    or eachfile.endswith("SAM")
-                                    or eachfile.endswith("SECURITY")
-                                    or eachfile.endswith("SOFTWARE")
-                                    or eachfile.endswith("SYSTEM")
-                                    or eachfile.endswith("SAM.LOG")
-                                    or eachfile.endswith("SECURITY.LOG")
-                                    or eachfile.endswith("SOFTWARE.LOG")
-                                    or eachfile.endswith("SYSTEM.LOG")
-                                    or eachfile.endswith("SAM.LOG1")
-                                    or eachfile.endswith("SECURITY.LOG1")
-                                    or eachfile.endswith("SOFTWARE.LOG1")
-                                    or eachfile.endswith("SYSTEM.LOG1")
-                                    or eachfile.endswith("SAM.LOG2")
-                                    or eachfile.endswith("SECURITY.LOG2")
-                                    or eachfile.endswith("SOFTWARE.LOG2")
-                                    or eachfile.endswith("SYSTEM.LOG2")
-                                    or eachfile.startswith("NTUSER.DAT")
-                                    or eachfile.startswith("UsrClass.dat")
-                                    or eachfile.endswith("NTUSER.DAT")
-                                    or eachfile.endswith("UsrClass.dat")
-                                    or eachfile.endswith(".evtx")
-                                    or eachfile.endswith(".automaticDestinations-ms")
-                                    or eachfile.endswith(".customDestinations-ms")
-                                ):
-                                    osguess = "::Windows"
-                                elif (
-                                    eachfile.endswith(".plist")
-                                    or eachfile.endswith("History.db")
-                                ) or (
-                                    (
-                                        eachfile.endswith("bash_history")
-                                        or eachfile.endswith("bash_logout")
-                                        or eachfile.endswith("bashrc")
-                                        or eachfile.endswith("/etc/passwd")
-                                        or eachfile.endswith("/etc/shadow")
-                                        or eachfile.endswith("/etc/group")
-                                        or eachfile.endswith("/etc/hosts")
-                                        or eachfile.endswith("crontab")
-                                    )
-                                    and (
-                                        "plist" in imgcontent
-                                        or "History.db" in imgcontent
-                                    )
-                                ):
-                                    osguess = "::macOS"
-                                elif (
-                                    eachfile.endswith(".conf")
-                                    or eachfile.endswith("places.sqlite")
-                                ) or (
-                                    (
-                                        eachfile.endswith("bash_history")
-                                        or eachfile.endswith("bash_logout")
-                                        or eachfile.endswith("bashrc")
-                                        or eachfile.endswith("/etc/passwd")
-                                        or eachfile.endswith("/etc/shadow")
-                                        or eachfile.endswith("/etc/group")
-                                        or eachfile.endswith("/etc/hosts")
-                                        or eachfile.endswith("crontab")
-                                    )
-                                    and (
-                                        "conf" in imgcontent
-                                        or "places.sqlite" in imgcontent
-                                        or "shadow" in imgcontent
-                                    )
-                                ):
-                                    osguess = "::Linux"
-                                elif (
-                                    eachfile.endswith("bash_history")
-                                    or eachfile.endswith("bash_logout")
-                                    or eachfile.endswith("bashrc")
-                                    or eachfile.endswith("/etc/passwd")
-                                    or eachfile.endswith("/etc/shadow")
-                                    or eachfile.endswith("/etc/group")
-                                    or eachfile.endswith("/etc/hosts")
-                                    or eachfile.endswith("crontab")
-                                ):
-                                    osguess = "::Unix"
-                                else:
-                                    osguess = ""
-                                if osguess != "":
-                                    if not os.path.exists(
-                                        output_directory + "/" + img + "/artefacts/"
-                                    ):
-                                        os.makedirs(
-                                            output_directory + "/" + img + "/artefacts/"
-                                        )
-                                    else:
-                                        pass
-                                    if not os.path.exists(
-                                        output_directory + "/" + img + "/artefacts/raw/"
-                                    ):
-                                        os.makedirs(
-                                            output_directory
-                                            + "/"
-                                            + img
-                                            + "/artefacts/raw/"
-                                        )
-                                    else:
-                                        pass
-                                    allimgs[img + osguess] = os.path.realpath(
-                                        root.split("/")[-3]
-                                    )
-                                    if (
-                                        (imgroot.split("/")[-1] == img)
-                                        and (
-                                            eachfile.startswith("NTUSER.DAT")
-                                            and eachfile.endswith("NTUSER.DAT")
-                                        )
-                                        or (
-                                            eachfile.startswith("UsrClass.dat")
-                                            and eachfile.endswith("UsrClass.dat")
-                                        )
-                                        or (
-                                            eachfile.endswith(
-                                                ".automaticDestinations-ms"
-                                            )
-                                            or eachfile.endswith(
-                                                ".customDestinations-ms"
-                                            )
-                                        )
-                                        or (
-                                            eachfile.startswith("bash_aliases")
-                                            and eachfile.endswith("bash_aliases")
-                                        )
-                                        or (
-                                            eachfile.startswith("bash_history")
-                                            and eachfile.endswith("bash_history")
-                                        )
-                                        or (
-                                            eachfile.startswith("bash_logout")
-                                            and eachfile.endswith("bash_logout")
-                                        )
-                                        or (
-                                            eachfile.startswith("bashrc")
-                                            and eachfile.endswith("bashrc")
-                                        )
-                                        or (
-                                            eachfile.startswith("login.keyring")
-                                            and eachfile.endswith("login.keyring")
-                                        )
-                                        or (
-                                            eachfile.startswith("user.keystore")
-                                            and eachfile.endswith("user.keystore")
-                                        )
-                                        or (
-                                            eachfile.startswith("HISTORY")
-                                            and eachfile.endswith("HISTORY")
-                                        )
-                                        or (
-                                            eachfile.startswith("History.db")
-                                            and eachfile.endswith("History.db")
-                                        )
-                                        or (
-                                            eachfile.startswith("places.sqlite")
-                                            and eachfile.endswith("places.sqlite")
-                                        )
-                                        and "+" not in eachfile
-                                    ):
-
-                                        def doWhichUser(whichuser):
-                                            if whichuser == "1":
-                                                print("  OK. Thank you.\n\n")
-                                                sys.exit()
-                                            elif whichuser == "2":
-                                                alias = "alias"
-                                            else:
-                                                alias = whichuser.strip("+")
-                                                if alias == "":
-                                                    alias = "alias"
-                                                else:
-                                                    pass
-                                            return alias
-
-                                        whichuser = input(
-                                            "\n  In order to accurately process and anaylse '{}' for '{}', a username will need to be provided.\n   You have three options:\n    1. Gracefully exit elrond and rename the files accordingly - '<username>+{}'\n    2. Ignore the user name ('alias' will be used instead)\n    3. Provide the user name now: [2] ".format(
-                                                eachfile, img, eachfile
-                                            )
-                                        )
-                                        alias = doWhichUser(whichuser)
-                                        reorgedfiles.append(
-                                            os.path.join(imgroot, eachfile)
-                                        )
-                                    else:
-                                        alias = ""
-                                    if (
-                                        eachfile.startswith("$MFT")
-                                        or eachfile.startswith("$LogFile")
-                                        or eachfile.startswith("$UsnJrnl")
-                                        or eachfile.startswith("$ObjId")
-                                        or eachfile.startswith("$Reparse")
-                                        or eachfile.startswith("hiberfil.sys")
-                                        or eachfile.startswith("pagefile.sys")
-                                        or eachfile.endswith("MFT")
-                                        or eachfile.endswith("LogFile")
-                                        or eachfile.endswith("UsnJrnl")
-                                        or eachfile.endswith("ObjId")
-                                        or eachfile.endswith("Reparse")
-                                        or eachfile.endswith("hiberfil.sys")
-                                        or eachfile.endswith("pagefile.sys")
-                                        or eachfile.endswith("setupapi.dev.log")
-                                        or eachfile.endswith("RecentFileCache.bcf")
-                                        or eachfile.endswith("Amcache.hve")
-                                        or (
-                                            eachfile.startswith("groups")
-                                            and eachfile.endswith("groups")
-                                        )
-                                        or (
-                                            eachfile.startswith("hosts")
-                                            and eachfile.endswith("hosts")
-                                        )
-                                        or (
-                                            eachfile.startswith("passwd")
-                                            and eachfile.endswith("passwd")
-                                        )
-                                        or (
-                                            eachfile.startswith("shadow")
-                                            and eachfile.endswith("shadow")
-                                        )
-                                    ):
-                                        doCopy(
-                                            os.path.join(imgroot, eachfile),
-                                            dest + "/" + eachfile,
-                                        )
-                                    elif eachfile.endswith("SYSTEM"):
-                                        doCopy(
-                                            os.path.join(imgroot, eachfile),
-                                            dest + "/" + eachfile,
-                                        )
-                                        os.rename(
-                                            dest + "/" + eachfile,
-                                            dest + "/.SYSTEM",
-                                        )
-                                    elif (
-                                        eachfile.endswith("SAM")
-                                        or eachfile.endswith("SECURITY")
-                                        or eachfile.endswith("SOFTWARE")
-                                        or eachfile.endswith("SYSTEM")
-                                        or eachfile.endswith("SAM.LOG")
-                                        or eachfile.endswith("SECURITY.LOG")
-                                        or eachfile.endswith("SOFTWARE.LOG")
-                                        or eachfile.endswith("SYSTEM.LOG")
-                                        or eachfile.endswith("SAM.LOG1")
-                                        or eachfile.endswith("SECURITY.LOG1")
-                                        or eachfile.endswith("SOFTWARE.LOG1")
-                                        or eachfile.endswith("SYSTEM.LOG1")
-                                        or eachfile.endswith("SAM.LOG2")
-                                        or eachfile.endswith("SECURITY.LOG2")
-                                        or eachfile.endswith("SOFTWARE.LOG2")
-                                        or eachfile.endswith("SYSTEM.LOG2")
-                                    ):
-                                        if not os.path.exists(dest + "/registry"):
-                                            os.makedirs(dest + "/registry")
-                                        else:
-                                            pass
-                                        doCopy(
-                                            os.path.join(imgroot, eachfile),
-                                            dest + "/registry/" + eachfile,
-                                        )
-                                    elif (
-                                        eachfile.startswith("NTUSER.DAT")
-                                        or eachfile.endswith("NTUSER.DAT")
-                                        or eachfile.startswith("UsrClass.dat")
-                                        or eachfile.endswith("UsrClass.dat")
-                                    ):
-                                        if not os.path.exists(dest + "/registry"):
-                                            os.makedirs(dest + "/registry")
-                                        else:
-                                            pass
-                                        if "+" in eachfile:
-                                            doCopy(
-                                                os.path.join(imgroot, eachfile),
-                                                dest + "/registry/" + eachfile,
-                                            )
-                                        else:
-                                            doCopy(
-                                                os.path.join(imgroot, eachfile),
-                                                dest
-                                                + "/registry/"
-                                                + alias
-                                                + "+"
-                                                + eachfile,
-                                            )
-                                    elif eachfile.endswith(".evtx"):
-                                        if not os.path.exists(dest + "/evtx"):
-                                            os.makedirs(dest + "/evtx")
-                                        else:
-                                            pass
-                                        doCopy(
-                                            os.path.join(imgroot, eachfile),
-                                            dest + "/evtx/" + eachfile,
-                                        )
-                                    elif eachfile.endswith(
-                                        ".automaticDestinations-ms"
-                                    ) or eachfile.endswith(".customDestinations-ms"):
-                                        if not os.path.exists(dest + "/jumplists"):
-                                            os.makedirs(dest + "/jumplists")
-                                        else:
-                                            pass
-                                        if "+" in eachfile:
-                                            doCopy(
-                                                os.path.join(imgroot, eachfile),
-                                                dest + "/jumplists/" + eachfile,
-                                            )
-                                        else:
-                                            doCopy(
-                                                os.path.join(imgroot, eachfile),
-                                                dest
-                                                + "/jumplists/"
-                                                + alias
-                                                + "+"
-                                                + eachfile,
-                                            )
-                                    elif (
-                                        eachfile.endswith("bash_aliases")
-                                        or eachfile.endswith("bash_history")
-                                        or eachfile.endswith("bash_logout")
-                                        or eachfile.endswith("bashrc")
-                                        or eachfile.endswith("login.keyring")
-                                        or eachfile.endswith("user.keystore")
-                                    ):
-                                        if "+" in eachfile:
-                                            doCopy(
-                                                os.path.join(imgroot, eachfile),
-                                                dest + "/" + eachfile,
-                                            )
-                                        else:
-                                            doCopy(
-                                                os.path.join(imgroot, eachfile),
-                                                dest + "/" + alias + "+" + eachfile,
-                                            )
-                                    elif eachfile.endswith(".keychain-db"):
-                                        if not os.path.exists(dest + "/keychain"):
-                                            os.makedirs(dest + "/keychain")
-                                        else:
-                                            pass
-                                        doCopy(
-                                            os.path.join(imgroot, eachfile),
-                                            dest + "/keychain/" + eachfile,
-                                        )
-                                    elif eachfile.endswith(".plist"):
-                                        if not os.path.exists(dest + "/plists"):
-                                            os.makedirs(dest + "/plists")
-                                        else:
-                                            pass
-                                        doCopy(
-                                            os.path.join(imgroot, eachfile),
-                                            dest + "/plists/" + eachfile,
-                                        )
-                                    elif eachfile.endswith(".log"):
-                                        if not os.path.exists(dest + "/logs"):
-                                            os.makedirs(dest + "/logs")
-                                        else:
-                                            pass
-                                        doCopy(
-                                            os.path.join(imgroot, eachfile),
-                                            dest + "/logs/" + eachfile,
-                                        )
-                                    elif eachfile.endswith(".conf"):
-                                        if not os.path.exists(dest + "/conf"):
-                                            os.makedirs(dest + "/conf")
-                                        else:
-                                            pass
-                                        doCopy(
-                                            os.path.join(imgroot, eachfile),
-                                            dest + "/conf/" + eachfile,
-                                        )
-                                    elif eachfile.startswith("job."):
-                                        if not os.path.exists(dest + "/jobs"):
-                                            os.makedirs(dest + "/jobs")
-                                        else:
-                                            pass
-                                        doCopy(
-                                            os.path.join(imgroot, eachfile),
-                                            dest + "/jobs/" + eachfile,
-                                        )
-                                    elif (
-                                        eachfile.endswith(".service")
-                                        or eachfile.endswith(".target")
-                                        or eachfile.endswith(".socket")
-                                    ):
-                                        if not os.path.exists(dest + "/services"):
-                                            os.makedirs(dest + "/services")
-                                        else:
-                                            pass
-                                        doCopy(
-                                            os.path.join(imgroot, eachfile),
-                                            dest + "/services/" + eachfile,
-                                        )
-                                    elif eachfile.endswith(".global-message-db.sqlite"):
-                                        if not os.path.exists(dest + "/mail"):
-                                            os.makedirs(dest + "/mail")
-                                        else:
-                                            pass
-                                        doCopy(
-                                            os.path.join(imgroot, eachfile),
-                                            dest + "/mail/" + eachfile,
-                                        )
-                                    elif (
-                                        (
-                                            eachfile.startswith("HISTORY")
-                                            and eachfile.endswith("HISTORY")
-                                        )
-                                        or eachfile.endswith("History.db")
-                                        or eachfile.endswith("places.sqlite")
-                                    ):
-                                        if not os.path.exists(dest + "/browsers"):
-                                            os.makedirs(dest + "browsers")
-                                        else:
-                                            pass
-                                        if alias != "" and not os.path.exists(
-                                            dest + "browsers/" + alias
-                                        ):
-                                            os.makedirs(dest + "browsers/" + alias)
-                                        else:
-                                            pass
-                                        if eachfile == "History":
-                                            if not os.path.exists(
-                                                dest + "browsers/" + alias + "/chromium"
-                                            ):
-                                                os.makedirs(
-                                                    dest
-                                                    + "browsers/"
-                                                    + alias
-                                                    + "/chromium"
-                                                )
-                                            else:
-                                                pass
-                                            bwsrdir = "chromium/"
-                                        elif eachfile == "HISTORY":
-                                            if not os.path.exists(
-                                                dest + "browsers/" + alias + "/edge"
-                                            ):
-                                                os.makedirs(
-                                                    dest + "browsers/" + alias + "/edge"
-                                                )
-                                            else:
-                                                pass
-                                            bwsrdir = "edge/"
-                                        elif eachfile == "History.db":
-                                            if not os.path.exists(
-                                                dest + "browsers/" + alias + "/safari"
-                                            ):
-                                                os.makedirs(
-                                                    dest
-                                                    + "browsers/"
-                                                    + alias
-                                                    + "/safari"
-                                                )
-                                            else:
-                                                pass
-                                            bwsrdir = "safari/"
-                                        elif eachfile == "places.sqlite":
-                                            if not os.path.exists(
-                                                dest + "browsers/" + alias + "/firefox"
-                                            ):
-                                                os.makedirs(
-                                                    dest
-                                                    + "browsers/"
-                                                    + alias
-                                                    + "/firefox"
-                                                )
-                                            else:
-                                                pass
-                                            bwsrdir = "firefox/"
-                                        else:
-                                            pass
-                                        if "+" in eachfile:
-                                            doCopy(
-                                                os.path.join(imgroot, eachfile),
-                                                dest
-                                                + "browsers/"
-                                                + eachfile.split("/")[-1].split("+")[0]
-                                                + "/"
-                                                + bwsrdir
-                                                + eachfile,
-                                            )
-                                        else:
-                                            doCopy(
-                                                os.path.join(imgroot, eachfile),
-                                                dest
-                                                + "browsers/"
-                                                + alias
-                                                + "/"
-                                                + bwsrdir
-                                                + eachfile,
-                                            )
-                                    elif (
-                                        volatility
-                                        and os.stat(
-                                            os.path.join(root, eachfile)
-                                        ).st_size
-                                        > 2000000000
-                                        and not (
-                                            eachfile.startswith("$MFT")
-                                            or eachfile.startswith("$LogFile")
-                                            or eachfile.startswith("$UsnJrnl")
-                                            or eachfile.startswith("$ObjId")
-                                            or eachfile.startswith("$Reparse")
-                                            or eachfile.startswith("hiberfil.sys")
-                                            or eachfile.startswith("pagefile.sys")
-                                            or eachfile.endswith("MFT")
-                                            or eachfile.endswith("LogFile")
-                                            or eachfile.endswith("UsnJrnl")
-                                            or eachfile.endswith("ObjId")
-                                            or eachfile.endswith("Reparse")
-                                            or eachfile.endswith("setupapi.dev.log")
-                                            or eachfile.endswith("RecentFileCache.bcf")
-                                            or eachfile.endswith("Amcache.hve")
-                                            or (
-                                                eachfile.startswith("groups")
-                                                and eachfile.endswith("groups")
-                                            )
-                                            or (
-                                                eachfile.startswith("hosts")
-                                                and eachfile.endswith("hosts")
-                                            )
-                                            or (
-                                                eachfile.startswith("passwd")
-                                                and eachfile.endswith("passwd")
-                                            )
-                                            or (
-                                                eachfile.startswith("shadow")
-                                                and eachfile.endswith("shadow")
-                                            )
-                                            or eachfile.endswith("bash_aliases")
-                                            or eachfile.endswith("bash_history")
-                                            or eachfile.endswith("bash_logout")
-                                            or eachfile.endswith("bashrc")
-                                            or eachfile.endswith("login.keyring")
-                                            or eachfile.endswith("user.keystore")
-                                            or eachfile.endswith("SAM")
-                                            or eachfile.endswith("SECURITY")
-                                            or eachfile.endswith("SOFTWARE")
-                                            or eachfile.endswith("SYSTEM")
-                                            or eachfile.endswith("SAM.LOG")
-                                            or eachfile.endswith("SECURITY.LOG")
-                                            or eachfile.endswith("SOFTWARE.LOG")
-                                            or eachfile.endswith("SYSTEM.LOG")
-                                            or eachfile.endswith("SAM.LOG1")
-                                            or eachfile.endswith("SECURITY.LOG1")
-                                            or eachfile.endswith("SOFTWARE.LOG1")
-                                            or eachfile.endswith("SYSTEM.LOG1")
-                                            or eachfile.endswith("SAM.LOG2")
-                                            or eachfile.endswith("SECURITY.LOG2")
-                                            or eachfile.endswith("SOFTWARE.LOG2")
-                                            or eachfile.endswith("SYSTEM.LOG2")
-                                            or eachfile.startswith("NTUSER.DAT")
-                                            or eachfile.startswith("UsrClass.dat")
-                                            or eachfile.endswith("NTUSER.DAT")
-                                            or eachfile.endswith("UsrClass.dat")
-                                            or eachfile.endswith(".evtx")
-                                            or eachfile.endswith(
-                                                ".automaticDestinations-ms"
-                                            )
-                                            or eachfile.endswith(
-                                                ".customDestinations-ms"
-                                            )
-                                            or eachfile.endswith(".plist")
-                                            or eachfile.endswith(".log")
-                                            or eachfile.endswith(".conf")
-                                            or eachfile.startswith("job.")
-                                            or eachfile.endswith(".service")
-                                            or eachfile.endswith(".target")
-                                            or eachfile.endswith(".socket")
-                                            or eachfile.endswith(".keychain-db")
-                                            or eachfile.endswith(".DS_Store")
-                                        )
-                                    ):
-                                        ismem = input(
-                                            "   '{}' is potentially a memory image. Do you wish to process this as such? Y/n [Y] ".format(
-                                                eachfile
-                                            )
-                                        )
-                                        if ismem != "n":
-                                            print(
-                                                "    '{}' will be marked for processing as a memory image, please stand by...".format(
-                                                    eachfile
-                                                )
-                                            )
-                                            doCopy(
-                                                os.path.join(imgroot, eachfile),
-                                                dest + "/" + eachfile,
-                                            )
-                                            os.rename(
-                                                dest + "/" + eachfile,
-                                                dest
-                                                + "/"
-                                                + eachfile.replace(" ", "")
-                                                + "_MEMORY.DMP",
-                                            )
-                                            print_done(verbosity)
-                                        else:
-                                            print(
-                                                "  OK. '{}' will not be processed as a memory image.".format(
-                                                    eachfile
-                                                )
-                                            )
-                                            pass
-                                    else:
-                                        pass
-                                else:
-                                    pass
+        for reorgroot, _, reorgfiles in os.walk(d):
+            for reorgfile in reorgfiles:
+                eachartefact = os.path.join(reorgroot, reorgfile)
+                if str(img) in str(eachartefact):
+                    dest = os.path.join(output_directory, img, "artefacts/raw/")
+                    if not os.path.exists(dest):
+                        os.mkdir(os.path.join(output_directory, img, "artefacts/"))
+                        os.mkdir(dest)
+                    else:
+                        pass
+                    if (
+                        eachartefact.endswith("$MFT")
+                        or eachartefact.endswith("$LogFile")
+                        or eachartefact.endswith("$UsnJrnl")
+                        or eachartefact.endswith("$ObjId")
+                        or eachartefact.endswith("$Reparse")
+                        or eachartefact.endswith("hiberfil.sys")
+                        or eachartefact.endswith("pagefile.sys")
+                        or eachartefact.endswith("setupapi.dev.log")
+                        or eachartefact.endswith("RecentFileCache.bcf")
+                        or eachartefact.endswith("Amcache.hve")
+                        or eachartefact.endswith("SAM")
+                        or eachartefact.endswith("SECURITY")
+                        or eachartefact.endswith("SOFTWARE")
+                        or eachartefact.endswith("SYSTEM")
+                        or eachartefact.endswith("SAM.LOG")
+                        or eachartefact.endswith("SECURITY.LOG")
+                        or eachartefact.endswith("SOFTWARE.LOG")
+                        or eachartefact.endswith("SYSTEM.LOG")
+                        or eachartefact.endswith("SAM.LOG1")
+                        or eachartefact.endswith("SECURITY.LOG1")
+                        or eachartefact.endswith("SOFTWARE.LOG1")
+                        or eachartefact.endswith("SYSTEM.LOG1")
+                        or eachartefact.endswith("SAM.LOG2")
+                        or eachartefact.endswith("SECURITY.LOG2")
+                        or eachartefact.endswith("SOFTWARE.LOG2")
+                        or eachartefact.endswith("SYSTEM.LOG2")
+                        or eachartefact.endswith("NTUSER.DAT")
+                        or eachartefact.endswith("UsrClass.dat")
+                        or eachartefact.endswith(".evtx")
+                        or eachartefact.endswith(".automaticDestinations-ms")
+                        or eachartefact.endswith(".customDestinations-ms")
+                        or eachartefact.endswith("index.dat")
+                    ):
+                        osguess = "Windows"
+                    elif (
+                        eachartefact.endswith(".plist")
+                        or eachartefact.endswith("History.db")
+                    ) or (
+                        (
+                            eachartefact.endswith("bash_history")
+                            or eachartefact.endswith("bash_logout")
+                            or eachartefact.endswith("bashrc")
+                            or eachartefact.endswith("/etc/passwd")
+                            or eachartefact.endswith("/etc/shadow")
+                            or eachartefact.endswith("/etc/group")
+                            or eachartefact.endswith("/etc/hosts")
+                            or eachartefact.endswith("crontab")
+                        )
+                        and ("plist" in eachartefact or "History.db" in eachartefact)
+                    ):
+                        osguess = "macOS"
+                    elif (
+                        eachartefact.endswith(".conf")
+                        or eachartefact.endswith("places.sqlite")
+                    ) or (
+                        (
+                            eachartefact.endswith("bash_history")
+                            or eachartefact.endswith("bash_logout")
+                            or eachartefact.endswith("bashrc")
+                            or eachartefact.endswith("/etc/passwd")
+                            or eachartefact.endswith("/etc/shadow")
+                            or eachartefact.endswith("/etc/group")
+                            or eachartefact.endswith("/etc/hosts")
+                            or eachartefact.endswith("crontab")
+                        )
+                        and (
+                            "conf" in eachartefact
+                            or "places.sqlite" in eachartefact
+                            or "shadow" in eachartefact
+                        )
+                    ):
+                        osguess = "Linux"
+                    elif (
+                        eachartefact.endswith("bash_history")
+                        or eachartefact.endswith("bash_logout")
+                        or eachartefact.endswith("bashrc")
+                        or eachartefact.endswith("/etc/passwd")
+                        or eachartefact.endswith("/etc/shadow")
+                        or eachartefact.endswith("/etc/group")
+                        or eachartefact.endswith("/etc/hosts")
+                        or eachartefact.endswith("crontab")
+                    ):
+                        osguess = "Unix"
+                    else:
+                        osguess = ""
+                    if not os.path.exists(output_directory + "/" + img + "/artefacts/"):
+                        os.makedirs(output_directory + "/" + img + "/artefacts/")
+                    else:
+                        pass
+                    if not os.path.exists(
+                        output_directory + "/" + img + "/artefacts/raw/"
+                    ):
+                        os.makedirs(output_directory + "/" + img + "/artefacts/raw/")
+                    else:
+                        pass
+                    if (
+                        eachartefact.endswith("$MFT")
+                        or eachartefact.endswith("$LogFile")
+                        or eachartefact.endswith("$UsnJrnl")
+                        or eachartefact.endswith("$ObjId")
+                        or eachartefact.endswith("$Reparse")
+                        or eachartefact.endswith("hiberfil.sys")
+                        or eachartefact.endswith("pagefile.sys")
+                        or eachartefact.endswith("setupapi.dev.log")
+                        or eachartefact.endswith("RecentFileCache.bcf")
+                        or eachartefact.endswith("Amcache.hve")
+                        or eachartefact.endswith("groups")
+                        or eachartefact.endswith("hosts")
+                        or eachartefact.endswith("passwd")
+                        or eachartefact.endswith("shadow")
+                    ):
+                        doCopy(
+                            eachartefact,
+                            dest + eachartefact.split("/")[-1],
+                        )
+                    elif (
+                        eachartefact.endswith("SAM")
+                        or eachartefact.endswith("SECURITY")
+                        or eachartefact.endswith("SOFTWARE")
+                        or eachartefact.endswith("SYSTEM")
+                        or eachartefact.endswith("SAM.LOG")
+                        or eachartefact.endswith("SECURITY.LOG")
+                        or eachartefact.endswith("SOFTWARE.LOG")
+                        or eachartefact.endswith("SYSTEM.LOG")
+                        or eachartefact.endswith("SAM.LOG1")
+                        or eachartefact.endswith("SECURITY.LOG1")
+                        or eachartefact.endswith("SOFTWARE.LOG1")
+                        or eachartefact.endswith("SYSTEM.LOG1")
+                        or eachartefact.endswith("SAM.LOG2")
+                        or eachartefact.endswith("SECURITY.LOG2")
+                        or eachartefact.endswith("SOFTWARE.LOG2")
+                        or eachartefact.endswith("SYSTEM.LOG2")
+                    ):
+                        if not os.path.exists(os.path.join(dest, "registry")):
+                            os.makedirs(os.path.join(dest, "registry"))
+                        else:
+                            pass
+                        doCopy(
+                            eachartefact,
+                            os.path.join(dest, "registry", eachartefact.split("/")[-1]),
+                        )
+                        if os.path.exists(
+                            os.path.join(dest, "registry", eachartefact.split("/")[-1])
+                        ) and os.path.join(
+                            dest, "registry", eachartefact.split("/")[-1]
+                        ).endswith(
+                            "SYSTEM"
+                        ):
+                            doCopy(
+                                os.path.join(
+                                    dest, "registry", eachartefact.split("/")[-1]
+                                ),
+                                os.path.join(dest, ".SYSTEM"),
+                            )
+                        else:
+                            pass
+                    elif eachartefact.endswith("NTUSER.DAT") or eachartefact.endswith(
+                        "UsrClass.dat"
+                    ):
+                        if not os.path.exists(os.path.join(dest, "registry")):
+                            os.makedirs(os.path.join(dest, "registry"))
+                        else:
+                            pass
+                        doCopy(
+                            eachartefact,
+                            os.path.join(
+                                dest,
+                                "registry",
+                                eachartefact.split("/")[-2]
+                                + "+"
+                                + eachartefact.split("/")[-1],
+                            ),
+                        )
+                    elif eachartefact.endswith(".evtx"):
+                        if not os.path.exists(os.path.join(dest, "evtx")):
+                            os.makedirs(os.path.join(dest, "evtx"))
+                        else:
+                            pass
+                        doCopy(
+                            eachartefact,
+                            os.path.join(
+                                dest,
+                                "evtx",
+                                eachartefact.split("/")[-1],
+                            ),
+                        )
+                    elif eachartefact.endswith(
+                        ".automaticDestinations-ms"
+                    ) or eachartefact.endswith(".customDestinations-ms"):
+                        if not os.path.exists(os.path.join(dest, "jumplists")):
+                            os.makedirs(os.path.join(dest, "jumplists"))
+                        else:
+                            pass
+                        doCopy(
+                            eachartefact,
+                            os.path.join(
+                                dest,
+                                "jumplists",
+                                eachartefact.split("/")[-2]
+                                + "+"
+                                + eachartefact.split("/")[-1],
+                            ),
+                        )
+                    elif (
+                        eachartefact.endswith("bash_aliases")
+                        or eachartefact.endswith("bash_history")
+                        or eachartefact.endswith("bash_logout")
+                        or eachartefact.endswith("bashrc")
+                        or eachartefact.endswith("login.keyring")
+                        or eachartefact.endswith("user.keystore")
+                    ):
+                        doCopy(
+                            eachartefact,
+                            os.path.join(
+                                dest,
+                                eachartefact.split("/")[-2]
+                                + "+"
+                                + eachartefact.split("/")[-1],
+                            ),
+                        )
+                    elif eachartefact.endswith(".keychain-db"):
+                        if not os.path.exists(os.path.join(dest, "keychain")):
+                            os.makedirs(os.path.join(dest, "keychain"))
+                        else:
+                            pass
+                        doCopy(
+                            eachartefact,
+                            dest + "/keychain/" + eachartefact,
+                        )
+                    elif eachartefact.endswith(".plist"):
+                        if not os.path.exists(os.path.join(dest, "plists")):
+                            os.makedirs(os.path.join(dest, "plists"))
+                        else:
+                            pass
+                        doCopy(
+                            eachartefact,
+                            dest + "/plists/" + eachartefact,
+                        )
+                    elif eachartefact.endswith(".log"):
+                        if not os.path.exists(os.path.join(dest, "logs")):
+                            os.makedirs(os.path.join(dest, "logs"))
+                        else:
+                            pass
+                        doCopy(
+                            eachartefact,
+                            dest + "/logs/" + eachartefact,
+                        )
+                    elif eachartefact.endswith(".conf"):
+                        if not os.path.exists(os.path.join(dest, "conf")):
+                            os.makedirs(os.path.join(dest, "conf"))
+                        else:
+                            pass
+                        doCopy(
+                            eachartefact,
+                            dest + "/conf/" + eachartefact,
+                        )
+                    elif eachartefact.startswith("job."):
+                        if not os.path.exists(os.path.join(dest, "jobs")):
+                            os.makedirs(os.path.join(dest, "jobs"))
+                        else:
+                            pass
+                        doCopy(
+                            eachartefact,
+                            dest + "/jobs/" + eachartefact,
+                        )
+                    elif (
+                        eachartefact.endswith(".service")
+                        or eachartefact.endswith(".target")
+                        or eachartefact.endswith(".socket")
+                    ):
+                        if not os.path.exists(os.path.join(dest, "services")):
+                            os.makedirs(os.path.join(dest, "services"))
+                        else:
+                            pass
+                        doCopy(
+                            eachartefact,
+                            os.path.join(dest, "services", eachartefact.split("/")[-1]),
+                        )
+                    elif eachartefact.endswith(".global-message-db.sqlite"):
+                        if not os.path.exists(os.path.join(dest, "mail")):
+                            os.makedirs(os.path.join(dest, "mail"))
+                        else:
+                            pass
+                        doCopy(
+                            eachartefact,
+                            os.path.join(dest, "mail", eachartefact.split("/")[-1]),
+                        )
+                    elif (
+                        eachartefact.endswith("History")
+                        or eachartefact.endswith("HISTORY")
+                        or eachartefact.endswith("History.db")
+                        or eachartefact.endswith("places.sqlite")
+                        or eachartefact.endswith("index.dat")
+                    ):
+                        if not os.path.exists(os.path.join(dest, "browsers")):
+                            os.makedirs(os.path.join(dest, "browsers"))
+                        else:
+                            pass
+                        if not os.path.exists(
+                            os.path.join(
+                                dest,
+                                "browsers",
+                                eachartefact.split("/")[-2],
+                            )
+                        ):
+                            os.makedirs(
+                                os.path.join(
+                                    dest,
+                                    "browsers",
+                                    eachartefact.split("/")[-2],
+                                )
+                            )
+                        else:
+                            pass
+                        if eachartefact.endswith("History") or eachartefact.endswith(
+                            "HISTORY"
+                        ):
+                            chromeoredge = input(
+                                "   As Microsoft Edge and Google Chrome both use chromium (https://en.wikipedia.org/wiki/Chromium_(web_browser))\n    Please confirm if '{}' is from Edge or Chrome:\n     1) Edge   2) Chrome   3) Unsure\n\t[1] ".format(
+                                    eachartefact.split("/")[-1]
+                                )
+                            )
+                            if chromeoredge != "2":
+                                bwsrdir = "chrome"
                             else:
-                                pass
+                                bwsrdir = "Edge"
+                        elif eachartefact.endswith("History.db"):
+                            bwsrdir = "safari"
+                        elif eachartefact.endswith("places.sqlite"):
+                            bwsrdir = "firefox"
+                        elif eachartefact.endswith("index.dat"):
+                            bwsrdir = "ie"
+                        else:
+                            pass
+                        if not os.path.exists(
+                            os.path.join(
+                                dest,
+                                "browsers",
+                                eachartefact.split("/")[-2],
+                                bwsrdir,
+                            )
+                        ):
+                            os.makedirs(
+                                os.path.join(
+                                    dest,
+                                    "browsers",
+                                    eachartefact.split("/")[-2],
+                                    bwsrdir,
+                                )
+                            )
+                        else:
+                            pass
+                        doCopy(
+                            eachartefact,
+                            os.path.join(
+                                dest,
+                                "browsers",
+                                eachartefact.split("/")[-2],
+                                bwsrdir,
+                                eachartefact.split("/")[-1],
+                            ),
+                        )
+                    elif (
+                        volatility
+                        and os.stat(eachartefact).st_size > 2000000000
+                        and (
+                            eachartefact.endswith("hiberfil.sys")
+                            or eachartefact.endswith("pagefile.sys")
+                            or eachartefact.endswith("swapfile.sys")
+                            or eachartefact.endswith("MEMORY.DMP")
+                        )
+                    ):
+                        ismem = input(
+                            "   '{}' is potentially a memory image. Do you wish to process this as such? Y/n [Y] ".format(
+                                eachartefact
+                            )
+                        )
+                        if ismem != "n":
+                            print(
+                                "    '{}' will be marked for processing as a memory image, please stand by...".format(
+                                    eachartefact
+                                )
+                            )
+                            doCopy(
+                                eachartefact,
+                                dest + "/" + eachartefact.split("/")[-1],
+                            )
+                            os.rename(
+                                dest + "/" + eachartefact.split("/")[-1],
+                                dest
+                                + "/"
+                                + eachartefact.replace(" ", "")
+                                + "_MEMORY.DMP",
+                            )
+                            print_done(verbosity)
+                        else:
+                            print(
+                                "  OK. '{}' will not be processed as a memory image.".format(
+                                    eachartefact
+                                )
+                            )
+                            pass
+                    else:
+                        pass
+                    if osguess != "" and str(img) not in str(allimgs):
+                        allimgs[os.path.join(d, img)] = img + "::" + osguess
+                    else:
+                        pass
+                else:
+                    pass
+        for _, eachimg in allimgs.items():
+            print_identification(verbosity, output_directory, eachimg.split("::")[0], osguess)
 
-    if not auto:
-        confirmd = input(
-            "  You have provided '{}' as the path containing the artefacts.\n  The directory must contain all of the hosts (as directories) you wish to process, each with their respective artefacts within (with no subdirectories).\n    Please note that the names of the artefacts MUST match the original filenames as named on the original host.\n  Continue? Y/n [Y] ".format(
-                d
+    for eachdir in os.listdir(output_directory):
+        shutil.rmtree(output_directory + "/" + eachdir)
+    show_example = input(
+        "   You have provided '{}' as the path containing the artefacts.\n   This directory path must contain all of the hosts (as directories) you wish to process, each with their respective artefacts within\n    If you have multiple files with the same name, for example 'NTUSER.DAT', place them in a directory with the name of that user profile.\n    If these files do not belong to a user profile, prefix the file with '#' and a number. \n   Ignoring the '#' prefix, all artefacts MUST match the original filenames from the original host.\n    Take your time in reorganising the artefacts.\n     Show example directory structure? Y/n [n] ".format(
+            d, d.split("/")[-1]
+        )
+    )
+    if show_example == "Y":
+        tabbed_insert, sub_insert = "\n\t\t\t\t\t\t", "\n\t\t\t\t\t\t\t\t"
+        print(
+            "\n   {}\033[1;33m<hostname>\033[1;m/\033[1;36m$MFT{}\033[1;m\033[1;m/\033[1;36m#1$MFT{}\033[1;m\033[1;m/\033[1;36msetupapi.dev.log{}\033[1;m/\033[1;36mAmCache.hve{}\033[1;m/\033[1;36mSOFTWARE{}\033[1;m/\033[1;36mSecurity.evtx{}\033[1;m/\033[1;33m<user_profile1>\033[1;m{}\033[1;m/\033[1;36mNTUSER.DAT{}\033[1;m/\033[1;36mUsrClass.DAT{}\033[1;m/\033[1;36mHistory{}\033[1;m/\033[1;36mindex.dat{}\033[1;m/\033[1;36m#1index.dat{}\033[1;m/\033[1;36mActivitiesCache.db{}\033[1;m/\033[1;33m<user_profile2>\033[1;m{}\033[1;m/\033[1;36mNTUSER.DAT{}\033[1;m/\033[1;36mUsrClass.DAT{}\033[1;m/\033[1;36mHistory{}\033[1;m/\033[1;36mindex.dat{}\033[1;m/\033[1;36m#1index.dat{}\033[1;m/\033[1;36m#2index.dat{}\033[1;m/\033[1;36mActivitiesCache.db\033[1;m".format(
+                d,
+                tabbed_insert,
+                tabbed_insert,
+                tabbed_insert,
+                tabbed_insert,
+                tabbed_insert,
+                tabbed_insert,
+                sub_insert,
+                sub_insert,
+                sub_insert,
+                sub_insert,
+                sub_insert,
+                sub_insert,
+                tabbed_insert,
+                sub_insert,
+                sub_insert,
+                sub_insert,
+                sub_insert,
+                sub_insert,
+                sub_insert,
+                sub_insert,
             )
         )
-        if confirmd == "n":
-            print(
-                "\n  OK. Please ensure the directory you provide adheres to the required structure.\n\n"
-            )
-            sys.exit()
-        else:
-            pass
+        time.sleep(10)
+    else:
+        pass
+    confirm_reorg = input("   Continue? Y/n [Y] ")
+    print()
+    if confirm_reorg == "n":
+        print(
+            "\n  OK. Ensure the directory you provide adheres to the required structure specified above. Please try again.\n\n"
+        )
+        sys.exit()
     else:
         pass
     d = str(str(d) + "/").replace("//", "/")
@@ -707,19 +515,40 @@ def reorganise_artefacts(output_directory, verbosity, allimgs, flags, auto, vola
     else:  # confirm reorganisation
         for _, dirs, _ in os.walk(d):
             for f in dirs:
-                if not auto:
-                    wtr = input("    Do you wish to process: '{}'? Y/n [Y] ".format(f))
-                else:
-                    wtr = "y"
-                if wtr != "n":
-                    if not os.path.exists(output_directory + f):
-                        os.makedirs(output_directory + f)
+                if os.path.exists(os.path.join(d, f)):
+                    if not auto:
+                        wtr = input(
+                            "    Do you wish to process: '{}'? Y/n [Y] ".format(f)
+                        )
                     else:
-                        pass
-                    doReorganise(verbosity, allimgs, d, output_directory, f)
+                        wtr = "y"
+                    if wtr != "n":
+                        if not os.path.exists(os.path.join(output_directory, f)):
+                            os.makedirs(os.path.join(output_directory, f))
+                        else:
+                            pass
+                        entry, prnt = (
+                            "LastWriteTime,elrond_host,elrond_stage,elrond_log_entry\n",
+                            " -> {} -> created audit log file for '{}'".format(
+                                datetime.now().isoformat().replace("T", " "), f
+                            ),
+                        )
+                        write_audit_log_entry(verbosity, output_directory, entry, prnt)
+                        entry, prnt = "{},{},{},commenced\n".format(
+                            datetime.now().isoformat(), f, "reorganising"
+                        ), " -> {} -> {} artefacts for '{}'".format(
+                            datetime.now().isoformat().replace("T", " "),
+                            "reorganising",
+                            f,
+                        )
+                        write_audit_log_entry(verbosity, output_directory, entry, prnt)
+                        organise_artefacts(verbosity, allimgs, d, output_directory, f)
+                    else:
+                        print("    OK. '{}' will not be processed.\n".format(f))
                 else:
-                    print("    OK. '{}' will not be processed.\n".format(f))
+                    pass
         imgs = allimgs.copy()
+    print()
     flags.append("01reorganised")
     print(
         "  ----------------------------------------\n  -> Completed Identification Phase.\n"

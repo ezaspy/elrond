@@ -325,9 +325,7 @@ def collect_windows_artefacts(
                 pass
         else:
             pass
-        if (
-            item == mnt + "/Windows/System32/LogFiles/WMI/"
-        ):  # comment - confirm backup location
+        if item == mnt + "/Windows/System32/LogFiles/WMI/":
             item_list, dest = (
                 os.listdir(item),
                 dest + "wmi/",
@@ -530,13 +528,13 @@ def collect_windows_artefacts(
                 os.listdir(item),
                 dest + "deleted/",
             )
-            try:
-                os.makedirs(dest)
-            except:
-                pass
             if verbosity != "":
                 print("     Collecting deleted files for {}...".format(vssimage))
             else:
+                pass
+            try:
+                os.makedirs(dest)
+            except:
                 pass
             for each in item_list:
                 shutil.copytree(
@@ -628,7 +626,12 @@ def collect_windows_artefacts(
         if volatility and item == mnt + "/":
             item_list = os.listdir(item)
             if len(item_list) > 0:
-                if verbosity != "":
+                if (
+                    "hiberfil.sys" in str(os.listdir(mnt))
+                    or "pagefile.sys" in str(os.listdir(mnt))
+                    or "swapfile.sys" in str(os.listdir(mnt))
+                    or "MEMORY.DMP" in str(os.listdir(mnt))
+                ) and verbosity != "":
                     print("     Collecting memory files...")
                 else:
                     pass

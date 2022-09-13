@@ -148,3 +148,7 @@ def configure_elastic_stack(
     subprocess.Popen(
         ["sudo", "updatedb"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
     ).communicate()
+    print(
+        "   Kibana is available at:            127.0.0.1:5601"
+    )  # adjust if custom location
+    return elasticuser, elasticpswd

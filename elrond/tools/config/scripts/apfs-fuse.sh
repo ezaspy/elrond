@@ -1,6 +1,7 @@
 #!/bin/bash
-printf "\n [+] Installing & configuring apfs-fuse...\n\n"
-sleep 2
+sleep 1
+clear
+printf "\n  -> Installing & configuring apfs-fuse...\n\n"
 sudo apt install libbz2-dev libattr1-dev cmake cmake-curses-gui -y --fix-missing
 cd /usr/local/bin
 sudo git clone https://github.com/ezaspy/apfs-fuse.git
@@ -13,5 +14,4 @@ sudo cmake ..
 sudo ccmake .
 sudo make
 sudo updatedb
-clear
-sleep 2
+sleep 1

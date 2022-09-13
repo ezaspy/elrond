@@ -5,7 +5,7 @@ from datetime import datetime
 
 from rivendell.audit import write_audit_log_entry
 from rivendell.meta import extract_metadata
-from rivendell.process.memory import process_memory
+from rivendell.memory.memory import process_memory
 
 
 def print_identification(verbosity, output_directory, disk_image, osplatform):

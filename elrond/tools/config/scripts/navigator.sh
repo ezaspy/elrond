@@ -1,5 +1,7 @@
 #!/bin/bash
-printf "\n [+] Installing & configuring attack-navigator...\n\n"
+sleep 1
+clear
+printf "\n  -> Installing & configuring attack-navigator...\n\n"
 curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/yarnkey.gpg >/dev/null
 echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
@@ -19,5 +21,4 @@ sudo cp -r dist/ /var/www/html/
 sudo mv /var/www/html/dist/ /var/www/html/attack-navigator/
 sudo service apache2 restart
 sudo updatedb
-clear
-sleep 2
+sleep 1

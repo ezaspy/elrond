@@ -16,7 +16,7 @@ from rivendell.collect.files.i30 import extract_i30
 from rivendell.collect.files.select import select_files
 from rivendell.collect.windows import collect_windows_artefacts
 from rivendell.meta import extract_metadata
-from rivendell.process.memory import process_memory
+from rivendell.memory.memory import process_memory
 
 
 def collect_artefacts(
@@ -402,7 +402,10 @@ def collect_artefacts(
                         if os.path.exists(item):
                             if "vss" in item:
                                 dest, vsstext = (
-                                    artefact_directory + "/raw/" + item.split("/")[4] + "/",
+                                    artefact_directory
+                                    + "/raw/"
+                                    + item.split("/")[4]
+                                    + "/",
                                     " from " + item.split("/")[4],
                                 )
                             else:
@@ -495,14 +498,14 @@ def collect_artefacts(
                         item,
                         vsstext,
                     )
-            extract_i30(
+            """extract_i30(
                 output_directory,
                 verbosity,
                 "recovered",
                 d,
                 img,
                 vssimage,
-            )
+            )"""
             if not auto:
                 do_collect = input(
                     "  Do you wish to collect files from '{}'? Y/n [Y] ".format(

@@ -15,26 +15,26 @@ parser.add_argument(
 )
 parser.add_argument(
     "-K",
-    "--keywords",
+    "--Keywords",
     nargs=1,
     help="Search for keywords throughout image and artefacts based on provided Keyword File; Example syntax: -K /path/to/keyword_file.txt",
 )
 parser.add_argument(
     "-Y",
-    "--yara",
+    "--Yara",
     nargs=1,
     help="Run Yara signatures against all files on disk image or just collected files; Example syntax: -Y /path/to/directory_of_yara_files",
 )
 parser.add_argument(
     "-F",
-    "--collectfiles",
+    "--collectFiles",
     nargs="?",
     help="Collect files from disk including binaries, documents, scripts etc.; Optional: Provide an inclusion/exclusion file; Example syntax: -F include:/path/to/include_file.txt",
     const=True,
 )
 parser.add_argument(
     "-A",
-    "--analysis",
+    "--Analysis",
     help="Conduct 'automated forensic analysis' for disk artefacts; Extended Attributes; Alternate Data Streams; Timestomping",
     action="store_const",
     const=True,
@@ -50,15 +50,15 @@ parser.add_argument(
 )
 parser.add_argument(
     "-B",
-    "--dogs",
-    help="'Dogs Bollocks Mode (DBM).' Invokes -acINoPQqRUVv. You MUST provide either -C (--collect), -G (--gandalf) or -O (--reorganise) depending on whether you've acquired disk images, leveraged gandalf or seperately acquired artefacts, respectively.",
+    "--dogsBollocks",
+    help="'Dogs Bollocks Mode (DBM).' Invokes -AacINoPQqRU. You MUST provide either -C (--collect), -G (--gandalf) or -O (--reorganise) depending on whether you've acquired disk images, leveraged gandalf or seperately acquired artefacts, respectively.",
     action="store_const",
     const=True,
     default=False,
 )
 parser.add_argument(
     "-C",
-    "--collect",
+    "--Collect",
     help="Collect artefacts from disk image (artefacts have NOT been collected seperately)",
     action="store_const",
     const=True,
@@ -74,7 +74,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "-D",
-    "--delete",
+    "--Delete",
     help="Delete raw data after processing",
     action="store_const",
     const=True,
@@ -82,7 +82,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "-E",
-    "--elastic",
+    "--Elastic",
     help="Output data and index into local Elastic instance",
     action="store_const",
     const=True,
@@ -90,7 +90,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "-G",
-    "--gandalf",
+    "--Gandalf",
     help="Read artefacts acquired using gandalf",
     action="store_const",
     const=True,
@@ -98,7 +98,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "-I",
-    "--extractiocs",
+    "--extractIocs",
     help="Extract IOCs from processed files collected from disk; WARNING: This can take a long time!",
     action="store_const",
     const=True,
@@ -122,7 +122,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "-M",
-    "--volatility",
+    "--Memory",
     help="Collect, process and analyse memory image using Volatility Framework",
     action="store_const",
     const=True,
@@ -138,7 +138,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "-N",
-    "--navigator",
+    "--Navigator",
     help="Map identified artefacts to MITRE ATT&CK® navigator (requires Splunk (-S) flag)",
     action="store_const",
     const=True,
@@ -154,7 +154,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "-P",
-    "--process",
+    "--Process",
     help="Process disk artefacts which have been collected",
     action="store_const",
     const=True,
@@ -162,7 +162,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "-Q",
-    "--superquick",
+    "--superQuick",
     help="Super Quick mode. Do NOT obtain last access & creation times, hash files, perform entropy analysis or extract metadata; WARNING: Not invoking this flag can take a long time!",
     action="store_const",
     const=True,
@@ -178,7 +178,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "-R",
-    "--reorganise",
+    "--Reorganise",
     help="Reorganise artefacts NOT collected using gandalf",
     action="store_const",
     const=True,
@@ -186,7 +186,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "-S",
-    "--splunk",
+    "--Splunk",
     help="Output data and index into local Splunk instance",
     action="store_const",
     const=True,
@@ -202,7 +202,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "-T",
-    "--timeline",
+    "--Timeline",
     help="Create Timeline of disk image using plaso; WARNING: This can take a VERY long time!",
     action="store_const",
     const=True,
@@ -218,7 +218,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "-U",
-    "--userprofiles",
+    "--Userprofiles",
     help="Collect user profile artefacts",
     action="store_const",
     const=True,
@@ -227,31 +227,31 @@ parser.add_argument(
 parser.add_argument(
     "-u",
     "--unmount",
-    help="Do not unmount, currently mounted images (in /mnt/elrond_mountX)",
+    help="Do not unmount, currently mounted images (in /mnt/elrond_mountXX)",
     action="store_const",
     const=True,
     default=False,
 )
 parser.add_argument(
     "-V",
-    "--veryverbose",
-    help="Show detailed logging",
+    "--clamaV",
+    help="Run ClamAV against mounted image",
     action="store_const",
     const=True,
     default=False,
 )
 parser.add_argument(
-    "-v",
-    "--verbose",
-    help="Show logging",
+    "-X",
+    "--eXhaustive",
+    help="Exhaustive mode. Invoke all flags: -BDElMnSTtZ. You MUST provide either -C (--collect), -G (--gandalf) or -O (--reorganise) depending on whether you've acquired disk images, leveraged gandalf or seperately acquired artefacts, respectively.",
     action="store_const",
     const=True,
     default=False,
 )
 parser.add_argument(
     "-Z",
-    "--archive",
-    help="Archive raw data after processing",
+    "--Ziparchive",
+    help="Archive raw data as zip after processing",
     action="store_const",
     const=True,
     default=False,
@@ -260,37 +260,37 @@ parser.add_argument(
 args = parser.parse_args()
 directory = args.directory
 case = args.case
-analysis = args.analysis
+analysis = args.Analysis
 auto = args.auto
-dogs = args.dogs
-collect = args.collect
+dogs = args.dogsBollocks
+collect = args.Collect
 vss = args.vss
-delete = args.delete
-elastic = args.elastic
-gandalf = args.gandalf
-collectfiles = args.collectfiles
-extractiocs = args.extractiocs
+delete = args.Delete
+elastic = args.Elastic
+gandalf = args.Gandalf
+collectfiles = args.collectFiles
+extractiocs = args.extractIocs
 imageinfo = args.imageinfo
 lotr = args.lotr
-keywords = args.keywords
-volatility = args.volatility
+keywords = args.Keywords
+volatility = args.Memory
 metacollected = args.metacollected
-navigator = args.navigator
+navigator = args.Navigator
 nsrl = args.nsrl
-process = args.process
-superquick = args.superquick
+process = args.Process
+superquick = args.superQuick
 quick = args.quick
-reorganise = args.reorganise
-splunk = args.splunk
+reorganise = args.Reorganise
+splunk = args.Splunk
 symlinks = args.symlinks
-timeline = args.timeline
+timeline = args.Timeline
 memorytimeline = args.memorytimeline
-userprofiles = args.userprofiles
+userprofiles = args.Userprofiles
 unmount = args.unmount
-veryverbose = args.veryverbose
-verbose = args.verbose
-yara = args.yara
-archive = args.archive
+clamav = args.clamaV
+yara = args.Yara
+exhaustive = args.eXhaustive
+archive = args.Ziparchive
 
 d = directory[0]
 case = case[0]
@@ -455,7 +455,23 @@ asciitext = [
 
 
 if __name__ == "__main__":
+    if exhaustive:
+        dogs = True
+        delete = True
+        elastic = True
+        lotr = True
+        volatility = True
+        nsrl = True
+        superquick = False
+        quick = False
+        splunk = True
+        timeline = True
+        memorytimeline = True
+        archive = True
+    else:
+        pass
     if dogs:
+        analysis = True
         auto = True
         vss = True
         extractiocs = True
@@ -465,10 +481,11 @@ if __name__ == "__main__":
         superquick = True
         quick = True
         userprofiles = True
-        veryverbose = True
-        verbose = True
+        clamav = True
     else:
         pass
+    veryverbose = True
+    verbose = True
     main(
         directory,
         case,
@@ -498,6 +515,7 @@ if __name__ == "__main__":
         memorytimeline,
         userprofiles,
         unmount,
+        clamav,
         veryverbose,
         verbose,
         yara,

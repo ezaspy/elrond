@@ -16,7 +16,6 @@ from rivendell.process.timeline import create_plaso_timeline
 def collect_process_keyword_analysis_timeline(
     auto,
     collect,
-    gandalf,
     process,
     analysis,
     extractiocs,
@@ -29,6 +28,7 @@ def collect_process_keyword_analysis_timeline(
     metacollected,
     superquick,
     quick,
+    reorganise,
     symlinks,
     userprofiles,
     verbose,
@@ -48,43 +48,40 @@ def collect_process_keyword_analysis_timeline(
     memtimeline,
     stage,
 ):
-    if len(imgs) != 0:
-        if not gandalf:
-            if collect:
-                collect_artefacts(
-                    auto,
-                    vss,
-                    collectfiles,
-                    nsrl,
-                    keywords,
-                    volatility,
-                    metacollected,
-                    superquick,
-                    quick,
-                    symlinks,
-                    userprofiles,
-                    verbose,
-                    d,
-                    cwd,
-                    sha256,
-                    flags,
-                    system_artefacts,
-                    output_directory,
-                    verbosity,
-                    f,
-                    imgs,
-                    path,
-                    volchoice,
-                    vssmem,
-                    memtimeline,
-                    stage,
-                )
-            else:
-                imgs = reorganise_artefacts(
-                    output_directory, verbosity, allimgs, flags, auto, volatility
-                )
+    if (collect and len(imgs) != 0) or reorganise:
+        if collect:
+            collect_artefacts(
+                auto,
+                vss,
+                collectfiles,
+                nsrl,
+                keywords,
+                volatility,
+                metacollected,
+                superquick,
+                quick,
+                symlinks,
+                userprofiles,
+                verbose,
+                d,
+                cwd,
+                sha256,
+                flags,
+                system_artefacts,
+                output_directory,
+                verbosity,
+                f,
+                imgs,
+                path,
+                volchoice,
+                vssmem,
+                memtimeline,
+                stage,
+            )
         else:
-            pass
+            imgs = reorganise_artefacts(
+                output_directory, verbosity, d, allimgs, flags, auto, volatility
+            )
         if process:
             select_pre_process_artefacts(
                 output_directory,
