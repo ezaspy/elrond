@@ -63,12 +63,11 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 ## Configuration
 
 There are several software package required for using elrond but almost all of them are contained within the [SANS SIFT Worksation](https://www.sans.org/tools/sift-workstation/) virtual machine OVA. However, for the software which is not included, I have provided a script ([make.sh](https://github.com/ezaspy/elrond/blob/main/make.sh)) which installs and configures the additional software required for all potential functionality leveraged by elrond (volatility3, apfs-fuse, ClamAV etc.).<br>
-To invoke the script, simply follow the instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md#configuration). **Please note, you will only need to run the make.sh script once, per SIFT instance**
+To invoke the script, simply follow the instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md#configuration). **Note: you will only need to run the make.sh script once, per SIFT instance**
 
 - [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (20.04)
   - Note: SANS SIFT 18.04 is not supported.
 - [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md) to install and configure the additional software for SIFT 20.04.
-  - Please note the elrond also only supports x64 memory images.
   - If you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [.../elrond/elrond/tools/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/scripts/)
 <br><br><br>
 
@@ -76,24 +75,24 @@ To invoke the script, simply follow the instructions in [CONFIG.md](https://gith
 
 ## Usage
 
-`python3 elrond.py <case_id> <directory> [<output_directory>] [-h] [-AaBCcDEGHIiMoPpQqRSsTtUZ] [-K <keyword_file>] [-Y <yara_dir>] -F (include|exclude):[<include/exclude_file>]`
+`python3 elrond.py <case_id> <directory> [<output_directory>] [-h] [-AaBCcDEGHIiMoPpQqRSsTtUVvZ] [-K <keyword_file>] [-Y <yara_dir>] -F (include|exclude):[<include/exclude_file>]`
 
 <br>
 
 ### Collect (-C)<br>
 #### Examples<br>
 
-- Invoking DBM (-B) flag (instead of using -AacINoPQqU), Process (**-P**) index artefacts in Splunk (**-S**) and conduct File Collection (-F) with inclusion list<br>
+- Invoking DBM (-B) flag (instead of using -acINoPQqUVv), Process (**-P**) index artefacts in Splunk (**-S**) and conduct File Collection (-F) with inclusion list<br>
 
 `python3 elrond.py case_name /path/to/disk/images -BCPS  -F include:./include_file.txt`
 
 - Automatically (**-a**) and super-quietly (**-Q**) Collect (**-C**), Process (**-P**), Analyse (**-A**) and index artefacts (including memory (**-M**)) in Splunk (**-S**)<br>
 
-`python3 elrond.py case_name /path/to/disk_and_memory/images -aqQMCPAS`
+`python3 elrond.py case_name /path/to/disk_and_memory/images -aqQvVMCPAS`
 
-- Automatically (**-a**), super-quietly (**-Q**) Collect (**-C**), Process (**-P**) and conduct IOC Extraction (**-I**)<br>
+- Very verbosely (**-V**), automatically (**-a**), super-quietly (**-Q**) Collect (**-C**), Process (**-P**) and conduct IOC Extraction (**-I**)<br>
 
-`python3 elrond.py case_name /path/to/disk/images -aqQCPI`
+`python3 elrond.py case_name /path/to/disk/images -avVqQCPI`
 <br><br>
 
 ### Gandalf (-G)<br>
@@ -101,9 +100,9 @@ To invoke the script, simply follow the instructions in [CONFIG.md](https://gith
 
 - Automatically (**-a**) and superquietly (**-Q**) Process (**-P**), Analyse (**-A**) and index artefacts in Splunk (**-S**) (acquired using [gandalf](https://github.com/ezaspy/gandalf))<br>
 
-`python3 elrond.py case_name /path/to/disk/images -aqGPAS`
+`python3 elrond.py case_name /path/to/disk/images -aqvVGPAS`
 
-- Invoking DBM (-B) flag (instead of using -AacINoPQqU), Process (**-P**) index artefacts in Splunk (**-S**) and conduct Keyword Searching (-K <file_name>)<br>
+- Invoking DBM (-B) flag (instead of using -acINoPQqUVv), Process (**-P**) index artefacts in Splunk (**-S**) and conduct Keyword Searching (-K <file_name>)<br>
 
 `python3 elrond.py case_name /path/to/disk/images -BGPS -K keywords.txt`
 <br><br>
@@ -114,21 +113,21 @@ To invoke the script, simply follow the instructions in [CONFIG.md](https://gith
 
 - Automatically (**-a**) and quietly (**-q**) Process (**-P**), Analyse (**-A**) and index artefacts in Splunk (**-S**) (reorganise previously collected disk artefacts (**-R**))<br>
 
-`python3 elrond.py case_name /path/to/disk/images -aqRPAS`
+`python3 elrond.py case_name /path/to/disk/images -aqvVRPAS`
 
-- Invoking DBM (-B) flag (instead of using -AacINoPQqU), Process (**-P**) index artefacts in Splunk (**-S**) and conduct Yara Searching (-Y <yara_dir>)<br>
+- Invoking DBM (-B) flag (instead of using -acINoPQqUVv), Process (**-P**) index artefacts in Splunk (**-S**) and conduct Yara Searching (-Y <yara_dir>)<br>
 
 `python3 elrond.py case_name /path/to/disk/images -BRPS -Y <directory/of/yara/files>`
 <br><br>
 
 ### Support
 
-See the [support file](https://github.com/ezaspy/elrond/SUPPORT.md) for a list of commands and additional third-party tools to help with preparing images or data for elrond.
+See [SUPPORT.md](https://github.com/ezaspy/elrond/blob/main/elrond/SUPPORT.md) for a list of commands and additional third-party tools to help with preparing images or data for elrond.
 <br><br>
 
 ### Notices
 
-Please note that if you notice 'nixCommand' or 'nixProcess' in files processed from a Windows OS, this is somewhat intentional. I debated with myself whether to try and change these to 'WinCommand' and 'WinProcess', respectively but also considered the situation of Windows Subsystem for Linux (WSL) being installed. As a result, I have left them as they are. If you know of a way to identify whether a file belongs inside the Linux element of WSL based on file path, file type, file content etc. please raise an [issue](https://github.com/ezaspy/elrond/issues) and let me know.
+If you notice 'nixCommand' or 'nixProcess' in files processed from a Windows OS, this is somewhat intentional. I debated with myself whether to try and change these to 'WinCommand' and 'WinProcess', respectively but also considered the situation of Windows Subsystem for Linux (WSL) being installed. As a result, I have left them as they are. If you know of a way to identify whether a file belongs inside the Linux element of WSL based on file path, file type, file content etc. please raise an [issue](https://github.com/ezaspy/elrond/issues) and let me know.
 <br><br><br>
 
 <!-- CONTRIBUTING -->
