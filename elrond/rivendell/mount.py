@@ -5,10 +5,8 @@ import shutil
 import subprocess
 import sys
 import time
-from datetime import datetime
 
 from rivendell.core.identify import identify_disk_image
-from rivendell.audit import write_audit_log_entry
 
 
 def unmount_images(elrond_mount, ewf_mount):
@@ -154,7 +152,7 @@ def mounted_image(allimgs, disk_image, destination_mount, disk_file, index):
         print("   '{}'{} could not be mounted.".format(disk_image, partition))
 
 
-def doVMDKConvert(intermediate_mount):
+def convert_vmdk(intermediate_mount):
     subprocess.Popen(
         [
             "qemu-img",
@@ -659,7 +657,7 @@ def mount_images(
                         os.remove(intermediate_mount + ".raw")
                     else:
                         pass
-                    doVMDKConvert(intermediate_mount)
+                    convert_vmdk(intermediate_mount)
                 else:
                     pass
                 mount_vmdk_image(
@@ -677,7 +675,7 @@ def mount_images(
                             intermediate_mount.split("/")[-1]
                         )
                     )
-                    doVMDKConvert(intermediate_mount)
+                    convert_vmdk(intermediate_mount)
                 else:
                     convertVMDK = input(
                         "  It looks like '{}.raw' already exists. Did you want to replace it? Y/n [Y] ".format(
@@ -686,7 +684,7 @@ def mount_images(
                     )
                     if convertVMDK != "n":
                         os.remove(intermediate_mount + ".raw")
-                        doVMDKConvert(intermediate_mount)
+                        convert_vmdk(intermediate_mount)
                     else:
                         pass
                 mount_vmdk_image(
