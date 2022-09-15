@@ -512,12 +512,6 @@ def main(
                     )
                     write_audit_log_entry(verbosity, output_directory, entry, prnt)
                     print("   Attempting to mount '{}'...".format(f))
-                    entry, prnt = "{},{},{},commenced\n".format(
-                        datetime.now().isoformat(), f, stage
-                    ), " -> {} -> mounting '{}'".format(
-                        datetime.now().isoformat().replace("T", " "), f
-                    )
-                    write_audit_log_entry(verbosity, output_directory, entry, prnt)
                     allimgs = mount_images(
                         d,
                         auto,

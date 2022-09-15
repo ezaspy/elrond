@@ -36,7 +36,8 @@
 
 - [About the Project](#about-the-project)
   - [Related Projects](#related-projects)
-- [Configuration](#configuration)
+- [Configuration](#Installation/Configuration)
+  - [SIFT-elrond](#SIFT-elrond)
   - [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads)
   - [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md)
 - [Usage](#usage)
@@ -60,7 +61,14 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 
 <!-- PREREQUISITES -->
 
-## Configuration
+## Installation/Configuration
+
+### SIFT-elrond
+
+- Download [SIFT-elrond](https://drive.google.com/file/d/1BjL3DUoE2-V7AwXCUFhmHuwQoThd48l_/view?usp=sharing) OVA, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
+- Alternatively, follow the instructions below...
+
+### Configure
 
 There are several software package required for using elrond but almost all of them are contained within the [SANS SIFT Worksation](https://www.sans.org/tools/sift-workstation/) virtual machine OVA. However, for the software which is not included, I have provided a script ([make.sh](https://github.com/ezaspy/elrond/blob/main/make.sh)) which installs and configures the additional software required for all potential functionality leveraged by elrond (volatility3, apfs-fuse, ClamAV etc.).<br>
 To invoke the script, simply follow the instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md#configuration). **Note: you will only need to run the make.sh script once, per SIFT instance**

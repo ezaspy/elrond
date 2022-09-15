@@ -5,8 +5,10 @@ import shutil
 import subprocess
 import sys
 import time
+from datetime import datetime
 
 from rivendell.core.identify import identify_disk_image
+from rivendell.audit import write_audit_log_entry
 
 
 def unmount_images(elrond_mount, ewf_mount):
@@ -259,7 +261,7 @@ def mount_vmdk_image(
                     )
                 else:
                     print(
-                        "   An error occured when mounting '{}'.\n    Perhaps this is a macOS-based image and requires apfs-fuse? Visit https://github.com/ezaspy/apfs-fuse and try again.\n   If this does not work, the disk may not be supported and/or may be corrupt? Feel free to raise an issue via https://github.com/ezaspy/elrond/issues".format(
+                        "   An error occured when mounting '{}'.\n    Perhaps this is a macOS-based image and requires apfs-fuse (https://github.com/ezaspy/apfs-fuse)?\n    Alternatively, the disk may not be supported and/or may be corrupt? You can raise an issue via https://github.com/ezaspy/elrond/issues".format(
                             disk_file
                         )
                     )
@@ -272,9 +274,7 @@ def mount_vmdk_image(
                             os.path.join(
                                 output_directory, intermediate_mount.split("/")[-1]
                             )
-                            + "/"
-                            + intermediate_mount.split("/")[-1]
-                            + ".log"
+                            + "/log.audit"
                         )
                         os.rmdir(
                             os.path.join(
@@ -283,11 +283,7 @@ def mount_vmdk_image(
                         )
                     else:
                         pass
-                    if input("    Continue? Y/n [n] ") != "Y":
-                        print("\n  OK. Exiting.\n\n")
-                        sys.exit()
-                    else:
-                        pass
+                    sys.exit()
         else:
             disk_image = identify_disk_image(
                 verbosity, output_directory, disk_file, destination_mount
@@ -353,7 +349,7 @@ def mount_images(
             cwd,
             quotes,
         )
-    else:
+    else:  # mounting images
         if "EWF" in imgformat or "Expert Witness" in imgformat:
             if not os.path.exists(ewf_mount[0]):
                 try:
@@ -644,13 +640,21 @@ def mount_images(
             elif "DOS/MBR boot sector" in imgformat and disk_file.endswith(".raw"):
                 if auto != True:
                     vmdkow = input(
-                        "  '{}' has already been converted, do you wish to overwrite this file? Y/n [Y] ".format(
+                        "    '{}' has already been converted, do you wish to overwrite this file? Y/n [Y] ".format(
                             intermediate_mount.split("/")[-1]
                         )
                     )
                 else:
                     vmdkow = "n"
-                if vmdkow != "n":
+                if vmdkow != "n" or "Invalid partition table" in imgformat:
+                    if "Invalid partition table" in imgformat:
+                        print(
+                            "    It looks like '{}' is corrupt; it will be removed and re-converted, please stand by...".format(
+                                intermediate_mount.split("/")[-1]
+                            )
+                        )
+                    else:
+                        pass
                     if os.path.exists(intermediate_mount + ".raw"):
                         os.remove(intermediate_mount + ".raw")
                     else:
@@ -681,7 +685,7 @@ def mount_images(
                         )
                     )
                     if convertVMDK != "n":
-                        os.remove(intermediate_mount)
+                        os.remove(intermediate_mount + ".raw")
                         doVMDKConvert(intermediate_mount)
                     else:
                         pass
@@ -695,4 +699,10 @@ def mount_images(
                 )
         else:
             pass
+        """entry, prnt = "{},{},{},commenced\n".format(
+            datetime.now().isoformat(), disk_file, stage
+        ), " -> {} -> mounting '{}'".format(
+            datetime.now().isoformat().replace("T", " "), disk_file
+        )
+        write_audit_log_entry(verbosity, output_directory, entry, prnt)"""
     return allimgs
