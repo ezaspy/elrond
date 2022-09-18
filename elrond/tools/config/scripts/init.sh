@@ -22,7 +22,7 @@ sudo chmod 777 /etc/fstab
 echo "/dev/sdb swap swap defaults 0 0" >> /etc/fstab
 sudo chmod 664 /etc/fstab
 ../elrond/tools/config/scripts/./python.sh
-sudo apt install mlocate build-essential yara clamav clamav-daemon john gparted -y --fix-missing
+sudo apt install mlocate build-essential qemu yara clamav clamav-daemon john gparted -y --fix-missing
 sudo systemctl stop clamav-freshclam
 sudo freshclam
 sudo systemctl start clamav-freshclam
