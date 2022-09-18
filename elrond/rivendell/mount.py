@@ -165,6 +165,7 @@ def convert_vmdk(intermediate_mount):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ).communicate()
+    # https://github.com/ezaspy/elrond/issues/18
 
 
 def mount_vmdk_image(
