@@ -529,7 +529,7 @@ def main(
                         cwd,
                         quotes,
                     )
-                    if len(allimgs) > 0:
+                    if len(allimgs) > 0 and f in str(allimgs):
                         entry, prnt = "{},{},{},completed\n".format(
                             datetime.now().isoformat(), f, "mounting"
                         ), " -> {} -> mounted '{}'".format(
@@ -537,6 +537,7 @@ def main(
                         )
                         write_audit_log_entry(verbosity, output_directory, entry, prnt)
                     else:
+                        print("   Unfortunately, '{}' could not be mounted".format(f))
                         entry, prnt = "{},{},{},failed\n".format(
                             datetime.now().isoformat(), f, "mounting"
                         ), " -> {} -> not mounted '{}'".format(
@@ -673,7 +674,9 @@ def main(
         else:
             pass
     time.sleep(1)
-    if (collect or reorganise):  # Collection/Reorganisation, Processing, Keyword Searching, Analysis & Timelining
+    if (
+        collect or reorganise
+    ):  # Collection/Reorganisation, Processing, Keyword Searching, Analysis & Timelining
         collect_process_keyword_analysis_timeline(
             auto,
             collect,
