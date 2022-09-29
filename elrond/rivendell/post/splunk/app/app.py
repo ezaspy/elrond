@@ -44,7 +44,7 @@ def build_app_elrond(case, postpath):
         elif sd.endswith("default/"):
             with open(sd + "app.conf", "w") as appconf:
                 appconf.write(
-                    "#\n# Splunk app configuration file\n#\n\n[install]\nis_configured = 0\n\n[ui]\nis_visible = 1\nlabel = elrond\n\n[launcher]\nauthor = ezaspy [ezaspython (at) gmail (dot) com]\ndescription = Accompanying Splunk app for elrond script.\nversion = 1.0.0\n"
+                    "#\n# Splunk app configuration file\n#\n\n[install]\nis_configured = 0\n\n[ui]\nis_visible = 1\nlabel = elrond\n\n[launcher]\nauthor = ezaspy [ezaspython (at) gmail (dot) com]\ndescription = Accompanying Splunk app for elrond script\nversion = 1.0.0\n\n[package]\nid = elrond\n"
                 )
             with open(sd + "fields.conf", "w") as fieldsconf:
                 fieldsconf.write("[mitre_technique]\nINDEXED = True\n\n")
@@ -101,14 +101,14 @@ def build_app_elrond(case, postpath):
                     '[usb_out]\ndefinition = (source=*usb.log.json OR source="*system-launchdaemons+com.apple.usbd.plist.json" OR source="*syslog.*") | `replace_slash` | `convert_time` | search (ven=* OR prod=* OR serial=*) | table index host Time LastWriteTime disk serial ven prod | fillnull value=- | rename index AS Case host AS Host disk AS Disk serial AS "Serial No." ven AS Vendor prod AS Product\niseval = 0\n\n'
                 )
             with open(sd + "props.conf", "w") as propsconf:
-                propsreports = "TRANSFORMS = mitre_assign\nREPORT-logtype_make = logtype_make\nREPORT-IPAddress_get = IPAddress_get\nREPORT-MFTFiles1_get = MFTFiles1_get\nREPORT-MFTFiles2_get = MFTFiles2_get\nREPORT-MFTFiles3_get = MFTFiles3_get\nREPORT-MFTFiles4_get = MFTFiles4_get\nREPORT-WinCommands_get = WinCommands_get\nREPORT-nixCommands_get = nixCommands_get\nREPORT-WinProcesses_get = WinProcesses_get\nREPORT-nixProcesses_get = nixProcesses_get\nREPORT-usb_win_hw = usb_win_hw\nREPORT-usb_win_dvc = usb_win_dvc\nREPORT-usb_mac_ven = usb_mac_ven\nREPORT-usb_mac_prod = usb_mac_prod\nREPORT-usb_lin_ven = usb_lin_ven\nREPORT-usb_lin_prod = usb_lin_prod\nREPORT-usb_lin_rev = usb_lin_rev\nREPORT-usb_lin_sn = usb_lin_sn\n\n"
+                propsreports = "TRANSFORMS = mitre_assign\nREPORT-logtype_make = logtype_make\nREPORT-IPAddress_get = IPAddress_get\nREPORT-MFTFiles1_get = MFTFiles1_get\nREPORT-MFTFiles2_get = MFTFiles2_get\nREPORT-MFTFiles3_get = MFTFiles3_get\nREPORT-MFTFiles4_get = MFTFiles4_get\nREPORT-WinCommands_get = WinCommands_get\nREPORT-nixCommands_get = nixCommands_get\nREPORT-WinProcesses_get = WinProcesses_get\nREPORT-nixProcesses_get = nixProcesses_get\nREPORT-usb_win_hw = usb_win_hw\nREPORT-usb_win_dvc = usb_win_dvc\nREPORT-usb_mac_ven = usb_mac_ven\nREPORT-usb_mac_prod = usb_mac_prod\nREPORT-usb_lin_ven = usb_lin_ven\nREPORT-usb_lin_prod = usb_lin_prod\nREPORT-usb_lin_rev = usb_lin_rev\nREPORT-usb_lin_sn = usb_lin_sn"
                 propsconf.write(
-                    '[elrondCSV]\nBREAK_ONLY_BEFORE_DATE = \nDATETIME_CONFIG = \nINDEXED_EXTRACTIONS = csv\nKV_MODE = none\nLINE_BREAKER = ([\\r\\n]+)\nMAX_DAYS_AGO = 999999\nMAX_DAYS_HENCE = 999999\nNO_BINARY_CHECK = true\n{}\nSHOULD_LINEMERGE = false\nTIMESTAMP_FIELDS = LastWriteTime\ncategory = Custom\ndescription = Comma-separated value format. Set header and other settings in "Delimited Settings"\ndisabled = false\npulldown_type = true\n\n'.format(
+                    '[elrondCSV]\nBREAK_ONLY_BEFORE_DATE = 0\nDATETIME_CONFIG = \nINDEXED_EXTRACTIONS = csv\nKV_MODE = none\nLINE_BREAKER = ([\\r\\n]+)\nMAX_DAYS_AGO = 999999\nMAX_DAYS_HENCE = 999999\nNO_BINARY_CHECK = true\n{}\nSHOULD_LINEMERGE = false\nTIMESTAMP_FIELDS = LastWriteTime\ncategory = Custom\ndescription = Comma-separated value format. Set header and other settings in "Delimited Settings"\ndisabled = false\npulldown_type = true\n\n'.format(
                         propsreports
                     )
                 )
                 propsconf.write(
-                    '[elrondCSV_noTime]\nBREAK_ONLY_BEFORE_DATE = \nDATETIME_CONFIG = CURRENT\nINDEXED_EXTRACTIONS = csv\nKV_MODE = none\nLINE_BREAKER = ([\\r\\n]+)\nMAX_DAYS_AGO = 999999\nMAX_DAYS_HENCE = 999999\nNO_BINARY_CHECK = true\n{}\nSHOULD_LINEMERGE = false\nTIMESTAMP_FIELDS = LastWriteTime\ncategory = Custom\ndescription = Comma-separated value format. Set header and other settings in "Delimited Settings"\ndisabled = false\npulldown_type = true\n\n'.format(
+                    '[elrondCSV_noTime]\nBREAK_ONLY_BEFORE_DATE = 0\nDATETIME_CONFIG = CURRENT\nINDEXED_EXTRACTIONS = csv\nKV_MODE = none\nLINE_BREAKER = ([\\r\\n]+)\nMAX_DAYS_AGO = 999999\nMAX_DAYS_HENCE = 999999\nNO_BINARY_CHECK = true\n{}\nSHOULD_LINEMERGE = false\nTIMESTAMP_FIELDS = LastWriteTime\ncategory = Custom\ndescription = Comma-separated value format. Set header and other settings in "Delimited Settings"\ndisabled = false\npulldown_type = true\n\n'.format(
                         propsreports
                     )
                 )
@@ -131,49 +131,25 @@ def build_app_elrond(case, postpath):
                 sd + "transforms.conf", "w"
             ) as transformsconf:  # regex field extractions
                 transformsconf.write(
-                    "[logtype_make]\nREGEX = (?<logtype>(?:registry|evt|shimcache|jumplists|usb|log|plist|service|journal|browser|analysis|timeline|memory|audit))\nSOURCE_KEY = source\n\n"
-                )  # All
-                transformsconf.write(
-                    "[IPAddress_get]\nREGEX = (?P<ip>(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))\nSOURCE_KEY = _raw\nMV_ADD = true\n\n"
+                    "[logtype_make]\nREGEX = (?<logtype>(?:registry|evt|shimcache|jumplists|usb|log|plist|service|journal|browser|analysis|timeline|memory|audit))\nSOURCE_KEY = source\n\n[IPAddress_get]\nREGEX = (?P<ip>(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))\nSOURCE_KEY = _raw\nMV_ADD = true\n\n"
                 )  # All
                 transformsconf.write(
                     "[Filenames_get]\nREGEX = (?<Filepath>.*)\\/(?<Filename>[^\\/]+)\\.(?<Fileext>[^\\:]+)$\nSOURCE_KEY = Filename\n\n"
                 )  # All (LastAccessTimes, metadata & analysis)
                 transformsconf.write(
-                    "[WinCommands_get]\nREGEX = (?<ProcessPath>.*)\\/(?<ProcessName>[^\\/]+)\\.(?<ProcessExt>.*)$\nSOURCE_KEY = WinCommand\n\n"
+                    "[WinCommands_get]\nREGEX = (?<ProcessPath>.*)\\/(?<ProcessName>[^\\/]+)\\.(?<ProcessExt>.*)$\nSOURCE_KEY = WinCommand\n\n[WinProcesses_get]\nREGEX = (?<ProcessPath>.*)\\/(?<ProcessName>[^\\/]+)\\.(?<ProcessExt>.*)$\nSOURCE_KEY = WinProcess\n\n"
                 )  # Windows
                 transformsconf.write(
-                    "[nixCommands_get]\nREGEX = (?<ProcessPath>.*)\\/(?<ProcessName>[^\\/]+)\\.(?<ProcessExt>.*)$\nSOURCE_KEY = nixCommand\n\n"
+                    "[nixCommands_get]\nREGEX = (?<ProcessPath>.*)\\/(?<ProcessName>[^\\/]+)\\.(?<ProcessExt>.*)$\nSOURCE_KEY = nixCommand\n\n[nixProcesses_get]\nREGEX = (?<ProcessPath>.*)\\/(?<ProcessName>[^\\/]+)\\.(?<ProcessExt>.*)$\nSOURCE_KEY = nixProcess\n\n"
                 )  # nix
                 transformsconf.write(
-                    "[WinProcesses_get]\nREGEX = (?<ProcessPath>.*)\\/(?<ProcessName>[^\\/]+)\\.(?<ProcessExt>.*)$\nSOURCE_KEY = WinProcess\n\n"
+                    "[usb_win_hw]\nREGEX = [^\\-]\\ \\-\\ (?<HardwareType>[^\\\\\\\\]+)\nSOURCE_KEY = Artefact\n\n[usb_win_dvc]\nREGEX = (?<disk>[A-Za-z\\d]+)\\S(?:D|d)(?:I|i)(?:S|s)(?:K|k)\\S(?:V|v)(?:E|e)(?:N|n)_(?<ven>[a-z\\d]+)\\S+(?:P|p)(?:R|r)(?:O|o)(?:D|d)_(?<prod>\\w+)(\\S(?:R|r)(?:E|e)(?:V|v)_(?<rev>[a-z\\d]+))?\\S(?<serial>[^\\#]+)\nSOURCE_KEY = Artefact\n\n"
                 )  # Windows
                 transformsconf.write(
-                    "[nixProcesses_get]\nREGEX = (?<ProcessPath>.*)\\/(?<ProcessName>[^\\/]+)\\.(?<ProcessExt>.*)$\nSOURCE_KEY = nixProcess\n\n"
-                )  # nix
-                transformsconf.write(
-                    "[usb_win_hw]\nREGEX = [^\\-]\\ \\-\\ (?<HardwareType>[^\\\\\\\\]+)\nSOURCE_KEY = Artefact\n\n"
-                )  # Windows
-                transformsconf.write(
-                    "[usb_win_dvc]\nREGEX = (?<disk>[A-Za-z\\d]+)\\S(?:D|d)(?:I|i)(?:S|s)(?:K|k)\\S(?:V|v)(?:E|e)(?:N|n)_(?<ven>[a-z\\d]+)\\S+(?:P|p)(?:R|r)(?:O|o)(?:D|d)_(?<prod>\\w+)(\\S(?:R|r)(?:E|e)(?:V|v)_(?<rev>[a-z\\d]+))?\\S(?<serial>[^\\#]+)\nSOURCE_KEY = Artefact\n\n"
-                )  # Windows
-                transformsconf.write(
-                    '[usb_mac_ven]\nREGEX = idVendor\\": \\"(?P<ven>[^\\"]+)\nSOURCE_KEY = _raw\n\n'
+                    '[usb_mac_ven]\nREGEX = idVendor\\": \\"(?P<ven>[^\\"]+)\nSOURCE_KEY = _raw\n\n[usb_mac_prod]\nREGEX = idProduct\\": \\"(?P<prod>[^\\"]+)\nSOURCE_KEY = _raw\n\n'
                 )  # macOS
                 transformsconf.write(
-                    '[usb_mac_prod]\nREGEX = idProduct\\": \\"(?P<prod>[^\\"]+)\nSOURCE_KEY = _raw\n\n'
-                )  # macOS
-                transformsconf.write(
-                    "[usb_lin_ven]\nREGEX = Manufacturer: (?<ven>.+)\nSOURCE_KEY = Message\n\n"
-                )  # Linux
-                transformsconf.write(
-                    "[usb_lin_prod]\nREGEX = Product: (?<prod>.+)\nSOURCE_KEY = Message\n\n"
-                )  # Linux
-                transformsconf.write(
-                    "[usb_lin_rev]\nREGEX = bcdDevice= (?<rev>.+)\nSOURCE_KEY = Message\n\n"
-                )  # Linux
-                transformsconf.write(
-                    "[usb_lin_sn]\nREGEX = SerialNumber: (?<sn>.+)\nSOURCE_KEY = Message\n\n"
+                    "[usb_lin_ven]\nREGEX = Manufacturer: (?<ven>.+)\nSOURCE_KEY = Message\n\n[usb_lin_prod]\nREGEX = Product: (?<prod>.+)\nSOURCE_KEY = Message\n\n[usb_lin_rev]\nREGEX = bcdDevice= (?<rev>.+)\nSOURCE_KEY = Message\n\n[usb_lin_sn]\nREGEX = SerialNumber: (?<sn>.+)\nSOURCE_KEY = Message\n\n"
                 )  # Linux
             with open(
                 sd + "transforms.conf", "a"
@@ -195,33 +171,14 @@ def build_app_elrond(case, postpath):
         elif sd.endswith("nav/"):
             with open(sd + "default.xml", "w") as defaultnav:
                 defaultnav.write(
-                    '<nav search_view="search">\n    <collection label="Splunk">\n        '
+                    '<nav search_view="search">\n    <collection label="Splunk">\n        <view name="datasets" />\n		<view name="reports" />\n		<view name="alerts" />\n	</collection>\n	<collection label="Toolbox">\n		<view name="CyberChef" />\n		<view name="ascii" />\n		<view name="ports" />\n		<view name="subnetting" />\n	</collection>\n	'
                 )
-                defaultnav.write('<view name="datasets" />\n		')
-                defaultnav.write('<view name="reports" />\n		')
-                defaultnav.write('<view name="alerts" />\n	')
-                defaultnav.write("</collection>\n	")
-                defaultnav.write('<collection label="Toolbox">\n		')
-                defaultnav.write('<view name="CyberChef" />\n		')
-                defaultnav.write('<view name="ascii" />\n		')
-                defaultnav.write('<view name="ports" />\n		')
-                defaultnav.write('<view name="subnetting" />\n	')
-                defaultnav.write("</collection>\n	")
                 create_nav_menu(defaultnav)
-                defaultnav.write('<view name="actors_software" />\n    ')
-                defaultnav.write('<collection label="Potential Indicators">\n		')
-                defaultnav.write('<view name="analysis" />\n		')
-                defaultnav.write('<view name="iocs" />\n		')
-                defaultnav.write('<view name="keywords" />\n		')
-                defaultnav.write('<view name="yara" />\n	')
-                defaultnav.write("</collection>\n	")
                 defaultnav.write(
-                    '<collection label="Cases">\n        <view source="all" match="{}" />\n    </collection>\n    '.format(
+                    '<view name="actors_software" />\n    <collection label="Potential Indicators">\n		<view name="analysis" />\n		<view name="iocs" />\n		<view name="keywords" />\n		<view name="yara" />\n	</collection>\n	<collection label="Cases">\n        <view source="all" match="{}" />\n    </collection>\n    <view name="search" />\n    <view name="dashboards" />\n</nav>'.format(
                         case
                     )
                 )
-                defaultnav.write('<view name="search" />\n    ')
-                defaultnav.write('<view name="dashboards" />\n</nav>')
         elif sd.endswith("static/"):
             icons = [
                 sd + "appIconAlt_2x.png",
@@ -429,5 +386,29 @@ def build_app_elrond(case, postpath):
                     '<form>\n<label>Subnetting</label>\n    \n<row>\n<html>\n<font color="black">\n\n<table border="0" cellpadding="8" cellspacing="8">\n  <tr>\n    <td>\n      <h2><strong>IPv4 Subnet Cheatsheet</strong></h2>\n<table  bgcolor="#ffffff" border="1" cellpadding="2" cellspacing="1">\n<thead>\n<tr>\n<td>\n<p align="center"><strong>CIDR</strong></p>\n</td>\n<td>\n<p align="center"><strong>Subnet Mask</strong></p>\n</td>\n<td>\n<p align="center"><strong>Total IPs</strong></p>\n</td>\n<td>\n<p align="center"><strong>Usable IPs</strong></p>\n</td>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>/32</td>\n<td>255.255.255.255</td>\n<td>1</td>\n<td>1</td>\n</tr>\n<tr>\n<td>/31</td>\n<td>255.255.255.254</td>\n<td>2</td>\n<td>2*</td>\n</tr>\n<tr>\n<td>/30</td>\n<td>255.255.255.252</td>\n<td>4</td>\n<td>2</td>\n</tr>\n<tr>\n<td>/29</td>\n<td>255.255.255.248</td>\n<td>8</td>\n<td>6</td>\n</tr>\n<tr>\n<td>/28</td>\n<td>255.255.255.240</td>\n<td>16</td>\n<td>14</td>\n</tr>\n<tr>\n<td>/27</td>\n<td>255.255.255.224</td>\n<td>32</td>\n<td>30</td>\n</tr>\n<tr>\n<td>/26</td>\n<td>255.255.255.192</td>\n<td>64</td>\n<td>62</td>\n</tr>\n<tr>\n<td>/25</td>\n<td>255.255.255.128</td>\n<td>128</td>\n<td>126</td>\n</tr>\n<tr>\n<td>/24</td>\n<td>255.255.255.0</td>\n<td>256</td>\n<td>254</td>\n</tr>\n<tr>\n<td>/23</td>\n<td>255.255.254.0</td>\n<td>512</td>\n<td>510</td>\n</tr>\n<tr>\n<td>/22</td>\n<td>255.255.252.0</td>\n<td>1024</td>\n<td>1022</td>\n</tr>\n<tr>\n<td>/21</td>\n<td>255.255.248.0</td>\n<td>2048</td>\n<td>2046</td>\n</tr>\n<tr>\n<td>/20</td>\n<td>255.255.240.0</td>\n<td>4096</td>\n<td>4094</td>\n</tr>\n<tr>\n<td>/19</td>\n<td>255.255.224.0</td>\n<td>8192</td>\n<td>8190</td>\n</tr>\n<tr>\n<td>/18</td>\n<td>255.255.192.0</td>\n<td>16,384</td>\n<td>16,382</td>\n</tr>\n<tr>\n<td>/17</td>\n<td>255.255.128.0</td>\n<td>32,768</td>\n<td>32,766</td>\n</tr>\n<tr>\n<td>/16</td>\n<td>255.255.0.0</td>\n<td>65,536</td>\n<td>65,534</td>\n</tr>\n<tr>\n<td>/15</td>\n<td>255.254.0.0</td>\n<td>131,072</td>\n<td>131,070</td>\n</tr>\n<tr>\n<td>/14</td>\n<td>255.252.0.0</td>\n<td>262,144</td>\n<td>262,142</td>\n</tr>\n<tr>\n<td>/13</td>\n<td>255.248.0.0</td>\n<td>524,288</td>\n<td>524,286</td>\n</tr>\n<tr>\n<td>/12</td>\n<td>255.240.0.0</td>\n<td>1,048,576</td>\n<td>1,048,574</td>\n</tr>\n<tr>\n<td>/11</td>\n<td>255.224.0.0</td>\n<td>2,097,152</td>\n<td>2,097,150</td>\n</tr>\n<tr>\n<td>/10</td>\n<td>255.192.0.0</td>\n<td>4,194,304</td>\n<td>4,194,302</td>\n</tr>\n<tr>\n<td>/9</td>\n<td>255.128.0.0</td>\n<td>8,388,608</td>\n<td>8,388,606</td>\n</tr>\n<tr>\n<td>/8</td>\n<td>255.0.0.0</td>\n<td>16,777,216</td>\n<td>16,777,214</td>\n</tr>\n<tr>\n<td>/7</td>\n<td>254.0.0.0</td>\n<td>33,554,432</td>\n<td>33,554,430</td>\n</tr>\n<tr>\n<td>/6</td>\n<td>252.0.0.0</td>\n<td>67,108,864</td>\n<td>67,108,862</td>\n</tr>\n<tr>\n<td>/5</td>\n<td>248.0.0.0</td>\n<td>134,217,728</td>\n<td>134,217,726</td>\n</tr>\n<tr>\n<td>/4</td>\n<td>240.0.0.0</td>\n<td>268,435,456</td>\n<td>268,435,454</td>\n</tr>\n<tr>\n<td>/3</td>\n<td>224.0.0.0</td>\n<td>536,870,912</td>\n<td>536,870,910</td>\n</tr>\n<tr>\n<td>/2</td>\n<td>192.0.0.0</td>\n<td>1,073,741,824</td>\n<td>1,073,741,822</td>\n</tr>\n<tr>\n<td>/1</td>\n<td>128.0.0.0</td>\n<td>2,147,483,648</td>\n<td>2,147,483,646</td>\n</tr>\n</tbody>\n</table>\n    \n  </td>\n  <td valign="top">\n\n    <h2><strong>Private IP ranges</strong></h2>\n<table  bgcolor="#EEEEEE" border="1" cellpadding="2" cellspacing="2">\n<tr>\n  <td><strong>Class</strong></td>\n  <td><strong>Size</strong></td>\n  <td><strong>Subnet Mask</strong></td>\n  <td><strong>Range of IPs</strong></td>\n</tr>\n<tr>\n<td>Class A</td>\n<td>10.0.0.0/8</td>\n<td>255.0.0.0</td>\n<td>10.0.0.0 - 10.255.255.255</td>\n</tr>\n<tr>\n<td>Class B</td>\n<td>172.16.0.0/12</td>\n<td>255.240.0.0</td>\n<td>172.16.0.0 - 172.31.255.255</td>\n</tr>\n<tr>\n<td>Class C</td>\n<td>192.168.0.0/16</td>\n<td>255.255.0.0</td>\n<td>192.168.0.0 - 192.168.255.255</td>\n</tr>\n<tr>\n<td>Localhost</td>\n<td>127.0.0.0/8</td>\n<td>255.0.0.0</td>\n<td>127.0.0.0 - 127.255.255.255</td>\n</tr>\n</table>\n\n</td>\n<td valign="top">\n  \n  <h2><strong>Classful Ranges</strong></h2>\n<table  bgcolor="#EEEEEE" border="1" cellpadding="2" cellspacing="2">\n<tr>\n  <td><strong>Class</strong></td>\n  <td><strong>Range of IPs</strong></td>\n</tr>\n<tr>\n<td>Class A</td>\n<td>10.0.0.0 - 10.255.255.255</td>\n</tr>\n<tr>\n<td>Class B</td>\n<td>172.16.0.0 - 172.31.255.255</td>\n</tr>\n<tr>\n<td>Class C</td>\n<td>192.168.0.0 - 192.168.255.255</td>\n</tr>\n<tr>\n<td>Class D</td>\n<td>224.0.0.0 - 239.255.255.255</td>\n</tr>\n<tr>\n<td>Class E</td>\n<td>240.0.0.0 - 255.255.255.255</td>\n</tr>\n</table>\n\n    </td>\n    \n<td valign="top">\n  \n  <h2><strong>Decimal to Binary</strong></h2>\n<table  bgcolor="#EEEEEE" border="1" cellpadding="2" cellspacing="2">\n<tr>\n  <th colspan="2"><strong>Subnet Mask</strong></th>\n  <th colspan="2"><strong>Wildcard</strong></th>\n</tr>\n<tr>\n<td>255</td>\n<td>1111 1111</td>\n<td>0</td>\n<td>0000 0000</td>\n</tr>\n  <tr>\n<td>254</td>\n<td>1111 1110</td>\n<td>1</td>\n<td>0000 0001</td>\n</tr>\n    <tr>\n<td>252</td>\n<td>1111 1100</td>\n<td>3</td>\n<td>0000 0011</td>\n</tr>\n    <tr>\n<td>248</td>\n<td>1111 1000</td>\n<td>7</td>\n<td>0000 0111</td>\n</tr>\n    <tr>\n<td>240</td>\n<td>1111 0000</td>\n<td>15</td>\n<td>0000 1111</td>\n</tr>\n    <tr>\n<td>224</td>\n<td>1110 0000</td>\n<td>31</td>\n<td>0001 1111</td>\n</tr>\n    <tr>\n<td>192</td>\n<td>1100 0000</td>\n<td>63</td>\n<td>0011 1111</td>\n</tr>\n    <tr>\n<td>128</td>\n<td>1000 0000</td>\n<td>127</td>\n<td>0111 1111</td>\n</tr>\n    <tr>\n<td>0</td>\n<td>0000 0000</td>\n<td>255</td>\n<td>1111 1111</td>\n</tr>\n  \n</table>\n\n    </td>\n    \n</tr>\n\n</table>\n\n</font>\n</html>\n</row>\n</form>'
                 )
             create_xmls(sd)
+        else:
+            pass
+    for sd in [
+        "/" + postpath + "splunk/etc/apps/elrond/",
+        "/" + postpath + "splunk/etc/apps/elrond/appserver/",
+        "/" + postpath + "splunk/etc/apps/elrond/appserver/static/",
+        "/" + postpath + "splunk/etc/apps/elrond/bin/",
+        "/" + postpath + "splunk/etc/apps/elrond/default/",
+        "/" + postpath + "splunk/etc/apps/elrond/default/data/",
+        "/" + postpath + "splunk/etc/apps/elrond/default/data/ui/",
+        "/" + postpath + "splunk/etc/apps/elrond/default/data/ui/html/",
+        "/" + postpath + "splunk/etc/apps/elrond/default/data/ui/nav/",
+        "/" + postpath + "splunk/etc/apps/elrond/default/data/ui/views/",
+        "/" + postpath + "splunk/etc/apps/elrond/lookups/",
+        "/" + postpath + "splunk/etc/apps/elrond/metadata/",
+        "/" + postpath + "splunk/etc/apps/elrond/static/",
+    ]:
+        if os.path.exists(sd + ".DS_Store"):
+            os.remove(sd + ".DS_Store")
+        else:
+            pass
+        if sd.endswith("static/"):
+            os.remove(sd + ".icon.hex")
+            os.remove(sd + ".logo.hex")
         else:
             pass
