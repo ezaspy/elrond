@@ -23,6 +23,9 @@ from rivendell.post.splunk.app.views.html.command_control import (
 )
 from rivendell.post.splunk.app.views.html.exfiltration import create_exfiltration_html
 from rivendell.post.splunk.app.views.html.impact import create_impact_html
+from rivendell.post.splunk.app.views.html.static.pages import create_ascii
+from rivendell.post.splunk.app.views.html.static.pages import create_ports
+from rivendell.post.splunk.app.views.html.static.pages import create_subnet
 from rivendell.post.splunk.app.views.xml.initial_access import create_initial_access_xml
 from rivendell.post.splunk.app.views.xml.execution import create_execution_xml
 from rivendell.post.splunk.app.views.xml.persistence import create_persistence_xml
@@ -89,6 +92,12 @@ def create_htmls(sd):
         sd, header, headings, iocs, related, insert, mitigations, footer
     )
     create_impact_html(sd, header, headings, iocs, related, insert, mitigations, footer)
+
+
+def create_static_pages(sd):
+    create_ascii(sd)
+    create_ports(sd)
+    create_subnet(sd)
 
 
 def create_xmls(sd):
