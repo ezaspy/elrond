@@ -2,10 +2,10 @@
 import os
 import subprocess
 
-from rivendell.post.splunk.app.cyberchef import create_cyberchef_dashboard
 from rivendell.post.splunk.app.lookup import create_mitre_lookup
 from rivendell.post.splunk.app.nav import create_nav_menu
 from rivendell.post.splunk.app.transforms import create_transforms
+from rivendell.post.splunk.app.views.html.static.cyberchef import create_cyberchef
 from rivendell.post.splunk.app.views.views import create_htmls
 from rivendell.post.splunk.app.views.views import create_static_pages
 from rivendell.post.splunk.app.views.views import create_xmls
@@ -16,15 +16,12 @@ def build_app_elrond(case, postpath):
         "/" + postpath + "splunk/etc/apps/elrond/",
         "/" + postpath + "splunk/etc/apps/elrond/appserver/",
         "/" + postpath + "splunk/etc/apps/elrond/appserver/static/",
-        "/" + postpath + "splunk/etc/apps/elrond/bin/",
         "/" + postpath + "splunk/etc/apps/elrond/default/",
         "/" + postpath + "splunk/etc/apps/elrond/default/data/",
         "/" + postpath + "splunk/etc/apps/elrond/default/data/ui/",
-        "/" + postpath + "splunk/etc/apps/elrond/default/data/ui/html/",
         "/" + postpath + "splunk/etc/apps/elrond/default/data/ui/nav/",
         "/" + postpath + "splunk/etc/apps/elrond/default/data/ui/views/",
         "/" + postpath + "splunk/etc/apps/elrond/lookups/",
-        "/" + postpath + "splunk/etc/apps/elrond/metadata/",
         "/" + postpath + "splunk/etc/apps/elrond/static/",
     ]:
         os.mkdir(sd)
@@ -45,7 +42,7 @@ def build_app_elrond(case, postpath):
         elif sd.endswith("default/"):
             with open(sd + "app.conf", "w") as appconf:
                 appconf.write(
-                    "#\n# Splunk app configuration file\n#\n\n[install]\nis_configured = 0\n\n[ui]\nis_visible = 1\nlabel = elrond\n\n[launcher]\nauthor = ezaspy [ezaspython (at) gmail (dot) com]\ndescription = Accompanying Splunk app for elrond script\nversion = 1.1.0\n\n[package]\nid = elrond\n"
+                    "#\n# Splunk app configuration file\n#\n\n[install]\nis_configured = 0\n\n[ui]\nis_visible = 1\nlabel = elrond\n\n[launcher]\nauthor = ezaspy [ezaspython (at) gmail (dot) com]\ndescription = Accompanying Splunk app for elrond script\nversion = 1.2.0\n\n[package]\nid = elrond\n"
                 )
             with open(sd + "fields.conf", "w") as fieldsconf:
                 fieldsconf.write("[mitre_technique]\nINDEXED = True\n\n")
@@ -156,8 +153,6 @@ def build_app_elrond(case, postpath):
                 sd + "transforms.conf", "a"
             ) as default_transformsconf:  # mitre technique assignments
                 create_transforms(default_transformsconf)
-        elif sd.endswith("html/"):
-            create_cyberchef_dashboard(sd)
         elif sd.endswith("lookups/"):
             with open(sd + "evt.csv", "w") as evtcsv:
                 evtcsv.write(
@@ -172,7 +167,7 @@ def build_app_elrond(case, postpath):
         elif sd.endswith("nav/"):
             with open(sd + "default.xml", "w") as defaultnav:
                 defaultnav.write(
-                    '<nav search_view="search">\n    <collection label="Splunk">\n        <view name="datasets" />\n		<view name="reports" />\n		<view name="alerts" />\n	</collection>\n	<collection label="Toolbox">\n		<view name="CyberChef" />\n		<view name="ascii" />\n		<view name="ports" />\n		<view name="subnetting" />\n	</collection>\n	'
+                    '<nav search_view="search">\n    <collection label="Splunk">\n        <view name="datasets" />\n		<view name="reports" />\n		<view name="alerts" />\n	</collection>\n	<collection label="Toolbox">\n		<a href="http://127.0.0.1/cyberchef/index.html" target="_blank">CyberChef</a>\n		<view name="ascii" />\n		<view name="ports" />\n		<view name="subnetting" />\n	</collection>\n	'
                 )
                 create_nav_menu(defaultnav)
                 defaultnav.write(
@@ -225,7 +220,7 @@ def build_app_elrond(case, postpath):
                     )
             with open(sd + "actors_software.xml", "w") as actorsxml:
                 actorsxml.write(
-                    '<form version="1.1" stylesheet="mitre.css" theme="dark">\n  <search id="base">\n    <query>index=* host=* | dedup index host | table index host</query>\n    <earliest>$time_tok.earliest$</earliest>\n    <latest>$time_tok.latest$</latest>\n  </search>\n  <label>Threat Actors &amp; Software</label>\n  <fieldset submitButton="true" autoRun="false">\n    <input type="checkbox" token="it_tok" searchWhenChanged="true">\n      <label></label>\n      <description>Evidence is determined by the utilisation of a tool, technique or software affiliated with an known threat actor. It is not strictly evidence of compromise.</description>\n  <populatingSearch fieldForLabel="it" fieldForValue="it">| gentimes start=-1 | eval it="Toggle MITRE Information"</populatingSearch>\n      <delimiter> </delimiter>\n      <fieldForLabel>it</fieldForLabel>\n      <fieldForValue>it</fieldForValue>\n    </input>\n    <input type="dropdown" token="case_tok" searchWhenChanged="false">\n      <label>Select a Case:</label>\n      <choice value="*">All</choice>\n      <default>*</default>\n      <initialValue>*</initialValue>\n      <fieldForLabel>index</fieldForLabel>\n      <fieldForValue>index</fieldForValue>\n      <search base="base">\n        <query>| search host=$host_tok$ | dedup index | sort index</query>\n      </search>\n      <prefix>"</prefix>\n      <suffix>"</suffix>\n    </input>\n    <input type="dropdown" token="host_tok" searchWhenChanged="false">\n      <label>Select a Host:</label>\n      <choice value="*">All</choice>\n      <default>*</default>\n      <initialValue>*</initialValue>\n      <fieldForLabel>host</fieldForLabel>\n      <fieldForValue>host</fieldForValue>\n      <search base="base">\n        <query>| search index=$case_tok$ | dedup host | sort host</query>\n      </search>\n      <prefix>"</prefix>\n      <suffix>"</suffix>\n    </input>\n    <input type="time" token="time_tok" searchWhenChanged="false">\n      <label>Select a Time Range:</label>\n      <default>\n        <earliest>-7d@h</earliest>\n        <latest></latest>\n      </default>\n    </input>\n  </fieldset>\n  <row>\n    <panel depends="$it_tok$">\n      <table>\n        <title>Adversarial Tactics, Techniques &amp; Common Knowledge</title>\n        <search>\n          <query>| inputlookup mitre.csv | table name id tactic platform threat_actor description | sort name | rename name AS Name id AS ID tactic AS Tactic platform AS Platform threat_actor AS "Threat Actor" description AS Description</query>\n          <earliest>$time_tok.earliest$</earliest>\n          <latest>$time_tok.latest$</latest>\n        </search>\n        <option name="count">10</option>\n        <option name="dataOverlayMode">none</option>\n        <option name="drilldown">none</option>\n        <option name="percentagesRow">false</option>\n        <option name="refresh.display">progressbar</option>\n        <option name="rowNumbers">false</option>\n        <option name="totalsRow">false</option>\n        <option name="wrap">false</option>\n      </table>\n    </panel>\n  </row>\n  <row>\n    <panel>\n      <title>Evidence of Threat Actor/Software (Top 20)</title>\n      <input type="dropdown" token="actorsoftware_tok" searchWhenChanged="true">\n        <label>Select Threat Actor or Software:</label>\n        <choice value="threat_actor">Threat Actor</choice>\n        <choice value="software">Software</choice>\n        <default>threat_actor</default>\n        <initialValue>threat_actor</initialValue>\n      </input>\n      <chart>\n        <search>\n          <query>index=$case_tok$ host=$host_tok$ | `MITRE_lookup` | search threat_actor!=- software!=- | `expand-$actorsoftware_tok$` | timechart count BY "$actorsoftware_tok$" useother=f usenull=f limit=20 | rename threat_actor AS "Threat Actor" software AS "Software"</query>\n          <earliest>$time_tok.earliest$</earliest>\n          <latest>$time_tok.latest$</latest>\n          <sampleRatio>1</sampleRatio>\n        </search>\n        <option name="charting.axisTitleX.text">Time</option>\n        <option name="charting.chart">line</option>\n        <option name="charting.drilldown">none</option>\n        <option name="charting.layout.splitSeries">0</option>\n        <option name="charting.legend.placement">bottom</option>\n        <option name="height">600</option>\n        <option name="refresh.display">progressbar</option>\n      </chart>\n    </panel>\n  </row>\n</form>'
+                    '<form version="1.1" stylesheet="mitre.css" theme="dark">\n  <search id="base">\n    <query>index=* host=* | dedup index host | table index host</query>\n    <earliest>$time_tok.earliest$</earliest>\n    <latest>$time_tok.latest$</latest>\n  </search>\n  <label>Threat Actors &amp; Software</label>\n  <fieldset submitButton="true" autoRun="false">\n    <input type="checkbox" token="it_tok" searchWhenChanged="true">\n      <label></label>\n      <description>Evidence is determined by the utilisation of a tool, technique or software affiliated with an known threat actor. It is not strictly evidence of compromise.</description>\n  <search>\n        <query><![CDATA[| gentimes start=-1 | eval it="Toggle MITRE Information"]]></query>\n      </search>\n      <fieldForLabel>it</fieldForLabel>\n      <fieldForValue>it</fieldForValue>\n      <delimiter> </delimiter>\n      <fieldForLabel>it</fieldForLabel>\n      <fieldForValue>it</fieldForValue>\n    </input>\n    <input type="dropdown" token="case_tok" searchWhenChanged="false">\n      <label>Select a Case:</label>\n      <choice value="*">All</choice>\n      <default>*</default>\n      <initialValue>*</initialValue>\n      <fieldForLabel>index</fieldForLabel>\n      <fieldForValue>index</fieldForValue>\n      <search base="base">\n        <query>| search host=$host_tok$ | dedup index | sort index</query>\n      </search>\n      <prefix>"</prefix>\n      <suffix>"</suffix>\n    </input>\n    <input type="dropdown" token="host_tok" searchWhenChanged="false">\n      <label>Select a Host:</label>\n      <choice value="*">All</choice>\n      <default>*</default>\n      <initialValue>*</initialValue>\n      <fieldForLabel>host</fieldForLabel>\n      <fieldForValue>host</fieldForValue>\n      <search base="base">\n        <query>| search index=$case_tok$ | dedup host | sort host</query>\n      </search>\n      <prefix>"</prefix>\n      <suffix>"</suffix>\n    </input>\n    <input type="time" token="time_tok" searchWhenChanged="false">\n      <label>Select a Time Range:</label>\n      <default>\n        <earliest>-7d@h</earliest>\n        <latest></latest>\n      </default>\n    </input>\n  </fieldset>\n  <row>\n    <panel depends="$it_tok$">\n      <table>\n        <title>Adversarial Tactics, Techniques &amp; Common Knowledge</title>\n        <search>\n          <query>| inputlookup mitre.csv | table name id tactic platform threat_actor description | sort name | rename name AS Name id AS ID tactic AS Tactic platform AS Platform threat_actor AS "Threat Actor" description AS Description</query>\n          <earliest>$time_tok.earliest$</earliest>\n          <latest>$time_tok.latest$</latest>\n        </search>\n        <option name="count">10</option>\n        <option name="dataOverlayMode">none</option>\n        <option name="drilldown">none</option>\n        <option name="percentagesRow">false</option>\n        <option name="refresh.display">progressbar</option>\n        <option name="rowNumbers">false</option>\n        <option name="totalsRow">false</option>\n        <option name="wrap">false</option>\n      </table>\n    </panel>\n  </row>\n  <row>\n    <panel>\n      <title>Evidence of Threat Actor/Software (Top 20)</title>\n      <input type="dropdown" token="actorsoftware_tok" searchWhenChanged="true">\n        <label>Select Threat Actor or Software:</label>\n        <choice value="threat_actor">Threat Actor</choice>\n        <choice value="software">Software</choice>\n        <default>threat_actor</default>\n        <initialValue>threat_actor</initialValue>\n      </input>\n      <chart>\n        <search>\n          <query>index=$case_tok$ host=$host_tok$ | `MITRE_lookup` | search threat_actor!=- software!=- | `expand-$actorsoftware_tok$` | timechart count BY "$actorsoftware_tok$" useother=f usenull=f limit=20 | rename threat_actor AS "Threat Actor" software AS "Software"</query>\n          <earliest>$time_tok.earliest$</earliest>\n          <latest>$time_tok.latest$</latest>\n          <sampleRatio>1</sampleRatio>\n        </search>\n        <option name="charting.axisTitleX.text">Time</option>\n        <option name="charting.chart">line</option>\n        <option name="charting.drilldown">none</option>\n        <option name="charting.layout.splitSeries">0</option>\n        <option name="charting.legend.placement">bottom</option>\n        <option name="height">600</option>\n        <option name="refresh.display">progressbar</option>\n      </chart>\n    </panel>\n  </row>\n</form>'
                 )
             with open(sd + "mitre.xml", "w") as mitrexml:
                 mitrexml.write(
@@ -255,19 +250,12 @@ def build_app_elrond(case, postpath):
                 )
             create_static_pages(sd)
             create_xmls(sd)
-            """
-            REPLACED
-            <label></label>\n      <populatingSearch fieldForLabel="it" fieldForValue="it">| gentimes start=-1 | eval it="Toggle MITRE Information"</populatingSearch>
-            WITH
-              <label></label>\n      <search>\n        <query><![CDATA[| gentimes start=-1 | eval it="Toggle MITRE Information"]]></query>\n      </search>\n      <fieldForLabel>it</fieldForLabel>\n      <fieldForValue>it</fieldForValue>
-            """
         else:
             pass
     for sd in [
         "/" + postpath + "splunk/etc/apps/elrond/",
         "/" + postpath + "splunk/etc/apps/elrond/appserver/",
         "/" + postpath + "splunk/etc/apps/elrond/appserver/static/",
-        "/" + postpath + "splunk/etc/apps/elrond/bin/",
         "/" + postpath + "splunk/etc/apps/elrond/default/",
         "/" + postpath + "splunk/etc/apps/elrond/default/data/",
         "/" + postpath + "splunk/etc/apps/elrond/default/data/ui/",
@@ -275,10 +263,10 @@ def build_app_elrond(case, postpath):
         "/" + postpath + "splunk/etc/apps/elrond/default/data/ui/nav/",
         "/" + postpath + "splunk/etc/apps/elrond/default/data/ui/views/",
         "/" + postpath + "splunk/etc/apps/elrond/lookups/",
-        "/" + postpath + "splunk/etc/apps/elrond/metadata/",
         "/" + postpath + "splunk/etc/apps/elrond/static/",
     ]:
         if os.path.exists(sd + ".DS_Store"):
             os.remove(sd + ".DS_Store")
         else:
             pass
+    create_cyberchef("/var/www/html/cyberchef/")

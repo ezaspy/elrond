@@ -417,7 +417,7 @@ def configure_splunk_stack(
                 os.remove(apptar)
                 os.chdir("/" + splunk_install_path + "splunk/etc/apps/")
                 subprocess.Popen(
-                    ["chmod", "-R", "744", appdir],
+                    ["chmod", "-R", "644", appdir],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                 ).communicate()
@@ -429,8 +429,23 @@ def configure_splunk_stack(
         else:
             pass
     os.chdir("/" + splunk_install_path + "splunk/etc/apps/")
+    for root, dirs, files in os.walk(
+        "/" + splunk_install_path + "splunk/etc/apps/elrond/"
+    ):
+        for eachdir in dirs:
+            subprocess.Popen(
+                ["chmod", "755", os.path.join(root, eachdir)],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).communicate()
+        for eachfile in files:
+            subprocess.Popen(
+                ["chmod", "644", os.path.join(root, eachfile)],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).communicate()
     subprocess.Popen(
-        ["chmod", "-R", "744", "elrond/"],
+        ["chmod", "755", "elrond/"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ).communicate()
