@@ -134,7 +134,7 @@ To invoke the script, simply follow the instructions in [CONFIG.md](https://gith
 See [SUPPORT.md](https://github.com/ezaspy/elrond/blob/main/elrond/SUPPORT.md) for a list of commands and additional third-party tools to help with preparing images or data for elrond.
 <br><br>
 
-## Artefacts Collected
+## Artefacts
 Below is a list of all the artefacts collected and processed from the respective operating systems.
 
 ### Windows
