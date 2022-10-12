@@ -34,13 +34,14 @@
 
 ## Table of Contents
 
-- [About the Project](#about-the-project)
+- [About](#about)
   - [Related Projects](#related-projects)
 - [Configuration](#Installation/Configuration)
   - [SIFT-elrond](#SIFT-elrond)
   - [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads)
   - [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md)
 - [Usage](#usage)
+- [Artefacts](#artefacts)
 - [Contributing](#contributing)
   - [Contact](#contact)
 - [Acknowledgements](#acknowledgements)
@@ -49,7 +50,7 @@
 
 <!-- ABOUT -->
 
-## About The Project
+## About
 
 elrond has been created to help fellow digitial forensicators with the identification, extraction, collection, processing, analysis and outputting of forensic artefacts from (up to 20 paritions for) Windows E01 or VMDK, macOS DMG/E01 or VMDK, Linux dd or VMDK disk images as well as raw memory images and previously collected artefacts which can all be outputted into Splunk. I have spent many an incident repeating the same processes by mounting, collecting (mainly Windows) forensic artefacts and then attempting to correlate them together with other data sources and artefacts. Thus, as mentioned above elrond has been built to consolidate those seperate processes into one single script helping to accerlate and automate these otherwise repetitive, tedious and often occasionally-referenced commands. As elrond outputs the artefact information as either CSV or JSON, they can be processed by many commonly-used log file analysis tools, consequently, elrond does have the capability to stand up a local [Splunk](https://www.splunk.com/) or [elastic](https://www.elastic.co/) instance with acompanying, respective app ([Splunk](https://splunkbase.splunk.com/app/6606/); [elastic]()), whereby the artefacts are automatically assigned and aligned with the [MITRE ATT&CK® Framework](https://attack.mitre.org/). In addition, elrond can also populate a local [ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/) instance providing a visual representation of potential attack techniques leveraged as part of said incident.<br>
 Additional features include image and file hashing, metadata extraction, file recovery and carving, AV scanning, IOC extraction, keyword searching and timelining.<br>
@@ -131,6 +132,141 @@ To invoke the script, simply follow the instructions in [CONFIG.md](https://gith
 ### Support
 
 See [SUPPORT.md](https://github.com/ezaspy/elrond/blob/main/elrond/SUPPORT.md) for a list of commands and additional third-party tools to help with preparing images or data for elrond.
+<br><br>
+
+## Artefacts Collected
+Below is a list of all the artefacts collected and processed from the respective operating systems.
+
+### Windows
+- C:\\$MFT
+- C:\\$LogFile
+- C:\\$ObjId
+- C:\\$Recycle.Bin
+- C:\\$Reparse
+- C:\\$UsnJrnl
+- C:\\Windows\\AppCompat\\Programs\\RecentFileCache.bcf
+- C:\\Windows\\AppCompat\\Programs\\Amcache.hve
+- C:\\Windows\\inf\\setupapi.dev.log
+- C:\\Windows\\Prefetch\\*.pf
+- C:\\Windows\\System32\\config\\SAM
+- C:\\Windows\\System32\\config\\SAM.LOG
+- C:\\Windows\\System32\\config\\SAM.LOG1
+- C:\\Windows\\System32\\config\\SAM.LOG2
+- C:\\Windows\\System32\\config\\SECURITY
+- C:\\Windows\\System32\\config\\SECURITY.LOG
+- C:\\Windows\\System32\\config\\SECURITY.LOG1
+- C:\\Windows\\System32\\config\\SECURITY.LOG2
+- C:\\Windows\\System32\\config\\SOFTWARE
+- C:\\Windows\\System32\\config\\SOFTWARE.LOG
+- C:\\Windows\\System32\\config\\SOFTWARE.LOG1
+- C:\\Windows\\System32\\config\\SOFTWARE.LOG2
+- C:\\Windows\\System32\\config\\SYSTEM
+- C:\\Windows\\System32\\config\\SYSTEM.LOG
+- C:\\Windows\\System32\\config\\SYSTEM.LOG1
+- C:\\Windows\\System32\\config\\SYSTEM.LOG2
+- C:\\Windows\\System32\\winevt\\Logs\\*.evt(x)
+- C:\\Windows\\System32\\wbem\\Repository\\
+- C:\\Windows\\System32\\LogFiles\\WMI\\
+- C:\\Windows\\System32\\LogFiles\\
+- C:\\Users\\%USERPROFILE%\\
+- C:\\Users\\%USERPROFILE%\\NTUSER.DAT
+- C:\\Users\\%USERPROFILE%\\AppData\\Local\\ConnectedDevicesPlatform\\ActivitiesCache.db
+- C:\\Users\\%USERPROFILE%\\AppData\\Local\\ConnectedDevicesPlatform\\ActivitiesCache.db-shm
+- C:\\Users\\%USERPROFILE%\\AppData\\Local\\ConnectedDevicesPlatform\\ActivitiesCache.db-wal
+- C:\\Users\\%USERPROFILE%\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\
+- C:\\Users\\%USERPROFILE%\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\History
+- C:\\Users\\%USERPROFILE%\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat
+- C:\\Users\\%USERPROFILE%\\AppData\\Local\\Microsoft\\Windows\\History\\Content.IE5
+- C:\\Users\\%USERPROFILE%\\AppData\\Local\\Microsoft\\Windows\\History\\History.IE5
+- C:\\Users\\%USERPROFILE%\\AppData\\Local\\Microsoft\\Windows\\History\\Low\\
+- C:\\Users\\%USERPROFILE%\\AppData\\Local\\Microsoft\\Windows\\Temporary Internet Files\\
+- C:\\Users\\%USERPROFILE%\\AppData\\Local\\Microsoft\\Windows\\Temporary Internet Files\\Content.Outlook\\
+- C:\\Users\\%USERPROFILE%\\AppData\\Local\\Mozilla\\Firefox\\Profiles\\
+- C:\\Users\\%USERPROFILE%\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\AutomaticDestinations\\
+- C:\\Users\\%USERPROFILE%\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\CustomDestinations\\
+- C:\\Users\\%USERPROFILE%\\Documents\\Outlook Files\\
+<br>
+
+### macOS
+- /.Trashes
+- /Library/Logs
+- /Library/Preferences
+- /Library/LaunchAgents
+- /Library/LaunchDaemons
+- /Library/StartupItems
+- /System/Library/Preferences
+- /System/Library/LaunchAgents
+- /System/Library/LaunchDaemons
+- /System/Library/StartupItems
+- /Users/%USERPROFILE%/
+- /Users/%USERPROFILE%/.bash_aliases
+- /Users/%USERPROFILE%/.bash_history
+- /Users/%USERPROFILE%/.bash_logout
+- /Users/%USERPROFILE%/.bashrc
+- /Users/%USERPROFILE%/.bash_session
+- /Users/%USERPROFILE%/.ssh
+- /Users/%USERPROFILE%/.Trash/
+- /Users/%USERPROFILE%/Library/keychains/.keychain-db
+- /Users/%USERPROFILE%/Library/Mail/*.plist
+- /Users/%USERPROFILE%/Library/Preferences/*.plist
+- /Users/%USERPROFILE%/Library/Safari/*.plist
+- /Users/%USERPROFILE%/Library/Safari/History.db
+- /Users/%USERPROFILE%/Library/Application Support/Google/Chrome/Default/
+- /Users/%USERPROFILE%/Library/Application Support/Firefox/Profiles/
+- /etc/passwd
+- /etc/shadow
+- /etc/group
+- /etc/hosts
+- /etc/crontab
+- /etc/security
+- /tmp
+- /var/log
+<br>
+
+### Linux
+- /.Trashes
+- /etc/passwd
+- /etc/shadow
+- /etc/group
+- /etc/hosts
+- /etc/crontab
+- /etc/security
+- /etc/systemd
+- /etc/modules-load
+- /home/%USERPROFILE%/
+- /home/%USERPROFILE%/.bash_aliases
+- /home/%USERPROFILE%/.bash_history
+- /home/%USERPROFILE%/.bash_logout
+- /home/%USERPROFILE%/.bashrc
+- /home/%USERPROFILE%/.bash_session
+- /home/%USERPROFILE%/.config/autostart/
+- /home/%USERPROFILE%/.config/google-chrome/%DIR%/History
+- /home/%USERPROFILE%/.local/share/Trash/files
+- /home/%USERPROFILE%/.local/share/keyrings/
+- /home/%USERPROFILE%/.local/share/recently-used.xbel
+- /home/%USERPROFILE%/.mozilla/firefox/%DIR%/places.sqlite
+- /home/%USERPROFILE%/.ssh
+- /home/%USERPROFILE%/.thunderbird/.default
+- /home/%USERPROFILE%/.thunderbird/global-messages-db.sqlite
+- /home/%USERPROFILE%/.thunderbird/places.sqlite
+- /home/%USERPROFILE%/.thunderbird/downloads.sqlite
+- /home/%USERPROFILE%/.thunderbird/panacea.dat
+- /root/.bash_aliases
+- /root/.bash_history
+- /root/.bash_logout
+- /root/.bashrc
+- /root/.bash_session
+- /root/.local/share/keyrings/
+- /root/.ssh
+- /tmp
+- /usr/lib/systemd/user/*.service
+- /usr/lib/systemd/user/*.target
+- /usr/lib/systemd/user/*.socket
+- /var/cache/cups/job.*
+- /var/cups/job.*
+- /var/log
+- /var/vm/sleepimage
+- /var/vm/swapfile
 <br><br>
 
 ### Notices

@@ -379,10 +379,6 @@ def collect_linux_artefacts(
         else:
             pass
         if item == mnt + "/root":
-            bwsrdest, userdest = (
-                dest + "browsers/",
-                dest + "user_profiles",
-            )
             if os.path.exists(item + "/.bash_history"):
                 if verbosity != "":
                     print(

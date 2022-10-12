@@ -7,8 +7,6 @@ from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 from rivendell.collect.users.mac import mac_users
 
-import time
-
 
 def collect_mac_artefacts(
     dest,
