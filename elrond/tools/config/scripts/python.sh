@@ -13,5 +13,8 @@ sudo python3.9 -m pip install setuptools
 sudo python3.9 -m pip install construct==2.10.68
 python3.9 -m pip install setuptools
 python3.9 -m pip install construct==2.10.68
+python3 -m pip install construct
+python3 -m pip install etl
+python3 -m pip install etl-parser
 sudo updatedb
 sleep 1

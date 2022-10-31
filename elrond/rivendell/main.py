@@ -79,7 +79,7 @@ def main(
     )
     if not collect and not gandalf and not reorganise:
         print(
-            "\n  You MUST use the collect switch (-C), gandalf switch (-G) or the reorganise switch (-O).\n   If you are processing acquired disk and/or memory images, you must invoke the collect switch (-C).\n   If you have previously collected artefacts using gandalf, you must invoke the gandalf switch (-G).\n   If you have previously collected artefacts NOT using gandalf, you must invoke the reorganise switch (-O).\n\n  Please try again.\n\n\n"
+            "\n  You MUST use the collect switch (-C), gandalf switch (-G) or the reorganise switch (-O)\n   If you are processing acquired disk and/or memory images, you must invoke the collect switch (-C)\n   If you have previously collected artefacts having used gandalf, you must invoke the gandalf switch (-G)\n   If you have previously collected artefacts NOT having used gandalf, you must invoke the reorganise switch (-O)\n\n  Please try again.\n\n\n"
         )
         sys.exit()
     else:
@@ -442,13 +442,13 @@ def main(
                         pass
                 else:
                     pass
-        for foundimg in foundimgs:
+        for foundimg in foundimgs: # potentially add ova and vdi - https://superuser.com/questions/915615/mount-vmware-disk-images-under-linux
             stage = "mounting"
             path, root, f, imgformat = foundimg.split("||")
             if (
                 "Expert Witness" in imgformat
-                or "VMDK" in imgformat
-                or ("VMware" and " disk image" in imgformat)
+                or ("VMDK" in imgformat
+                or ("VMware" and " disk image" in imgformat) and (f.endswith(".vmdk")))
                 or (
                     "DOS/MBR boot sector" in imgformat
                     and (f.endswith(".raw") or f.endswith(".dd") or f.endswith(".img"))

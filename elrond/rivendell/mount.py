@@ -35,6 +35,20 @@ def unmount_images(elrond_mount, ewf_mount):
             remove_directories("/mnt/vss/" + eachimg)
         else:
             pass
+    for devnbd in range(1, 15):
+        if os.path.exists("/dev/nbd" + str(devnbd)):
+            unmount_locations("/dev/nbd" + str(devnbd))
+            subprocess.Popen(
+                [
+                    "qemu-nbd",
+                    "--disconnect",
+                    "/dev/nbd" + str(devnbd),
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).communicate()
+        else:
+            pass
     for eachelrond in elrond_mount:
         if os.path.exists(eachelrond):
             unmount_locations(eachelrond)
@@ -106,7 +120,7 @@ def obtain_offset(
     intermediate_mount,
 ):
     offset_values = re.findall(
-        r"\\n[\w\-\.\/]+(?:(?:ewf1p\d+)|\.(?:raw|dd|img)\d)[\ \*]+(?P<offset>\d+)[\w\d\.\ \*]+\s+(?:NTFS|Microsoft\ basic\ data|HPFS|Linux|exFAT)",
+        r"\\n[\w\-\.\/]+(?:(?:(?:ewf1|nbd\d)p\d+)|\.(?:raw|dd|img)\d)[\ \*]+(?P<offset>\d+)[\w\d\.\ \*]+\s+(?:NTFS|Microsoft\ basic\ data|HPFS|Linux|exFAT)",
         str(
             subprocess.Popen(
                 ["fdisk", "-l", intermediate_mount],
@@ -152,28 +166,13 @@ def mounted_image(allimgs, disk_image, destination_mount, disk_file, index):
         print("   '{}'{} could not be mounted.".format(disk_image, partition))
 
 
-def convert_vmdk(intermediate_mount):
-    subprocess.Popen(
-        [
-            "qemu-img",
-            "convert",
-            "-O",
-            "raw",
-            intermediate_mount,
-            intermediate_mount + ".raw",
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    ).communicate()
-    # https://github.com/ezaspy/elrond/issues/18
-
-
 def mount_vmdk_image(
     verbosity,
     output_directory,
     intermediate_mount,
     destination_mount,
     disk_file,
+    path,
     allimgs,
 ):
     try:
@@ -205,6 +204,41 @@ def mount_vmdk_image(
         else:
             apfs = ""
     if apfs != "":
+        if disk_file.endswith(".vmdk"):
+            subprocess.Popen(
+                [
+                    "modprobe",
+                    "nbd",
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).communicate()
+            for devnbd in range(1, 15):  # check for first empty /dev/ndbX location
+                validfile = str(
+                    subprocess.Popen(
+                        ["fdisk", "-l", "/dev/nbd" + str(devnbd)],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                    ).communicate()
+                )
+                if "Inappropriate ioctl for device" in validfile:
+                    intermediate_mount = "/dev/nbd" + str(devnbd)
+                    break
+                else:
+                    pass
+            subprocess.Popen(
+                [
+                    "qemu-nbd",
+                    "-r",
+                    "-c",
+                    intermediate_mount,
+                    path,
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).communicate()
+        else:
+            pass
         offset_values = obtain_offset(intermediate_mount)
         if len(offset_values) > 0:
             for offset_value in offset_values:
@@ -259,30 +293,106 @@ def mount_vmdk_image(
                         allimgs, disk_image, destination_mount, disk_file, "0"
                     )
                 else:
-                    print(
-                        "   An error occured when mounting '{}'.\n    Perhaps this is a macOS-based image and requires apfs-fuse (https://github.com/ezaspy/apfs-fuse)?\n    Alternatively, the disk may not be supported and/or may be corrupt? You can raise an issue via https://github.com/ezaspy/elrond/issues".format(
-                            disk_file
-                        )
+                    mount_attempt = str(
+                        subprocess.Popen(
+                            [
+                                "mount",
+                                "-o",
+                                "ro,loop,show_sys_files,streams_interface=windows,offset="
+                                + str(int(offset_value) * 512),
+                                intermediate_mount,
+                                destination_mount,
+                            ],
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                        ).communicate()[1]
                     )
-                    if os.path.exists(
-                        os.path.join(
-                            output_directory, intermediate_mount.split("/")[-1]
+                    if mount_attempt == "b''":
+                        disk_image = identify_disk_image(
+                            verbosity, output_directory, disk_file, destination_mount
                         )
-                    ):
-                        os.remove(
-                            os.path.join(
-                                output_directory, intermediate_mount.split("/")[-1]
-                            )
-                            + "/log.audit"
+                        mounted_image(
+                            allimgs, disk_image, destination_mount, disk_file, "0"
                         )
-                        os.rmdir(
-                            os.path.join(
-                                output_directory, intermediate_mount.split("/")[-1]
-                            )
+                    elif (
+                        "overlapping loop device exists" in mount_attempt
+                    ):  # mounted the first valid partition, but cannot mount another partition in the same way
+                        nbd_mount = re.findall(
+                            r"\\n[\w\-\.\/]+(nbd\dp\d+)|\.(?:raw|dd|img)\d[\ \*]+(?:\d+)[\w\d\.\ \*]+\s+(?:NTFS|Microsoft\ basic\ data|HPFS|Linux|exFAT)",
+                            str(
+                                subprocess.Popen(
+                                    ["fdisk", "-l", intermediate_mount],
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE,
+                                ).communicate()[0]
+                            )[2:-3],
                         )
+                        nbd_mount.pop(0)
+                        for eachnbd in nbd_mount:
+                            if len(os.listdir(destination_mount)) > 0:
+                                new_destination = int(
+                                    re.findall(
+                                        r"elrond_mount0?(\d+)", destination_mount
+                                    )[0]
+                                )
+                                new_destination += 1
+                                if len(str(new_destination)) == 1:
+                                    new_destination = "/mnt/elrond_mount0" + str(
+                                        new_destination
+                                    )
+                                else:
+                                    new_destination = "/mnt/elrond_mount" + str(
+                                        new_destination
+                                    )
+                                if not os.path.exists(new_destination):
+                                    os.mkdir(new_destination)
+                                else:
+                                    pass
+                                destination_mount = new_destination + "/"
+                                subprocess.Popen(
+                                    ["mount", "/dev/" + eachnbd, destination_mount],
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE,
+                                ).communicate()[
+                                    0
+                                ]  # to mount VMDKs - sudo mount /dev/nbd1p2 /mnt/elrond_mount01/
+                                disk_image = identify_disk_image(
+                                    verbosity,
+                                    output_directory,
+                                    disk_file,
+                                    destination_mount,
+                                )
+                                mounted_image(
+                                    allimgs,
+                                    disk_image,
+                                    destination_mount,
+                                    disk_file,
+                                    "0",
+                                )
                     else:
-                        pass
-                    sys.exit()
+                        print(
+                            "   An error occured when mounting '{}'.\n    Perhaps this is a macOS-based image and requires apfs-fuse (https://github.com/ezaspy/apfs-fuse)?\n    Alternatively, the disk may not be supported and/or may be corrupt? You can raise an issue via https://github.com/ezaspy/elrond/issues".format(
+                                disk_file
+                            )
+                        )
+                        if os.path.exists(
+                            os.path.join(
+                                output_directory, intermediate_mount.split("/")[-1]
+                            )
+                        ):
+                            os.remove(
+                                os.path.join(
+                                    output_directory, intermediate_mount.split("/")[-1]
+                                )
+                                + "/log.audit"
+                            )
+                            os.rmdir(
+                                os.path.join(
+                                    output_directory, intermediate_mount.split("/")[-1]
+                                )
+                            )
+                        else:
+                            pass
         else:
             disk_image = identify_disk_image(
                 verbosity, output_directory, disk_file, destination_mount
@@ -612,7 +722,8 @@ def mount_images(
         elif ("VMware" in imgformat and " disk image" in imgformat) or (
             "DOS/MBR boot sector" in imgformat
             and (
-                disk_file.endswith(".raw")
+                disk_file.endswith(".vmdk")
+                or disk_file.endswith(".raw")
                 or disk_file.endswith(".dd")
                 or disk_file.endswith(".img")
             )
@@ -634,9 +745,12 @@ def mount_images(
                     intermediate_mount,
                     destination_mount,
                     disk_file,
+                    path,
                     allimgs,
                 )
-            elif "DOS/MBR boot sector" in imgformat and disk_file.endswith(".raw"):
+            elif "DOS/MBR boot sector" in imgformat and disk_file.endswith(
+                ".raw"
+            ):  # vmdk file has already been converted (not using elrond)
                 if auto != True:
                     vmdkow = input(
                         "    '{}' has already been converted, do you wish to overwrite this file? Y/n [Y] ".format(
@@ -648,17 +762,11 @@ def mount_images(
                 if vmdkow != "n" or "Invalid partition table" in imgformat:
                     if "Invalid partition table" in imgformat:
                         print(
-                            "    It looks like '{}' is corrupt; it will be removed and re-converted, please stand by...".format(
+                            "    It looks like '{}' is corrupt; it will be removed and will need to be re-converted, please try again.".format(
                                 intermediate_mount.split("/")[-1]
                             )
                         )
-                    else:
-                        pass
-                    if os.path.exists(intermediate_mount + ".raw"):
-                        os.remove(intermediate_mount + ".raw")
-                    else:
-                        pass
-                    convert_vmdk(intermediate_mount)
+                        # insert Continue? here...
                 else:
                     pass
                 mount_vmdk_image(
@@ -667,33 +775,17 @@ def mount_images(
                     intermediate_mount,
                     destination_mount,
                     disk_file,
+                    path,
                     allimgs,
                 )
-            else:
-                if not os.path.exists(intermediate_mount + ".raw"):
-                    print(
-                        "  '{}' needs to be converted before it can be mounted, please stand by...".format(
-                            intermediate_mount.split("/")[-1]
-                        )
-                    )
-                    convert_vmdk(intermediate_mount)
-                else:
-                    convertVMDK = input(
-                        "  It looks like '{}.raw' already exists. Did you want to replace it? Y/n [Y] ".format(
-                            intermediate_mount.split("/")[-1]
-                        )
-                    )
-                    if convertVMDK != "n":
-                        os.remove(intermediate_mount + ".raw")
-                        convert_vmdk(intermediate_mount)
-                    else:
-                        pass
+            else:  # raw vmdk file can be mounted
                 mount_vmdk_image(
                     verbosity,
                     output_directory,
-                    intermediate_mount + ".raw",
+                    intermediate_mount,
                     destination_mount,
                     disk_file,
+                    path,
                     allimgs,
                 )
         else:
