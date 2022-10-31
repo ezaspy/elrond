@@ -42,8 +42,8 @@
   - [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md)
 - [Usage](#usage)
 - [Artefacts](#artefacts)
-- [Contributing](#contributing)
-  - [Contact](#contact)
+- [Contact](#contributing)
+  - [Contributing](#contact)
 - [Acknowledgements](#acknowledgements)
 
 <br><br>
@@ -66,18 +66,18 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 
 ### SIFT-elrond
 
-- Download [SIFT-elrond](https://drive.google.com/file/d/1BjL3DUoE2-V7AwXCUFhmHuwQoThd48l_/view?usp=sharing) OVA, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
+- Download [SIFT-elrond](https://drive.google.com/file/d/1BjL3DUoE2-V7AwXCUFhmHuwQoThd48l_/view?usp=sharing){:target="_blank"} OVA, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
 - Alternatively, follow the instructions below...
 
 ### Configure
 
-There are several software package required for using elrond but almost all of them are contained within the [SANS SIFT Worksation](https://www.sans.org/tools/sift-workstation/) virtual machine OVA. However, for the software which is not included, I have provided a script ([make.sh](https://github.com/ezaspy/elrond/blob/main/make.sh)) which installs and configures the additional software required for all potential functionality leveraged by elrond (volatility3, apfs-fuse, ClamAV etc.).<br>
-To invoke the script, simply follow the instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md#configuration). **Note: you will only need to run the make.sh script once, per SIFT instance**
+There are several software package required for using elrond but almost all of them are contained within the [SANS SIFT Worksation](https://www.sans.org/tools/sift-workstation/){:target="_blank"} virtual machine OVA. However, for the software which is not included, I have provided a script ([make.sh](https://github.com/ezaspy/elrond/blob/main/make.sh){:target="_blank"}) which installs and configures the additional software required for all potential functionality leveraged by elrond (volatility3, apfs-fuse, ClamAV etc.).<br>
+To invoke the script, simply follow the instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md#configuration){:target="_blank"}. **Note: you will only need to run the make.sh script once, per SIFT instance**
 
-- [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (20.04)
+- [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads){:target="_blank"} (20.04)
   - Note: SANS SIFT 18.04 is not supported.
-- [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md) to install and configure the additional software for SIFT 20.04.
-  - If you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [.../elrond/elrond/tools/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/scripts/)
+- [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md){:target="_blank"} to install and configure the additional software for SIFT 20.04.
+  - If you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [.../elrond/elrond/tools/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/scripts/){:target="_blank"}
 <br><br><br>
 
 <!-- USAGE EXAMPLES -->
@@ -271,7 +271,7 @@ Below is a list of all the artefacts collected and processed from the respective
 
 ### Notices
 
-If you notice 'nixCommand' or 'nixProcess' in files processed from a Windows OS, this is somewhat intentional. I debated with myself whether to try and change these to 'WinCommand' and 'WinProcess', respectively but also considered the situation of Windows Subsystem for Linux (WSL) being installed. As a result, I have left them as they are. If you know of a way to identify whether a file belongs inside the Linux element of WSL based on file path, file type, file content etc. please raise an [issue](https://github.com/ezaspy/elrond/issues) and let me know.
+If you notice 'nixCommand' or 'nixProcess' in files processed from a Windows OS, this is somewhat intentional. I debated with myself whether to try and change these to 'WinCommand' and 'WinProcess', respectively but also considered the situation of Windows Subsystem for Linux (WSL) being installed. As a result, I have left them as they are. If you know of a way to identify whether a file belongs inside the Linux element of WSL based on file path, file type, file content etc. please raise an [issue](https://github.com/ezaspy/elrond/issues){:target="_blank"} and let me know.
 <br><br><br>
 
 <!-- CONTRIBUTING -->
@@ -296,35 +296,35 @@ ezaspy - ezaspython (at) gmail (dot) com
 
 ## Acknowledgements
 
-- [Joff Thyor](https://www.blackhillsinfosec.com/team/joff-thyer/)
-- [alexandercarruthers](https://github.com/alexandercarruthers)
-- [SANS](https://www.sans.org)
-- [Harbingers LLC](https://uspto.report/company/Harbingers-L-L-C)<br><br>
+- [Joff Thyor](https://www.blackhillsinfosec.com/team/joff-thyer/){:target="_blank"}
+- [alexandercarruthers](https://github.com/alexandercarruthers){:target="_blank"}
+- [SANS](https://www.sans.org){:target="_blank"}
+- [Harbingers LLC](https://uspto.report/company/Harbingers-L-L-C){:target="_blank"}<br><br>
 - Tooling
-  - [joachimmetz](https://github.com/joachimmetz)
-  - [Harlan Carvey](https://github.com/hcarvey)
-  - [williballenthin](https://github.com/williballenthin)
-  - [dkovar](https://github.com/dkovar)
-  - [Richard Penman](https://github.com/richardpenman)
-  - [harelsegev](https://github.com/harelsegev/INDXRipper)
-  - [mnrkbys](https://github.com/mnrkbys/macosac)
-  - [The Volatility Foundation](https://github.com/volatilityfoundation)
-  - [AVML](https://github.com/microsoft/avml)
-  - [Jonathon Poling](https://ponderthebits.com/2017/02/osx-mac-memory-acquisition-and-analysis-using-osxpmem-and-volatility/)
-  - [@binaryz0ne](https://www.binary-zone.com/2019/06/20/acquiring-linux-memory-using-avml-and-using-it-with-volatility/)
-  - [JPCERTCC](https://github.com/JPCERTCC/Windows-Symbol-Tables)
-  - [John - Python Awesome](https://pythonawesome.com/windows-symbol-tables-for-volatility-3-in-python/)<br><br>
+  - [joachimmetz](https://github.com/joachimmetz){:target="_blank"}
+  - [Harlan Carvey](https://github.com/hcarvey){:target="_blank"}
+  - [williballenthin](https://github.com/williballenthin){:target="_blank"}
+  - [dkovar](https://github.com/dkovar){:target="_blank"}
+  - [Richard Penman](https://github.com/richardpenman){:target="_blank"}
+  - [harelsegev](https://github.com/harelsegev/INDXRipper){:target="_blank"}
+  - [mnrkbys](https://github.com/mnrkbys/macosac){:target="_blank"}
+  - [The Volatility Foundation](https://github.com/volatilityfoundation){:target="_blank"}
+  - [AVML](https://github.com/microsoft/avml){:target="_blank"}
+  - [Jonathon Poling](https://ponderthebits.com/2017/02/osx-mac-memory-acquisition-and-analysis-using-osxpmem-and-volatility/){:target="_blank"}
+  - [@binaryz0ne](https://www.binary-zone.com/2019/06/20/acquiring-linux-memory-using-avml-and-using-it-with-volatility/){:target="_blank"}
+  - [JPCERTCC](https://github.com/JPCERTCC/Windows-Symbol-Tables){:target="_blank"}
+  - [John - Python Awesome](https://pythonawesome.com/windows-symbol-tables-for-volatility-3-in-python/){:target="_blank"}<br><br>
 - Documentation
-  - [Best-README-Template](https://github.com/othneildrew/Best-README-Template)
-  - [hatchful](https://hatchful.shopify.com)
-  - [Image Shields](https://shields.io)<br><br>
+  - [Best-README-Template](https://github.com/othneildrew/Best-README-Template){:target="_blank"}
+  - [hatchful](https://hatchful.shopify.com){:target="_blank"}
+  - [Image Shields](https://shields.io){:target="_blank"}<br><br>
 - Theme &amp; Artwork
-  - [J.R.R. Tolkien](https://en.wikipedia.org/wiki/J._R._R._Tolkien)
-  - [Peter Jackson](https://twitter.com/ReaPeterJackson)
-  - [ASCII Text Generator](https://textkool.com/en/ascii-art-generator?hl=default&vl=default&font=Red%20Phoenix&text=Your%20text%20here%20)
-  - [ASCII Art Generator](https://www.ascii-art-generator.org)
-  - [ASCII Art](http://www.asciiworld.com/-Lord-of-the-Rings-.html)
-  - [SIFT-elrond Desktop background](https://www.hdwallpaper.nu/wp-content/uploads/2015/04/rings_the_lord_of_the_rings_one_ring_hd_wallpaper.jpg)
+  - [J.R.R. Tolkien](https://en.wikipedia.org/wiki/J._R._R._Tolkien){:target="_blank"}
+  - [Peter Jackson](https://twitter.com/ReaPeterJackson){:target="_blank"}
+  - [ASCII Text Generator](https://textkool.com/en/ascii-art-generator?hl=default&vl=default&font=Red%20Phoenix&text=Your%20text%20here%20){:target="_blank"}
+  - [ASCII Art Generator](https://www.ascii-art-generator.org){:target="_blank"}
+  - [ASCII Art](http://www.asciiworld.com/-Lord-of-the-Rings-.html){:target="_blank"}
+  - [SIFT-elrond Desktop background](https://www.hdwallpaper.nu/wp-content/uploads/2015/04/rings_the_lord_of_the_rings_one_ring_hd_wallpaper.jpg){:target="_blank"}
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
