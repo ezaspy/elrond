@@ -2,15 +2,15 @@
 sleep 1
 clear
 cd /opt/elrond/elrond
-../elrond/tools/config/scripts/./init.sh
-../elrond/tools/config/scripts/./pwsh.sh
-../elrond/tools/config/scripts/./apfs-fuse.sh
-../elrond/tools/config/scripts/./sift.sh
-../elrond/tools/config/scripts/./volatility3.sh
-../elrond/tools/config/scripts/./dwarf2json.sh
-../elrond/tools/config/scripts/./splunk.sh
-../elrond/tools/config/scripts/./elastic.sh
-../elrond/tools/config/scripts/./navigator.sh
+/opt/elrond/elrond/tools/config/scripts/./init.sh
+/opt/elrond/elrond/tools/config/scripts/./pwsh.sh
+/opt/elrond/elrond/tools/config/scripts/./apfs-fuse.sh
+/opt/elrond/elrond/tools/config/scripts/./sift.sh
+/opt/elrond/elrond/tools/config/scripts/./volatility3.sh
+/opt/elrond/elrond/tools/config/scripts/./dwarf2json.sh
+/opt/elrond/elrond/tools/config/scripts/./splunk.sh
+/opt/elrond/elrond/tools/config/scripts/./elastic.sh
+/opt/elrond/elrond/tools/config/scripts/./navigator.sh
 updatedb
 # configuring elrond
 sudo chmod -R 744 /opt/elrond/
@@ -19,9 +19,4 @@ sudo chmod +x /opt/elrond/elrond.py
 sudo updatedb
 sleep 1
 clear
-printf "\n\n  -> SIFT has been successfully configured for elrond. Press ENTER to continue..."
-read answer
-sleep 1
-clear
-sleep 1
-cd /opt/elrond/elrond/
+/opt/elrond/elrond/tools/config/scripts/./finish.sh
