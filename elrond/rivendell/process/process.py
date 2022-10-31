@@ -22,6 +22,9 @@ from rivendell.process.windows import (
 from rivendell.process.windows import process_registry_profile
 from rivendell.process.windows import process_shimcache
 from rivendell.process.windows import process_usb
+from rivendell.process.windows import process_ual
+from rivendell.process.windows import process_wbem
+from rivendell.process.windows import process_wmi
 
 
 def process_artefacts(
@@ -121,6 +124,18 @@ def process_artefacts(
                 artefact,
                 jsondict,
                 jsonlist,
+            )
+        elif artefact.endswith(".etl"):
+            process_wmi(
+                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+            )
+        elif artefact.endswith("OBJECTS.DATA"):
+            process_wbem(
+                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+            )
+        elif artefact.endswith(".mdb"):
+            process_ual(
+                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
             )
         elif artefact.endswith("-ms") and "+" in artefact:
             process_jumplists(

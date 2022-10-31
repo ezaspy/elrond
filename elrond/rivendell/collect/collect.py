@@ -498,14 +498,17 @@ def collect_artefacts(
                         item,
                         vsstext,
                     )
-            """extract_i30(
-                output_directory,
-                verbosity,
-                "recovered",
-                d,
-                img,
-                vssimage,
-            )"""
+            if img.split("::")[0].endswith(".E01") or img.split("::")[0].endswith(".e01"):
+                extract_i30(
+                    output_directory,
+                    verbosity,
+                    "recovered",
+                    d,
+                    img,
+                    vssimage,
+                )
+            else:
+                pass
             if not auto:
                 do_collect = input(
                     "  Do you wish to collect files from '{}'? Y/n [Y] ".format(
