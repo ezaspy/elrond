@@ -21,11 +21,13 @@ sudo cp /etc/fstab /etc/fstab.orig
 sudo chmod 777 /etc/fstab
 echo "/dev/sdb swap swap defaults 0 0" >> /etc/fstab
 sudo chmod 664 /etc/fstab
-../elrond/tools/config/scripts/./python.sh
+/opt/elrond/elrond/tools/config/scripts/./python.sh
 sudo apt install mlocate build-essential qemu wget apt-transport-https software-properties-common mdbtools yara clamav clamav-daemon john gparted -y --fix-missing
 sudo systemctl stop clamav-freshclam
 sudo freshclam
 sudo systemctl start clamav-freshclam
+sift update
+sift upgrade
 sudo updatedb
 # configuring elrond
 sudo chmod -R 744 /opt/elrond/

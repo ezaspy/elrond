@@ -5,7 +5,6 @@ cd /opt/elrond/elrond
 /opt/elrond/elrond/tools/config/scripts/./init.sh
 /opt/elrond/elrond/tools/config/scripts/./pwsh.sh
 /opt/elrond/elrond/tools/config/scripts/./apfs-fuse.sh
-/opt/elrond/elrond/tools/config/scripts/./sift.sh
 /opt/elrond/elrond/tools/config/scripts/./volatility3.sh
 /opt/elrond/elrond/tools/config/scripts/./dwarf2json.sh
 /opt/elrond/elrond/tools/config/scripts/./splunk.sh
