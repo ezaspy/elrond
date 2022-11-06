@@ -10,8 +10,8 @@ sudo git clone https://github.com/harelsegev/INDXRipper /opt/elrond/elrond/tools
 /usr/bin/python3.9 -m pip install --upgrade pip
 /usr/bin/python3 -m pip install --upgrade pip
 /usr/bin/python -m pip install --upgrade pip
-sudo python3.9 -m pip install setuptools
-sudo python3.9 -m pip install construct==2.10.68
+python3.9 -m pip install setuptools
+python3.9 -m pip install construct==2.10.68
 python3.9 -m pip install setuptools
 python3.9 -m pip install construct==2.10.68
 python3 -m pip install construct
