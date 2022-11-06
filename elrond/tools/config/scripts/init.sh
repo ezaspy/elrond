@@ -32,6 +32,6 @@ sudo updatedb
 # configuring elrond
 sudo chmod -R 744 /opt/elrond/
 export PATH=$PATH:/opt/elrond
-sudo chmod +x /opt/elrond/elrond.py
+sudo chmod +x /opt/elrond/elrond/elrond.py
 sudo updatedb
 sleep 1
