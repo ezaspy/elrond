@@ -22,6 +22,9 @@ sudo chmod 777 /etc/fstab
 echo "/dev/sdb swap swap defaults 0 0" >> /etc/fstab
 sudo chmod 664 /etc/fstab
 /opt/elrond/elrond/tools/config/scripts/./python.sh
+sudo wget -O /opt/elrond/elrond/tools/.clamav-0.105.1-2.linux.x86_64.deb "https://www.clamav.net/downloads/production/clamav-0.105.1-2.linux.x86_64.deb"
+sudo dpkg -i /opt/elrond/elrond/tools/.clamav-0.105.1-2.linux.x86_64.deb
+sudo apt update
 sudo apt install mlocate build-essential qemu wget apt-transport-https software-properties-common mdbtools yara clamav clamav-daemon john gparted -y --fix-missing
 sudo systemctl stop clamav-freshclam
 sudo freshclam
@@ -30,6 +33,6 @@ sudo updatedb
 # configuring elrond
 sudo chmod -R 744 /opt/elrond/
 export PATH=$PATH:/opt/elrond
-sudo chmod +x /opt/elrond/elrond/elrond.py
+sudo chmod +x /opt/elrond/elrond.py
 sudo updatedb
 sleep 1
