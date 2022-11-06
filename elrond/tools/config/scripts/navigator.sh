@@ -10,6 +10,7 @@ sudo npm install -g npm@8.6.0 && sudo npm install -g @angular/cli && sudo npm in
 cd /opt/elrond/elrond/tools/ && git clone https://github.com/mitre-attack/attack-navigator.git
 sudo chmod -R 744 /opt/elrond/ && cd attack-navigator/nav-app
 npm install && npm audit fix --force && ng build && ng build
+sleep 10000
 sudo cp -r dist/ /var/www/html/
 sudo mv /var/www/html/dist/ /var/www/html/attack-navigator/
 sudo service apache2 restart
