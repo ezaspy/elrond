@@ -26,8 +26,6 @@ sudo apt install mlocate build-essential qemu wget apt-transport-https software-
 sudo systemctl stop clamav-freshclam
 sudo freshclam
 sudo systemctl start clamav-freshclam
-sift update
-sift upgrade
 sudo updatedb
 # configuring elrond
 sudo chmod -R 744 /opt/elrond/
