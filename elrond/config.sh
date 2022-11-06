@@ -10,12 +10,9 @@ cd /opt/elrond/elrond
 /opt/elrond/elrond/tools/config/scripts/./splunk.sh
 /opt/elrond/elrond/tools/config/scripts/./elastic.sh
 /opt/elrond/elrond/tools/config/scripts/./navigator.sh
-updatedb
-# configuring elrond
-sudo chmod -R 744 /opt/elrond/
-export PATH=$PATH:/opt/elrond
-sudo chmod +x /opt/elrond/elrond.py
+/opt/elrond/elrond/tools/config/scripts/./nrsl.sh
+sudo chmod -R 744 /opt/elrond/ && sudo chmod +x /opt/elrond/elrond.py
+echo "export PATH=$PATH:/opt/elrond" > /home/sansforensics/.bashrc
 sudo updatedb
 sleep 1
-clear
 /opt/elrond/elrond/tools/config/scripts/./finish.sh
