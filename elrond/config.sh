@@ -10,7 +10,7 @@ cd /opt/elrond/elrond
 /opt/elrond/elrond/tools/config/scripts/./splunk.sh
 /opt/elrond/elrond/tools/config/scripts/./elastic.sh
 /opt/elrond/elrond/tools/config/scripts/./navigator.sh
-/opt/elrond/elrond/tools/config/scripts/./nrsl.sh
+/opt/elrond/elrond/tools/config/scripts/./nsrl.sh
 sudo chmod -R 744 /opt/elrond/ && sudo chmod +x /opt/elrond/elrond.py
 echo "export PATH=$PATH:/opt/elrond" > /home/sansforensics/.bashrc
 sudo updatedb
