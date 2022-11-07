@@ -19,4 +19,4 @@ sudo apt install kibana
 sudo /bin/systemctl daemon-reload
 sudo systemctl enable kibana.service
 sudo updatedb
-sleep 1
+sleep 1000
