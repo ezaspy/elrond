@@ -1,7 +1,7 @@
 #!/bin/bash
 sleep 1
 clear
-printf "\n  -> Downloading & Installing PowerShell...\n\n"
+printf "\n  -> Installing & configuring PowerShell...\n\n"
 wget -q "https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb"
 sudo dpkg -i packages-microsoft-prod.deb
 sudo apt update
