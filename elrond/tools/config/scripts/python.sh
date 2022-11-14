@@ -3,9 +3,7 @@ sleep 1
 clear
 printf "\n  -> Configuring python3.9...\n\n"
 yes '' | sudo add-apt-repository ppa:deadsnakes/ppa
-printf "TEST1"
 sudo apt update
-printf "TEST2"
 sudo apt install python3.9 -y --fix-missing
 PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
 sudo git clone https://github.com/harelsegev/INDXRipper /opt/elrond/elrond/tools/INDXRipper
