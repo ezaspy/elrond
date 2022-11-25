@@ -57,6 +57,20 @@ def configure_elastic_stack(
         stderr=subprocess.PIPE,
     ).communicate()
     subprocess.Popen(
+        ["sudo", "chmod", "777", "/etc/systemd/system/logstash.service"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ).communicate()
+    with open("/etc/systemd/system/logstash.service", "w") as logstash_service:
+        logstash_service.write(
+            '[Unit]\nDescription=logstash\n\n[Service]\nType=simple\nUser=logstash\nGroup=logstash\n# Load env vars from /etc/default/ and /etc/sysconfig/ if they exist.\n# Prefixing the path with \'-\' makes it try to load, but if the file doesn\'t\n# exist, it continues onward.\nEnvironmentFile=-/etc/default/logstash\nEnvironmentFile=-/etc/sysconfig/logstash\nExecStart=/usr/share/logstash/bin/logstash "--path.settings" "/etc/logstash"\nRestart=always\nWorkingDirectory=/\nNice=19\nLimitNOFILE=16384\n\n# When stopping, how long to wait before giving up and sending SIGKILL?\n# Keep in mind that SIGKILL on a process can cause data loss.\nTimeoutStopSec=180\n\n[Install]\nWantedBy=multi-user.target\n'
+        )
+    subprocess.Popen(
+        ["sudo", "chmod", "644", "/etc/systemd/system/logstash.service"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ).communicate()
+    subprocess.Popen(
         ["sudo", "systemctl", "enable", "logstash.service"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
