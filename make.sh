@@ -6,4 +6,5 @@ export PATH=$PATH:/opt/elrond
 sudo chmod +x /opt/elrond/elrond/config.sh
 sudo chmod +x /opt/elrond/elrond/elrond.py
 clear
-sudo /opt/elrond/elrond/./config.sh
+cd /opt/elrond/elrond
+sudo ./config.sh
