@@ -14,10 +14,6 @@ sudo chmod 664 /etc/fstab
 # downloading software
 python3 -m keyring --disable
 /opt/elrond/elrond/tools/config/scripts/./python.sh
-sudo wget -O /opt/elrond/elrond/tools/.clamav-0.105.1-2.linux.x86_64.deb "https://www.clamav.net/downloads/production/clamav-0.105.1-2.linux.x86_64.deb"
-sudo dpkg -i /opt/elrond/elrond/tools/.clamav-0.105.1-2.linux.x86_64.deb
-sudo apt update && sudo apt install mlocate build-essential qemu wget apt-transport-https software-properties-common sqlite3 mdbtools yara clamav clamav-daemon john gparted -y --fix-missing
-sudo systemctl stop clamav-freshclam && sudo freshclam && sudo systemctl start clamav-freshclam
 # configuring elrond
 sudo chmod -R 744 /opt/elrond/ && sudo chmod +x /opt/elrond/elrond/elrond.py
 echo "export PATH=$PATH:/opt/elrond" > /home/sansforensics/.bashrc
