@@ -13,4 +13,3 @@ sudo /bin/systemctl enable elasticsearch.service
 sudo /bin/systemctl enable logstash.service
 sudo /bin/systemctl enable kibana.service
 sudo sysctl -w vm.max_map_count=262144
-sudo updatedb

@@ -13,5 +13,4 @@ sudo mv Windows-Symbol-Tables/symbols/windows/*.pdb/ /usr/local/lib/python3.8/di
 sudo rm -rf Windows-Symbol-Tables
 sudo chmod -R 755 /usr/local/lib/python3.8/dist-packages/volatility3/
 sudo chown -R root:root /usr/local/lib/python3.8/dist-packages/volatility3/
-sudo updatedb
 sleep 1

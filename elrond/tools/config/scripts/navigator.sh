@@ -25,5 +25,4 @@ sleep 2
 sudo cp -r dist/ /var/www/html/
 sudo mv /var/www/html/dist/ /var/www/html/attack-navigator/
 sudo service apache2 restart
-sudo updatedb
 sleep 1

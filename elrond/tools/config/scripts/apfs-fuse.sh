@@ -13,5 +13,4 @@ cd build
 sudo cmake ..
 sudo ccmake .
 sudo make
-sudo updatedb
 sleep 1

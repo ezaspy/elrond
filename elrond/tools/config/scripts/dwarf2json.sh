@@ -9,5 +9,4 @@ export PATH=$PATH:/usr/local/go/bin
 cd /opt/elrond/elrond/tools/
 sudo git clone https://github.com/ezaspy/dwarf2json.git
 cd /opt/elrond/elrond
-sudo updatedb
 sleep 1
