@@ -11,10 +11,10 @@ cd /opt/elrond/elrond
 /opt/elrond/elrond/tools/config/scripts/./elastic.sh
 /opt/elrond/elrond/tools/config/scripts/./navigator.sh
 /opt/elrond/elrond/tools/config/scripts/./nsrl.sh
-sudo wget -O /opt/elrond/elrond/tools/.clamav-0.105.1-2.linux.x86_64.deb "https://www.clamav.net/downloads/production/clamav-0.105.1-2.linux.x86_64.deb"
-sudo dpkg -i /opt/elrond/elrond/tools/.clamav-0.105.1-2.linux.x86_64.deb
+sudo wget -O /opt/elrond/elrond/tools/.clamav.deb "https://www.clamav.net/downloads/production/clamav-0.105.1-2.linux.x86_64.deb"
+sudo dpkg -i /opt/elrond/elrond/tools/.clamav.deb
 sudo apt update
-sudo apt install mlocate net-tools build-essential qemu wget apt-transport-https software-properties-common systemd gnupg sqlite3 mdbtools yara clamav clamav-daemon john gparted -y --fix-missing
+sudo apt install mlocate net-tools build-essential qemu apt-transport-https software-properties-common systemd gnupg sqlite3 mdbtools yara clamav clamav-daemon john gparted -y --fix-missing
 sudo systemctl stop clamav-freshclam
 sudo freshclam
 sudo systemctl start clamav-freshclam
