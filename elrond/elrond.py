@@ -50,8 +50,8 @@ parser.add_argument(
 )
 parser.add_argument(
     "-B",
-    "--dogsBollocks",
-    help="'Dogs Bollocks Mode (DBM).' Invokes -AacINoPQqRU. You MUST provide either -C (--collect), -G (--gandalf) or -O (--reorganise) depending on whether you've acquired disk images, leveraged gandalf or seperately acquired artefacts, respectively.",
+    "--Brisk",
+    help="'Brisk Mode.' Invokes -AacINoPQqRU. You MUST provide either -C (--collect), -G (--gandalf) or -O (--reorganise) depending on whether you've acquired disk images, leveraged gandalf or seperately acquired artefacts, respectively.",
     action="store_const",
     const=True,
     default=False,
