@@ -314,9 +314,9 @@ def main(
         output_directory = os.path.dirname(od) + "/"
     else:
         output_directory = "./"
-    if not os.path.isdir(d):
+    if not os.path.isdir(d) or len(os.listdir(d)) == 0:
         print(
-            "\n  [directory] - '{}' does not exist and/or is not a directory, please try again.\n\n".format(
+            "\n  [directory] - '{}' does not exist, is not a directory or is empty, please try again.\n\n".format(
                 d
             )
         )
@@ -456,10 +456,10 @@ def main(
             ):
                 time.sleep(2)
                 if not auto:
-                    wtm = input("  Do you wish to mount '{}'? Y/n [Y] ".format(f))
+                    wish_to_mount = input("  Do you wish to mount '{}'? Y/n [Y] ".format(f))
                 else:
-                    wtm = "y"
-                if wtm != "n":
+                    wish_to_mount = "y"
+                if wish_to_mount != "n":
                     if not superquick and not quick:
                         if not os.path.exists(output_directory + f + "/meta.audit"):
                             with open(
