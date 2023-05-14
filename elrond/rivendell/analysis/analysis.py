@@ -312,6 +312,7 @@ def analyse_artefacts(
                                     or (
                                         f.endswith(".elf")
                                         and str(file_hdr)[2:10] != "\\x7f\\x45"
+                                        and str(file_hdr)[2:10] != "\\x7fELF\\"
                                     )
                                     or (
                                         (
@@ -326,8 +327,11 @@ def analyse_artefacts(
                                             and str(file_hdr)[2:10] != "MZ\\x00\\x"
                                             and str(file_hdr)[2:10] != "MZx\\x00\\"
                                             and str(file_hdr)[2:10] != "MZ\\x9f\\x"
+                                            and str(file_hdr)[2:10] != "\\x00\\x02"
+                                            and str(file_hdr)[2:10] != "\\x02\\x00"
                                             and str(file_hdr)[2:9] != "DCH\\x01"
                                             and str(file_hdr)[2:9] != "DCD\\x01"
+                                            and str(file_hdr)[2:9] != "DCN\\x01"
                                             and str(file_hdr)[2:9] != "DCN\\x01"
                                         )
                                     )
@@ -338,6 +342,7 @@ def analyse_artefacts(
                                             or f.endswith(".pptx")
                                         )
                                         and str(file_hdr)[2:10] != "\\x50\\x4b"
+                                        and str(file_hdr)[2:10] != "PK\\x03\\x"
                                     )
                                     or (
                                         (
@@ -355,6 +360,7 @@ def analyse_artefacts(
                                             or f.endswith(".ott")
                                         )
                                         and str(file_hdr)[2:10] != "\\x50\\x4b"
+                                        and str(file_hdr)[2:10] != "PK\\x03\\x"
                                     )
                                     or (
                                         f.endswith(".pdf")
