@@ -151,7 +151,7 @@ def collect_process_keyword_analysis_timeline(
                 "\n\n  -> \033[1;36mCommencing Analysis Phase...\033[1;m\n  ----------------------------------------"
             )
             time.sleep(1)
-            for img, mnt in imgs.items():
+            for mnt, img in imgs.items():
                 if "vss" in img.split("::")[1]:
                     vssimage = (
                         "'"
