@@ -5,9 +5,10 @@ import shutil
 import subprocess
 import sys
 import time
+from datetime import datetime
 
+from rivendell.audit import write_audit_log_entry
 from rivendell.core.identify import identify_disk_image
-
 
 def unmount_images(elrond_mount, ewf_mount):
     def unmount_locations(each):
@@ -308,6 +309,7 @@ def mount_vmdk_image(
                         ).communicate()[1]
                     )
                     if mount_attempt == "b''":
+                        print("TEST1")
                         disk_image = identify_disk_image(
                             verbosity, output_directory, disk_file, destination_mount
                         )
@@ -317,6 +319,7 @@ def mount_vmdk_image(
                     elif (
                         "overlapping loop device exists" in mount_attempt
                     ):  # mounted the first valid partition, but cannot mount another partition in the same way
+                        print("TEST2")
                         nbd_mount = re.findall(
                             r"\\n[\w\-\.\/]+(nbd\dp\d+)|\.(?:raw|dd|img)\d[\ \*]+(?:\d+)[\w\d\.\ \*]+\s+(?:NTFS|Microsoft\ basic\ data|HPFS|Linux|exFAT)",
                             str(
@@ -369,6 +372,10 @@ def mount_vmdk_image(
                                     disk_file,
                                     "0",
                                 )
+                    elif (
+                        "unknown filesystem type 'swap'" in mount_attempt
+                    ):  # cannot mount swap partition
+                        pass
                     else:
                         print(
                             "   An error occured when mounting '{}'.\n    Perhaps this is a macOS-based image and requires apfs-fuse (https://github.com/ezaspy/apfs-fuse)?\n    Alternatively, the disk may not be supported and/or may be corrupt? You can raise an issue via https://github.com/ezaspy/elrond/issues".format(
@@ -790,10 +797,10 @@ def mount_images(
                 )
         else:
             pass
-        """entry, prnt = "{},{},{},commenced\n".format(
+        entry, prnt = "{},{},{},commenced\n".format(
             datetime.now().isoformat(), disk_file, stage
         ), " -> {} -> mounting '{}'".format(
             datetime.now().isoformat().replace("T", " "), disk_file
         )
-        write_audit_log_entry(verbosity, output_directory, entry, prnt)"""
+        write_audit_log_entry(verbosity, output_directory, entry, prnt)
     return allimgs
