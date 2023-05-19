@@ -926,6 +926,7 @@ def main(
                 verbosity,
                 output_directory,
                 case,
+                stage,
                 allimgs,
                 volatility,
                 analysis,
