@@ -51,7 +51,7 @@ parser.add_argument(
 parser.add_argument(
     "-B",
     "--Brisk",
-    help="'Brisk Mode.' Invokes -AacINoPQqRU. You MUST provide either -C (--collect), -G (--gandalf) or -O (--reorganise) depending on whether you've acquired disk images, leveraged gandalf or seperately acquired artefacts, respectively.",
+    help="'Brisk Mode.' Invokes -AacINPQqU. You MUST provide either -C (--collect), -G (--gandalf) or -O (--reorganise) depending on whether you've acquired disk images, leveraged gandalf or seperately acquired artefacts, respectively.",
     action="store_const",
     const=True,
     default=False,
@@ -262,7 +262,7 @@ directory = args.directory
 case = args.case
 analysis = args.Analysis
 auto = args.auto
-dogs = args.dogsBollocks
+brisk = args.Brisk
 collect = args.Collect
 vss = args.vss
 delete = args.Delete
@@ -457,7 +457,7 @@ asciitext = [
 
 if __name__ == "__main__":
     if exhaustive:
-        dogs = True
+        brisk = True
         delete = True
         elastic = True
         lotr = True
@@ -471,7 +471,7 @@ if __name__ == "__main__":
         archive = True
     else:
         pass
-    if dogs:
+    if brisk:
         analysis = True
         auto = True
         vss = True
