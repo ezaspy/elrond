@@ -4,6 +4,8 @@ import re
 import subprocess
 import time
 
+from rivendell.post.elastic.ingest import ingest_elastic_data
+
 configs = [
     "/usr/lib/systemd/system/elasticsearch.service",
     "/etc/elasticsearch/jvm.options",
@@ -13,7 +15,7 @@ configs = [
 
 
 def configure_elastic_stack(
-    verbosity, output_directory, case, imgs, volatility, analysis, timeline
+    verbosity, output_directory, case, imgs, volatility, analysis, timeline, yara
 ):
     def replace_original_configs(configs):
         for config in configs:
@@ -42,11 +44,6 @@ def configure_elastic_stack(
             '# ======================== Elasticsearch Configuration =========================\n#\n# NOTE: Elasticsearch comes with reasonable defaults for most settings.\n#       Before you set out to tweak and tune the configuration, make sure you\n#       understand what are you trying to accomplish and the consequences.\n#\n# The primary way of configuring a node is via this file. This template lists\n# the most important settings you may want to configure for a production cluster.\n#\n# Please consult the documentation for further information on configuration options:\n# https://www.elastic.co/guide/en/elasticsearch/reference/index.html\n#\n# ---------------------------------- Cluster -----------------------------------\n#\n# Use a descriptive name for your cluster:\n#\ncluster.name: elrond\n#\n# ------------------------------------ Node ------------------------------------\n#\n# Use a descriptive name for the node:\n#\nnode.name: elrond-es1\n#\n# Add custom attributes to the node:\n#\n#node.attr.rack: r1\n#\n# ----------------------------------- Paths ------------------------------------\n#\n# Path to directory where to store the data (separate multiple locations by comma):\n#\npath.data: /var/lib/elasticsearch\n#\n# Path to log files:\n#\npath.logs: /var/log/elasticsearch\n#\n# ----------------------------------- Memory -----------------------------------\n#\n# Lock the memory on startup:\n#\n#bootstrap.memory_lock: true\n#\n# Make sure that the heap size is set to about half the memory available\n# on the system and that the owner of the process is allowed to use this\n# limit.\n#\n# Elasticsearch performs poorly when the system is swapping the memory.\n#\n# ---------------------------------- Network -----------------------------------\n#\n# By default Elasticsearch is only accessible on localhost. Set a different\n# address here to expose this node on the network:\n#\nnetwork.host: 127.0.0.1\n#\n# By default Elasticsearch listens for HTTP traffic on the first free port it\n# finds starting at 9200. Set a specific HTTP port here:\n#\nhttp.port: 9200\n#\n# For more information, consult the network module documentation.\n#\n# --------------------------------- Discovery ----------------------------------\n#\n# Pass an initial list of hosts to perform discovery when this node is started:\n# The default list of hosts is ["127.0.0.1", "[::1]"]\n#\n#discovery.type: single-node\n#discovery.seed_hosts: ["host1", "host2"]\n#\n# Bootstrap the cluster using an initial set of master-eligible nodes:\n#\ncluster.initial_master_nodes: ["elrond-es1"]\n#\n# For more information, consult the discovery and cluster formation module documentation.\n#\n# ---------------------------------- Various -----------------------------------\n#\n# Require explicit names when deleting indices:\n#\n#action.destructive_requires_name: true\n#\n# ---------------------------------- Security ----------------------------------\n#\n#                                 *** WARNING ***\n#\n# Elasticsearch security features are not enabled by default.\n# These features are free, but require configuration changes to enable them.\n# This means that users don’t have to provide credentials and can get full access\n# to the cluster. Network connections are also not encrypted.\n#\n# To protect your data, we strongly encourage you to enable the Elasticsearch security features. \n# Refer to the following documentation for instructions.\n#\n# https://www.elastic.co/guide/en/elasticsearch/reference/7.16/configuring-stack-security.html\n'
         )
     subprocess.Popen(
-        ["sudo", "sysctl", "-w", "vm.max_map_count=262144"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    ).communicate()
-    subprocess.Popen(
         ["sudo", "/bin/systemctl", "enable", "elasticsearch.service"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -56,31 +53,6 @@ def configure_elastic_stack(
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ).communicate()
-    subprocess.Popen(
-        ["sudo", "chmod", "777", "/etc/systemd/system/logstash.service"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    ).communicate()
-    with open("/etc/systemd/system/logstash.service", "w") as logstash_service:
-        logstash_service.write(
-            '[Unit]\nDescription=logstash\n\n[Service]\nType=simple\nUser=logstash\nGroup=logstash\n# Load env vars from /etc/default/ and /etc/sysconfig/ if they exist.\n# Prefixing the path with \'-\' makes it try to load, but if the file doesn\'t\n# exist, it continues onward.\nEnvironmentFile=-/etc/default/logstash\nEnvironmentFile=-/etc/sysconfig/logstash\nExecStart=/usr/share/logstash/bin/logstash "--path.settings" "/etc/logstash"\nRestart=always\nWorkingDirectory=/\nNice=19\nLimitNOFILE=16384\n\n# When stopping, how long to wait before giving up and sending SIGKILL?\n# Keep in mind that SIGKILL on a process can cause data loss.\nTimeoutStopSec=180\n\n[Install]\nWantedBy=multi-user.target\n'
-        )
-    subprocess.Popen(
-        ["sudo", "chmod", "644", "/etc/systemd/system/logstash.service"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    ).communicate()
-    subprocess.Popen(
-        ["sudo", "systemctl", "enable", "logstash.service"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    ).communicate()
-    subprocess.Popen(
-        ["sudo", "systemctl", "start", "logstash.service"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    ).communicate()
-    replace_original_configs(configs)
     with open("/etc/kibana/kibana.yml", "w") as kyml:
         kyml.write(
             '# Kibana is served by a back end server. This setting specifies the port to use.\nserver.port: 5601\n\n# Specifies the address to which the Kibana server will bind. IP addresses and host names are both valid values.\n# The default is \'localhost\', which usually means remote machines will not be able to connect.\n# To allow connections from remote users, set this parameter to a non-loopback address.\nserver.host: "127.0.0.1"\n\n# Enables you to specify a path to mount Kibana at if you are running behind a proxy.\n# Use the `server.rewriteBasePath` setting to tell Kibana if it should remove the basePath\n# from requests it receives, and to prevent a deprecation warning at startup.\n# This setting cannot end in a slash.\n#server.basePath: ""\n\n# Specifies whether Kibana should rewrite requests that are prefixed with\n# `server.basePath` or require that they are rewritten by your reverse proxy.\n# This setting was effectively always `false` before Kibana 6.3 and will\n# default to `true` starting in Kibana 7.0.\n#server.rewriteBasePath: false\n\n# Specifies the public URL at which Kibana is available for end users. If\n# `server.basePath` is configured this URL should end with the same basePath.\n#server.publicBaseUrl: ""\n\n# The maximum payload size in bytes for incoming server requests.\n#server.maxPayload: 1048576\n\n# The Kibana server\'s name.  This is used for display purposes.\nserver.name: "linux-kb1"\n\n# The URLs of the Elasticsearch instances to use for all your queries.\nelasticsearch.hosts: ["http://127.0.0.1:9200"]\n\n# Kibana uses an index in Elasticsearch to store saved searches, visualizations and\n# dashboards. Kibana creates a new index if the index doesn\'t already exist.\n#kibana.index: ".kibana"\n\n# The default application to load.\n#kibana.defaultAppId: "home"\n\n# If your Elasticsearch is protected with basic authentication, these settings provide\n# the username and password that the Kibana server uses to perform maintenance on the Kibana\n# index at startup. Your Kibana users still need to authenticate with Elasticsearch, which\n# is proxied through the Kibana server.\n#elasticsearch.username: "kibana_system"\n#elasticsearch.password: "pass"\n\n# Kibana can also authenticate to Elasticsearch via "service account tokens".\n# If may use this token instead of a username/password.\n# elasticsearch.serviceAccountToken: "my_token"\n\n# Enables SSL and paths to the PEM-format SSL certificate and SSL key files, respectively.\n# These settings enable SSL for outgoing requests from the Kibana server to the browser.\n#server.ssl.enabled: false\n#server.ssl.certificate: /path/to/your/server.crt\n#server.ssl.key: /path/to/your/server.key\n\n# Optional settings that provide the paths to the PEM-format SSL certificate and key files.\n# These files are used to verify the identity of Kibana to Elasticsearch and are required when\n# xpack.security.http.ssl.client_authentication in Elasticsearch is set to required.\n#elasticsearch.ssl.certificate: /path/to/your/client.crt\n#elasticsearch.ssl.key: /path/to/your/client.key\n\n# Optional setting that enables you to specify a path to the PEM file for the certificate\n# authority for your Elasticsearch instance.\n#elasticsearch.ssl.certificateAuthorities: [ "/path/to/your/CA.pem" ]\n\n# To disregard the validity of SSL certificates, change this setting\'s value to \'none\'.\n#elasticsearch.ssl.verificationMode: full\n\n# Time in milliseconds to wait for Elasticsearch to respond to pings. Defaults to the value of\n# the elasticsearch.requestTimeout setting.\n#elasticsearch.pingTimeout: 1500\n\n# Time in milliseconds to wait for responses from the back end or Elasticsearch. This value\n# must be a positive integer.\n#elasticsearch.requestTimeout: 30000\n\n# List of Kibana client-side headers to send to Elasticsearch. To send *no* client-side\n# headers, set this value to [] (an empty list).\n#elasticsearch.requestHeadersWhitelist: [ authorization ]\n\n# Header names and values that are sent to Elasticsearch. Any custom headers cannot be overwritten\n# by client-side headers, regardless of the elasticsearch.requestHeadersWhitelist configuration.\n#elasticsearch.customHeaders: {{'
@@ -149,11 +121,6 @@ def configure_elastic_stack(
         stderr=subprocess.PIPE,
     ).communicate()
     subprocess.Popen(
-        ["sudo", "systemctl", "restart", "logstash"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    ).communicate()
-    subprocess.Popen(
         ["sudo", "systemctl", "restart", "kibana"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -162,6 +129,7 @@ def configure_elastic_stack(
     subprocess.Popen(
         ["sudo", "updatedb"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
     ).communicate()
+    ingest_elastic_data()
     print(
         "   Kibana is available at:            127.0.0.1:5601"
     )  # adjust if custom location
