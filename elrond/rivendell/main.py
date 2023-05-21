@@ -922,11 +922,10 @@ def main(
         else:
             pass
         if elastic:
-            usercred, pswdcred = configure_elastic_stack(
+            configure_elastic_stack(
                 verbosity,
                 output_directory,
                 case,
-                stage,
                 allimgs,
                 volatility,
                 analysis,
