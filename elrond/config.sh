@@ -11,7 +11,6 @@ cd /opt/elrond/elrond
 /opt/elrond/elrond/tools/config/scripts/./splunk.sh
 /opt/elrond/elrond/tools/config/scripts/./elastic.sh
 /opt/elrond/elrond/tools/config/scripts/./navigator.sh
-clear
 sudo chmod -R 755 /opt/elrond/
 sudo chmod +x /opt/elrond/elrond/elrond.py
 echo "export PATH=$PATH:/opt/elrond" >> /home/sansforensics/.bashrc
