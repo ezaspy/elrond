@@ -92,7 +92,6 @@ def ingest_elastic_data(
                 else:
                     pass
             for atftfile in atftfiles:
-                print(atftfile)
                 if os.path.getsize(os.path.join(atftroot, atftfile)) > 0 and atftfile.endswith(".json"):
                     if atftfile.endswith(".json"):
                         with open(os.path.join(atftroot, atftfile)) as read_json:
