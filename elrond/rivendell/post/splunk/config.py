@@ -189,7 +189,7 @@ def install_splunk_stack(
 
 
 def configure_splunk_stack(
-    verbosity, output_directory, case, allimgs, volatility, analysis, timeline, yara
+    verbosity, output_directory, case, allimgs
 ):
     def request_splunk_creds():
         splunkuser, splunkpswd = input(
