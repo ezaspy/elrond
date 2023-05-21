@@ -4,6 +4,10 @@ clear
 printf "\n  -> Running initialization script for elrond...\n\n"
 # installing vmware_tools
 /opt/elrond/elrond/tools/config/scripts/./virtual.sh
+# updating regripper
+sudo mv /usr/share/regripper/rip.pl /usr/share/regripper/rip.pl.orig
+sudo cp /opt/elrond/elrond/tools/config/rip.pl /usr/share/regripper/rip.pl
+sudo chmod 755 /usr/share/regripper/rip.pl
 # creating linux_swap space
 sudo mkswap /dev/sdb
 sudo swapon /dev/sdb
