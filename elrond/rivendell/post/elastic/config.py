@@ -222,8 +222,4 @@ def configure_elastic_stack(
     print(
         "   elasticsearch is available at:     127.0.0.1:9200\n   Kibana is available at:            127.0.0.1:5601"
     )  # adjust if custom location
-    #return elasticuser, elasticpswd
-    print(
-        "   elastic Web is available at:            http://127.0.0.1:8000/en-US/app/elrond/"
-    )
     os.chdir(pwd)
