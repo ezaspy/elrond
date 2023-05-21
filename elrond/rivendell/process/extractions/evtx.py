@@ -98,7 +98,7 @@ def extract_evtx(
                 pass
         if len(evtjsonlist) > 0:
             evtjson.write(
-                str(evtjsonlist)
+                re.sub(r"\d+\s(Public Primary Certification Authority)\s-\s\w\d", r"\1", str(evtjsonlist)
                 .replace(
                     "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",
                     "/",
@@ -131,7 +131,7 @@ def extract_evtx(
                 .replace("/, \"", "/\", \"")
                 .replace("/}, {\"", "/\"}, {\"")
                 .replace("ProcessName", "WinProcess")
-            )
+            ))
         else:
             pass
         evtjsonlist.clear()

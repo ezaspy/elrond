@@ -205,10 +205,20 @@ def use_system_plugins(
                             ):
                                 kv = list(eachkv)
                                 if len(kv) > 0:
-                                    (
-                                        jsondict["File"],
-                                        jsondict["Filepath"],
-                                    ) = (kv[0], kv[1])
+                                    Filepath = re.sub(r"\\n\d{4}-\d{2}-\d{2}.*", r"", kv[1])
+                                    kv_info = re.findall(r"\S(?:\\n)(\d{4}-\d{2}-\d{2}.*)", kv[1])
+                                    if len(kv_info) > 0:
+                                        Timestamp = kv_info[0]
+                                    else:
+                                        Timestamp = "-"
+                                    if len(Filepath) > 0:
+                                        (
+                                            jsondict["File"],
+                                            jsondict["Filepath"],
+                                            jsondict["Timestamp"],
+                                        ) = (kv[0], Filepath.strip('"').strip('/').strip('"').strip('/').replace("\\\\\\\\", "\\\\"), Timestamp)
+                                    else:
+                                        pass
                                 else:
                                     pass
                         else:
