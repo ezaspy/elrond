@@ -3,7 +3,10 @@ import os
 import re
 import subprocess
 import time
+from datetime import datetime
+from collections import OrderedDict
 
+from rivendell.audit import write_audit_log_entry
 from rivendell.post.elastic.ingest import ingest_elastic_data
 
 configs = [
@@ -14,8 +17,78 @@ configs = [
 ]
 
 
+"""def overwrite_elastic_index(
+    verbosity, output_directory, case, stage, allimgs, elastic_install_path
+):
+    indxq = input(
+        "    Index {} already exists, would you like to overwrite the existing index or create a new index? [O]verwrite/[n]ew O ".format(
+            case
+        )
+    )
+    if indxq != "n":
+        estcindx = str(
+            subprocess.Popen(
+                ["./elastic", "remove", "index", case],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).communicate()
+        )
+    else:
+        case = input("    Name of new index: ").strip("\n")
+    for _, everyimg in allimgs.items():
+        entry, prnt = "{},{},adding {} index {}, {}".format(
+            datetime.now().isoformat(),
+            stage,
+            stage,
+            case,
+            everyimg.split("::")[0],
+        ), " -> {} -> adding {} index {} for '{}'".format(
+            datetime.now().isoformat().replace("T", " "),
+            stage,
+            case,
+            everyimg.split("::")[0],
+        )
+        write_audit_log_entry(verbosity, output_directory, entry, prnt)
+        splkindx = str(
+            subprocess.Popen(
+                [
+                    "/" + elastic_install_path + "elastic/bin/./elastic",
+                    "add",
+                    "index",
+                    case,
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).communicate()[0]
+        )
+        if len(splkindx[2:-1]) == 0 or splkindx[2:-3] == 'Index "' + case + '" added.':
+            if len(splkindx[2:-1]) == 0:
+                print("    elastic index '{}' already exists...".format(case))
+                overwrite_elastic_index(
+                    verbosity,
+                    output_directory,
+                    case,
+                    stage,
+                    allimgs,
+                    elastic_install_path,
+                )
+            elif splkindx[2:-3] == 'Index "' + case + '" added.':
+                print("    elastic index created for '{}'...".format(case))
+            else:
+                pass
+        else:
+            print(
+                "    elastic index creation failed for '{}'.\n    Please try again.".format(
+                    case
+                )
+            )
+            overwrite_elastic_index(
+                verbosity, output_directory, case, stage, allimgs, elastic_install_path
+            )"""
+
+
 def configure_elastic_stack(
-    verbosity, output_directory, case, allimgs, volatility, analysis, timeline, yara
+    verbosity, output_directory, case, stage, allimgs
 ):
     def replace_original_configs(configs):
         for config in configs:
@@ -28,6 +101,9 @@ def configure_elastic_stack(
             else:
                 pass
 
+    allimgs = OrderedDict(sorted(allimgs.items(), key=lambda x: x[1]))
+    pwd = os.getcwd()
+    stage = "elastic"
     print(
         "\n\n  -> \033[1;36mCommencing Elastic Phase...\033[1;m\n  ----------------------------------------"
     )
@@ -139,9 +215,15 @@ def configure_elastic_stack(
         verbosity,
         output_directory,
         case,
+        stage,
         allimgs,
     )
+    print()
     print(
         "   elasticsearch is available at:     127.0.0.1:9200\n   Kibana is available at:            127.0.0.1:5601"
     )  # adjust if custom location
     #return elasticuser, elasticpswd
+    print(
+        "   elastic Web is available at:            http://127.0.0.1:8000/en-US/app/elrond/"
+    )
+    os.chdir(pwd)

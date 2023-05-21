@@ -10,10 +10,26 @@ from io import StringIO
 from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
+
+def ingest_elastic_ndjson(case, ndjsonfile):
+    ingest_data_command = shlex.split('curl -s -H "Content-Type: application/x-ndjson" -XPOST localhost:9200/{}/default/_bulk?pretty --data-binary @"{}"'.format(case, ndjsonfile))
+    ingested_data = subprocess.Popen(ingest_data_command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ).communicate()[0]
+    if 'failed" : 1' in str(ingested_data) or "request body is required" in str(ingested_data):
+        print(ndjsonfile.split("/")[-1])
+        import time
+        time.sleep(20)
+    else:
+        pass
+
+
 def ingest_elastic_data(
     verbosity,
     output_directory,
     case,
+    stage,
     allimgs,
 ):
     imgs_to_ingest = []
@@ -48,10 +64,11 @@ def ingest_elastic_data(
             vssimage, vsstext = "'" + img.split("::")[0] + "'", ""
         print()
         print("     Ingesting artefacts into elasticsearch for {}...".format(vssimage))
-        entry, prnt = "{},{}{},elastic,ingesting\n".format(
-            datetime.now().isoformat(), img.split("::")[0], vsstext
-        ), " -> {} -> ingesting artfacts into elastic for {}{}".format(
+        entry, prnt = "{},{}{},{},ingesting\n".format(
+            datetime.now().isoformat(), img.split("::")[0], vsstext, stage
+        ), " -> {} -> ingesting artfacts into {} for {}{}".format(
             datetime.now().isoformat().replace("T", " "),
+            stage,
             vssimage,
             vsstext,
         )
@@ -62,47 +79,41 @@ def ingest_elastic_data(
             )
         ):
             for atftfile in atftfiles:
-                if os.path.getsize(os.path.join(atftroot, atftfile)) > 0 and (atftfile.endswith(".csv") or atftfile.endswith(".json")):
-                    """if atftfile.endswith(".csv"):
-                        csvtojson = {}
+                if os.path.getsize(os.path.join(atftroot, atftfile)) > 0 and atftfile.endswith(".csv"):
+                    if atftfile.endswith(".csv"):
                         with open(os.path.join(atftroot, atftfile), encoding='utf-8') as read_csv:
-                            csv_reader = csv.DictReader(read_csv)
-                            for rows in csv_reader:
-                                print(rows)
-                                import time
-                                time.sleep(20)
-                                key = rows['Serial Number']
-                                csvtojson[key] = rows
-                            with open(os.path.join(atftroot, atftfile)[0:-4] + ".json", 'w', encoding='utf-8') as write_json:
-                                write_json.write(json.dumps(csvtojson))"""
+                            csv_results = csv.DictReader(read_csv)
+                            with open(os.path.join(atftroot, atftfile)[0:-4] + ".ndjson", 'a', encoding='utf-8') as write_json:
+                                for result in csv_results:
+                                    write_json.write('{{"index": {{"_index": "{}"}}}}\n{{"hostname": "{}", "artefact": "{}", {}\n\n'.format(case, img.split("::")[0], atftfile, str(result)[1:]))
+                            ingest_elastic_ndjson(case, os.path.join(atftroot, atftfile)[0:-4] + ".ndjson")
+                    else:
+                        pass
+                else:
+                    pass
+            for atftfile in atftfiles:
+                print(atftfile)
+                if os.path.getsize(os.path.join(atftroot, atftfile)) > 0 and atftfile.endswith(".json"):
                     if atftfile.endswith(".json"):
                         with open(os.path.join(atftroot, atftfile)) as read_json:
                             json_content = read_json.read()
                         in_json = StringIO(json_content)
                         results = [json.dumps(record) for record in json.load(in_json)]
-                        ndjsonfile = os.path.join(atftroot, atftfile)[0:-5] + ".ndjson"
-                        with open(ndjsonfile, "w") as write_json:
+                        with open(os.path.join(atftroot, atftfile)[0:-5] + ".ndjson", "w") as write_json:
                             for result in results:
                                 write_json.write('{{"index": {{"_index": "{}"}}}}\n{{"hostname": "{}", "artefact": "{}", {}\n\n'.format(case, img.split("::")[0], atftfile, result[1:]))
-                        ingest_data_command = shlex.split('curl -s -H "Content-Type: application/x-ndjson" -XPOST localhost:9200/{}/default/_bulk?pretty --data-binary @{}'.format(case, ndjsonfile))
-                        ingested_data = subprocess.Popen(ingest_data_command,
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE,
-                        ).communicate()[0]
-                        if 'failed" : 1' in str(ingested_data) or "request body is required" in str(ingested_data):
-                            print(ndjsonfile.split("/")[-1])
-                            import time
-                            time.sleep(20)
+                        ingest_elastic_ndjson(case, os.path.join(atftroot, atftfile)[0:-5] + ".ndjson")
                     else:
                         pass
                 else:
                     pass
         print_done(verbosity)
         print("     elasticsearch ingestion completed for {}".format(vssimage))
-        entry, prnt = "{},{},elastic,completed\n".format(
-            datetime.now().isoformat(), vssimage
-        ), " -> {} -> indexed artfacts into elastic for {}".format(
+        entry, prnt = "{},{},{},completed\n".format(
+            datetime.now().isoformat(), vssimage, stage
+        ), " -> {} -> indexed artfacts into {} for {}".format(
             datetime.now().isoformat().replace("T", " "),
+            stage,
             vssimage,
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
