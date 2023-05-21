@@ -21,7 +21,7 @@ from rivendell.post.clean import archive_artefacts
 from rivendell.post.clean import delete_artefacts
 from rivendell.post.elastic.config import configure_elastic_stack
 from rivendell.post.mitre.nav_config import configure_navigator
-from rivendell.post.splunk.install import configure_splunk_stack
+from rivendell.post.splunk.config import configure_splunk_stack
 from rivendell.post.yara import run_yara_signatures
 
 
@@ -908,11 +908,8 @@ def main(
                 verbosity,
                 output_directory,
                 case,
+                stage,
                 allimgs,
-                volatility,
-                analysis,
-                timeline,
-                yara,
             )
             flags.append("08splunk")
             print(
@@ -926,11 +923,8 @@ def main(
                 verbosity,
                 output_directory,
                 case,
+                stage,
                 allimgs,
-                volatility,
-                analysis,
-                timeline,
-                yara,
             )
             flags.append("09elastic")
             print(
