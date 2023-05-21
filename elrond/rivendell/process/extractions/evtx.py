@@ -128,6 +128,8 @@ def extract_evtx(
                 .replace('[\'"{"', '[{"')
                 .replace('"}"\']', '"}]')
                 .replace("/\"", "/")
+                .replace("/, \"", "/\", \"")
+                .replace("/}, {\"", "/\"}, {\"")
                 .replace("ProcessName", "WinProcess")
             )
         else:
