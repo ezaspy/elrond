@@ -87,9 +87,7 @@ configs = [
             )"""
 
 
-def configure_elastic_stack(
-    verbosity, output_directory, case, stage, allimgs
-):
+def configure_elastic_stack(verbosity, output_directory, case, stage, allimgs):
     def replace_original_configs(configs):
         for config in configs:
             if os.path.exists(config):
@@ -196,12 +194,12 @@ def configure_elastic_stack(
             stderr=subprocess.PIPE,
         ).communicate()
         subprocess.Popen(
-            ["sudo", "systemctl", "restart", "elasticsearch"],
+            ["sudo", "systemctl", "start", "elasticsearch"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         ).communicate()
         subprocess.Popen(
-            ["sudo", "systemctl", "restart", "kibana"],
+            ["sudo", "systemctl", "start", "kibana"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         ).communicate()
@@ -218,6 +216,22 @@ def configure_elastic_stack(
         stage,
         allimgs,
     )
+    subprocess.Popen(
+        ["sudo", "/bin/systemctl", "daemon-reload"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ).communicate()
+    subprocess.Popen(
+        ["sudo", "systemctl", "restart", "elasticsearch"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ).communicate()
+    subprocess.Popen(
+        ["sudo", "systemctl", "restart", "kibana"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ).communicate()
+    time.sleep(4)
     print()
     print(
         "   elasticsearch is available at:     127.0.0.1:9200\n   Kibana is available at:            127.0.0.1:5601"
