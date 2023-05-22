@@ -321,6 +321,11 @@ def main(
             )
         )
         sys.exit()
+    elif len(os.listdir(d)) > 0 and (".e01" not in str(os.listdir(d)) and ".E01" not in str(os.listdir(d)) and ".vmdk" not in str(os.listdir(d)) and ".VMDK" not in str(os.listdir(d)) and ".dd" not in str(os.listdir(d)) and ".DD" not in str(os.listdir(d)) and ".raw" not in str(os.listdir(d)) and ".RAW" not in str(os.listdir(d)) and ".img" not in str(os.listdir(d)) and ".IMG" not in str(os.listdir(d))):
+        print(
+            "\n  [directory] - '{}' does not contain any valid files (.E01/.VMDK/.dd/.raw/.img) for elrond to assess.\n     Please ensure you are referencing the correct directory path and try again.\n\n\n".format(d)
+        )
+        sys.exit()
     else:
         pass
     if not unmount:
