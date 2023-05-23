@@ -2,6 +2,7 @@
 import csv
 import json
 import os
+import re
 import shlex
 import subprocess
 import time
@@ -23,11 +24,13 @@ def ingest_elastic_ndjson(case, ndjsonfile):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ).communicate()[0]
-    if 'failed" : 1' in str(ingested_data) or "request body is required" in str(
-        ingested_data
+    if (
+        "Unexpected character" in str(ingested_data)
+        or 'failed" : 1' in str(ingested_data)
+        or "request body is required" in str(ingested_data)
     ):
         print(
-            "       '{}' could not be ingested - perhaps the json did not format correctly?".format(
+            "       Could not ingest\t'{}'\t\t- perhaps the json did not format correctly?".format(
                 ndjsonfile.split("/")[-1]
             )
         )
@@ -48,10 +51,19 @@ def ingest_elastic_data(
             imgs_to_ingest.append(img)
         else:
             pass
+    """for data, index_name in index_mapping.items():  # consider making individual indexes for each log source type - to ensure the correct timestamp is mapped for that log source - _index should be casetest-<usb/evtx/registry/log/etc.>
+        if atftroot.split("/")[-1] == "cooked":
+            index = atftfile.split(".")[0]
+        else:
+            index = atftroot.split("/")[-1]
+        print(atftroot.split("/")[-1])
+        print(atftfile)
+        print(data, index_name)
+        print(index)"""
     # creating index based on case name in elasticsearch
     make_index = shlex.split(
         'curl -X PUT "localhost:9200/{}?pretty"'.format(case.lower())
-    )  # consider making individual indexes for each log source type - to ensure the correct timestamp is mapped for that log source - _index should be casetest-<usb/evtx/registry/log/etc.>
+    )
     subprocess.Popen(
         make_index, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     ).communicate()[0]
@@ -108,10 +120,54 @@ def ingest_elastic_data(
                 output_directory + img.split("::")[0] + "/artefacts/cooked/"
             )
         ):
-            for atftfile in atftfiles:
+            for (
+                atftfile
+            ) in (
+                atftfiles
+            ):  # spliting the large csv files into smaller chunks for easing ingestion
                 if os.path.getsize(
                     os.path.join(atftroot, atftfile)
-                ) > 0 and atftfile.endswith(".csv"):
+                ) > 52427769 and atftfile.endswith(".csv"):
+                    subprocess.Popen(
+                        [
+                            "split",
+                            "-C",
+                            "20m",
+                            "--numeric-suffixes",
+                            os.path.join(atftroot, atftfile),
+                            "{}-split".format(os.path.join(atftroot, atftfile[0:-4])),
+                        ],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                    ).communicate()[0]
+        time.sleep(0.5)
+        for atftroot, _, atftfiles in os.walk(
+            os.path.realpath(
+                output_directory + img.split("::")[0] + "/artefacts/cooked/"
+            )
+        ):
+            for (
+                atftfile
+            ) in atftfiles:  # renaming the split files with the .csv extension
+                if "-split" in atftfile:
+                    os.rename(
+                        os.path.join(atftroot, atftfile),
+                        os.path.join(atftroot, atftfile + ".csv"),
+                    )
+                else:
+                    pass
+        time.sleep(0.5)
+        for atftroot, _, atftfiles in os.walk(
+            os.path.realpath(
+                output_directory + img.split("::")[0] + "/artefacts/cooked/"
+            )
+        ):
+            for atftfile in atftfiles:  # converting csv files to ndjson
+                if (
+                    os.path.getsize(os.path.join(atftroot, atftfile)) > 0
+                    and atftfile.endswith(".csv")
+                    and os.path.getsize(os.path.join(atftroot, atftfile)) < 52427770
+                ):
                     if atftfile.endswith(".csv"):
                         with open(
                             os.path.join(atftroot, atftfile), encoding="utf-8"
@@ -123,17 +179,32 @@ def ingest_elastic_data(
                                 encoding="utf-8",
                             ) as write_json:
                                 for result in csv_results:
+                                    data = (
+                                        str(result)[2:]
+                                        .replace("': '", '": "')
+                                        .replace("', '", '", "')
+                                        .replace("'}", '"}')
+                                        .replace("': None", '": None')
+                                        .replace("\": None, '", '": None, "')
+                                        .replace("': \"", '": "')
+                                        .replace("\", '", '", "')
+                                        .replace('"-": "-", ', "")
+                                        .replace('"": "", ', "")
+                                    )
+                                    """if "+index.dat" in atftfile:
+                                        malformed_indexdat_data = re.findall(
+                                            r"\"Domain\": \"(.*)\"url\"", data
+                                        )
+                                        print(malformed_indexdat_data)
+                                        time.sleep(10)
+                                    else:
+                                        pass"""
                                     write_json.write(
                                         '{{"index": {{"_index": "{}"}}}}\n{{"hostname": "{}", "artefact": "{}", "{}\n\n'.format(
                                             case.lower(),
                                             img.split("::")[0],
                                             atftfile,
-                                            str(result)[2:]
-                                            .replace("': '", '": "')
-                                            .replace("', '", '", "')
-                                            .replace("'}", '"}')
-                                            .replace("': None", '": None')
-                                            .replace("\": None, '", '": None, "'),
+                                            data,
                                         )
                                     )
                             ingest_elastic_ndjson(
@@ -144,8 +215,13 @@ def ingest_elastic_data(
                         pass
                 else:
                     pass
-            time.sleep(1)
-            for atftfile in atftfiles:
+        time.sleep(0.5)
+        for atftroot, _, atftfiles in os.walk(
+            os.path.realpath(
+                output_directory + img.split("::")[0] + "/artefacts/cooked/"
+            )
+        ):
+            for atftfile in atftfiles:  # converting json files to ndjson
                 if os.path.getsize(
                     os.path.join(atftroot, atftfile)
                 ) > 0 and atftfile.endswith(".json"):
@@ -158,14 +234,17 @@ def ingest_elastic_data(
                             os.path.join(atftroot, atftfile)[0:-5] + ".ndjson", "w"
                         ) as write_json:
                             for result in results:
-                                write_json.write(
-                                    '{{"index": {{"_index": "{}"}}}}\n{{"hostname": "{}", "artefact": "{}", {}\n\n'.format(
-                                        case.lower(),
-                                        img.split("::")[0],
-                                        atftfile,
-                                        result[1:],
+                                if result != "{}":
+                                    write_json.write(
+                                        '{{"index": {{"_index": "{}"}}}}\n{{"hostname": "{}", "artefact": "{}", {}\n\n'.format(
+                                            case.lower(),
+                                            img.split("::")[0],
+                                            atftfile,
+                                            result[1:],
+                                        )
                                     )
-                                )
+                                else:
+                                    pass
                         ingest_elastic_ndjson(
                             case.lower(),
                             os.path.join(atftroot, atftfile)[0:-5] + ".ndjson",
@@ -174,6 +253,7 @@ def ingest_elastic_data(
                         pass
                 else:
                     pass
+        time.sleep(0.5)
         print_done(verbosity)
         print("     elasticsearch ingestion completed for {}".format(vssimage))
         entry, prnt = "{},{},{},completed\n".format(
