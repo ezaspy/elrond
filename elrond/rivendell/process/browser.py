@@ -42,7 +42,7 @@ def process_browser_index(
             + vssartefact
             + "browsers/"
             + indexuser
-            + "/IE/History.IE5/index.dat"
+            + "/ie/History.IE5/index.dat"
         ):
             if verbosity != "":
                 print(
@@ -52,7 +52,10 @@ def process_browser_index(
                 )
             else:
                 pass
-            (entry, prnt,) = "{},{},{},({}) '{}' browser artefact\n".format(
+            (
+                entry,
+                prnt,
+            ) = "{},{},{},({}) '{}' browser artefact\n".format(
                 datetime.now().isoformat(),
                 vssimage.replace("'", ""),
                 stage,
@@ -71,14 +74,14 @@ def process_browser_index(
                 + img.split("::")[0]
                 + "/artefacts/cooked"
                 + vssartefact
-                + "browsers/IE"
+                + "browsers/ie"
             ):
                 os.makedirs(
                     output_directory
                     + img.split("::")[0]
                     + "/artefacts/cooked"
                     + vssartefact
-                    + "browsers/IE"
+                    + "browsers/ie"
                 )
             else:
                 pass
@@ -87,7 +90,7 @@ def process_browser_index(
                 + img.split("::")[0]
                 + "/artefacts/cooked"
                 + vssartefact
-                + "browsers/IE/"
+                + "browsers/ie/"
                 + indexuser
                 + "+"
                 + artefact.split("/")[-1]
@@ -98,7 +101,7 @@ def process_browser_index(
                     + img.split("::")[0]
                     + "/artefacts/cooked"
                     + vssartefact
-                    + "browsers/IE/"
+                    + "browsers/ie/"
                     + indexuser
                     + "+"
                     + artefact.split("/")[-1]
@@ -113,7 +116,7 @@ def process_browser_index(
                 + img.split("::")[0]
                 + "/artefacts/cooked"
                 + vssartefact
-                + "browsers/IE/"
+                + "browsers/ie/"
                 + indexuser
                 + "+"
                 + artefact.split("/")[-1]
@@ -302,7 +305,6 @@ def format_browser_entries(artefact, browsertype, eachentry):
 def process_browser(
     verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
 ):
-
     if not os.path.exists(
         output_directory
         + img.split("::")[0]
@@ -359,7 +361,10 @@ def process_browser(
             pass
     else:
         pass
-    (entry, prnt,) = "{},{},{},'{}' ({}) {} browser artefact\n".format(
+    (
+        entry,
+        prnt,
+    ) = "{},{},{},'{}' ({}) {} browser artefact\n".format(
         datetime.now().isoformat(),
         vssimage.replace("'", ""),
         stage,
