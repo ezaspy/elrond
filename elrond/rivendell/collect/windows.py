@@ -225,7 +225,7 @@ def collect_windows_artefacts(
             print_done(verbosity)
         else:
             pass
-        """if item == mnt + "/Windows/System32/winevt/Logs/":
+        if item == mnt + "/Windows/System32/winevt/Logs/":
             item_list, dest = (
                 os.listdir(item),
                 dest + "evt/",
@@ -279,7 +279,7 @@ def collect_windows_artefacts(
             else:
                 pass
         else:
-            pass"""
+            pass
         if (
             item == mnt + "/Windows/System32/wbem/Repository/"
             or item == mnt + "/Windows/System32/wbem/Logs/"
