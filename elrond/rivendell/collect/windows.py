@@ -80,7 +80,10 @@ def collect_windows_artefacts(
                 print("     Collecting 'setupapi.dev.log' for {}...".format(vssimage))
             else:
                 pass
-            (entry, prnt,) = "{},{},{},'setupapi.dev.log'\n".format(
+            (
+                entry,
+                prnt,
+            ) = "{},{},{},'setupapi.dev.log'\n".format(
                 datetime.now().isoformat(),
                 img.split("::")[0],
                 stage,
@@ -182,7 +185,10 @@ def collect_windows_artefacts(
                     or each.endswith("SYSTEM.LOG2")
                 ):
                     try:
-                        (entry, prnt,) = "{},{},{},'{}' registry hive\n".format(
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' registry hive\n".format(
                             datetime.now().isoformat(),
                             img.split("::")[0],
                             stage,
@@ -219,7 +225,7 @@ def collect_windows_artefacts(
             print_done(verbosity)
         else:
             pass
-        if item == mnt + "/Windows/System32/winevt/Logs/":
+        """if item == mnt + "/Windows/System32/winevt/Logs/":
             item_list, dest = (
                 os.listdir(item),
                 dest + "evt/",
@@ -237,7 +243,10 @@ def collect_windows_artefacts(
                     pass
                 for each in item_list:
                     try:
-                        (entry, prnt,) = "{},{},{},'{}' event log\n".format(
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' event log\n".format(
                             datetime.now().isoformat(),
                             img.split("::")[0],
                             stage,
@@ -270,8 +279,11 @@ def collect_windows_artefacts(
             else:
                 pass
         else:
-            pass
-        if (item == mnt + "/Windows/System32/wbem/Repository/" or item == mnt + "/Windows/System32/wbem/Logs/"):
+            pass"""
+        if (
+            item == mnt + "/Windows/System32/wbem/Repository/"
+            or item == mnt + "/Windows/System32/wbem/Logs/"
+        ):
             item_list, dest = (
                 os.listdir(item),
                 dest + "wbem/",
@@ -291,7 +303,10 @@ def collect_windows_artefacts(
                     pass
                 for each in item_list:
                     try:
-                        (entry, prnt,) = "{},{},{},'{}' WBEM evidence\n".format(
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' WBEM evidence\n".format(
                             datetime.now().isoformat(),
                             img.split("::")[0],
                             stage,
@@ -345,7 +360,10 @@ def collect_windows_artefacts(
                     pass
                 for each in item_list:
                     try:
-                        (entry, prnt,) = "{},{},{},'{}' WMI artefact\n".format(
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' WMI artefact\n".format(
                             datetime.now().isoformat(),
                             img.split("::")[0],
                             stage,
@@ -379,7 +397,10 @@ def collect_windows_artefacts(
                         if len(backup_list) > 0:
                             for each_backup in backup_list:
                                 try:
-                                    (entry, prnt,) = "{},{},{},'{}' WMI artefact\n".format(
+                                    (
+                                        entry,
+                                        prnt,
+                                    ) = "{},{},{},'{}' WMI artefact\n".format(
                                         datetime.now().isoformat(),
                                         img.split("::")[0],
                                         stage,
@@ -401,7 +422,9 @@ def collect_windows_artefacts(
                                         os.path.join(dest, item.split("/")[-1], each)
                                     ):
                                         dest = check_existence(
-                                            os.path.join(item.split("/")[-1], each), dest, 1
+                                            os.path.join(item.split("/")[-1], each),
+                                            dest,
+                                            1,
                                         )
                                     else:
                                         pass
@@ -444,7 +467,9 @@ def collect_windows_artefacts(
                                                 )
                                             ):
                                                 dest = check_existence(
-                                                    os.path.join(item.split("/")[-1], each),
+                                                    os.path.join(
+                                                        item.split("/")[-1], each
+                                                    ),
                                                     dest,
                                                     1,
                                                 )
@@ -487,7 +512,10 @@ def collect_windows_artefacts(
                 for each in item_list:
                     if each.endswith(".mdb"):
                         try:
-                            (entry, prnt,) = "{},{},{},'{}' UAL evidence\n".format(
+                            (
+                                entry,
+                                prnt,
+                            ) = "{},{},{},'{}' UAL evidence\n".format(
                                 datetime.now().isoformat(),
                                 img.split("::")[0],
                                 stage,
@@ -542,7 +570,10 @@ def collect_windows_artefacts(
                     dest + each,
                     symlinks=symlinkvalue,
                 )
-                (entry, prnt,) = "{},{},{},'{}' deleted file\n".format(
+                (
+                    entry,
+                    prnt,
+                ) = "{},{},{},'{}' deleted file\n".format(
                     datetime.now().isoformat(),
                     img.split("::")[0],
                     stage,
@@ -574,7 +605,10 @@ def collect_windows_artefacts(
                     pass
                 for each in item_list:
                     try:
-                        (entry, prnt,) = "{},{},{},'{}' prefetch file\n".format(
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' prefetch file\n".format(
                             datetime.now().isoformat(),
                             img.split("::")[0],
                             stage,
@@ -644,7 +678,10 @@ def collect_windows_artefacts(
                         or item + each == mnt + "/Windows/MEMORY.DMP"
                     ):
                         if not os.path.exists(dest + each):
-                            (entry, prnt,) = "{},{},{},'{}' memory file\n".format(
+                            (
+                                entry,
+                                prnt,
+                            ) = "{},{},{},'{}' memory file\n".format(
                                 datetime.now().isoformat(),
                                 vssimage,
                                 stage,
