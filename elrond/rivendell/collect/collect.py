@@ -498,7 +498,9 @@ def collect_artefacts(
                         item,
                         vsstext,
                     )
-            if img.split("::")[0].endswith(".E01") or img.split("::")[0].endswith(".e01"):
+            if img.split("::")[0].endswith(".E01") or img.split("::")[0].endswith(
+                ".e01"
+            ):
                 extract_i30(
                     output_directory,
                     verbosity,
