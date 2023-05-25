@@ -191,14 +191,42 @@ def ingest_elastic_data(
                                         .replace('"-": "-", ', "")
                                         .replace('"": "", ', "")
                                     )
-                                    """if "+index.dat" in atftfile:
+                                    if "+index.dat" in atftfile:
                                         malformed_indexdat_data = re.findall(
-                                            r"\"Domain\": \"(.*)\"url\"", data
+                                            r"(.*\"Domain\": \")([\S\s]+)(\"url\".*)",
+                                            data,
                                         )
-                                        print(malformed_indexdat_data)
-                                        time.sleep(10)
+                                        reformed_data = (
+                                            malformed_indexdat_data[0][1]
+                                            .replace("(", "%28")
+                                            .replace(")", "%29")
+                                            .replace("{", "%7B")
+                                            .replace("}", "%7D")
+                                            .replace('"', "%22")
+                                        )
+                                        reformed_data = re.sub(
+                                            r'(Description": "[^"]+)(\}$)',
+                                            r'\1"\2',
+                                            reformed_data,
+                                        )
+                                        if reformed_data.endswith("%22, "):
+                                            reformed_data = reformed_data.replace(
+                                                "%22, ", '", '
+                                            )
+                                        else:
+                                            pass
+                                        reformed_data.replace("\" ', ", '"').replace(
+                                            "\\\\\\", "\\\\"
+                                        )
+                                        data = "{}{}{}".format(
+                                            malformed_indexdat_data[0][0],
+                                            reformed_data.replace(
+                                                "\\\\\\", "\\\\"
+                                            ).replace("\\\\\\", "\\\\"),
+                                            malformed_indexdat_data[0][2],
+                                        )
                                     else:
-                                        pass"""
+                                        pass
                                     write_json.write(
                                         '{{"index": {{"_index": "{}"}}}}\n{{"hostname": "{}", "artefact": "{}", "{}\n\n'.format(
                                             case.lower(),
