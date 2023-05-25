@@ -172,19 +172,24 @@ def process_browser_index(
                         .strip(";")
                         .split(",")[0],
                     )
-                    details, description = str(
-                        re.sub(
-                            r"(\S),(\S)",
-                            r"\1\2",
-                            str(
-                                re.sub(
-                                    r"(\S),(\S)",
-                                    r"\1\2",
-                                    indexentry.split("<|>")[2],
-                                )
-                            ).strip(","),
+                    details = (
+                        str(
+                            re.sub(
+                                r"(\S),(\S)",
+                                r"\1\2",
+                                str(
+                                    re.sub(
+                                        r"(\S),(\S)",
+                                        r"\1\2",
+                                        indexentry.split("<|>")[2],
+                                    )
+                                ).strip(","),
+                            )
                         )
-                    ).replace(", ,", " ").strip(","), re.sub(
+                        .replace(", ,", " ")
+                        .strip(",")
+                    )
+                    description = re.sub(
                         r"\w\-\ \.",
                         r"",
                         str(
@@ -200,9 +205,7 @@ def process_browser_index(
                                 ).strip(","),
                             )
                         ).replace(", ,", " "),
-                    ).strip(
-                        ","
-                    )
+                    ).strip(",")
                     if ":" not in details:
                         description, details = str(
                             re.sub(
@@ -243,15 +246,27 @@ def process_browser_index(
                         description = "-"
                     else:
                         pass
-                    indexout.write(
-                        "{},{},{},{},{}\n".format(
-                            profile,
-                            protocol,
-                            site,
-                            details,
-                            description,
+                    if description.endswith(", "):
+                        description = description[0:-2]
+                    else:
+                        pass
+                    if "/" in site:
+                        details = site
+                        site = (
+                            details.replace("https://", "")
+                            .replace("http://", "")
+                            .split("/")[0]
                         )
+                    else:
+                        pass
+                    index_dat_row = "{},{},{},{},{}\n".format(
+                        profile,
+                        protocol,
+                        site,
+                        details,
+                        description,
                     )
+                    indexout.write("{}".format(index_dat_row))
             print_done(verbosity)
         else:
             pass
