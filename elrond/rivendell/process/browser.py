@@ -454,7 +454,7 @@ def process_browser(
         + artefact.split("/raw/")[1].split("/")[1]
         + "+"
         + artefact.split("/")[-1]
-        + ".csv"
+        + "_downloads.csv"
     ):
         with open(
             output_directory
