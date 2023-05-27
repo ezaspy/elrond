@@ -4,7 +4,9 @@ import re
 import subprocess
 
 
-def use_profile_plugins(artefact, jsondict, jsonlist, regjsonlist, rgrplistj, regart, regusr):
+def use_profile_plugins(
+    artefact, jsondict, jsonlist, regjsonlist, rgrplistj, regart, regusr
+):
     for profile in rgrplistj.split("\\n----------------------------------------\\n"):
         if (
             len(profile.split(" v.")) > 1
@@ -259,7 +261,10 @@ def use_profile_plugins(artefact, jsondict, jsonlist, regjsonlist, rgrplistj, re
                 ):
                     kv = list(eachkv)
                     if len(kv) > 0:
-                        (jsondict["MRUGroup"], jsondict["LastWriteTime"],) = (
+                        (
+                            jsondict["MRUGroup"],
+                            jsondict["LastWriteTime"],
+                        ) = (
                             kv[0].replace("\\\\", "\\"),
                             kv[1],
                         )
@@ -1537,10 +1542,16 @@ def extract_registry_profile(
             ).communicate()[0]
         )[2:-1]
         jsonlist, regjsonlist = use_profile_plugins(
-            artefact, jsondict, jsonlist, regjsonlist, rgrplistj, artefact.split("/")[-1].upper().split("+")[1], regusr
+            artefact,
+            jsondict,
+            jsonlist,
+            regjsonlist,
+            rgrplistj,
+            artefact.split("/")[-1].upper().split("+")[1],
+            regusr,
         )
         if len(regjsonlist) > 0:
-            regjson.write(
+            regdata = (
                 str(regjsonlist)
                 .replace(
                     "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",
@@ -1571,6 +1582,12 @@ def extract_registry_profile(
                 .replace('[\'"{"', '[{"')
                 .replace('"}"\']', '"}]')
             )
+            regdata = re.sub(
+                r'(", "[^"]+": ")(LastWrite) ?(Time)(", ")([^"]+": ")([\d-]{10} [\d:]{8}Z?")',
+                r'\1-\4\5-", "\2\3": "\6',
+                regdata,
+            )
+            regjson.write(regdata)
         else:
             pass
         regjsonlist.clear()
