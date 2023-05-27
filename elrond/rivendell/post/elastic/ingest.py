@@ -4,6 +4,7 @@ import json
 import os
 import re
 import shlex
+import shutil
 import subprocess
 import time
 from datetime import datetime
@@ -13,9 +14,50 @@ from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
-def ingest_elastic_ndjson(case, ndjsonfile):
+def convert_timestamps(data):
+    # yyyy/MM/dd HH:mm:ss.SSS
+    converted_timestamp_formats = re.sub(
+        r"(@timestamp\": \"\d{4})/(\d{2})/(\d{2}) (\d{2}:\d{2}:\d{2}\.\d{3}[^\d])",
+        r"\1-\2-\3 \4 000",
+        data,
+    )
+    # yyyy-MM-dd HH:mm:ssZ/yyyy-MM-dd HH:mm:ss
+    converted_timestamp_formats = re.sub(
+        r"(@timestamp\": \"\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2})Z?",
+        r"\1 \2\.000000",
+        converted_timestamp_formats,
+    )
+    # MM/dd/yy HH:mm:ss
+    converted_timestamp_formats = re.sub(
+        r"(@timestamp\": \"\d{2})/(\d{2})/(\d{2}) (\d{2}:\d{2}:\d{2})",
+        r"\1-\2-\3 \4\.000000",
+        converted_timestamp_formats,
+    )
+    # evtx files and $I30
+    return (
+        converted_timestamp_formats.replace(" 000", "000")
+        .replace("000000.", ".")
+        .replace("\\.000000", ".000000")
+        .replace("\\..", ".")
+    )
+
+
+def ingest_elastic_ndjson(output_directory, img, case, source_location):
+    if not os.path.exists(
+        os.path.join(output_directory + img.split("::")[0] + "/elastic/")
+    ):
+        os.makedirs(os.path.join(output_directory + img.split("::")[0] + "/elastic/"))
+        os.makedirs(
+            os.path.join(output_directory + img.split("::")[0] + "/elastic/documents/")
+        )
+    else:
+        pass
+    ndjsonfile = os.path.join(
+        output_directory + img.split("::")[0] + "/elastic/documents/{}"
+    ).format(source_location.split("/")[-1])
+    shutil.move(source_location, ndjsonfile)
     ingest_data_command = shlex.split(
-        'curl -s -H "Content-Type: application/x-ndjson" -XPOST localhost:9200/{}/default/_bulk?pretty --data-binary @"{}"'.format(
+        'curl -s -H "Content-Type: application/x-ndjson" -XPOST localhost:9200/{}/_doc/_bulk?pretty --data-binary @"{}"'.format(
             case.lower(), ndjsonfile
         )
     )
@@ -51,25 +93,34 @@ def ingest_elastic_data(
             imgs_to_ingest.append(img)
         else:
             pass
-    """for data, index_name in index_mapping.items():  # consider making individual indexes for each log source type - to ensure the correct timestamp is mapped for that log source - _index should be casetest-<usb/evtx/registry/log/etc.>
-        if atftroot.split("/")[-1] == "cooked":
-            index = atftfile.split(".")[0]
+        if (
+            not os.path.exists(
+                output_directory + img.split("::")[0] + "/artefacts/cooked/"
+            )
+            and len(
+                os.listdir(output_directory + img.split("::")[0] + "/artefacts/cooked/")
+            )
+            > 0
+        ):
+            os.makedirs(
+                os.path.join(output_directory + img.split("::")[0] + "/elastic-ingest")
+            )
         else:
-            index = atftroot.split("/")[-1]
-        print(atftroot.split("/")[-1])
-        print(atftfile)
-        print(data, index_name)
-        print(index)"""
+            pass
     # creating index based on case name in elasticsearch
     make_index = shlex.split(
-        'curl -X PUT "localhost:9200/{}?pretty"'.format(case.lower())
-    )
+        'curl -X PUT "localhost:9200/{}?pretty" -H "Content-Type: application/json" -d\'{{"mappings": {{"properties": {{"@timestamp": {{"type": "date", "format": "YYYY-MM-DD HH:mm:ss.SSSSSS"}}}}}}}}\''.format(
+            case.lower()
+        )
+    )  # yyyy/MM/dd HH:mm:ss.SSS||MM/dd/yy HH:mm:ss||yyyy-MM-dd HH:mm:ss.SSSSSS||yyyy-MM-dd HH:mm:ssZ||yyyy-MM-dd HH:mm:ss||epoch_millis
     subprocess.Popen(
-        make_index, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        make_index,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
     ).communicate()[0]
     # increasing field limitations in elasticsearch
     increase_index_limit = shlex.split(
-        'curl -X PUT  -H "Content-Type: application/x-ndjson" localhost:9200/{}/_settings?pretty -d \'{{"index.mapping.total_fields.limit": 10000}}\''.format(
+        'curl -X PUT  -H "Content-Type: application/x-ndjson" localhost:9200/{}/_settings?pretty -d \'{{"index.mapping.total_fields.limit": 1000000}}\''.format(
             case.lower()
         )
     )
@@ -78,13 +129,14 @@ def ingest_elastic_data(
     ).communicate()[0]
     # creating index pattern to ensure data is mapped correctly in Kibana
     make_index_pattern = shlex.split(
-        'curl -X POST "localhost:5601/api/saved_objects/index-pattern/{}" -H "kbn-xsrf: true" -H "Content-Type: application/json" -d \'{{"attributes": {{"title": "{}*"}}}}\''.format(
+        'curl -X POST "localhost:5601/api/saved_objects/index-pattern/{}" -H "kbn-xsrf: true" -H "Content-Type: application/json" -d \'{{"attributes":{{"fieldAttrs":"{{}}","title":"{}*","timeFieldName":"@timestamp","fields":"[]","typeMeta":"{{}}","runtimeFieldMap":"{{}}"}}}}\''.format(
             case.lower(), case.lower()
         )
     )
     subprocess.Popen(
         make_index_pattern, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     ).communicate()[0]
+    time.sleep(0.2)
     for img in imgs_to_ingest:
         if "vss" in img.split("::")[1]:
             vssimage, vsstext = "'" + img.split("::")[0] + "' (" + img.split("::")[
@@ -140,7 +192,7 @@ def ingest_elastic_data(
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                     ).communicate()[0]
-        time.sleep(0.5)
+        time.sleep(0.2)
         for atftroot, _, atftfiles in os.walk(
             os.path.realpath(
                 output_directory + img.split("::")[0] + "/artefacts/cooked/"
@@ -156,7 +208,50 @@ def ingest_elastic_data(
                     )
                 else:
                     pass
-        time.sleep(0.5)
+        for atftroot, _, atftfiles in os.walk(
+            os.path.realpath(
+                output_directory + img.split("::")[0] + "/artefacts/cooked/"
+            )
+        ):
+            for atftfile in atftfiles:  # adding header to split csv files
+                if (
+                    "-split" in atftfile
+                    and "journal_mft" in atftfile
+                    and atftfile.endswith(".csv")
+                    and "00" not in atftfile
+                ):
+                    with open(
+                        os.path.join(atftroot, ".adding_header_" + atftfile),
+                        "a",
+                    ) as adding_header:
+                        adding_header.write(
+                            "record,state,active,record_type,seq_number,parent_file_record,parent_file_record_seq,std_info_creation_date,std_info_modification_date,std_info_access_date,std_info_entry_date,object_id,birth_volume_id,birth_object_id,birth_domain_id,std_info,attribute_list,has_filename,has_object_id,volume_name,volume_info,data,index_root,index_allocation,bitmap,reparse_point,ea_information,ea,property_set,logged_utility_stream,log/notes,stf_fn_shift,usec_zero,ads,possible_copy,possible_volume_move,Filename,fn_info_creation_date,fn_info_modification_date,fn_info_access_date,fn_info_entry_date,LastWriteTime\n"
+                        )
+                        with open(os.path.join(atftroot, atftfile)) as read_split_file:
+                            for eachcsvrow in read_split_file:
+                                adding_header.write(eachcsvrow)
+                    os.remove(os.path.join(atftroot, atftfile))
+                else:
+                    pass
+        for atftroot, _, atftfiles in os.walk(
+            os.path.realpath(
+                output_directory + img.split("::")[0] + "/artefacts/cooked/"
+            )
+        ):
+            for atftfile in atftfiles:  # renaming the split files, with headers
+                if (
+                    "-split" in atftfile
+                    and ".adding_header_" in atftfile
+                    and "journal_mft" in atftfile
+                    and atftfile.endswith(".csv")
+                ):
+                    os.rename(
+                        os.path.join(atftroot, atftfile),
+                        os.path.join(atftroot, atftfile.split(".adding_header_")[-1]),
+                    )
+                else:
+                    pass
+        time.sleep(0.2)
         for atftroot, _, atftfiles in os.walk(
             os.path.realpath(
                 output_directory + img.split("::")[0] + "/artefacts/cooked/"
@@ -227,15 +322,35 @@ def ingest_elastic_data(
                                         )
                                     else:
                                         pass
-                                    write_json.write(
-                                        '{{"index": {{"_index": "{}"}}}}\n{{"hostname": "{}", "artefact": "{}", "{}\n\n'.format(
-                                            case.lower(),
-                                            img.split("::")[0],
-                                            atftfile,
-                                            data,
+                                    # inserting timestamp now() as no timestamp exists
+                                    if (
+                                        "_index" not in data
+                                        and "LastWrite" not in data
+                                        and "@timestamp" not in data
+                                    ):
+                                        time_insert = '", "@timestamp": "{}'.format(
+                                            datetime.now().isoformat().replace("T", " ")
                                         )
+                                    else:
+                                        time_insert = ""
+                                    data = '{{"index": {{"_index": "{}"}}}}\n{{"hostname": "{}", "artefact": "{}{}", "{}\n\n'.format(
+                                        case.lower(),
+                                        img.split("::")[0],
+                                        atftfile,
+                                        time_insert,
+                                        data.replace("LastWriteTime", "@timestamp")
+                                        .replace("LastWrite Time", "@timestamp")
+                                        .replace('"LastWrite": "', '"@timestamp": "')
+                                        .replace(
+                                            '"@timestamp": "@timestamp ',
+                                            '"@timestamp": "',
+                                        ),
                                     )
+                                    converted_timestamp = convert_timestamps(data)
+                                    write_json.write(converted_timestamp)
                             ingest_elastic_ndjson(
+                                output_directory,
+                                img,
                                 case.lower(),
                                 os.path.join(atftroot, atftfile)[0:-4] + ".ndjson",
                             )
@@ -243,7 +358,7 @@ def ingest_elastic_data(
                         pass
                 else:
                     pass
-        time.sleep(0.5)
+        time.sleep(0.2)
         for atftroot, _, atftfiles in os.walk(
             os.path.realpath(
                 output_directory + img.split("::")[0] + "/artefacts/cooked/"
@@ -263,17 +378,27 @@ def ingest_elastic_data(
                         ) as write_json:
                             for result in results:
                                 if result != "{}":
-                                    write_json.write(
-                                        '{{"index": {{"_index": "{}"}}}}\n{{"hostname": "{}", "artefact": "{}", {}\n\n'.format(
-                                            case.lower(),
-                                            img.split("::")[0],
-                                            atftfile,
-                                            result[1:],
-                                        )
+                                    # malformed field matching in SOFTWARE - wbem plugin
+                                    data = '{{"index": {{"_index": "{}"}}}}\n{{"hostname": "{}", "artefact": "{}", {}\n\n'.format(
+                                        case.lower(),
+                                        img.split("::")[0],
+                                        atftfile,
+                                        result[1:]
+                                        .replace("LastWriteTime", "@timestamp")
+                                        .replace("LastWrite Time", "@timestamp")
+                                        .replace('"LastWrite": "', '"@timestamp": "')
+                                        .replace(
+                                            '"@timestamp": "@timestamp ',
+                                            '"@timestamp": "',
+                                        ),
                                     )
+                                    converted_timestamp = convert_timestamps(data)
+                                    write_json.write(converted_timestamp)
                                 else:
                                     pass
                         ingest_elastic_ndjson(
+                            output_directory,
+                            img,
                             case.lower(),
                             os.path.join(atftroot, atftfile)[0:-5] + ".ndjson",
                         )
@@ -281,7 +406,7 @@ def ingest_elastic_data(
                         pass
                 else:
                     pass
-        time.sleep(0.5)
+        time.sleep(0.2)
         print_done(verbosity)
         print("     elasticsearch ingestion completed for {}".format(vssimage))
         entry, prnt = "{},{},{},completed\n".format(
