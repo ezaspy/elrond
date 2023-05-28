@@ -42,20 +42,7 @@ def convert_timestamps(data):
     )
 
 
-def ingest_elastic_ndjson(output_directory, img, case, source_location):
-    if not os.path.exists(
-        os.path.join(output_directory + img.split("::")[0] + "/elastic/")
-    ):
-        os.makedirs(os.path.join(output_directory + img.split("::")[0] + "/elastic/"))
-        os.makedirs(
-            os.path.join(output_directory + img.split("::")[0] + "/elastic/documents/")
-        )
-    else:
-        pass
-    ndjsonfile = os.path.join(
-        output_directory + img.split("::")[0] + "/elastic/documents/{}"
-    ).format(source_location.split("/")[-1])
-    shutil.move(source_location, ndjsonfile)
+def ingest_elastic_ndjson(case, ndjsonfile):
     ingest_data_command = shlex.split(
         'curl -s -H "Content-Type: application/x-ndjson" -XPOST localhost:9200/{}/_doc/_bulk?pretty --data-binary @"{}"'.format(
             case.lower(), ndjsonfile
@@ -72,12 +59,40 @@ def ingest_elastic_ndjson(output_directory, img, case, source_location):
         or "request body is required" in str(ingested_data)
     ):
         print(
-            "       Could not ingest\t'{}'\t\t- perhaps the json did not format correctly?".format(
+            "       Could not ingest\t'{}'\t- perhaps the json did not format correctly?".format(
                 ndjsonfile.split("/")[-1]
             )
         )
     else:
         pass
+
+
+def prepare_elastic_ndjson(output_directory, img, case, source_location):
+    if not os.path.exists(
+        os.path.join(output_directory + img.split("::")[0] + "/elastic/")
+    ):
+        os.makedirs(os.path.join(output_directory + img.split("::")[0] + "/elastic/"))
+        os.makedirs(
+            os.path.join(output_directory + img.split("::")[0] + "/elastic/documents/")
+        )
+    else:
+        pass
+    ndjsonfile = os.path.join(
+        output_directory + img.split("::")[0] + "/elastic/documents/{}"
+    ).format(source_location.split("/")[-1])
+    shutil.move(source_location, ndjsonfile)
+    with open(
+        os.path.join(output_directory + "/elastic_ingestion_commands.txt"),
+        "a",
+    ) as testing:
+        testing.write(
+            'curl -s -H "Content-Type: application/x-ndjson" -XPOST localhost:9200/{}/_doc/_bulk?pretty --data-binary @"{}"'.format(
+                case.lower(), ndjsonfile
+            )
+        )
+        testing.write("\n\n")
+    ingest_elastic_ndjson(case, ndjsonfile)
+    ingest_elastic_ndjson(case, ndjsonfile) # repeating to ensure data is ingested
 
 
 def ingest_elastic_data(
@@ -338,7 +353,8 @@ def ingest_elastic_data(
                                         img.split("::")[0],
                                         atftfile,
                                         time_insert,
-                                        data.replace("LastWriteTime", "@timestamp")
+                                        data.replace("SystemTime", "@timestamp")
+                                        .replace("LastWriteTime", "@timestamp")
                                         .replace("LastWrite Time", "@timestamp")
                                         .replace('"LastWrite": "', '"@timestamp": "')
                                         .replace(
@@ -348,7 +364,7 @@ def ingest_elastic_data(
                                     )
                                     converted_timestamp = convert_timestamps(data)
                                     write_json.write(converted_timestamp)
-                            ingest_elastic_ndjson(
+                            prepare_elastic_ndjson(
                                 output_directory,
                                 img,
                                 case.lower(),
@@ -384,6 +400,7 @@ def ingest_elastic_data(
                                         img.split("::")[0],
                                         atftfile,
                                         result[1:]
+                                        .replace("SystemTime", "@timestamp")
                                         .replace("LastWriteTime", "@timestamp")
                                         .replace("LastWrite Time", "@timestamp")
                                         .replace('"LastWrite": "', '"@timestamp": "')
@@ -396,7 +413,7 @@ def ingest_elastic_data(
                                     write_json.write(converted_timestamp)
                                 else:
                                     pass
-                        ingest_elastic_ndjson(
+                        prepare_elastic_ndjson(
                             output_directory,
                             img,
                             case.lower(),
