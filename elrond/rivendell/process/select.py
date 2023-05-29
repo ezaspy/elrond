@@ -161,299 +161,301 @@ def select_pre_process_artefacts(
                 )
             else:
                 pass
-            if "vss" in img.split("::")[1]:
-                vssimage = (
-                    "'"
-                    + img.split("::")[0]
-                    + "' ("
-                    + img.split("::")[1]
-                    .split("_")[1]
-                    .replace("vss", "volume shadow copy #")
-                    + ")"
-                )
-            else:
-                vssimage = "'" + img.split("::")[0] + "'"
-            print("    Processing artefacts for {}...".format(vssimage))
-            entry, prnt = "{},{},{},commenced\n".format(
-                datetime.now().isoformat(), vssimage.replace("'", ""), stage
-            ), " -> {} -> {} artefacts for {}".format(
-                datetime.now().isoformat().replace("T", " "), stage, vssimage
-            )
-            write_audit_log_entry(verbosity, output_directory, entry, prnt)
-            for each in artefacts_list:
-                ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
-                artefact = str(ia[0][1])
-                if not artefact.split("/")[-1].startswith(
-                    "#"
-                ):  # processing primary image artefacts
-                    vssmem = determine_vss_image(
-                        output_directory,
-                        verbosity,
-                        volatility,
-                        d,
-                        stage,
-                        img,
-                        vssimage,
-                        artefact,
-                        vssmem,
-                        volchoice,
-                        vss,
-                        memtimeline,
-                    )
-                else:
-                    pass
-            for each in artefacts_list:
-                ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
-                artefact = str(ia[0][1])
-                if artefact.split("/")[-1].startswith(
-                    "#1"
-                ):  # processing secondary image artefacts
-                    vssmem = determine_vss_image(
-                        output_directory,
-                        verbosity,
-                        volatility,
-                        d,
-                        stage,
-                        img,
-                        vssimage,
-                        artefact,
-                        vssmem,
-                        volchoice,
-                        vss,
-                        memtimeline,
-                    )
-                else:
-                    pass
-            for each in artefacts_list:
-                ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
-                artefact = str(ia[0][1])
-                if artefact.split("/")[-1].startswith(
-                    "#2"
-                ):  # processing tertiary image artefacts
-                    vssmem = determine_vss_image(
-                        output_directory,
-                        verbosity,
-                        volatility,
-                        d,
-                        stage,
-                        img,
-                        vssimage,
-                        artefact,
-                        vssmem,
-                        volchoice,
-                        vss,
-                        memtimeline,
-                    )
-                else:
-                    pass
-            for each in artefacts_list:
-                ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
-                artefact = str(ia[0][1])
-                if artefact.split("/")[-1].startswith(
-                    "#3"
-                ):  # processing secondary, tertiary etc. image artefacts
-                    vssmem = determine_vss_image(
-                        output_directory,
-                        verbosity,
-                        volatility,
-                        d,
-                        stage,
-                        img,
-                        vssimage,
-                        artefact,
-                        vssmem,
-                        volchoice,
-                        vss,
-                        memtimeline,
-                    )
-                else:
-                    pass
-            for each in artefacts_list:
-                ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
-                artefact = str(ia[0][1])
-                if artefact.split("/")[-1].startswith(
-                    "#4"
-                ):  # processing secondary, tertiary etc. image artefacts
-                    vssmem = determine_vss_image(
-                        output_directory,
-                        verbosity,
-                        volatility,
-                        d,
-                        stage,
-                        img,
-                        vssimage,
-                        artefact,
-                        vssmem,
-                        volchoice,
-                        vss,
-                        memtimeline,
-                    )
-                else:
-                    pass
-            for each in artefacts_list:
-                ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
-                artefact = str(ia[0][1])
-                if artefact.split("/")[-1].startswith(
-                    "#5"
-                ):  # processing secondary, tertiary etc. image artefacts
-                    vssmem = determine_vss_image(
-                        output_directory,
-                        verbosity,
-                        volatility,
-                        d,
-                        stage,
-                        img,
-                        vssimage,
-                        artefact,
-                        vssmem,
-                        volchoice,
-                        vss,
-                        memtimeline,
-                    )
-                else:
-                    pass
-            for each in artefacts_list:
-                ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
-                artefact = str(ia[0][1])
-                if artefact.split("/")[-1].startswith(
-                    "#6"
-                ):  # processing secondary, tertiary etc. image artefacts
-                    vssmem = determine_vss_image(
-                        output_directory,
-                        verbosity,
-                        volatility,
-                        d,
-                        stage,
-                        img,
-                        vssimage,
-                        artefact,
-                        vssmem,
-                        volchoice,
-                        vss,
-                        memtimeline,
-                    )
-                else:
-                    pass
-            for each in artefacts_list:
-                ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
-                artefact = str(ia[0][1])
-                if artefact.split("/")[-1].startswith(
-                    "#7"
-                ):  # processing secondary, tertiary etc. image artefacts
-                    vssmem = determine_vss_image(
-                        output_directory,
-                        verbosity,
-                        volatility,
-                        d,
-                        stage,
-                        img,
-                        vssimage,
-                        artefact,
-                        vssmem,
-                        volchoice,
-                        vss,
-                        memtimeline,
-                    )
-                else:
-                    pass
-            for each in artefacts_list:
-                ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
-                artefact = str(ia[0][1])
-                if artefact.split("/")[-1].startswith(
-                    "#8"
-                ):  # processing secondary, tertiary etc. image artefacts
-                    vssmem = determine_vss_image(
-                        output_directory,
-                        verbosity,
-                        volatility,
-                        d,
-                        stage,
-                        img,
-                        vssimage,
-                        artefact,
-                        vssmem,
-                        volchoice,
-                        vss,
-                        memtimeline,
-                    )
-                else:
-                    pass
-            for each in artefacts_list:
-                ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
-                artefact = str(ia[0][1])
-                if artefact.split("/")[-1].startswith(
-                    "#9"
-                ):  # processing secondary, tertiary etc. image artefacts
-                    vssmem = determine_vss_image(
-                        output_directory,
-                        verbosity,
-                        volatility,
-                        d,
-                        stage,
-                        img,
-                        vssimage,
-                        artefact,
-                        vssmem,
-                        volchoice,
-                        vss,
-                        memtimeline,
-                    )
-                else:
-                    pass
-            if collectfiles:
-                process_list.clear()
-                if os.path.exists(
-                    os.path.join(output_directory + img.split("::")[0] + "/carved/")
-                ):
-                    print(
-                        "\n      \033[1;33m{} carved files for {}...\033[1;m".format(
-                            stage.title(), vssimage
-                        )
-                    )
-                    process_list.append(
-                        os.path.join(output_directory + img.split("::")[0] + "/carved/")
-                    )
-                    artefacts_list.clear()
-                    artefacts_list = select_artefacts_to_process(
-                        img, process_list, artefacts_list, processed_artefacts
-                    )
-                    for each in artefacts_list:
-                        ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
-                        artefact = str(ia[0][1])
-                        vssmem = process_artefacts(
-                            output_directory,
-                            verbosity,
-                            volatility,
-                            d,
-                            stage,
-                            img,
-                            vssimage,
-                            "/",
-                            artefact,
-                            vssmem,
-                            volchoice,
-                            vss,
-                            memtimeline,
-                        )
-                    print(
-                        "       \033[1;33mProcessed carved files for {}\n\033[1;m".format(
-                            vssimage
-                        )
-                    )
-                else:
-                    pass
-            else:
-                pass
-            print("  -> Completed Processing Phase for {}".format(vssimage))
-            entry, prnt = "{},{},{},completed\n".format(
-                datetime.now().isoformat(), vssimage.replace("'", ""), stage
-            ), " -> {} -> processing completed for {}".format(
-                datetime.now().isoformat().replace("T", " "), vssimage
-            )
-            write_audit_log_entry(verbosity, output_directory, entry, prnt)
-            print()
         else:
             pass
+    for _, img in imgs.items():  # processing identified artefacts
+        if "vss" in img.split("::")[1]:
+            vssimage = (
+                "'"
+                + img.split("::")[0]
+                + "' ("
+                + img.split("::")[1]
+                .split("_")[1]
+                .replace("vss", "volume shadow copy #")
+                + ")"
+            )
+        else:
+            vssimage = "'" + img.split("::")[0] + "'"
+        print("    Processing artefacts for {}...".format(vssimage))
+        entry, prnt = "{},{},{},commenced\n".format(
+            datetime.now().isoformat(), vssimage.replace("'", ""), stage
+        ), " -> {} -> {} artefacts for {}".format(
+            datetime.now().isoformat().replace("T", " "), stage, vssimage
+        )
+        write_audit_log_entry(verbosity, output_directory, entry, prnt)
+        for each in artefacts_list:
+            ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
+            artefact = str(ia[0][1])
+            if not artefact.split("/")[-1].startswith(
+                "#"
+            ):  # processing primary image artefacts
+                vssmem = determine_vss_image(
+                    output_directory,
+                    verbosity,
+                    volatility,
+                    d,
+                    stage,
+                    img,
+                    vssimage,
+                    artefact,
+                    vssmem,
+                    volchoice,
+                    vss,
+                    memtimeline,
+                )
+            else:
+                pass
+        # below sections are for multi-paritied drives
+        for each in artefacts_list:
+            ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
+            artefact = str(ia[0][1])
+            if artefact.split("/")[-1].startswith(
+                "#1"
+            ):  # processing secondary image artefacts
+                vssmem = determine_vss_image(
+                    output_directory,
+                    verbosity,
+                    volatility,
+                    d,
+                    stage,
+                    img,
+                    vssimage,
+                    artefact,
+                    vssmem,
+                    volchoice,
+                    vss,
+                    memtimeline,
+                )
+            else:
+                pass
+        for each in artefacts_list:
+            ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
+            artefact = str(ia[0][1])
+            if artefact.split("/")[-1].startswith(
+                "#2"
+            ):  # processing tertiary image artefacts
+                vssmem = determine_vss_image(
+                    output_directory,
+                    verbosity,
+                    volatility,
+                    d,
+                    stage,
+                    img,
+                    vssimage,
+                    artefact,
+                    vssmem,
+                    volchoice,
+                    vss,
+                    memtimeline,
+                )
+            else:
+                pass
+        for each in artefacts_list:
+            ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
+            artefact = str(ia[0][1])
+            if artefact.split("/")[-1].startswith(
+                "#3"
+            ):  # processing secondary, tertiary etc. image artefacts
+                vssmem = determine_vss_image(
+                    output_directory,
+                    verbosity,
+                    volatility,
+                    d,
+                    stage,
+                    img,
+                    vssimage,
+                    artefact,
+                    vssmem,
+                    volchoice,
+                    vss,
+                    memtimeline,
+                )
+            else:
+                pass
+        for each in artefacts_list:
+            ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
+            artefact = str(ia[0][1])
+            if artefact.split("/")[-1].startswith(
+                "#4"
+            ):  # processing secondary, tertiary etc. image artefacts
+                vssmem = determine_vss_image(
+                    output_directory,
+                    verbosity,
+                    volatility,
+                    d,
+                    stage,
+                    img,
+                    vssimage,
+                    artefact,
+                    vssmem,
+                    volchoice,
+                    vss,
+                    memtimeline,
+                )
+            else:
+                pass
+        for each in artefacts_list:
+            ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
+            artefact = str(ia[0][1])
+            if artefact.split("/")[-1].startswith(
+                "#5"
+            ):  # processing secondary, tertiary etc. image artefacts
+                vssmem = determine_vss_image(
+                    output_directory,
+                    verbosity,
+                    volatility,
+                    d,
+                    stage,
+                    img,
+                    vssimage,
+                    artefact,
+                    vssmem,
+                    volchoice,
+                    vss,
+                    memtimeline,
+                )
+            else:
+                pass
+        for each in artefacts_list:
+            ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
+            artefact = str(ia[0][1])
+            if artefact.split("/")[-1].startswith(
+                "#6"
+            ):  # processing secondary, tertiary etc. image artefacts
+                vssmem = determine_vss_image(
+                    output_directory,
+                    verbosity,
+                    volatility,
+                    d,
+                    stage,
+                    img,
+                    vssimage,
+                    artefact,
+                    vssmem,
+                    volchoice,
+                    vss,
+                    memtimeline,
+                )
+            else:
+                pass
+        for each in artefacts_list:
+            ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
+            artefact = str(ia[0][1])
+            if artefact.split("/")[-1].startswith(
+                "#7"
+            ):  # processing secondary, tertiary etc. image artefacts
+                vssmem = determine_vss_image(
+                    output_directory,
+                    verbosity,
+                    volatility,
+                    d,
+                    stage,
+                    img,
+                    vssimage,
+                    artefact,
+                    vssmem,
+                    volchoice,
+                    vss,
+                    memtimeline,
+                )
+            else:
+                pass
+        for each in artefacts_list:
+            ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
+            artefact = str(ia[0][1])
+            if artefact.split("/")[-1].startswith(
+                "#8"
+            ):  # processing secondary, tertiary etc. image artefacts
+                vssmem = determine_vss_image(
+                    output_directory,
+                    verbosity,
+                    volatility,
+                    d,
+                    stage,
+                    img,
+                    vssimage,
+                    artefact,
+                    vssmem,
+                    volchoice,
+                    vss,
+                    memtimeline,
+                )
+            else:
+                pass
+        for each in artefacts_list:
+            ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
+            artefact = str(ia[0][1])
+            if artefact.split("/")[-1].startswith(
+                "#9"
+            ):  # processing secondary, tertiary etc. image artefacts
+                vssmem = determine_vss_image(
+                    output_directory,
+                    verbosity,
+                    volatility,
+                    d,
+                    stage,
+                    img,
+                    vssimage,
+                    artefact,
+                    vssmem,
+                    volchoice,
+                    vss,
+                    memtimeline,
+                )
+            else:
+                pass
+        if collectfiles:
+            process_list.clear()
+            if os.path.exists(
+                os.path.join(output_directory + img.split("::")[0] + "/carved/")
+            ):
+                print(
+                    "\n      \033[1;33m{} carved files for {}...\033[1;m".format(
+                        stage.title(), vssimage
+                    )
+                )
+                process_list.append(
+                    os.path.join(output_directory + img.split("::")[0] + "/carved/")
+                )
+                artefacts_list.clear()
+                artefacts_list = select_artefacts_to_process(
+                    img, process_list, artefacts_list, processed_artefacts
+                )
+                for each in artefacts_list:
+                    ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
+                    artefact = str(ia[0][1])
+                    vssmem = process_artefacts(
+                        output_directory,
+                        verbosity,
+                        volatility,
+                        d,
+                        stage,
+                        img,
+                        vssimage,
+                        "/",
+                        artefact,
+                        vssmem,
+                        volchoice,
+                        vss,
+                        memtimeline,
+                    )
+                print(
+                    "       \033[1;33mProcessed carved files for {}\n\033[1;m".format(
+                        vssimage
+                    )
+                )
+            else:
+                pass
+        else:
+            pass
+        print("  -> Completed Processing Phase for {}".format(vssimage))
+        entry, prnt = "{},{},{},completed\n".format(
+            datetime.now().isoformat(), vssimage.replace("'", ""), stage
+        ), " -> {} -> processing completed for {}".format(
+            datetime.now().isoformat().replace("T", " "), vssimage
+        )
+        write_audit_log_entry(verbosity, output_directory, entry, prnt)
+        print()
         processed_imgs.append(img.split("::")[0])
     else:
         pass
