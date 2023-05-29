@@ -665,91 +665,95 @@ def use_plugins(
             with open(
                 output_directory + mempath + "/" + plugin + ".json", "w"
             ) as voljson:
-                voljson.write(
+                vol_data = re.sub(
+                    r'("[^"]+": \[\{"[^"]+": "[^"]+", "[^\{\]]+\})(, \{"VolatilityVersion")',
+                    r"\1]}\2",
                     re.sub(
-                        r'("[^"]+": \[\{"[^"]+": "[^"]+", "[^\{\]]+\})(, \{"VolatilityVersion")',
-                        r"\1]}\2",
+                        r'(\[\{"[^\[\]]+\})(, \{"VolatilityVersion": ")',
+                        r"\1}]\2",
                         re.sub(
-                            r'(\[\{"[^\[\]]+\})(, \{"VolatilityVersion": ")',
-                            r"\1}]\2",
+                            r'("\}\])"(\}\]$)',
+                            r"\1\2",
                             re.sub(
-                                r'("\}\])"(\}\]$)',
-                                r"\1\2",
-                                re.sub(
-                                    r'(\[\{"[^\[\]]+\})(, \{"VolatilityVersion": ")',
-                                    r"\1}]\2",
-                                    str(voljsonlist)
-                                    .replace('\\\\"', '"')
-                                    .replace("['\"", "[")
-                                    .replace("\"']", "]")
-                                    .replace("}\"', '\"{", "}, {")
-                                    .replace("'", '"')
-                                    .replace('\\\\"', '"')
-                                    .replace('"}", "{"', '"}, {"')
-                                    .replace(', "{}"', "")
-                                    .replace('": "\\\\n', '": "')
-                                    .replace('"}"]', '"}]')
-                                    .replace('["{"', '[{"')
-                                    .replace('"[{"', '"[{"')
-                                    .replace(']}"]}', "]}]}")
-                                    .replace('"[{"', '[{"')
-                                    .replace('"}], ', '"}], "')
-                                    .replace('"["{}"], ', '["{}"], "')
-                                    .replace('"}", "{"', '"}, {"')
-                                    .replace("\\\\\\\\", "\\")
-                                    .replace('"["{}", "{"', '[{"')
-                                    .replace('}"], ', '"}], "')
-                                    .replace('": ["{"}], ""', '": [], "')
-                                    .replace(']"}]', "]}]")
-                                    .replace('": "[]}]}]', '": []}]}]')
-                                    .replace(', "Item": "GNOME_KEYRING_PID=', "")
-                                    .replace('":_"', '": "')
-                                    .replace(": : ", ": ")
-                                    .replace('"----------"', "--")
-                                    .replace('"--------"', "--")
-                                    .replace('"------"', "--")
-                                    .replace('"----"', "--")
-                                    .replace('""', '"')
-                                    .replace('", ", "', '", "')
-                                    .replace('": "-", "\\"', '": "')
-                                    .replace('": "; ,  ', '": "-", "')
-                                    .replace('": --, "', '": "--", "')
-                                    .replace('": ", "', '": "--", "')
-                                    .replace(', "', '", "')
-                                    .replace('""', '"')
-                                    .replace('"}]", "', '"}], "')
-                                    .replace('\\"}, {"', '}", {"')
-                                    .replace('\\", ",', '",')
-                                    .replace('}",', '"},')
-                                    .replace(',}, {"', '"}, {"')
-                                    .replace(', ", "', '", "')
-                                    .replace(",}, {", '"}, {')
-                                    .replace('": "}, {"', '": "-"}, {"')
-                                    .replace('}, {"', '"}, {"')
-                                    .replace('""', '"')
-                                    .replace('"}]}]", "', '"}]}], "')
-                                    .replace('"}, "', '"}, {"')
-                                    .replace('\\", \\"\\"]", "', '", "')
-                                    .replace('""', '"')
-                                    .replace('\\",_\\"\\"]}', '"}')
-                                    .replace('"}]"}, {"', '"}, {"')
-                                    .replace('"}, "', '"}, {"')
-                                    .replace('": "}]', '": ""}]')
-                                    .replace('"}]"}, {"', '"}]}, {"')
-                                    .replace("}]", '"}]')
-                                    .replace('""', '"')
-                                    .replace('"}]", "', '"}], "'),
-                                ),
-                            )
-                            .replace('"}}], {"', '"}, {"')
-                            .replace('",", "', '", "')
-                            .replace('"}]"}], "', '"}]}], "'),
+                                r'(\[\{"[^\[\]]+\})(, \{"VolatilityVersion": ")',
+                                r"\1}]\2",
+                                str(voljsonlist)
+                                .replace('\\\\"', '"')
+                                .replace("['\"", "[")
+                                .replace("\"']", "]")
+                                .replace("}\"', '\"{", "}, {")
+                                .replace("'", '"')
+                                .replace('\\\\"', '"')
+                                .replace('"}", "{"', '"}, {"')
+                                .replace(', "{}"', "")
+                                .replace('": "\\\\n', '": "')
+                                .replace('"}"]', '"}]')
+                                .replace('["{"', '[{"')
+                                .replace('"[{"', '"[{"')
+                                .replace(']}"]}', "]}]}")
+                                .replace('"[{"', '[{"')
+                                .replace('"}], ', '"}], "')
+                                .replace('"["{}"], ', '["{}"], "')
+                                .replace('"}", "{"', '"}, {"')
+                                .replace("\\\\\\\\", "\\")
+                                .replace('"["{}", "{"', '[{"')
+                                .replace('}"], ', '"}], "')
+                                .replace('": ["{"}], ""', '": [], "')
+                                .replace(']"}]', "]}]")
+                                .replace('": "[]}]}]', '": []}]}]')
+                                .replace(', "Item": "GNOME_KEYRING_PID=', "")
+                                .replace('":_"', '": "')
+                                .replace(": : ", ": ")
+                                .replace('"----------"', "--")
+                                .replace('"--------"', "--")
+                                .replace('"------"', "--")
+                                .replace('"----"', "--")
+                                .replace('""', '"')
+                                .replace('", ", "', '", "')
+                                .replace('": "-", "\\"', '": "')
+                                .replace('": "; ,  ', '": "-", "')
+                                .replace('": --, "', '": "--", "')
+                                .replace('": ", "', '": "--", "')
+                                .replace(', "', '", "')
+                                .replace('""', '"')
+                                .replace('"}]", "', '"}], "')
+                                .replace('\\"}, {"', '}", {"')
+                                .replace('\\", ",', '",')
+                                .replace('}",', '"},')
+                                .replace(',}, {"', '"}, {"')
+                                .replace(', ", "', '", "')
+                                .replace(",}, {", '"}, {')
+                                .replace('": "}, {"', '": "-"}, {"')
+                                .replace('}, {"', '"}, {"')
+                                .replace('""', '"')
+                                .replace('"}]}]", "', '"}]}], "')
+                                .replace('"}, "', '"}, {"')
+                                .replace('\\", \\"\\"]", "', '", "')
+                                .replace('""', '"')
+                                .replace('\\",_\\"\\"]}', '"}')
+                                .replace('"}]"}, {"', '"}, {"')
+                                .replace('"}, "', '"}, {"')
+                                .replace('": "}]', '": ""}]')
+                                .replace('"}]"}, {"', '"}]}, {"')
+                                .replace("}]", '"}]')
+                                .replace('""', '"')
+                                .replace('"}]", "', '"}], "'),
+                            ),
                         )
-                        .replace('": ""]", "', '": "-", "')
                         .replace('"}}], {"', '"}, {"')
-                        .replace('": ""]", "', '": "-", "'),
-                    ).replace('\\", "', '", "'),
-                ),
+                        .replace('",", "', '", "')
+                        .replace('"}]"}], "', '"}]}], "'),
+                    )
+                    .replace('": ""]", "', '": "-", "')
+                    .replace('"}}], {"', '"}, {"')
+                    .replace('": ""]", "', '": "-", "'),
+                ).replace('\\", "', '", "')
+                vol_data = re.sub(
+                    r'(, "ControlFlags": \[[^\[]+"\})(, \{"VolatilityVersion)',
+                    r"\1]}\2",
+                    str(vol_data),
+                )
+                voljson.write(vol_data)
             entry, prnt = "{},{},extracted {},{} ({})\n".format(
                 datetime.now().isoformat(),
                 vssimage,
