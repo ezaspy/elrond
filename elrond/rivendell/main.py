@@ -1071,7 +1071,7 @@ def main(
         else:
             timetaken = "{} second.".format(str(secs))
     if vss:
-        for eachimg, _ in imgs.items():
+        for _, eachimg in imgs.items():
             if (
                 "Windows" in eachimg.split("::")[1]
                 and (
