@@ -16,11 +16,6 @@ def extract_dumpreg_system(
         artefact + ".json",
         "a",
     ) as regjson:
-        print("rip.pl",
-            "-r",
-            artefact,
-            "-f",
-            artefact.split("/")[-1].split(".")[2].lower())
         rgrplistj = str(
             str(
                 subprocess.Popen(
