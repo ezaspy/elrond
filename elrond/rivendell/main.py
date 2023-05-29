@@ -9,7 +9,7 @@ import time
 from collections import OrderedDict
 from datetime import datetime
 
-from rivendell.core.coreprokat import collect_process_keyword_analysis_timeline
+from rivendell.core.core import collect_process_keyword_analysis_timeline
 from rivendell.audit import write_audit_log_entry
 from rivendell.core.gandalf import assess_gandalf
 from rivendell.core.identify import identify_memory_image
@@ -321,9 +321,22 @@ def main(
             )
         )
         sys.exit()
-    elif len(os.listdir(d)) > 0 and (".e01" not in str(os.listdir(d)) and ".E01" not in str(os.listdir(d)) and ".vmdk" not in str(os.listdir(d)) and ".VMDK" not in str(os.listdir(d)) and ".dd" not in str(os.listdir(d)) and ".DD" not in str(os.listdir(d)) and ".raw" not in str(os.listdir(d)) and ".RAW" not in str(os.listdir(d)) and ".img" not in str(os.listdir(d)) and ".IMG" not in str(os.listdir(d))):
+    elif len(os.listdir(d)) > 0 and (
+        ".e01" not in str(os.listdir(d))
+        and ".E01" not in str(os.listdir(d))
+        and ".vmdk" not in str(os.listdir(d))
+        and ".VMDK" not in str(os.listdir(d))
+        and ".dd" not in str(os.listdir(d))
+        and ".DD" not in str(os.listdir(d))
+        and ".raw" not in str(os.listdir(d))
+        and ".RAW" not in str(os.listdir(d))
+        and ".img" not in str(os.listdir(d))
+        and ".IMG" not in str(os.listdir(d))
+    ):
         print(
-            "\n  [directory] - '{}' does not contain any valid files (.E01/.VMDK/.dd/.raw/.img) for elrond to assess.\n     Please ensure you are referencing the correct directory path and try again.\n\n\n".format(d)
+            "\n  [directory] - '{}' does not contain any valid files (.E01/.VMDK/.dd/.raw/.img) for elrond to assess.\n     Please ensure you are referencing the correct directory path and try again.\n\n\n".format(
+                d
+            )
         )
         sys.exit()
     else:
@@ -447,13 +460,20 @@ def main(
                         pass
                 else:
                     pass
-        for foundimg in foundimgs: # potentially add ova and vdi - https://superuser.com/questions/915615/mount-vmware-disk-images-under-linux
+        for (
+            foundimg
+        ) in (
+            foundimgs
+        ):  # potentially add ova and vdi - https://superuser.com/questions/915615/mount-vmware-disk-images-under-linux
             stage = "mounting"
             path, root, f, imgformat = foundimg.split("||")
             if (
                 "Expert Witness" in imgformat
-                or ("VMDK" in imgformat
-                or ("VMware" and " disk image" in imgformat) and (f.endswith(".vmdk")))
+                or (
+                    "VMDK" in imgformat
+                    or ("VMware" and " disk image" in imgformat)
+                    and (f.endswith(".vmdk"))
+                )
                 or (
                     "DOS/MBR boot sector" in imgformat
                     and (f.endswith(".raw") or f.endswith(".dd") or f.endswith(".img"))
@@ -461,7 +481,9 @@ def main(
             ):
                 time.sleep(2)
                 if not auto:
-                    wish_to_mount = input("  Do you wish to mount '{}'? Y/n [Y] ".format(f))
+                    wish_to_mount = input(
+                        "  Do you wish to mount '{}'? Y/n [Y] ".format(f)
+                    )
                 else:
                     wish_to_mount = "y"
                 if wish_to_mount != "n":
