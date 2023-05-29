@@ -55,7 +55,7 @@ def collect_artefacts(
         sys.exit()
     else:
         if vss:
-            for image, _ in imgs.items():
+            for _, image in imgs.items():
                 for shdw in sorted(os.listdir("/mnt/shadow_mount")):
                     if shdw == image.split("::")[0]:
                         for eachvss in sorted(
