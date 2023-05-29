@@ -302,7 +302,7 @@ def collect_artefacts(
         symlinkvalue = False
     else:
         symlinkvalue = True
-    for mnt, img in imgs.items():  # Collection
+    for img, mnt in imgs.items():  # Collection
         if "vss" in img.split("::")[1]:
             vssimage = (
                 "'"
@@ -498,7 +498,7 @@ def collect_artefacts(
                         item,
                         vsstext,
                     )
-            if img.split("::")[0].endswith(".E01") or img.split("::")[0].endswith(
+            """if img.split("::")[0].endswith(".E01") or img.split("::")[0].endswith(
                 ".e01"
             ):
                 extract_i30(
@@ -510,7 +510,7 @@ def collect_artefacts(
                     vssimage,
                 )
             else:
-                pass
+                pass"""
             if not auto:
                 do_collect = input(
                     "  Do you wish to collect files from '{}'? Y/n [Y] ".format(
