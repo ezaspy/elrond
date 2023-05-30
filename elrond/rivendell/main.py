@@ -70,6 +70,7 @@ def main(
     quotes,
     asciitext,
 ):
+    partitions = []
     subprocess.Popen(["clear"])
     time.sleep(2)
     print(
@@ -539,7 +540,7 @@ def main(
                     )
                     write_audit_log_entry(verbosity, output_directory, entry, prnt)
                     print("   Attempting to mount '{}'...".format(f))
-                    allimgs = mount_images(
+                    allimgs, partitions = mount_images(
                         d,
                         auto,
                         verbosity,
@@ -555,7 +556,9 @@ def main(
                         "mounting",
                         cwd,
                         quotes,
+                        partitions,
                     )
+                    partitions = list(set(partitions))
                     if len(allimgs) > 0 and f in str(allimgs):
                         entry, prnt = "{},{},{},completed\n".format(
                             datetime.now().isoformat(), f, "mounting"
@@ -739,7 +742,7 @@ def main(
             memtimeline,
             stage,
         )
-    allimgs, imgs, elrond_mount = (
+    allimgs, imgs, elrond_mount, img_list = (
         OrderedDict(sorted(allimgs.items(), key=lambda x: x[1])),
         OrderedDict(sorted(imgs.items(), key=lambda x: x[1])),
         [
@@ -764,6 +767,7 @@ def main(
             "/mnt/elrond_mount18",
             "/mnt/elrond_mount19",
         ],
+        [],
     )
     if (
         len(allimgs) > 0
@@ -1070,8 +1074,12 @@ def main(
             timetaken = "{} seconds.".format(str(secs))
         else:
             timetaken = "{} second.".format(str(secs))
+    OrderedDict(sorted(imgs.items(), key=lambda x: x[1]))
+    for _, eachimg in imgs.items():
+        img_list.append(eachimg)
+    partitions = sorted(list(set(partitions)))
     if vss:
-        for _, eachimg in imgs.items():
+        for eachimg, partition in zip(img_list, partitions):
             if (
                 "Windows" in eachimg.split("::")[1]
                 and (
@@ -1080,9 +1088,15 @@ def main(
                 and "memory_" not in eachimg.split("::")[1]
                 and "_vss" not in eachimg.split("::")[1]
             ):
+                if len(partitions) > 1:
+                    partition_insert = " ({} partition)".format(
+                        partition.split("||")[0][2::]
+                    )
+                else:
+                    partition_insert = ""
                 inspectedvss = input(
-                    "\n\n  ----------------------------------------\n   Have you reviewed the Volume Shadow Copies for '{}'? Y/n [Y] ".format(
-                        eachimg.split("::")[0]
+                    "\n\n  ----------------------------------------\n   Have you reviewed the Volume Shadow Copies for '{}'{}? Y/n [Y] ".format(
+                        eachimg.split("::")[0], partition_insert
                     )
                 )
                 if inspectedvss != "n":
