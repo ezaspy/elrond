@@ -10,6 +10,7 @@ from datetime import datetime
 from rivendell.audit import write_audit_log_entry
 from rivendell.core.identify import identify_disk_image
 
+
 def unmount_images(elrond_mount, ewf_mount):
     def unmount_locations(each):
         subprocess.Popen(
@@ -165,6 +166,7 @@ def mounted_image(allimgs, disk_image, destination_mount, disk_file, index):
         )
     else:
         print("   '{}'{} could not be mounted.".format(disk_image, partition))
+    return partition
 
 
 def mount_vmdk_image(
@@ -175,6 +177,7 @@ def mount_vmdk_image(
     disk_file,
     path,
     allimgs,
+    partitions,
 ):
     try:
         apfs = str(
@@ -265,8 +268,26 @@ def mount_vmdk_image(
                     disk_image = identify_disk_image(
                         verbosity, output_directory, disk_file, destination_mount
                     )
-                    mounted_image(
+                    partition = mounted_image(
                         allimgs, disk_image, destination_mount, disk_file, "0"
+                    )
+                    partitions.append(
+                        "{}||{}".format(
+                            partition[2:-1]
+                            .replace("partition", "")
+                            .replace("zeroth", "00zeroth")
+                            .replace("first", "01first")
+                            .replace("second", "02second")
+                            .replace("third", "03third")
+                            .replace("forth", "04forth")
+                            .replace("fifth", "05fifth")
+                            .replace("sixth", "06sixth")
+                            .replace("seventh", "07seventh")
+                            .replace("eighth", "08eighth")
+                            .replace("ninth", "09ninth")
+                            .strip(),
+                            disk_image,
+                        )
                     )
                 elif (
                     str(
@@ -290,8 +311,26 @@ def mount_vmdk_image(
                     disk_image = identify_disk_image(
                         verbosity, output_directory, disk_file, destination_mount
                     )
-                    mounted_image(
+                    partition = mounted_image(
                         allimgs, disk_image, destination_mount, disk_file, "0"
+                    )
+                    partitions.append(
+                        "{}||{}".format(
+                            partition[2:-1]
+                            .replace("partition", "")
+                            .replace("zeroth", "00zeroth")
+                            .replace("first", "01first")
+                            .replace("second", "02second")
+                            .replace("third", "03third")
+                            .replace("forth", "04forth")
+                            .replace("fifth", "05fifth")
+                            .replace("sixth", "06sixth")
+                            .replace("seventh", "07seventh")
+                            .replace("eighth", "08eighth")
+                            .replace("ninth", "09ninth")
+                            .strip(),
+                            disk_image,
+                        )
                     )
                 else:
                     mount_attempt = str(
@@ -309,12 +348,29 @@ def mount_vmdk_image(
                         ).communicate()[1]
                     )
                     if mount_attempt == "b''":
-                        print("TEST1")
                         disk_image = identify_disk_image(
                             verbosity, output_directory, disk_file, destination_mount
                         )
-                        mounted_image(
+                        partition = mounted_image(
                             allimgs, disk_image, destination_mount, disk_file, "0"
+                        )
+                        partitions.append(
+                            "{}||{}".format(
+                                partition[2:-1]
+                                .replace("partition", "")
+                                .replace("zeroth", "00zeroth")
+                                .replace("first", "01first")
+                                .replace("second", "02second")
+                                .replace("third", "03third")
+                                .replace("forth", "04forth")
+                                .replace("fifth", "05fifth")
+                                .replace("sixth", "06sixth")
+                                .replace("seventh", "07seventh")
+                                .replace("eighth", "08eighth")
+                                .replace("ninth", "09ninth")
+                                .strip(),
+                                disk_image,
+                            )
                         )
                     elif (
                         "overlapping loop device exists" in mount_attempt
@@ -365,12 +421,30 @@ def mount_vmdk_image(
                                     disk_file,
                                     destination_mount,
                                 )
-                                mounted_image(
+                                partition = mounted_image(
                                     allimgs,
                                     disk_image,
                                     destination_mount,
                                     disk_file,
                                     "0",
+                                )
+                                partitions.append(
+                                    "{}||{}".format(
+                                        partition[2:-1]
+                                        .replace("partition", "")
+                                        .replace("zeroth", "00zeroth")
+                                        .replace("first", "01first")
+                                        .replace("second", "02second")
+                                        .replace("third", "03third")
+                                        .replace("forth", "04forth")
+                                        .replace("fifth", "05fifth")
+                                        .replace("sixth", "06sixth")
+                                        .replace("seventh", "07seventh")
+                                        .replace("eighth", "08eighth")
+                                        .replace("ninth", "09ninth")
+                                        .strip(),
+                                        disk_image,
+                                    )
                                 )
                     elif (
                         "unknown filesystem type 'swap'" in mount_attempt
@@ -404,9 +478,30 @@ def mount_vmdk_image(
             disk_image = identify_disk_image(
                 verbosity, output_directory, disk_file, destination_mount
             )
-            mounted_image(allimgs, disk_image, destination_mount, disk_file, "0")
+            partition = mounted_image(
+                allimgs, disk_image, destination_mount, disk_file, "0"
+            )
+            partitions.append(
+                "{}||{}".format(
+                    partition[2:-1]
+                    .replace("partition", "")
+                    .replace("zeroth", "00zeroth")
+                    .replace("first", "01first")
+                    .replace("second", "02second")
+                    .replace("third", "03third")
+                    .replace("forth", "04forth")
+                    .replace("fifth", "05fifth")
+                    .replace("sixth", "06sixth")
+                    .replace("seventh", "07seventh")
+                    .replace("eighth", "08eighth")
+                    .replace("ninth", "09ninth")
+                    .strip(),
+                    disk_image,
+                )
+            )
     else:
         pass
+    return partitions
 
 
 def mount_ewf(path, intermediate_mount):
@@ -433,6 +528,7 @@ def mount_images(
     stage,
     cwd,
     quotes,
+    partitions,
 ):
     if not os.path.exists(elrond_mount[0]):
         try:
@@ -448,7 +544,7 @@ def mount_images(
         pass
     if len(os.listdir(elrond_mount[0])) != 0:
         elrond_mount.pop(0)
-        allimgs = mount_images(
+        allimgs, partitions = mount_images(
             d,
             auto,
             verbosity,
@@ -481,7 +577,7 @@ def mount_images(
                 pass
             if len(os.listdir(ewf_mount[0])) != 0:
                 ewf_mount.pop(0)
-                mount_images(
+                allimgs, partitions = mount_images(
                     d,
                     auto,
                     verbosity,
@@ -532,7 +628,27 @@ def mount_images(
                 disk_image = identify_disk_image(
                     verbosity, output_directory, disk_file, destination_mount
                 )
-                mounted_image(allimgs, disk_image, destination_mount, disk_file, "0")
+                partition = mounted_image(
+                    allimgs, disk_image, destination_mount, disk_file, "0"
+                )
+                partitions.append(
+                    "{}||{}".format(
+                        partition[2:-1]
+                        .replace("partition", "")
+                        .replace("zeroth", "00zeroth")
+                        .replace("first", "01first")
+                        .replace("second", "02second")
+                        .replace("third", "03third")
+                        .replace("forth", "04forth")
+                        .replace("fifth", "05fifth")
+                        .replace("sixth", "06sixth")
+                        .replace("seventh", "07seventh")
+                        .replace("eighth", "08eighth")
+                        .replace("ninth", "09ninth")
+                        .strip(),
+                        disk_image,
+                    )
+                )
                 if vss:
                     if verbosity != "":
                         print(
@@ -650,12 +766,30 @@ def mount_images(
                                     disk_file,
                                     destination_mount,
                                 )
-                                mounted_image(
+                                partition = mounted_image(
                                     allimgs,
                                     disk_image,
                                     destination_mount,
                                     disk_file,
                                     "0",
+                                )
+                                partitions.append(
+                                    "{}||{}".format(
+                                        partition[2:-1]
+                                        .replace("partition", "")
+                                        .replace("zeroth", "00zeroth")
+                                        .replace("first", "01first")
+                                        .replace("second", "02second")
+                                        .replace("third", "03third")
+                                        .replace("forth", "04forth")
+                                        .replace("fifth", "05fifth")
+                                        .replace("sixth", "06sixth")
+                                        .replace("seventh", "07seventh")
+                                        .replace("eighth", "08eighth")
+                                        .replace("ninth", "09ninth")
+                                        .strip(),
+                                        disk_image,
+                                    )
                                 )
                             else:
                                 pass
@@ -709,12 +843,30 @@ def mount_images(
                                     )
                                 else:
                                     pass
-                                mounted_image(
+                                partition = mounted_image(
                                     allimgs,
                                     disk_image,
                                     destination_mount,
                                     disk_file,
                                     offset_values.index(offset_value),
+                                )
+                                partitions.append(
+                                    "{}||{}".format(
+                                        partition[2:-1]
+                                        .replace("partition", "")
+                                        .replace("zeroth", "00zeroth")
+                                        .replace("first", "01first")
+                                        .replace("second", "02second")
+                                        .replace("third", "03third")
+                                        .replace("forth", "04forth")
+                                        .replace("fifth", "05fifth")
+                                        .replace("sixth", "06sixth")
+                                        .replace("seventh", "07seventh")
+                                        .replace("eighth", "08eighth")
+                                        .replace("ninth", "09ninth")
+                                        .strip(),
+                                        disk_image,
+                                    )
                                 )
                             else:
                                 pass
@@ -736,17 +888,23 @@ def mount_images(
             )
         ):
             if d.startswith("/"):
-                destination_mount, intermediate_mount, = (
+                (
+                    destination_mount,
+                    intermediate_mount,
+                ) = (
                     elrond_mount[0],
                     "/" + d.strip("/") + "/" + disk_file.strip("/"),
                 )
             else:
-                destination_mount, intermediate_mount, = (
+                (
+                    destination_mount,
+                    intermediate_mount,
+                ) = (
                     elrond_mount[0],
                     d.strip("/") + "/" + disk_file.strip("/"),
                 )
             if "DOS/MBR boot sector" in imgformat and disk_file.endswith(".dd"):
-                mount_vmdk_image(
+                partitions = mount_vmdk_image(
                     verbosity,
                     output_directory,
                     intermediate_mount,
@@ -776,7 +934,7 @@ def mount_images(
                         # insert Continue? here...
                 else:
                     pass
-                mount_vmdk_image(
+                partitions = mount_vmdk_image(
                     verbosity,
                     output_directory,
                     intermediate_mount,
@@ -786,7 +944,7 @@ def mount_images(
                     allimgs,
                 )
             else:  # raw vmdk file can be mounted
-                mount_vmdk_image(
+                partitions = mount_vmdk_image(
                     verbosity,
                     output_directory,
                     intermediate_mount,
@@ -803,4 +961,4 @@ def mount_images(
             datetime.now().isoformat().replace("T", " "), disk_file
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
-    return allimgs
+    return allimgs, partitions
