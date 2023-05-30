@@ -161,6 +161,7 @@ def select_pre_process_artefacts(
                 )
             else:
                 pass
+            processed_imgs.append(img.split("::")[0])
         else:
             pass
     for _, img in imgs.items():  # processing identified artefacts
