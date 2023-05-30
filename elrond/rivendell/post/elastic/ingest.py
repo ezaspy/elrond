@@ -302,20 +302,32 @@ def prepare_elastic_ndjson(output_directory, img, case, source_location):
         )
     else:
         pass
-    ndjsonfile = os.path.join(
-        output_directory + img.split("::")[0] + "/elastic/documents/{}"
-    ).format(source_location.split("/")[-1])
-    shutil.move(source_location, ndjsonfile)
-    with open(
-        os.path.join(output_directory + "/elastic_ingestion_commands.txt"),
-        "a",
-    ) as testing:
-        testing.write(
-            'curl -s -H "Content-Type: application/x-ndjson" -XPOST localhost:9200/{}/_doc/_bulk?pretty --data-binary @"{}"'.format(
-                case.lower(), ndjsonfile
-            )
+    if "/vss" in source_location:
+        vss_path_insert = "/vss{}".format(
+            source_location.split("/vss")[1].split("/")[0]
         )
-        testing.write("\n\n")
+        if not os.path.exists(
+            os.path.join(
+                output_directory
+                + img.split("::")[0]
+                + "/elastic/documents{}".format(vss_path_insert)
+            )
+        ):
+            os.makedirs(
+                os.path.join(
+                    output_directory
+                    + img.split("::")[0]
+                    + "/elastic/documents{}".format(vss_path_insert)
+                )
+            )
+        else:
+            pass
+    else:
+        vss_path_insert = ""
+    ndjsonfile = os.path.join(
+        output_directory + img.split("::")[0] + "/elastic/documents{}/{}"
+    ).format(vss_path_insert, source_location.split("/")[-1])
+    shutil.move(source_location, ndjsonfile)
     ingest_elastic_ndjson(case, ndjsonfile)
     ingest_elastic_ndjson(case, ndjsonfile)  # repeating to ensure data is ingested
 
@@ -413,6 +425,22 @@ def ingest_elastic_data(
                 output_directory + img.split("::")[0] + "/artefacts/cooked/"
             ),
         ]
+        for sub_dir in os.listdir(
+            os.path.realpath(
+                output_directory + img.split("::")[0] + "/artefacts/cooked/"
+            )
+        ):
+            if "vss" in sub_dir:
+                directories_with_data.append(
+                    os.path.realpath(
+                        output_directory + img.split("::")[0] + "/artefacts/cooked"
+                    )
+                    + "/"
+                    + sub_dir
+                )
+                # print(os.path.realpath(output_directory + img.split("::")[0] + "/artefacts/cooked") + "/" + sub_dir)
+            else:
+                pass
         for each_dir in directories_with_data:
             split_large_csv_files(each_dir)
             prepare_csv_to_ndjson(each_dir)
