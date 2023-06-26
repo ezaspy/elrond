@@ -101,7 +101,6 @@ def configure_elastic_stack(verbosity, output_directory, case, stage, allimgs):
 
     allimgs = OrderedDict(sorted(allimgs.items(), key=lambda x: x[1]))
     pwd = os.getcwd()
-    stage = "elastic"
     print(
         "\n\n  -> \033[1;36mCommencing Elastic Phase...\033[1;m\n  ----------------------------------------"
     )
