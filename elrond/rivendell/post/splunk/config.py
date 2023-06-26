@@ -209,7 +209,7 @@ def configure_splunk_stack(verbosity, output_directory, case, stage, allimgs):
         ).communicate()
         if "Unauthorized" in str(testcreds)[3:-4] and "ERROR" in str(testcreds)[3:-4]:
             print("\n     Invalid credentials. Please try again...")
-            request_splunk_creds()
+            splunkuser, splunkpswd = request_splunk_creds()
         else:
             pass
         splunk_service(splunk_install_path, "stop")
@@ -457,9 +457,5 @@ def configure_splunk_stack(verbosity, output_directory, case, stage, allimgs):
         stderr=subprocess.PIPE,
     ).communicate()
     splunk_service(splunk_install_path, "start")
-    print()
-    print(
-        "   Splunk Web is available at:            http://127.0.0.1:8000/en-US/app/elrond/"
-    )
     os.chdir(pwd)
     return splunkuser, splunkpswd

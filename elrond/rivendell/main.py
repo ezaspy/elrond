@@ -969,11 +969,10 @@ def main(
                 "\n\n  -> \033[1;36mBuilding ATT&CK® Navigator...\033[1;m\n  ----------------------------------------"
             )
             time.sleep(1)
-            navresults = configure_navigator(case, usercred, pswdcred)
+            navresults = configure_navigator(
+                verbosity, output_directory, "navigator", case, splunk, elastic, usercred, pswdcred
+            )
             if navresults != "":
-                print(
-                    "\n   ATT&CK® Navigator is available at:     127.0.0.1/attack-navigator\n"
-                )
                 flags.append("10navigator")
             else:
                 pass
@@ -1187,6 +1186,24 @@ def main(
         time.sleep(1)
     if len(allimgs.items()) > 0:
         print("  ----------------------------------------")
+        print()
+        if splunk:
+            print("    Splunk Web:           127.0.0.1:8000/en-US/app/elrond/")
+        else:
+            pass
+        if elastic:
+            print(
+                "    elasticsearch:        127.0.0.1:9200\n    Kibana:               127.0.0.1:5601"
+            )
+        else:
+            pass
+        if navigator:
+            print("    ATT&CK® Navigator:    127.0.0.1:4200")
+        else:
+            pass
+        print()
+        print("  ----------------------------------------")
+        print("\n")
     else:
         pass
     print("\n\n     \033[1;36m{}\033[1;m".format(random.choice(quotes) + "\n\n\n"))

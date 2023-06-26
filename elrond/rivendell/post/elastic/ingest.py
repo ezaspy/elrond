@@ -450,7 +450,7 @@ def ingest_elastic_data(
         print("     elasticsearch ingestion completed for {}".format(vssimage))
         entry, prnt = "{},{},{},completed\n".format(
             datetime.now().isoformat(), vssimage, stage
-        ), " -> {} -> indexed artfacts into {} for {}".format(
+        ), " -> {} -> ingested artfacts into {} for {}".format(
             datetime.now().isoformat().replace("T", " "),
             stage,
             vssimage,

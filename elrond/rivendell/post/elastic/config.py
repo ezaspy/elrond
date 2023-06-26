@@ -232,9 +232,5 @@ def configure_elastic_stack(verbosity, output_directory, case, stage, allimgs):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ).communicate()
-    time.sleep(4)
-    print()
-    print(
-        "   elasticsearch is available at:     127.0.0.1:9200\n   Kibana is available at:            127.0.0.1:5601"
-    )  # adjust if custom location
+    time.sleep(2)
     os.chdir(pwd)
