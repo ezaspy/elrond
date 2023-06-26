@@ -125,7 +125,6 @@ def configure_navigator(case, splunkuser, splunkpswd):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         ).communicate()
-        time.sleep(20)
         navresults = "-"
     else:
         print("     No evidence of MITRE ATT&CK® techniques could be identified.")
