@@ -939,7 +939,7 @@ def main(
                 verbosity,
                 output_directory,
                 case,
-                stage,
+                "splunk",
                 allimgs,
             )
             flags.append("08splunk")
@@ -954,7 +954,7 @@ def main(
                 verbosity,
                 output_directory,
                 case,
-                stage,
+                "elastic",
                 allimgs,
             )
             flags.append("09elastic")
