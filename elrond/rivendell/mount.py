@@ -19,7 +19,13 @@ def unmount_images(elrond_mount, ewf_mount):
         time.sleep(0.1)
 
     def remove_directories(each):
-        shutil.rmtree(each)
+        try:
+            shutil.rmtree(each)
+        except PermissionError:
+            print(
+                "\n   Error: Unable to unmount locations. Are you running elrond as root?\n\n"
+            )
+            sys.exit()
         time.sleep(0.1)
 
     for shadowimg in os.listdir("/mnt/shadow_mount/"):
