@@ -188,9 +188,7 @@ def install_splunk_stack(
     return requser, request_password
 
 
-def configure_splunk_stack(
-    verbosity, output_directory, case, allimgs
-):
+def configure_splunk_stack(verbosity, output_directory, case, stage, allimgs):
     def request_splunk_creds():
         splunkuser, splunkpswd = input(
             "      Splunk admin username: "
@@ -235,7 +233,6 @@ def configure_splunk_stack(
     allimgs = OrderedDict(sorted(allimgs.items(), key=lambda x: x[1]))
     splunk_install_path = "opt/"
     pwd = os.getcwd()
-    stage = "splunk"
     apps = {
         "lookup_editor/": "lookup-file-editor_346.tar",
         "network_topology/": "network_topology.tar",
