@@ -82,6 +82,11 @@ def collect_process_keyword_analysis_timeline(
             imgs = reorganise_artefacts(
                 output_directory, verbosity, d, allimgs, flags, auto, volatility
             )
+        for eachdir in os.listdir(output_directory):
+            if len(os.listdir(os.path.join(output_directory, eachdir))) == 0:
+                os.rmdir(os.path.join(output_directory, eachdir))
+            else:
+                pass
         if process:
             select_pre_process_artefacts(
                 output_directory,
