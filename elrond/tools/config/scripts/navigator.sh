@@ -18,8 +18,7 @@ sudo chmod -R 755 /opt/elrond/
 sudo chown -R sansforensics:sansforensics /opt/elrond/
 cd /opt/elrond/elrond/tools/attack-navigator/nav-app
 sudo npm install
-sudo ng build
-sudo cp -r dist/ /var/www/html/
-sudo mv /var/www/html/dist/ /var/www/html/attack-navigator/
-sudo service apache2 restart
+sudo pm2 start --time --name="attack-navigator" ng -- serve
+# sudo pm2 stop attack-navigator
+cd /opt/elrond
 sleep 1
