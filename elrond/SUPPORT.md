@@ -134,9 +134,7 @@ See Appendix for information on additional Linux distros<br><br><br>
 # Exporting VM as OVA
 * VMware Fusion
 
-`/Applications/VMware\ Fusion.app/Contents/Library/vmware-vdiskmanager -r <location of virtual machine>.vmwarevm/Virtual\ Disk.vmdk -t 0 <new disk name>.vmdk`<br>
->
-`/Applications/VMware\ Fusion.app/Contents/Library/VMware\ OVF\ Tool/./ovftool  --acceptAllEulas <location of virtual machine>.vmwarevm/<name of virtual machine>.vmx <name of virtual machine>.ova`
+``/Applications/VMware\ Fusion.app/Contents/Library/VMware\ OVF\ Tool/./ovftool  --acceptAllEulas <location of virtual machine>.vmwarevm/<name of virtual machine>.vmx <name of virtual machine>.ova`
 
 <br><br><br>
 
