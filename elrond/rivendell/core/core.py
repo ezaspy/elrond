@@ -83,8 +83,11 @@ def collect_process_keyword_analysis_timeline(
                 output_directory, verbosity, d, allimgs, flags, auto, volatility
             )
         for eachdir in os.listdir(output_directory):
-            if len(os.listdir(os.path.join(output_directory, eachdir))) == 0:
-                os.rmdir(os.path.join(output_directory, eachdir))
+            if os.isdir(eachdir) or eachdir == ".DS_Store":
+                if len(os.listdir(os.path.join(output_directory, eachdir))) == 0:
+                    os.rmdir(os.path.join(output_directory, eachdir))
+                else:
+                    pass
             else:
                 pass
         if process:
