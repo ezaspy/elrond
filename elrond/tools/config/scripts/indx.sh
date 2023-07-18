@@ -4,7 +4,7 @@ clear
 printf "\n  -> Configuring python3.9...\n\n"
 yes '' | sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt update
-sudo apt install python3.9 -y --fix-missing
+sudo apt install python3.9 python3.9-venv -y --fix-missing
 PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
 sudo git clone https://github.com/harelsegev/INDXRipper /opt/elrond/elrond/tools/INDXRipper
 /usr/bin/python3.9 -m pip install --upgrade pip
