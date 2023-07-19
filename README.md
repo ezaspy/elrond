@@ -66,7 +66,7 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 
 ### SIFT-elrond
 
-- Download [SIFT-elrond](https://drive.google.com/file/d/18kdJ7KGzRGhILB9hoR30jLHhS17TXM2R/view?usp=share_link) OVA, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
+- Download [SIFT-elrond](https://drive.google.com/file/d/18kdJ7KGzRGhILB9hoR30jLHhS17TXM2R/view?usp=share_link) OVA (archived in a ZIP), which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
 - Alternatively, follow the instructions below...
 
 ### Configure
@@ -285,6 +285,7 @@ If you notice 'nixCommand' or 'nixProcess' in files processed from a Windows OS,
 - Tooling
   - [joachimmetz](https://github.com/joachimmetz)
   - [Harlan Carvey](https://github.com/hcarvey)
+  - [@JRick_3](https://obscurite-hateblo-jp.translate.goog/entry/2022/02/28/003408?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en-US&_x_tr_pto=wapp)
   - [williballenthin](https://github.com/williballenthin)
   - [dkovar](https://github.com/dkovar)
   - [Richard Penman](https://github.com/richardpenman)
