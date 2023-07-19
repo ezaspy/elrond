@@ -32,5 +32,4 @@ python3 -m keyring --disable
 /opt/elrond/elrond/tools/config/scripts/./indx.sh
 # configuring elrond
 sudo chmod -R 744 /opt/elrond/ && sudo chmod +x /opt/elrond/elrond/elrond.py
-echo "export PATH=$PATH:/opt/elrond" > /home/sansforensics/.bashrc
 sleep 1
