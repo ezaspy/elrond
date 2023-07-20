@@ -150,14 +150,6 @@ def configure_navigator(
         navresults = "-"
         print_done(verbosity)
         print("     ATT&CK Navigator built for '{}'".format(case))
-        entry, prnt = "{},{},{},completed\n".format(
-            datetime.now().isoformat(), case, stage
-        ), " -> {} -> built ATT&CK navigator for '{}'".format(
-            datetime.now().isoformat().replace("T", " "),
-            stage,
-            case,
-        )
-        write_audit_log_entry(verbosity, output_directory, entry, prnt)
     else:
         print("     No evidence of MITRE ATT&CK® techniques could be identified.")
         navresults = ""
