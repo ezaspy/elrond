@@ -14,11 +14,13 @@ sudo -E env "PATH=$PATH" n 16
 sudo npm install -g @angular/cli
 sudo npm install -g pm2
 sudo git clone https://github.com/mitre-attack/attack-navigator.git /opt/attack-navigator
-sudo chmod -R 755 /opt/attack-navigator/
-sudo chown -R sansforensics:sansforensics /opt/attack-navigator/
 cd /opt/attack-navigator/nav-app
 sudo npm install
 sudo pm2 start --time --name="attack-navigator" ng -- serve
+sleep 1
+curl https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json -o /opt/attack-navigator/nav-app/src/assets/enterprise-attack.json
+sudo chmod -R 755 /opt/attack-navigator/
+sudo chown -R sansforensics:sansforensics /opt/attack-navigator/
 # sudo pm2 stop attack-navigator
 cd /opt/elrond
 sleep 1
