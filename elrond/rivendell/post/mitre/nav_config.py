@@ -86,10 +86,6 @@ def configure_navigator(
         alltechniques = sorted(list(set(maintechniques)))
         for eachtechnique in alltechniques:
             navlist = create_attack_navigator(nav_list, eachtechnique)
-        os.rename(
-            "/opt/attack-navigator/enterprise-attack.json",
-            "/opt/attack-navigator/nav-app/src/assets/enterprise-attack.json",
-        )
         with open(
             "/opt/attack-navigator/nav-app/src/assets/.{}.json".format(case),
             "w",
