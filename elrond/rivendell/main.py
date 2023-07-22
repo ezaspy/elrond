@@ -970,7 +970,7 @@ def main(
             )
             time.sleep(1)
             navresults = configure_navigator(
-                verbosity, output_directory, "navigator", case, splunk, elastic, usercred, pswdcred
+                verbosity, case, splunk, elastic, usercred, pswdcred
             )
             if navresults != "":
                 flags.append("10navigator")
