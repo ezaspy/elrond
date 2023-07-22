@@ -566,6 +566,7 @@ def mount_images(
             stage,
             cwd,
             quotes,
+            partitions,
         )
     else:  # mounting images
         if "EWF" in imgformat or "Expert Witness" in imgformat:
@@ -599,6 +600,7 @@ def mount_images(
                     stage,
                     cwd,
                     quotes,
+                    partitions,
                 )
             else:
                 pass
@@ -918,6 +920,7 @@ def mount_images(
                     disk_file,
                     path,
                     allimgs,
+                    partitions,
                 )
             elif "DOS/MBR boot sector" in imgformat and disk_file.endswith(
                 ".raw"
@@ -948,6 +951,7 @@ def mount_images(
                     disk_file,
                     path,
                     allimgs,
+                    partitions,
                 )
             else:  # raw vmdk file can be mounted
                 partitions = mount_vmdk_image(
@@ -958,6 +962,7 @@ def mount_images(
                     disk_file,
                     path,
                     allimgs,
+                    partitions,
                 )
         else:
             pass
