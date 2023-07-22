@@ -4,7 +4,7 @@ echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf
 sleep 1
 export PATH=$PATH:/opt/elrond/elrond
 echo '
-export PS1="\e[0;36m\u@\h:\e[m \e[0;32m\W\e[m\n$ "' >> /home/sansforensics/.bashrc
+export PS1="\e[1;36m\u@\h:\e[m \e[0;32m\w\e[m\n$ "' >> /home/sansforensics/.bashrc
 sleep 1
 cd /opt/elrond/elrond/
 clear
