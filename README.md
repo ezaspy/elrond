@@ -36,12 +36,12 @@
 
 - [About](#about)
   - [Related Projects](#related-projects)
-- [Configuration](#Installation/Configuration)
-  - [SIFT-elrond](#SIFT-elrond)
-  - [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads)
-  - [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md)
+- [Configuration](#configuration)
+  - [SIFT-elrond (recommended)](#sift-elrond-(recommended))
+  - [Self-build](#configure)
 - [Usage](#usage)
 - [Artefacts](#artefacts)
+- [Notices](#notices)
 - [Contact](#contributing)
   - [Contributing](#contact)
 - [Acknowledgements](#acknowledgements)
@@ -53,7 +53,10 @@
 ## About
 
 elrond has been created to help fellow digitial forensicators with the identification, extraction, collection, processing, analysis and outputting of forensic artefacts from (up to 20 paritions for) Windows E01 or VMDK, macOS DMG/E01 or VMDK, Linux dd or VMDK disk images as well as raw memory images and previously collected artefacts which can all be outputted into Splunk. I have spent many an incident repeating the same processes by mounting, collecting (mainly Windows) forensic artefacts and then attempting to correlate them together with other data sources and artefacts. Thus, as mentioned above elrond has been built to consolidate those seperate processes into one single script helping to accerlate and automate these otherwise repetitive, tedious and often occasionally-referenced commands. As elrond outputs the artefact information as either CSV or JSON, they can be processed by many commonly-used log file analysis tools, consequently, elrond does have the capability to stand up a local [Splunk](https://www.splunk.com/) or [elastic](https://www.elastic.co/) instance with acompanying, respective app ([Splunk](https://splunkbase.splunk.com/app/6606/); [elastic]()), whereby the artefacts are automatically assigned and aligned with the [MITRE ATT&CK® Framework](https://attack.mitre.org/). In addition, elrond can also populate a local [ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/) instance providing a visual representation of potential attack techniques leveraged as part of said incident.<br>
-Additional features include image and file hashing, metadata extraction, file recovery and carving, AV scanning, IOC extraction, keyword searching and timelining.<br>
+Additional features include image and file hashing, metadata extraction, file recovery and carving, AV scanning, IOC extraction, keyword searching and timelining.
+<br><br>
+
+It is important to note that elrond utilises many existing tools which have been built by other developers. elrond does do custom structuring of the outputted data but the conversion of the data is done by the other aforementioned toolsets. As with most thing, this is perhaps easier to explain with a [meme](https://github.com/ezaspy/elrond/blob/main/elrond/images/elrond_meme.jpeg).
 
 ### Related Projects
 
@@ -62,17 +65,17 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 
 <!-- PREREQUISITES -->
 
-## Installation/Configuration
+## Configuration
 
-### SIFT-elrond
+### SIFT-elrond (recommended)
 
 - Download [SIFT-elrond](https://drive.google.com/file/d/18kdJ7KGzRGhILB9hoR30jLHhS17TXM2R/view?usp=share_link) OVA, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
-- Alternatively, follow the instructions below...
+  - ***Note***: *the OVA does not contain the NSRL dataset*; follow instructions in [nsrl.sh](https://github.com/ezaspy/elrond/blob/main/elrond/tools/config/scripts/nsrl.sh) to download.
 
-### Configure
+### Self-build
 
-There are several software package required for using elrond but almost all of them are contained within the [SANS SIFT Worksation](https://www.sans.org/tools/sift-workstation/) virtual machine OVA. However, for the software which is not included, I have provided a script ([make.sh](https://github.com/ezaspy/elrond/blob/main/make.sh)) which installs and configures the additional software required for all potential functionality leveraged by elrond (volatility3, apfs-fuse, ClamAV etc.).<br>
-To invoke the script, simply follow the instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md#configuration). **Note: you will only need to run the make.sh script once, per SIFT instance**
+There are several software package required for using elrond but almost all of them are contained within the [SANS SIFT Worksation](https://www.sans.org/tools/sift-workstation/) virtual machine OVA. However, for the software which is not included, I have provided a script ([make.sh](https://github.com/ezaspy/elrond/blob/main/make.sh)) which installs and configures the additional software required for all potential functionality leveraged by elrond (for example: volatility3, apfs-fuse, ClamAV etc.).<br>
+To invoke the script, follow the instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md#configuration). **Note: you will only need to run the make.sh script once, per SIFT instance**
 
 - [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (20.04)
   - Note: SANS SIFT 18.04 is not supported.
@@ -128,6 +131,10 @@ To invoke the script, simply follow the instructions in [CONFIG.md](https://gith
 
 `python3 elrond.py case_name /path/to/disk/images -BRPS -Y <directory/of/yara/files>`
 <br><br>
+
+### Screenshot
+
+![elrond_screenshot](https://github.com/ezaspy/elrond/blob/main/elrond/images/elrond_screenshot.jpeg)
 
 ### Support
 
@@ -311,5 +318,3 @@ If you notice 'nixCommand' or 'nixProcess' in files processed from a Windows OS,
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-
-[elrond-screenshot]: images/screenshot.png
