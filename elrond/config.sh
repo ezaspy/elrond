@@ -3,6 +3,8 @@ sleep 1
 clear
 sudo apt update
 cd /opt/elrond/elrond
+sudo chmod -R 755 /opt/elrond/
+chown -R sansforensics:sansforensics /opt/elrond
 /opt/elrond/elrond/tools/config/scripts/./init.sh
 /opt/elrond/elrond/tools/config/scripts/./apfs-fuse.sh
 /opt/elrond/elrond/tools/config/scripts/./nsrl.sh
@@ -11,9 +13,4 @@ cd /opt/elrond/elrond
 /opt/elrond/elrond/tools/config/scripts/./splunk.sh
 /opt/elrond/elrond/tools/config/scripts/./elastic.sh
 /opt/elrond/elrond/tools/config/scripts/./navigator.sh
-sudo chmod -R 755 /opt/elrond/
-sudo chmod +x /opt/elrond/elrond/elrond.py
-echo "export PATH=$PATH:/opt/elrond" >> /home/sansforensics/.bashrc
-sudo updatedb
-sleep 1
 /opt/elrond/elrond/tools/config/scripts/./finish.sh
