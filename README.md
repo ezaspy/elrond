@@ -39,7 +39,7 @@
 - [Configuration](#Installation/Configuration)
   - [SIFT-elrond](#SIFT-elrond)
   - [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads)
-  - [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md)
+    - [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md)
 - [Usage](#usage)
 - [Artefacts](#artefacts)
 - [Notices](#notices)
