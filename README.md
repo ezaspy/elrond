@@ -67,6 +67,7 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 ### SIFT-elrond
 
 - Download [SIFT-elrond](https://drive.google.com/file/d/18kdJ7KGzRGhILB9hoR30jLHhS17TXM2R/view?usp=share_link) OVA, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
+  - Note: the OVA does not contain the NRSL dataset
 - Alternatively, follow the instructions below...
 
 ### Configure
