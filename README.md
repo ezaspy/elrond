@@ -36,16 +36,9 @@
 
 - [About](#about)
   - [Related Projects](#related-projects)
-<<<<<<< HEAD
 - [Configuration](#configuration)
   - [SIFT-elrond (recommended)](#sift-elrond-(recommended))
   - [Self-build](#configure)
-=======
-- [Configuration](#Installation/Configuration)
-  - [SIFT-elrond](#SIFT-elrond)
-  - [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads)
-    - [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md)
->>>>>>> b45eef4c3492fca119426c199e34ac4c9c52e841
 - [Usage](#usage)
 - [Artefacts](#artefacts)
 - [Notices](#notices)
@@ -59,7 +52,7 @@
 
 ## About
 
-elrond has been created to help fellow digitial forensicators with the identification, extraction, collection, processing, analysis and outputting of forensic artefacts from (up to 20 paritions for) Windows E01 or VMDK, macOS DMG/E01 or VMDK, Linux dd or VMDK disk images as well as raw memory images and previously collected artefacts which can all be outputted into Splunk. I have spent many an incident repeating the same processes by mounting, collecting (mainly Windows) forensic artefacts and then attempting to correlate them together with other data sources and artefacts. Thus, as mentioned above elrond has been built to consolidate those seperate processes into one single script helping to accerlate and automate these otherwise repetitive, tedious and often occasionally-referenced commands. As elrond outputs the artefact information as either CSV or JSON, they can be processed by many commonly-used log file analysis tools, consequently, elrond does have the capability to stand up a local [Splunk](https://www.splunk.com/) or [elastic](https://www.elastic.co/) instance with acompanying, respective app ([Splunk](https://splunkbase.splunk.com/app/6606/); [elastic]()), whereby the artefacts are automatically assigned and aligned with the [MITRE ATT&CK® Framework](https://attack.mitre.org/). In addition, elrond can also populate a local [ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/) instance providing a visual representation of potential attack techniques leveraged as part of said incident.<br>
+elrond has been created to help fellow digitial forensicators with the identification, extraction, collection, processing, analysis and outputting of forensic artefacts from (up to 20 paritions for) Windows E01 or VMDK, macOS DMG/E01 or VMDK, Linux dd or VMDK disk images as well as raw memory images and previously collected artefacts which can all be outputted into Splunk. I have spent many an incident repeating the same processes by mounting, collecting (mainly Windows) forensic artefacts and then attempting to correlate them together with other data sources and artefacts. Thus, as mentioned above elrond has been built to consolidate those seperate processes into one single script helping to accerlate and automate these otherwise repetitive, tedious and often occasionally-referenced commands. As elrond outputs the artefact information as either CSV or JSON, they can be processed by many commonly-used log file analysis tools, consequently, elrond does have the capability to stand up a local [Splunk](https://www.splunk.com/) (with acompanying [app](https://splunkbase.splunk.com/app/6606/)) or [elastic](https://www.elastic.co/) instance, whereby the artefacts are automatically assigned and aligned with the [MITRE ATT&CK® Framework](https://attack.mitre.org/). In addition, elrond can also populate a local [ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/) instance providing a visual representation of potential attack techniques leveraged as part of said incident.<br>
 Additional features include image and file hashing, metadata extraction, file recovery and carving, AV scanning, IOC extraction, keyword searching and timelining.
 <br><br>
 
@@ -77,12 +70,7 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 ### SIFT-elrond (recommended)
 
 - Download [SIFT-elrond](https://drive.google.com/file/d/18kdJ7KGzRGhILB9hoR30jLHhS17TXM2R/view?usp=share_link) OVA, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
-<<<<<<< HEAD
   - ***Note***: *the OVA does not contain the NSRL dataset*; follow instructions in [nsrl.sh](https://github.com/ezaspy/elrond/blob/main/elrond/tools/config/scripts/nsrl.sh) to download.
-=======
-  - ***Note**: the OVA does not contain the NSRL dataset*
-- Alternatively, follow the instructions below...
->>>>>>> b45eef4c3492fca119426c199e34ac4c9c52e841
 
 ### Self-build
 
