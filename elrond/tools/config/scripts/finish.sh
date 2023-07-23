@@ -1,11 +1,13 @@
 #!/bin/bash
 sleep 1
 echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf
-sleep 1
-export PATH=$PATH:/opt/elrond/elrond
 echo '
 export PS1="\e[1;36m\u@\h:\e[m \e[0;32m\w\e[m\n$ "' >> /home/sansforensics/.bashrc
-sleep 1
+sudo chmod -R 755 /opt/elrond/
+chown -R sansforensics:sansforensics /opt/elrond
+sudo chmod +x /opt/elrond/elrond/elrond.py
+echo "export PATH=$PATH:/opt/elrond" >> /home/sansforensics/.bashrc
+sudo updatedb
 cd /opt/elrond/elrond/
 clear
 printf "\n\n  -> SIFT has been successfully configured for elrond. Press ENTER to continue..."
