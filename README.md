@@ -42,6 +42,7 @@
   - [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md)
 - [Usage](#usage)
 - [Artefacts](#artefacts)
+- [Notices](#notices)
 - [Contact](#contributing)
   - [Contributing](#contact)
 - [Acknowledgements](#acknowledgements)
