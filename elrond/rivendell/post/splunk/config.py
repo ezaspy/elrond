@@ -262,11 +262,6 @@ def configure_splunk_stack(verbosity, output_directory, case, stage, allimgs):
         else:
             pass
     else:
-        for eachfile in os.listdir("/opt/elrond/elrond/tools/"):
-            if eachfile.startswith(".splunk") and eachfile.endswith(".deb"):
-                splunk_deb_file = "/opt/elrond/elrond/tools/" + eachfile
-            else:
-                pass
         print("    Splunk is not installed, please stand by...")
         splunkuser, splunkpswd = install_splunk_stack(
             verbosity,
@@ -274,7 +269,7 @@ def configure_splunk_stack(verbosity, output_directory, case, stage, allimgs):
             case,
             stage,
             allimgs,
-            splunk_deb_file,
+            "/opt/elrond/elrond/tools/.splunk.deb",
             splunk_install_path,
         )
         with open(
