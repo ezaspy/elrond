@@ -42,7 +42,10 @@ def extract_usb(
                     section.split(">>>  ")[1].split("<<<  ")[0][25:37],
                 )
                 try:
-                    (jsondict["SectionEndDate"], jsondict["SectionEndTime"],) = (
+                    (
+                        jsondict["SectionEndDate"],
+                        jsondict["SectionEndTime"],
+                    ) = (
                         section.split(">>>  ")[1].split("<<<  ")[1][12:][0:10],
                         section.split(">>>  ")[1].split("<<<  ")[1][12:][11:23],
                     )
@@ -102,33 +105,39 @@ def extract_usb(
                     r"\"StartDate\"\:\ \"([^\"]+)", eachinfo
                 ), re.findall(r"\"StartTime\"\:\ \"([^\"]+)", eachinfo)
                 if len(usbsd) == 1 and len(usbst) == 1:
-                    usbjson.write(
-                        str(
-                            re.sub(
-                                r"([^,:] )\"",
-                                r"\1",
-                                str(
-                                    re.sub(
-                                        r"\"( )",
-                                        r"\1",
-                                        "}, {"
-                                        + str(
-                                            re.sub(
-                                                r"(, \"StartTime\": \"[^\"]+\")",
-                                                r"\1, \"LastWriteTime\": "
-                                                + '"'
-                                                + usbsd[0]
-                                                + " "
-                                                + usbst[0]
-                                                + '"',
-                                                eachinfo,
-                                            )
-                                        ).replace('\\"', '"'),
-                                    )
-                                ),
-                            )
-                        ).replace(' , "', '" , "')
+                    usb_json = str(
+                        re.sub(
+                            r"([^,:] )\"",
+                            r"\1",
+                            str(
+                                re.sub(
+                                    r"\"( )",
+                                    r"\1",
+                                    "}, {"
+                                    + str(
+                                        re.sub(
+                                            r"(, \"StartTime\": \"[^\"]+\")",
+                                            r"\1, \"LastWriteTime\": "
+                                            + '"'
+                                            + usbsd[0]
+                                            + " "
+                                            + usbst[0]
+                                            + '"',
+                                            eachinfo,
+                                        )
+                                    ).replace('\\"', '"'),
+                                )
+                            ),
+                        )
+                    ).replace(' , "', '" , "')
+                    usb_json = re.sub(
+                        r"([^\\]\\)([^\\])",
+                        r"\1\\\2",
+                        usb_json.replace('": ""', '": "')
+                        .replace('"", "', '", "')
+                        .replace('="', "="),
                     )
+                    usbjson.write(usb_json)
                 else:
                     pass
     else:
