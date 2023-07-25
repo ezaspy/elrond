@@ -345,14 +345,8 @@ def ingest_elastic_data(
             imgs_to_ingest.append(img)
         else:
             pass
-        if (
-            not os.path.exists(
-                output_directory + img.split("::")[0] + "/artefacts/cooked/"
-            )
-            and len(
-                os.listdir(output_directory + img.split("::")[0] + "/artefacts/cooked/")
-            )
-            > 0
+        if not os.path.exists(
+            output_directory + img.split("::")[0] + "/elastic-ingest/"
         ):
             os.makedirs(
                 os.path.join(output_directory + img.split("::")[0] + "/elastic-ingest")
@@ -420,32 +414,42 @@ def ingest_elastic_data(
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
         directories_with_data = [
-            os.path.realpath(output_directory + img.split("::")[0]),
+            os.path.realpath(os.path.join(output_directory, img.split("::")[0])),
             os.path.realpath(
-                output_directory + img.split("::")[0] + "/artefacts/cooked/"
+                os.path.join(output_directory, img.split("::")[0], "/artefacts/cooked/")
             ),
         ]
-        for sub_dir in os.listdir(
-            os.path.realpath(
-                output_directory + img.split("::")[0] + "/artefacts/cooked/"
-            )
+        if os.path.exists(
+            os.path.join(output_directory, img.split("::")[0], "/artefacts/cooked/")
         ):
-            if "vss" in sub_dir:
-                directories_with_data.append(
-                    os.path.realpath(
-                        output_directory + img.split("::")[0] + "/artefacts/cooked"
-                    )
-                    + "/"
-                    + sub_dir
+            for sub_dir in os.listdir(
+                os.path.realpath(
+                    output_directory + img.split("::")[0] + "/artefacts/cooked/"
                 )
-                # print(os.path.realpath(output_directory + img.split("::")[0] + "/artefacts/cooked") + "/" + sub_dir)
+            ):
+                if "vss" in sub_dir:
+                    directories_with_data.append(
+                        os.path.realpath(
+                            os.path.join(
+                                output_directory
+                                + img.split("::")[0]
+                                + "/artefacts/cooked",
+                                sub_dir,
+                            )
+                        )
+                    )
+                else:
+                    pass
+        else:
+            pass
+        for each_dir in directories_with_data:
+            if os.path.exists(each_dir):
+                split_large_csv_files(each_dir)
+                prepare_csv_to_ndjson(each_dir)
+                convert_csv_to_ndjson(output_directory, case, img, each_dir)
+                convert_json_to_ndjson(output_directory, case, img, each_dir)
             else:
                 pass
-        for each_dir in directories_with_data:
-            split_large_csv_files(each_dir)
-            prepare_csv_to_ndjson(each_dir)
-            convert_csv_to_ndjson(output_directory, case, img, each_dir)
-            convert_json_to_ndjson(output_directory, case, img, each_dir)
         print_done(verbosity)
         print("     elasticsearch ingestion completed for {}".format(vssimage))
         entry, prnt = "{},{},{},completed\n".format(
