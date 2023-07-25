@@ -323,19 +323,15 @@ def main(
         )
         sys.exit()
     elif len(os.listdir(d)) > 0 and (
-        ".e01" not in str(os.listdir(d))
-        and ".E01" not in str(os.listdir(d))
-        and ".vmdk" not in str(os.listdir(d))
-        and ".VMDK" not in str(os.listdir(d))
-        and ".dd" not in str(os.listdir(d))
-        and ".DD" not in str(os.listdir(d))
-        and ".raw" not in str(os.listdir(d))
-        and ".RAW" not in str(os.listdir(d))
-        and ".img" not in str(os.listdir(d))
-        and ".IMG" not in str(os.listdir(d))
+        ".e01" not in str(os.listdir(d)).lower()
+        and ".vmdk" not in str(os.listdir(d)).lower()
+        and ".dd" not in str(os.listdir(d)).lower()
+        and ".raw" not in str(os.listdir(d)).lower()
+        and ".img" not in str(os.listdir(d)).lower()
+        and ".001" not in str(os.listdir(d)).lower()
     ):
         print(
-            "\n  [directory] - '{}' does not contain any valid files (.E01/.VMDK/.dd/.raw/.img) for elrond to assess.\n     Please ensure you are referencing the correct directory path and try again.\n\n\n".format(
+            "\n  [directory] - '{}' does not contain any valid files (.E01/.VMDK/.dd/.raw/.img/.001)\n     for elrond to assess.\n     Please ensure you are referencing the correct directory path and try again.\n\n\n".format(
                 d
             )
         )
