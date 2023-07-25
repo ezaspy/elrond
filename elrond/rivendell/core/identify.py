@@ -28,7 +28,8 @@ def identify_disk_image(verbosity, output_directory, disk_image, mount_location)
     else:
         pass
     if len(os.listdir(mount_location)) > 0:
-        if ("MFTMirr" in str(os.listdir(mount_location))
+        if (
+            "MFTMirr" in str(os.listdir(mount_location))
             or ("Bitmap" in str(os.listdir(mount_location)))
             or ("LogFile" in str(os.listdir(mount_location)))
             or ("Boot" in str(os.listdir(mount_location)))
@@ -36,9 +37,15 @@ def identify_disk_image(verbosity, output_directory, disk_image, mount_location)
         ):
             if "MSOCache" in str(os.listdir(mount_location)):
                 windows_os = "Windows7"
-            elif "Windows" in str(os.listdir(mount_location)) or "Boot" in str(os.listdir(mount_location)):
+            elif "Windows" in str(os.listdir(mount_location)) or "Boot" in str(
+                os.listdir(mount_location)
+            ):
                 if "Windows" in str(os.listdir(mount_location)):
-                    if "BrowserCore" in str(os.listdir(mount_location + "Windows/")) or "Containers" in str(os.listdir(mount_location + "Windows/")) or "IdentityCRL" in str(os.listdir(mount_location + "Windows/")):
+                    if (
+                        "BrowserCore" in str(os.listdir(mount_location + "Windows/"))
+                        or "Containers" in str(os.listdir(mount_location + "Windows/"))
+                        or "IdentityCRL" in str(os.listdir(mount_location + "Windows/"))
+                    ):
                         windows_os = "Windows Server 2022"
                     elif "InfusedApps" in str(os.listdir(mount_location + "Windows/")):
                         windows_os = "Windows Server 2016"
@@ -52,9 +59,7 @@ def identify_disk_image(verbosity, output_directory, disk_image, mount_location)
                     windows_os = "Windows Server"
             else:
                 windows_os = "Windows10"
-            print_identification(
-                verbosity, output_directory, disk_image, windows_os
-            )
+            print_identification(verbosity, output_directory, disk_image, windows_os)
             disk_image = disk_image + "::" + windows_os
         elif "root" in str(os.listdir(mount_location)) and "media" in str(
             os.listdir(mount_location)
@@ -180,13 +185,11 @@ def identify_memory_image(
             memoryplatform = "macOS memory"
         else:
             memoryplatform = "Linux memory"
-        ot[
-            f
-            + "::"
-            + memoryplatform.replace(" ", "_").split("_")[1]
-            + "_"
-            + memoryplatform.replace(" ", "_").split("_")[0]
-        ] = d
+        ot[d] = "{}::{}_{}".format(
+            f,
+            memoryplatform.replace(" ", "_").split("_")[1],
+            memoryplatform.replace(" ", "_").split("_")[0],
+        )
         if "02processing" not in str(flags):
             flags.append("02processing")
         else:
