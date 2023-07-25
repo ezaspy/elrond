@@ -37,7 +37,10 @@ def compare_include_exclude(
     def successful_copy(
         verbosity, output_directory, img, stage, vssimage, recovered_file, filetype
     ):
-        (entry, prnt,) = "{},{},{},{} '{}'\n".format(
+        (
+            entry,
+            prnt,
+        ) = "{},{},{},{} '{}'\n".format(
             datetime.now().isoformat(),
             img.split("::")[0],
             stage,

@@ -98,41 +98,45 @@ def extract_evtx(
                 pass
         if len(evtjsonlist) > 0:
             evtjson.write(
-                re.sub(r"\d+\s(Public Primary Certification Authority)\s-\s\w\d", r"\1", str(evtjsonlist)
-                .replace(
-                    "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",
-                    "/",
+                re.sub(
+                    r"\d+\s(Public Primary Certification Authority)\s-\s\w\d",
+                    r"\1",
+                    str(evtjsonlist)
+                    .replace(
+                        "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",
+                        "/",
+                    )
+                    .replace("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\", "/")
+                    .replace("\\\\\\\\\\\\\\\\", "/")
+                    .replace("\\\\\\\\", "/")
+                    .replace("\\\\", "/")
+                    .replace("\\", "/")
+                    .replace('/"', '"')
+                    .replace(
+                        "                                                                ",
+                        " ",
+                    )
+                    .replace("                                ", " ")
+                    .replace("                ", " ")
+                    .replace("        ", " ")
+                    .replace("    ", " ")
+                    .replace("  ", " ")
+                    .replace("  ", "")
+                    .replace('" ', '"')
+                    .replace(' "', '"')
+                    .replace("//'", "'")
+                    .replace('":"', '": "')
+                    .replace('","', '", "')
+                    .replace('"}"\', \'"{"', '"}, {"')
+                    .replace('[\'"{"', '[{"')
+                    .replace('"}"\']', '"}]')
+                    .replace('/"', "/")
+                    .replace('/, "', '/", "')
+                    .replace('/}, {"', '/"}, {"')
+                    .replace("/}]", '/"}]')
+                    .replace("ProcessName", "WinProcess"),
                 )
-                .replace("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\", "/")
-                .replace("\\\\\\\\\\\\\\\\", "/")
-                .replace("\\\\\\\\", "/")
-                .replace("\\\\", "/")
-                .replace("\\", "/")
-                .replace('/"', '"')
-                .replace(
-                    "                                                                ",
-                    " ",
-                )
-                .replace("                                ", " ")
-                .replace("                ", " ")
-                .replace("        ", " ")
-                .replace("    ", " ")
-                .replace("  ", " ")
-                .replace("  ", "")
-                .replace('" ', '"')
-                .replace(' "', '"')
-                .replace("//'", "'")
-                .replace('":"', '": "')
-                .replace('","', '", "')
-                .replace('"}"\', \'"{"', '"}, {"')
-                .replace('[\'"{"', '[{"')
-                .replace('"}"\']', '"}]')
-                .replace("/\"", "/")
-                .replace("/, \"", "/\", \"")
-                .replace("/}, {\"", "/\"}, {\"")
-                .replace('/}]','/"}]')
-                .replace("ProcessName", "WinProcess")
-            ))
+            )
         else:
             pass
         evtjsonlist.clear()

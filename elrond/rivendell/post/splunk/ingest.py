@@ -20,7 +20,9 @@ def ingest_splunk_data(
             imgs_to_index.append(img)
         else:
             pass
+    print(imgs_to_index)
     for img in imgs_to_index:
+        print(img)
         if "vss" in img.split("::")[1]:
             vssimage, vsstext = "'" + img.split("::")[0] + "' (" + img.split("::")[
                 1

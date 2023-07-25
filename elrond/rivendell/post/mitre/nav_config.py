@@ -8,9 +8,7 @@ from rivendell.audit import print_done
 from rivendell.post.mitre.nav_attack import create_attack_navigator
 
 
-def configure_navigator(
-    verbosity, case, splunk, elastic, usercred, pswdcred
-):
+def configure_navigator(verbosity, case, splunk, elastic, usercred, pswdcred):
     print(
         "    Mapping available artefacts to MITRE ATT&CK® navigator, please stand by..."
     )
@@ -80,7 +78,7 @@ def configure_navigator(
                 pass
             maintechniques.append(eachsub)
         alltechniques = sorted(list(set(maintechniques)))
-        #if case .json file exists - read it, extract the section of techniques and insert into updates file
+        # if case .json file exists - read it, extract the section of techniques and insert into updates file
         for eachtechnique in alltechniques:
             navlist = create_attack_navigator(nav_list, eachtechnique)
         with open(
@@ -142,24 +140,70 @@ def configure_navigator(
         navresults = "-"
         subprocess.Popen(
             [
-                "sudo", "chmod", "-R", "755", "/opt/attack-navigator/nav-app/src/assets/",
+                "sudo",
+                "chmod",
+                "-R",
+                "755",
+                "/opt/attack-navigator/nav-app/src/assets/",
             ],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         ).communicate(),
         subprocess.Popen(
             [
-                "sudo", "chown", "-R", "sansforensics:sansforensics", "/opt/attack-navigator/nav-app/src/assets/",
+                "sudo",
+                "chown",
+                "-R",
+                "sansforensics:sansforensics",
+                "/opt/attack-navigator/nav-app/src/assets/",
             ],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         ).communicate(),
         print_done(verbosity)
         os.chdir("/opt/attack-navigator/nav-app")
-        nav_online = re.findall(r"(attack-navigator[^%]+online)", str(subprocess.Popen(["sudo", "pm2", "status", "attack-navigator"], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()))
+        nav_online = re.findall(
+            r"(attack-navigator[^%]+online)",
+            str(
+                subprocess.Popen(
+                    ["sudo", "pm2", "status", "attack-navigator"],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                ).communicate()
+            ),
+        )
         print(nav_online)
-        if len(re.findall(r"(attack-navigator[^%]+online)", str(str(subprocess.Popen(["sudo", "pm2", "status", "attack-navigator"], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate())))) == 0:
-            subprocess.Popen(['sudo', 'pm2', 'start', '--time', '--name="attack-navigator"', 'ng', '--', 'serve'], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        if (
+            len(
+                re.findall(
+                    r"(attack-navigator[^%]+online)",
+                    str(
+                        str(
+                            subprocess.Popen(
+                                ["sudo", "pm2", "status", "attack-navigator"],
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE,
+                            ).communicate()
+                        )
+                    ),
+                )
+            )
+            == 0
+        ):
+            subprocess.Popen(
+                [
+                    "sudo",
+                    "pm2",
+                    "start",
+                    "--time",
+                    '--name="attack-navigator"',
+                    "ng",
+                    "--",
+                    "serve",
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).communicate()
         else:
             pass
         os.chdir("/opt/elrond/elrond")

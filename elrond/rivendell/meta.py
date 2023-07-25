@@ -134,7 +134,18 @@ def extract_metadata(
                                 metaentry = metaentry + "unknown,"
                         except:
                             metaentry = metaentry + "N/A,N/A,"
-                        if "/files/binaries/" in metapath or "/files/documents/" in metapath or "/files/archives/" in metapath or "/files/scripts/" in metapath or "/files/lnk/" in metapath or "/files/web/" in metapath or "/files/mail/" in metapath or "/files/virtual/" in metapath or "{}/user_profiles/".format(img.split("::")[0]) in metapath:  # do not assess entropy or extract metadata from raw or cooked artefacts - only files
+                        if (
+                            "/files/binaries/" in metapath
+                            or "/files/documents/" in metapath
+                            or "/files/archives/" in metapath
+                            or "/files/scripts/" in metapath
+                            or "/files/lnk/" in metapath
+                            or "/files/web/" in metapath
+                            or "/files/mail/" in metapath
+                            or "/files/virtual/" in metapath
+                            or "{}/user_profiles/".format(img.split("::")[0])
+                            in metapath
+                        ):  # do not assess entropy or extract metadata from raw or cooked artefacts - only files
                             try:
                                 eout = subprocess.Popen(
                                     ["densityscout", "-r", metapath],
@@ -157,7 +168,9 @@ def extract_metadata(
                                 if str(eout)[2:-1] != "" and "\\n(" in str(eout)[88:-5]:
                                     metaentry = (
                                         metaentry
-                                        + str(eout)[88:-5].split("\\n(")[1].split(")")[0]
+                                        + str(eout)[88:-5]
+                                        .split("\\n(")[1]
+                                        .split(")")[0]
                                         + ","
                                     )
                                 else:
@@ -175,7 +188,8 @@ def extract_metadata(
                                 )
                                 if str(mout)[2:-3] != "":
                                     mout = (
-                                        "File Size" + str(mout)[2:-3].split("File Size")[1]
+                                        "File Size"
+                                        + str(mout)[2:-3].split("File Size")[1]
                                     )
                                     entry, prnt = "{},{},{},{}\n".format(
                                         datetime.now().isoformat(),
@@ -226,4 +240,3 @@ def extract_metadata(
                         pass
                 except:
                     pass
-    

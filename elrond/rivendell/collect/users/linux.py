@@ -19,7 +19,13 @@ def linux_users(
     vssimage,
     vsstext,
 ):
-    (item_list, bwsrdest, userdest, bashfiles, usedfiles,) = (
+    (
+        item_list,
+        bwsrdest,
+        userdest,
+        bashfiles,
+        usedfiles,
+    ) = (
         os.listdir(item),
         dest + "browsers/",
         dest + "user_profiles",
@@ -49,7 +55,10 @@ def linux_users(
                             item + "/" + each + "/.local/share/" + eachused,
                             dest + each + "+" + eachused,
                         )
-                        (entry, prnt,) = "{},{},{},'{}' ({})\n".format(
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' ({})\n".format(
                             datetime.now().isoformat(),
                             img.split("::")[0],
                             stage,
@@ -94,7 +103,10 @@ def linux_users(
                             item + "/" + each + "/." + eachbash,
                             dest + each + "+" + eachbash,
                         )
-                        (entry, prnt,) = "{},{},{},'{}' ({})\n".format(
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' ({})\n".format(
                             datetime.now().isoformat(),
                             img.split("::")[0],
                             stage,
@@ -130,7 +142,10 @@ def linux_users(
                 ):
                     if keytype.endswith(".keyring") or keytype.endswith(".keystore"):
                         try:
-                            (entry, prnt,) = "{},{},{},key{} ({})\n".format(
+                            (
+                                entry,
+                                prnt,
+                            ) = "{},{},{},key{} ({})\n".format(
                                 datetime.now().isoformat(),
                                 img.split("::")[0],
                                 stage,
@@ -169,7 +184,10 @@ def linux_users(
                     )
                 else:
                     pass
-                (entry, prnt,) = "{},{},{},ssh files\n".format(
+                (
+                    entry,
+                    prnt,
+                ) = "{},{},{},ssh files\n".format(
                     datetime.now().isoformat(),
                     img.split("::")[0],
                     stage,
@@ -209,7 +227,10 @@ def linux_users(
                     )
                 else:
                     pass
-                (entry, prnt,) = "{},{},{},autostart files\n".format(
+                (
+                    entry,
+                    prnt,
+                ) = "{},{},{},autostart files\n".format(
                     datetime.now().isoformat(),
                     img.split("::")[0],
                     stage,
@@ -255,7 +276,10 @@ def linux_users(
                     )
                 else:
                     pass
-                (entry, prnt,) = "{},{},{},deleted files\n".format(
+                (
+                    entry,
+                    prnt,
+                ) = "{},{},{},deleted files\n".format(
                     datetime.now().isoformat(),
                     img.split("::")[0],
                     stage,
@@ -319,7 +343,10 @@ def linux_users(
                     )
                 else:
                     pass
-                (entry, prnt,) = "{},{},{},mail artefacts\n".format(
+                (
+                    entry,
+                    prnt,
+                ) = "{},{},{},mail artefacts\n".format(
                     datetime.now().isoformat(),
                     img.split("::")[0],
                     stage,
@@ -532,7 +559,10 @@ def linux_users(
                     )
                 else:
                     pass
-                (entry, prnt,) = "{},{},{},'{}' user profile\n".format(
+                (
+                    entry,
+                    prnt,
+                ) = "{},{},{},'{}' user profile\n".format(
                     datetime.now().isoformat(),
                     img.split("::")[0],
                     stage,

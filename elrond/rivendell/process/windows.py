@@ -439,16 +439,22 @@ def process_clipboard(
         pass
 
 
-def process_wmi(verbosity, vssimage, output_directory, img, vssartefact, stage, artefact):  # git clone https://github.com/airbus-cert/etl-parser
+def process_wmi(
+    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+):  # git clone https://github.com/airbus-cert/etl-parser
     print()  # python3 /mnt/hgfs/elrond_dev/issues/etl-parser/bin/etl2xml -i /mnt/hgfs/elrond_dev/issues/wmi/Terminal-Services-RPC-Client.etl -o /mnt/hgfs/elrond_dev/issues/wmi/Terminal-Services-RPC-Client.xml
 
 
-def process_wbem(verbosity, vssimage, output_directory, img, vssartefact, stage, artefact):  # git clone https://github.com/davidpany/WMI_Forensics
+def process_wbem(
+    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+):  # git clone https://github.com/davidpany/WMI_Forensics
     print()  # python2.7 /mnt/hgfs/elrond_dev/issues/WMI_Forensics/CCM_RUA_Finder.py -i /mnt/hgfs/elrond_dev/issues/wbem/OBJECTS.DATA -o /mnt/hgfs/elrond_dev/issues/wbem/OBJECTS.DATA.xls
 
 
-def process_ual(verbosity, vssimage, output_directory, img, vssartefact, stage, artefact):
-    print()  # 
+def process_ual(
+    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+):
+    print()  #
 
 
 def process_jumplists(
@@ -496,7 +502,10 @@ def process_jumplists(
                     )
                 else:
                     pass
-                (entry, prnt,) = "{},{},{},'{}' ({}) jumplist file\n".format(
+                (
+                    entry,
+                    prnt,
+                ) = "{},{},{},'{}' ({}) jumplist file\n".format(
                     datetime.now().isoformat(),
                     vssimage.replace("'", ""),
                     stage,
@@ -538,7 +547,10 @@ def process_outlook(
         )
     else:
         pass
-    (entry, prnt,) = "{},{},{},'{}' ({}) outlook file\n".format(
+    (
+        entry,
+        prnt,
+    ) = "{},{},{},'{}' ({}) outlook file\n".format(
         datetime.now().isoformat(),
         vssimage.replace("'", ""),
         stage,
@@ -662,7 +674,10 @@ def process_pagefile(verbosity, vssimage, output_directory, img, vssartefact, ar
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         ).communicate()[0]
-        (entry, prnt,) = "{},{},extraction of strings complete,'{}'\n".format(
+        (
+            entry,
+            prnt,
+        ) = "{},{},extraction of strings complete,'{}'\n".format(
             datetime.now().isoformat(),
             vssimage,
             artefact.split("/")[-1],

@@ -503,7 +503,12 @@ def create_attack_navigator(nav_list, eachtechnique):
     }
     for technique, content in nav_pairs.items():
         if eachtechnique == technique:
-            nav_list.append(content.replace("±§§±", ',\n            "color": "#00acb4",\n            "comment": "",\n            "enabled": true,\n            "metadata": [],\n            "showSubtechniques": false\n        },\n        '))
+            nav_list.append(
+                content.replace(
+                    "±§§±",
+                    ',\n            "color": "#00acb4",\n            "comment": "",\n            "enabled": true,\n            "metadata": [],\n            "showSubtechniques": false\n        },\n        ',
+                )
+            )
         else:
             pass
     navlist = list(set(nav_list.copy()))

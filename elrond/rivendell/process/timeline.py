@@ -69,7 +69,6 @@ def convert_plaso_timeline(verbosity, output_directory, stage, img):
 
 
 def create_plaso_timeline(verbosity, output_directory, stage, img, d, timelineimage):
-
     print("\n    Creating timeline for {}...".format(timelineimage))
     entry, prnt = "{},{},{},commenced\n".format(
         datetime.now().isoformat(), timelineimage, stage

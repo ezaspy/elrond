@@ -44,4 +44,3 @@ def manage_error(output_directory, verbosity, error, state, img, item, vsstext):
         img.split("::")[0],
     )
     write_audit_log_entry(verbosity, output_directory, entry, prnt)
-

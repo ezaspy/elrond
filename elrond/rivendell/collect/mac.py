@@ -133,7 +133,10 @@ def collect_mac_artefacts(
             item_list = os.listdir(item)
             for each in item_list:
                 try:
-                    (entry, prnt,) = "{},{},{},'{}' file\n".format(
+                    (
+                        entry,
+                        prnt,
+                    ) = "{},{},{},'{}' file\n".format(
                         datetime.now().isoformat(),
                         img.split("::")[0],
                         stage,
@@ -202,7 +205,10 @@ def collect_mac_artefacts(
             for each in item_list:
                 if each.endswith(".plist"):
                     try:
-                        (entry, prnt,) = "{},{},{},'{}' plist\n".format(
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' plist\n".format(
                             datetime.now().isoformat(),
                             img.split("::")[0],
                             stage,
@@ -252,7 +258,10 @@ def collect_mac_artefacts(
             item_list = os.listdir(item)
             for each in item_list:
                 try:
-                    (entry, prnt,) = "{},{},{},'{}' trash file\n".format(
+                    (
+                        entry,
+                        prnt,
+                    ) = "{},{},{},'{}' trash file\n".format(
                         datetime.now().isoformat(),
                         img.split("::")[0],
                         stage,
@@ -289,7 +298,10 @@ def collect_mac_artefacts(
             for each in item_list:
                 if not os.path.isdir(each):
                     try:
-                        (entry, prnt,) = "{},{},{},'{}' tmp file\n".format(
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' tmp file\n".format(
                             datetime.now().isoformat(),
                             img.split("::")[0],
                             stage,
@@ -318,7 +330,10 @@ def collect_mac_artefacts(
                         pass
                 else:
                     try:
-                        (entry, prnt,) = "{},{},{},'{}' tmp directory\n".format(
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' tmp directory\n".format(
                             datetime.now().isoformat(),
                             img.split("::")[0],
                             stage,
@@ -377,7 +392,10 @@ def collect_mac_artefacts(
                         or item == mnt + "/var/vm/swapfile"
                     ):
                         if not os.path.exists(dest + each):
-                            (entry, prnt,) = "{},{},{},'{}'\n".format(
+                            (
+                                entry,
+                                prnt,
+                            ) = "{},{},{},'{}'\n".format(
                                 datetime.now().isoformat(),
                                 img.split("::")[0],
                                 stage,

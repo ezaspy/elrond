@@ -444,7 +444,9 @@ def reorganise_artefacts(
                 else:
                     pass
         for _, eachimg in allimgs.items():
-            print_identification(verbosity, output_directory, eachimg.split("::")[0], osguess)
+            print_identification(
+                verbosity, output_directory, eachimg.split("::")[0], osguess
+            )
 
     for eachdir in os.listdir(output_directory):
         shutil.rmtree(output_directory + "/" + eachdir)

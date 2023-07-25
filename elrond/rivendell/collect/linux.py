@@ -126,7 +126,10 @@ def collect_linux_artefacts(
             for each in item_list:
                 if each.endswith(".conf"):
                     try:
-                        (entry, prnt,) = "{},{},{},'{}' configuration file\n".format(
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' configuration file\n".format(
                             datetime.now().isoformat(),
                             img.split("::")[0],
                             stage,
@@ -175,7 +178,10 @@ def collect_linux_artefacts(
             item_list = os.listdir(item)
             for each in item_list:
                 try:
-                    (entry, prnt,) = "{},{},{},'{}' log file\n".format(
+                    (
+                        entry,
+                        prnt,
+                    ) = "{},{},{},'{}' log file\n".format(
                         datetime.now().isoformat(),
                         img.split("::")[0],
                         stage,
@@ -224,7 +230,10 @@ def collect_linux_artefacts(
                     or each.endswith(".socket")
                 ):
                     try:
-                        (entry, prnt,) = "{},{},{},'{}' service file\n".format(
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' service file\n".format(
                             datetime.now().isoformat(),
                             img.split("::")[0],
                             stage,
@@ -274,7 +283,10 @@ def collect_linux_artefacts(
             for each in item_list:
                 if each.startswith("job."):
                     try:
-                        (entry, prnt,) = "{},{},{},'{}' job file\n".format(
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' job file\n".format(
                             datetime.now().isoformat(),
                             img.split("::")[0],
                             stage,
@@ -319,7 +331,10 @@ def collect_linux_artefacts(
             for each in item_list:
                 if not os.path.isdir(each):
                     try:
-                        (entry, prnt,) = "{},{},{},'{}' temp file\n".format(
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' temp file\n".format(
                             datetime.now().isoformat(),
                             img.split("::")[0],
                             stage,
@@ -348,7 +363,10 @@ def collect_linux_artefacts(
                         pass
                 else:
                     try:
-                        (entry, prnt,) = "{},{},{},'{}' /tmp directory\n".format(
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' /tmp directory\n".format(
                             datetime.now().isoformat(),
                             img.split("::")[0],
                             stage,
@@ -388,7 +406,10 @@ def collect_linux_artefacts(
                     )
                 else:
                     pass
-                (entry, prnt,) = "{},{},{},'{}' bash files\n".format(
+                (
+                    entry,
+                    prnt,
+                ) = "{},{},{},'{}' bash files\n".format(
                     datetime.now().isoformat(),
                     img.split("::")[0],
                     stage,
@@ -437,7 +458,10 @@ def collect_linux_artefacts(
                 for keytype in os.listdir(item + "/.local/share/keyrings/"):
                     if keytype.endswith(".keyring") or keytype.endswith(".keystore"):
                         try:
-                            (entry, prnt,) = "{},{},{},'root' {}\n".format(
+                            (
+                                entry,
+                                prnt,
+                            ) = "{},{},{},'root' {}\n".format(
                                 datetime.now().isoformat(),
                                 img.split("::")[0],
                                 stage,
@@ -499,7 +523,10 @@ def collect_linux_artefacts(
                         or item == mnt + "/var/vm/swapfile"
                     ):
                         if not os.path.exists(dest + each):
-                            (entry, prnt,) = "{},{},{},'{}'\n".format(
+                            (
+                                entry,
+                                prnt,
+                            ) = "{},{},{},'{}'\n".format(
                                 datetime.now().isoformat(),
                                 img.split("::")[0],
                                 stage,
