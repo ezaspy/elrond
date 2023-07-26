@@ -170,7 +170,9 @@ def convert_csv_to_ndjson(output_directory, case, img, root_dir):
                                     img.split("::")[0],
                                     atftfile,
                                     time_insert,
-                                    data.replace("SystemTime", "@timestamp")
+                                    data.replace(' "', " '")
+                                    .replace('" ', "' ")
+                                    .replace("SystemTime", "@timestamp")
                                     .replace("LastWriteTime", "@timestamp")
                                     .replace("LastWrite Time", "@timestamp")
                                     .replace('"LastWrite": "', '"@timestamp": "')
