@@ -3,7 +3,7 @@ def create_nav_menu(defaultnav):
     defaultnav.write('<collection label="MITRE">\n		')
     defaultnav.write('<view name="mitre" default="true" />\n		')
     defaultnav.write(
-        '<a href="http://127.0.0.1/attack-navigator/index.html" target="_blank">ATT&amp;CK® Navigator Mapping</a>\n		'
+        '<a href="http://127.0.0.1:4200" target="_blank">ATT&amp;CK® Navigator Mapping</a>\n		'
     )
     defaultnav.write('<view name="info" />\n	')
     defaultnav.write("</collection>\n	")
