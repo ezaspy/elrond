@@ -170,9 +170,7 @@ def convert_csv_to_ndjson(output_directory, case, img, root_dir):
                                     img.split("::")[0],
                                     atftfile,
                                     time_insert,
-                                    data.replace(' "', " '")
-                                    .replace('" ', "' ")
-                                    .replace("SystemTime", "@timestamp")
+                                    data.replace("SystemTime", "@timestamp")
                                     .replace("LastWriteTime", "@timestamp")
                                     .replace("LastWrite Time", "@timestamp")
                                     .replace('"LastWrite": "', '"@timestamp": "')
@@ -182,7 +180,17 @@ def convert_csv_to_ndjson(output_directory, case, img, root_dir):
                                     ),
                                 )
                                 converted_timestamp = convert_timestamps(data)
-                                write_json.write(converted_timestamp)
+                                write_json.write(
+                                    re.sub(
+                                        r'([^\{ ])"([^:,\}])',
+                                        r"\1%22\2",
+                                        re.sub(
+                                            r'([^:,] )"([^:,])',
+                                            r"\1%22\2",
+                                            converted_timestamp,
+                                        ),
+                                    )
+                                )
                         prepare_elastic_ndjson(
                             output_directory,
                             img,
@@ -280,10 +288,8 @@ def ingest_elastic_ndjson(case, ndjsonfile):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ).communicate()[0]
-    if (
-        "Unexpected character" in str(ingested_data)
-        or 'failed" : 1' in str(ingested_data)
-        or "request body is required" in str(ingested_data)
+    if "Unexpected character" in str(ingested_data) or 'failed" : 1' in str(
+        ingested_data
     ):
         print(
             "       Could not ingest\t'{}'\t- perhaps the json did not format correctly?".format(
@@ -331,7 +337,6 @@ def prepare_elastic_ndjson(output_directory, img, case, source_location):
     ).format(vss_path_insert, source_location.split("/")[-1])
     shutil.move(source_location, ndjsonfile)
     ingest_elastic_ndjson(case, ndjsonfile)
-    ingest_elastic_ndjson(case, ndjsonfile)  # repeating to ensure data is ingested
 
 
 def ingest_elastic_data(
@@ -347,11 +352,12 @@ def ingest_elastic_data(
             imgs_to_ingest.append(img)
         else:
             pass
-        if not os.path.exists(
-            output_directory + img.split("::")[0] + "/elastic-ingest/"
-        ):
+        if not os.path.exists(output_directory + img.split("::")[0] + "/elastic/"):
             os.makedirs(
-                os.path.join(output_directory + img.split("::")[0] + "/elastic-ingest")
+                os.path.join(output_directory + img.split("::")[0] + "/elastic")
+            )
+            os.makedirs(
+                os.path.join(output_directory + img.split("::")[0] + "/elastic/documents/")
             )
         else:
             pass
