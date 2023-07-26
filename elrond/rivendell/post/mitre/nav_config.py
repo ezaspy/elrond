@@ -162,17 +162,6 @@ def configure_navigator(verbosity, case, splunk, elastic, usercred, pswdcred):
         ).communicate(),
         print_done(verbosity)
         os.chdir("/opt/attack-navigator/nav-app")
-        nav_online = re.findall(
-            r"(attack-navigator[^%]+online)",
-            str(
-                subprocess.Popen(
-                    ["sudo", "pm2", "status", "attack-navigator"],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                ).communicate()
-            ),
-        )
-        print(nav_online)
         if (
             len(
                 re.findall(
@@ -196,7 +185,7 @@ def configure_navigator(verbosity, case, splunk, elastic, usercred, pswdcred):
                     "pm2",
                     "start",
                     "--time",
-                    '--name="attack-navigator"',
+                    '--name=attack-navigator',
                     "ng",
                     "--",
                     "serve",
