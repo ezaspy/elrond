@@ -775,7 +775,7 @@ def use_plugins(
                 plugin,
                 artefact.split("/")[-1],
                 profile,
-            ), " -> {} -> no evidence of '{}' available from {}".format(
+            ), " -> {} -> no evidence of '{}' from {}".format(
                 datetime.now().isoformat().replace("T", " "),
                 plugin,
                 vssimage,
