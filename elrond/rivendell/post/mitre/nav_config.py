@@ -81,12 +81,13 @@ def configure_navigator(verbosity, case, splunk, elastic, usercred, pswdcred):
         # if case .json file exists - read it, extract the section of techniques and insert into updates file
         for eachtechnique in alltechniques:
             navlist = create_attack_navigator(nav_list, eachtechnique)
+        # creating attack-navigator interim.<case>.json
         with open(
             "/opt/attack-navigator/nav-app/src/assets/.{}.json".format(case),
             "w",
         ) as attacktmp:
             attacktmp.write(
-                '{\n    "name": "layer",\n    "versions": {\n        "attack": "13",\n        "navigator": "4.8.2",\n        "layer": "4.4"\n    },\n    "domain": "enterprise-attack",\n    "description": "",\n    "filters": {\n        "platforms": [\n            "Linux",\n            "macOS",\n            "Windows",\n            "Containers"\n        ]\n    },\n    "sorting": 0,\n    "layout": {\n        "layout": "side",\n        "aggregateFunction": "average",\n        "showID": false,\n        "showName": true,\n        "showAggregateScores": false,\n        "countUnscored": false\n    },\n    "hideDisabled": false,\n    "techniques": [\n        '
+                '{\n    "name": "{}",\n    "versions": {\n        "attack": "13",\n        "navigator": "4.8.2",\n        "layer": "4.4"\n    },\n    "domain": "enterprise-attack",\n    "description": "",\n    "filters": {\n        "platforms": [\n            "Linux",\n            "macOS",\n            "Windows",\n            "Containers"\n        ]\n    },\n    "sorting": 0,\n    "layout": {\n        "layout": "side",\n        "aggregateFunction": "average",\n        "showID": false,\n        "showName": true,\n        "showAggregateScores": false,\n        "countUnscored": false\n    },\n    "hideDisabled": false,\n    "techniques": [\n        '.format(case)
             )
             for eachentry in str(navlist[:-1])[2:-2].split("\\n        ', '"):
                 attacktmp.write(eachentry.replace("\\n", "\n"))
@@ -111,6 +112,7 @@ def configure_navigator(verbosity, case, splunk, elastic, usercred, pswdcred):
             "r",
         ) as attacktmp:
             jsoncontent = attacktmp.readlines()
+        # creating attack-navigator <case>.json
         with open(
             "/opt/attack-navigator/nav-app/src/assets/{}.json".format(case),
             "w",
@@ -123,6 +125,7 @@ def configure_navigator(verbosity, case, splunk, elastic, usercred, pswdcred):
                 .replace("},{", "},\n        {")
             )
         os.remove("/opt/attack-navigator/nav-app/src/assets/.{}.json".format(case))
+        # creating attack-navigator config.json
         with open(
             "/opt/attack-navigator/nav-app/src/assets/config.json",
             "w",
@@ -162,39 +165,40 @@ def configure_navigator(verbosity, case, splunk, elastic, usercred, pswdcred):
         ).communicate(),
         print_done(verbosity)
         os.chdir("/opt/attack-navigator/nav-app")
-        if (
-            len(
-                re.findall(
-                    r"(attack-navigator[^%]+online)",
-                    str(
-                        str(
-                            subprocess.Popen(
-                                ["sudo", "pm2", "status", "attack-navigator"],
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE,
-                            ).communicate()
-                        )
-                    ),
-                )
-            )
-            == 0
-        ):
-            subprocess.Popen(
-                [
-                    "sudo",
-                    "pm2",
-                    "start",
-                    "--time",
-                    '--name=attack-navigator',
-                    "ng",
-                    "--",
-                    "serve",
-                ],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            ).communicate()
-        else:
-            pass
+        subprocess.Popen(
+            [
+                "sudo",
+                "pm2",
+                "stop",
+                "--name=attack-navigator",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate()
+        subprocess.Popen(
+            [
+                "sudo",
+                "pm2",
+                "delete",
+                "--name=attack-navigator",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate()
+        subprocess.Popen(
+            [
+                "sudo",
+                "pm2",
+                "start",
+                "--time",
+                "--name=attack-navigator",
+                "ng",
+                "--",
+                "serve",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate()
         os.chdir("/opt/elrond/elrond")
         print("     ATT&CK Navigator built for '{}'".format(case))
     else:
