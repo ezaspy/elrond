@@ -87,7 +87,7 @@ To invoke the script, follow the instructions in [CONFIG.md](https://github.com/
 
 ## Usage
 
-`python3 elrond.py <case_id> <directory> [<output_directory>] [-h] [-AaBCcDEGHIiMoPpQqRSsTtUVvZ] [-K <keyword_file>] [-Y <yara_dir>] -F (include|exclude):[<include/exclude_file>]`
+`python3 elrond.py <case_id> <directory> [<output_directory>] [-h] [-AaBCcDEGIiMmNnPQqRSsTtUuVXZ] [-K <keyword_file>] [-Y <yara_dir>] -F (include|exclude):[<include/exclude_file>]`
 
 <br>
 
