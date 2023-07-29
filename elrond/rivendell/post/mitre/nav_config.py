@@ -86,8 +86,7 @@ def configure_navigator(verbosity, case, splunk, elastic, usercred, pswdcred):
             "/opt/attack-navigator/nav-app/src/assets/.{}.json".format(case),
             "w",
         ) as attacktmp:
-            attacktmp.write("±§±\n    ".replace("±§±", "{"))
-            attacktmp.write('"name": "{}"'.format(case))
+            attacktmp.write('{}\n    "name": "{}"'.format("{", case))
             attacktmp.write(
                 ',\n    "versions": ±§±\n        "attack": "13",\n        "navigator": "4.8.2",\n        "layer": "4.4"\n    §±§,\n    "domain": "enterprise-attack",\n    "description": "",\n    "filters": ±§±\n        "platforms": [\n            "Linux",\n            "macOS",\n            "Windows",\n            "Containers"\n        ]\n    §±§,\n    "sorting": 0,\n    "layout": ±§±\n        "layout": "side",\n        "aggregateFunction": "average",\n        "showID": false,\n        "showName": true,\n        "showAggregateScores": false,\n        "countUnscored": false\n    §±§,\n    "hideDisabled": false,\n    "techniques": [\n        '.replace(
                     "±§±", "{"
@@ -99,15 +98,7 @@ def configure_navigator(verbosity, case, splunk, elastic, usercred, pswdcred):
                 attacktmp.write(eachentry.replace("\\n", "\n"))
             attacktmp.write(navlist[-1][:-10])
             attacktmp.write(
-                '\n    ],\n    "gradient": ±§±\n        "colors": [\n            "#ff6666ff",\n            "#ffe766ff",\n            "#8ec843ff"\n        ],\n        "minValue": 0,\n        "maxValue": 100\n    §±§,\n    "legendItems": [\n        ±§±\n            '.replace(
-                    "±§±", "{"
-                ).replace(
-                    "§±§", "}"
-                )
-            )
-            attacktmp.write('"label": "{}"'.format(case))
-            attacktmp.write(
-                ',\n            "color": "#00acb4"\n        §±§,\n        ±§±\n            "label": "Undetectable/Out-of-Scope",\n            "color": "#969696"\n        §±§\n    ],\n    "metadata": [],\n    "showTacticRowBackground": false,\n    "tacticRowBackground": "#dddddd",\n    "selectTechniquesAcrossTactics": true,\n    "selectSubtechniquesWithParent": false\n}'.replace(
+                '\n    ],\n    "gradient": ±§±\n        "colors": [\n            "#ff6666ff",\n            "#ffe766ff",\n            "#8ec843ff"\n        ],\n        "minValue": 0,\n        "maxValue": 100\n    §±§,\n    "legendItems": [\n        ±§±\n            "label": "Evidence of",\n            "color": "#00acb4"\n        §±§\n    ],\n    "metadata": [],\n    "showTacticRowBackground": false,\n    "tacticRowBackground": "#dddddd",\n    "selectTechniquesAcrossTactics": true,\n    "selectSubtechniquesWithParent": false\n§±§'.replace(
                     "±§±", "{"
                 ).replace(
                     "§±§", "}"
