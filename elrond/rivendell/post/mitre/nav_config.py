@@ -140,7 +140,7 @@ def configure_navigator(verbosity, case, splunk, elastic, usercred, pswdcred):
                 case
             )
             configjson.write(
-                config_json_content.replace("±§±", "{".replace("§±§", "}"))
+                config_json_content.replace("±§±", "{").replace("§±§", "}")
             )
         with open("/opt/attack-navigator/nav-app/src/index.html", "w") as indexhtml:
             indexhtml.write(
