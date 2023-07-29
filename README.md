@@ -60,7 +60,7 @@ It is important to note that elrond utilises many existing tools which have been
 
 ### Related Projects
 
-elrond is responsible for the analysis-side of digital forensic, but what about acquisition? An acompanying script called [gandalf](https://github.com/ezaspy/gandalf) can be deployed (locally or remotely) on either Windows (PowerShell), macOS or Linux (Python) hosts to acquire forensic artefacts. 
+elrond is responsible for the analysis-side of digital forensic, but what about acquisition? An acompanying script called [gandalf](https://github.com/ezaspy/gandalf) can be deployed (locally or remotely) on either Windows ([PowerShell](https://learn.microsoft.com/en-us/powershell/)), macOS or Linux ([Python](https://www.python.org)) hosts to acquire forensic artefacts. 
 <br><br><br>
 
 <!-- PREREQUISITES -->
@@ -69,7 +69,7 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 
 ### SIFT-elrond (recommended)
 
-- Download [SIFT-elrond](https://drive.google.com/file/d/18kdJ7KGzRGhILB9hoR30jLHhS17TXM2R/view?usp=share_link) OVA, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
+- Download [SIFT-elrond]() OVA, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
   - ***Note***: *the OVA does not contain the NSRL dataset*; execute [nsrl.sh](https://github.com/ezaspy/elrond/blob/main/elrond/tools/config/scripts/nsrl.sh) and follow instructions to download.
 
 ### Self-build
@@ -134,7 +134,7 @@ To invoke the script, follow the instructions in [CONFIG.md](https://github.com/
 
 ### Screenshot
 
-![elrond_screenshot](https://github.com/ezaspy/elrond/blob/main/elrond/images/elrond_screenshot.jpeg)
+![elrond_screenshot](https://github.com/ezaspy/elrond/blob/main/elrond/images/elrond_screenshot.jpg)
 
 ### Support
 
@@ -175,8 +175,8 @@ Below is a list of all the artefacts collected and processed from the respective
 - C:\\Windows\\System32\\wbem\\Repository\\
 - C:\\Windows\\System32\\LogFiles\\WMI\\
 - C:\\Windows\\System32\\LogFiles\\
-- C:\\Users\\%USERPROFILE%\\
 - C:\\Users\\%USERPROFILE%\\NTUSER.DAT
+- C:\\Users\\%USERPROFILE%\\UsrClass.DAT
 - C:\\Users\\%USERPROFILE%\\AppData\\Local\\ConnectedDevicesPlatform\\ActivitiesCache.db
 - C:\\Users\\%USERPROFILE%\\AppData\\Local\\ConnectedDevicesPlatform\\ActivitiesCache.db-shm
 - C:\\Users\\%USERPROFILE%\\AppData\\Local\\ConnectedDevicesPlatform\\ActivitiesCache.db-wal
@@ -192,6 +192,7 @@ Below is a list of all the artefacts collected and processed from the respective
 - C:\\Users\\%USERPROFILE%\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\AutomaticDestinations\\
 - C:\\Users\\%USERPROFILE%\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\CustomDestinations\\
 - C:\\Users\\%USERPROFILE%\\Documents\\Outlook Files\\
+- C:\\Users\\%USERPROFILE%\\*
 <br>
 
 ### macOS
@@ -226,7 +227,7 @@ Below is a list of all the artefacts collected and processed from the respective
 - /etc/hosts
 - /etc/crontab
 - /etc/security
-- /tmp
+- /tmp/*
 - /var/log
 <br>
 
@@ -265,7 +266,7 @@ Below is a list of all the artefacts collected and processed from the respective
 - /root/.bash_session
 - /root/.local/share/keyrings/
 - /root/.ssh
-- /tmp
+- /tmp/*
 - /usr/lib/systemd/user/*.service
 - /usr/lib/systemd/user/*.target
 - /usr/lib/systemd/user/*.socket
