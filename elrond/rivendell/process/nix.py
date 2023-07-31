@@ -872,13 +872,19 @@ def process_service(
                 jsonlist.append(json.dumps(jsondict))
             jsondict.clear()
             if len(jsonlist) > 0:
-                servicejson.write(
+                service_json = re.sub(
+                    r"(\w)\\'(\w)",
+                    r"\1'\2",
                     str(jsonlist)
                     .replace("'{", "{")
                     .replace("}'", "}")
                     .replace("# ", "")
                     .replace("#", "")
+                    .replace("n', \\\"", ".  ")
+                    .replace("n\\\", '", ".  ")
+                    .replace('[Unit]\\\\n\', \\"',''),
                 )
+                servicejson.write(service_json)
             else:
                 pass
             print_done(verbosity)
