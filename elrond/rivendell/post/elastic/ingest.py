@@ -336,7 +336,14 @@ def prepare_elastic_ndjson(output_directory, img, case, source_location):
         output_directory + img.split("::")[0] + "/elastic/documents{}/{}"
     ).format(vss_path_insert, source_location.split("/")[-1])
     shutil.move(source_location, ndjsonfile)
-    ingest_elastic_ndjson(case, ndjsonfile)
+    try:
+        ingest_elastic_ndjson(case, ndjsonfile)
+    except:
+        print(
+            "       Could not ingest\t'{}'\t- perhaps the json did not format correctly?".format(
+                ndjsonfile.split("/")[-1]
+            )
+        )
 
 
 def ingest_elastic_data(
