@@ -88,7 +88,12 @@ def configure_navigator(verbosity, case, splunk, elastic, usercred, pswdcred):
         ) as attacktmp:
             attacktmp.write('{}\n    "name": "{}"'.format("{", case))
             attacktmp.write(
-                ',\n    "versions": ±§±\n        "attack": "13",\n        "navigator": "4.8.2",\n        "layer": "4.4"\n    §±§,\n    "domain": "enterprise-attack",\n    "description": "",\n    "filters": ±§±\n        "platforms": [\n            "Linux",\n            "macOS",\n            "Windows",\n            "Containers"\n        ]\n    §±§,\n    "sorting": 0,\n    "layout": ±§±\n        "layout": "side",\n        "aggregateFunction": "average",\n        "showID": false,\n        "showName": true,\n        "showAggregateScores": false,\n        "countUnscored": false\n    §±§,\n    "hideDisabled": false,\n    "techniques": [\n        '.replace(
+                ',\n    "versions": {}\n        "attack": "13",\n        "navigator": "4.8.2",\n        "{}'.format(
+                    "{", case
+                )
+            )
+            attacktmp.write(
+                '": "4.4"\n    §±§,\n    "domain": "enterprise-attack",\n    "description": "",\n    "filters": ±§±\n        "platforms": [\n            "Linux",\n            "macOS",\n            "Windows",\n            "Containers"\n        ]\n    §±§,\n    "sorting": 0,\n    "layout": ±§±\n        "layout": "side",\n        "aggregateFunction": "average",\n        "showID": false,\n        "showName": true,\n        "showAggregateScores": false,\n        "countUnscored": false\n    §±§,\n    "hideDisabled": false,\n    "techniques": [\n        '.replace(
                     "±§±", "{"
                 ).replace(
                     "§±§", "}"
