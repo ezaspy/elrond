@@ -12,6 +12,63 @@ from rivendell.process.extractions.plist import (
 )
 
 
+def repair_malformed_plist(plist_out):
+    plist_out = re.sub(r"'(: \d+, )'", r'"\1"', plist_out)
+    plist_out = re.sub(r"'(: )((?:True|False))(, )'", r'"\1"\2"\3"', plist_out)
+    plist_out = plist_out.replace('[\\"', '["').replace('\\"]', '"]')
+    plist_out = plist_out.replace('": "[{"', '": [{"').replace('"}]", "', '"}], "')
+    plist_out = plist_out.replace('": "[\'', '": ["').replace('\']", "', '"], "')
+    plist_out = re.sub(r"'(: \d+\}\])\"(, \")", r'"\1\2', plist_out)
+    plist_out = (
+        plist_out.replace(']"}]', '"]}]')
+        .replace('""]}]', '"]}]')
+        .replace('": "[\'', '": ["')
+        .replace('\']", "', '"], "')
+        .replace('": [">', '": ["')
+        .replace('": "}, \'', '": {{}}, "')
+        .replace("': [", '": [')
+        .replace("]'}]\"}}]", "]}]}}]")
+        .replace("': ['", '": ["')
+        .replace('\']", "', '"], "')
+        .replace("'}, '", '"}, "')
+        .replace("': {'", '": {"')
+        .replace("'}, {'", '"}, {"')
+        .replace('": "[\'', '": ["')
+        .replace("'}}, {'", "'}}, {'")
+        .replace('": "[', '": ["')
+        .replace('": [""', '": ["')
+        .replace('\']"}], "', '"]}], "')
+        .replace("']\"}}", '"]}}')
+        .replace('": ["]", "', '": [], "')
+        .replace('": ["]"}', '": []}')
+    )
+    plist_out = re.sub(r"': (-?\d+)\}, '", r'": "\1"}, "', plist_out)
+    plist_out = re.sub(r"(\": \[\{\"[^']+)'(: )(b')", r'\1"\2"\3', plist_out)
+    plist_out = re.sub(r'\'(: \d+\}\])"(\})', r'"\1\2', plist_out)
+    plist_out = plist_out.replace('": [", "', '": ["')
+    plist_out = re.sub(r'(\w+)(\])"([\}\]]{1,2})', r'\1"\2\3', plist_out)
+    plist_out = plist_out.replace('\']"}, "', '"]}, "')
+    plist_out = re.sub(r"(\w+)'(], \")", r'\1"\2', plist_out)
+    plist_out = re.sub(r"(\w+)(: )(\[')", r'\1"\2"\3', plist_out)
+    plist_out = plist_out.replace('[\\"', '["').replace('\\"]', '"]')
+    plist_out = re.sub(r"(\w+)(\])(, \"\w+)", r"\1'\2\"\3", plist_out)
+    plist_out = plist_out.re.sub(r'(\w+)\'\}\]"\}, \{"', r'\1"}]}, {"', plist_out)
+    plist_out = re.sub(
+        r'(": "[^"]+", "[^\']+)\'(: )([^,]+)(, )\'([^"]+": ")',
+        r'\1"\2"\3"\4"\5',
+        plist_out,
+    )
+    plist_out = re.sub(r'(\w+)\'(\}\])"(\})', r'\1"\2\3', plist_out)
+    plist_out = re.sub(
+        r"(\d+\])'(\}\])\"(\})",
+        r"\1\2\3",
+    )
+    plist_out = re.sub(r'(w+)\'(\])"(\})', r'\1"\2\3', plist_out)
+    plist_out = plist_out.replace("', {'", '", {"')
+    plist_out = re.sub(r"'(: \d+}, {)'", r'"\1"', plist_out)
+    return plist_out
+
+
 def process_plist(
     verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
 ):
@@ -203,8 +260,14 @@ def process_plist(
                     plistout = str(pliststr[0:-1] + insert + "}")
                 else:
                     plistout = pliststr
-                plistout = pliststr
-                plistjson.write(plistout)
+                plist_out = (
+                    plistout.replace("', '", '", "')
+                    .replace("': '", '": "')
+                    .replace('": "[{\'', '": "[{"')
+                    .replace('\'}]", "', '"}]", "')
+                )
+                plist_out = repair_malformed_plist(plist_out)
+                plistjson.write("[{}]".format(plist_out))
                 print_done(verbosity)
             except:
                 pass
