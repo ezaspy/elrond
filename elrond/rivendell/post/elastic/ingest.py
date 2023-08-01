@@ -99,6 +99,7 @@ def convert_csv_to_ndjson(output_directory, case, img, root_dir):
                     with open(
                         os.path.join(atftroot, atftfile), encoding="utf-8"
                     ) as read_csv:
+                        # try/catch with file-reading error
                         csv_results = csv.DictReader(read_csv)
                         with open(
                             os.path.join(atftroot, atftfile)[0:-4] + ".ndjson",
@@ -210,40 +211,48 @@ def convert_json_to_ndjson(output_directory, case, img, root_dir):
             if os.path.getsize(
                 os.path.join(atftroot, atftfile)
             ) > 0 and atftfile.endswith(".json"):
-                with open(os.path.join(atftroot, atftfile)) as read_json:
-                    json_content = read_json.read()
-                in_json = StringIO(json_content)
-                results = [json.dumps(record) for record in json.load(in_json)]
-                with open(
-                    os.path.join(atftroot, atftfile)[0:-5] + ".ndjson", "w"
-                ) as write_json:
-                    for result in results:
-                        if result != "{}":
-                            # malformed field matching in SOFTWARE - wbem plugin
-                            data = '{{"index": {{"_index": "{}"}}}}\n{{"hostname": "{}", "artefact": "{}", {}\n\n'.format(
-                                case.lower(),
-                                img.split("::")[0],
-                                atftfile,
-                                result[1:]
-                                .replace("SystemTime", "@timestamp")
-                                .replace("LastWriteTime", "@timestamp")
-                                .replace("LastWrite Time", "@timestamp")
-                                .replace('"LastWrite": "', '"@timestamp": "')
-                                .replace(
-                                    '"@timestamp": "@timestamp ',
-                                    '"@timestamp": "',
-                                ),
-                            )
-                            converted_timestamp = convert_timestamps(data)
-                            write_json.write(converted_timestamp)
-                        else:
-                            pass
-                prepare_elastic_ndjson(
-                    output_directory,
-                    img,
-                    case.lower(),
-                    os.path.join(atftroot, atftfile)[0:-5] + ".ndjson",
-                )
+                try:
+                    with open(os.path.join(atftroot, atftfile)) as read_json:
+                        json_content = read_json.read()
+                    in_json = StringIO(json_content)
+                    # try/catch with file-reading error
+                    results = [json.dumps(record) for record in json.load(in_json)]
+                    with open(
+                        os.path.join(atftroot, atftfile)[0:-5] + ".ndjson", "w"
+                    ) as write_json:
+                        for result in results:
+                            if result != "{}":
+                                # malformed field matching in SOFTWARE - wbem plugin
+                                data = '{{"index": {{"_index": "{}"}}}}\n{{"hostname": "{}", "artefact": "{}", {}\n\n'.format(
+                                    case.lower(),
+                                    img.split("::")[0],
+                                    atftfile,
+                                    result[1:]
+                                    .replace("SystemTime", "@timestamp")
+                                    .replace("LastWriteTime", "@timestamp")
+                                    .replace("LastWrite Time", "@timestamp")
+                                    .replace('"LastWrite": "', '"@timestamp": "')
+                                    .replace(
+                                        '"@timestamp": "@timestamp ',
+                                        '"@timestamp": "',
+                                    ),
+                                )
+                                converted_timestamp = convert_timestamps(data)
+                                write_json.write(converted_timestamp)
+                            else:
+                                pass
+                    prepare_elastic_ndjson(
+                        output_directory,
+                        img,
+                        case.lower(),
+                        os.path.join(atftroot, atftfile)[0:-5] + ".ndjson",
+                    )
+                except Exception as e:
+                    print(
+                        "       Could not ingest\t'{}'\t- perhaps the json did not format correctly?".format(
+                            atftfile
+                        )
+                    )
             else:
                 pass
     time.sleep(0.2)
@@ -364,7 +373,9 @@ def ingest_elastic_data(
                 os.path.join(output_directory + img.split("::")[0] + "/elastic")
             )
             os.makedirs(
-                os.path.join(output_directory + img.split("::")[0] + "/elastic/documents/")
+                os.path.join(
+                    output_directory + img.split("::")[0] + "/elastic/documents/"
+                )
             )
         else:
             pass
