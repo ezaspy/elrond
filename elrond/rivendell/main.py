@@ -298,12 +298,19 @@ def main(
                         )
                     )
                     sys.exit()
-                except:
-                    print(
-                        "  An unknown error occured when trying to create '{}'.\n    Resart SIFT and try again.\n  ----------------------------------------\n\n".format(
-                            od
+                except Exception as e:
+                    if "Input/output error" in str(e):
+                        print(
+                            "  An input/output error occured when trying to create '{}'.\n    Ensure the full path of '{}' is accessible.\n  ----------------------------------------\n\n".format(
+                                od, od
+                            )
                         )
-                    )
+                    else:
+                        print(
+                            "  An unknown error occured when trying to create '{}'.\n    Restart SIFT and try again.\n  ----------------------------------------\n\n".format(
+                                od
+                            )
+                        )
                     sys.exit()
             else:
                 print(
