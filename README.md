@@ -316,6 +316,7 @@ If you notice 'nixCommand' or 'nixProcess' in files processed from a Windows OS,
   - [ASCII Art Generator](https://www.ascii-art-generator.org)
   - [ASCII Art](http://www.asciiworld.com/-Lord-of-the-Rings-.html)
   - [SIFT-elrond Desktop background](https://www.hdwallpaper.nu/wp-content/uploads/2015/04/rings_the_lord_of_the_rings_one_ring_hd_wallpaper.jpg)
+  - [lómi](https://www.elfdict.com/w/cloud)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
