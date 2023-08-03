@@ -88,8 +88,7 @@ To invoke the script, follow the instructions in [CONFIG.md](https://github.com/
 <br><br>
 
 ### Updating
-- Start SIFT-elrond
-  - `/opt/elrond/./update.sh`
+- `/opt/elrond/./update.sh`
 <br><br><br>
 
 <!-- USAGE EXAMPLES -->
