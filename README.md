@@ -56,7 +56,7 @@ elrond has been created to help fellow digitial forensicators with the identific
 Additional features include image and file hashing, metadata extraction, file recovery and carving, AV scanning, IOC extraction, keyword searching and timelining.
 <br><br>
 
-It is important to note that elrond utilises many existing tools which have been built by other developers. elrond does do custom structuring of the outputted data but the conversion of the data is done by the other aforementioned toolsets. As with most thing, this is perhaps easier to explain with a [meme](https://github.com/ezaspy/elrond/blob/main/elrond/images/elrond_meme.jpeg).
+It is important to note that elrond utilises many existing tools which have been built by other developers. elrond does do custom structuring of the outputted data but the conversion of the data is done by the other aforementioned toolsets. This is perhaps easier to explain with a [meme](https://github.com/ezaspy/elrond/blob/main/elrond/images/elrond_meme.jpeg).
 
 ### Related Projects
 
@@ -71,7 +71,7 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 
 #### SIFT-elrond (recommended)
 
-- Download [SIFT-elrond](https://drive.google.com/file/d/1-YQaSb9quQKWY-dMflpYKyWFm2amSFnq/view?usp=share_link) OVA, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
+- Download [SIFT-elrond](https://drive.google.com/file/d/1-Yi6tIBLJr1Dc6XCvs0l2RP5m6Kak3Qr/view?usp=share_link) OVA, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
   - ***Note***: *the OVA does not contain the NSRL dataset*; execute [nsrl.sh](https://github.com/ezaspy/elrond/blob/main/elrond/tools/config/scripts/nsrl.sh) and follow instructions to download.
   - If you encounter errors with SIFT-elrond, try running [update.sh](https://github.com/ezaspy/elrond/blob/main/elrond/update.sh) which will download the **latest version of elrond** onto your existing SIFT instance, before raising an [issue](https://github.com/ezaspy/elrond/issues).
 <br>
