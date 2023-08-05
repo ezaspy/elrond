@@ -564,7 +564,7 @@ def process_outlook(
         vssimage,
     )
     write_audit_log_entry(verbosity, output_directory, entry, prnt)
-    """if not os.path.exists(os.path.join(artefact.split(".pst")[0])):
+    if not os.path.exists(os.path.join(artefact.split(".pst")[0])):
         subprocess.Popen(
             [
                 "sudo",
@@ -579,7 +579,7 @@ def process_outlook(
             stderr=subprocess.PIPE,
         ).communicate()
     else:
-        pass"""
+        pass
     print_done(verbosity)
 
 
