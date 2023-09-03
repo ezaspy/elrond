@@ -44,7 +44,7 @@ def carve_files(output_directory, verbosity, d, artefact_directory, img, vssimag
             )
             write_audit_log_entry(verbosity, output_directory, entry, prnt)
             time.sleep(0.5)
-    print_done(verbosity)
+
     entry, prnt = "{},{},{},completed\n".format(
         datetime.now().isoformat(), vssimage.replace("'", ""), "carving"
     ), " -> {} -> {} artefacts from {}".format(

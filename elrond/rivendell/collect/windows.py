@@ -3,7 +3,6 @@ import os
 import shutil
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 from rivendell.collect.users.windows import windows_users
 
@@ -72,7 +71,7 @@ def collect_windows_artefacts(
                 shutil.copy2(item, dest)
             except:
                 pass
-            print_done(verbosity)
+
         else:
             pass
         if item == mnt + "/Windows/inf/setupapi.dev.log":
@@ -102,7 +101,7 @@ def collect_windows_artefacts(
                 shutil.copy2(item, dest)
             except:
                 pass
-            print_done(verbosity)
+
         else:
             pass
         if (
@@ -148,7 +147,7 @@ def collect_windows_artefacts(
                     )
             except:
                 pass
-            print_done(verbosity)
+
         else:
             pass
     elif len(os.listdir(item)) > 0:  # directories
@@ -222,7 +221,7 @@ def collect_windows_artefacts(
                         pass
                 else:
                     pass
-            print_done(verbosity)
+
         else:
             pass
         if item == mnt + "/Windows/System32/winevt/Logs/":
@@ -275,7 +274,7 @@ def collect_windows_artefacts(
                         shutil.copy2(item + each, dest)
                     except:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
         else:
@@ -335,7 +334,7 @@ def collect_windows_artefacts(
                         shutil.copy2(item + each, dest)
                     except:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
         else:
@@ -486,7 +485,7 @@ def collect_windows_artefacts(
                             pass
                     else:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
         else:
@@ -546,7 +545,7 @@ def collect_windows_artefacts(
                             pass
                     else:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
         else:
@@ -586,7 +585,7 @@ def collect_windows_artefacts(
                     img.split("::")[0],
                 )
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
-            print_done(verbosity)
+
         else:
             pass
         if item == mnt + "/Windows/Prefetch/":
@@ -637,7 +636,7 @@ def collect_windows_artefacts(
                         shutil.copy2(item + each, dest)
                     except:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
         else:
@@ -701,7 +700,7 @@ def collect_windows_artefacts(
                             shutil.copy2(item + each, dest + each)
                     else:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
         else:

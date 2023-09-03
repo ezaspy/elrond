@@ -4,7 +4,6 @@ import re
 import time
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
@@ -153,7 +152,6 @@ def search_keywords(
                         )
                 else:
                     pass
-            print_done(verbosity)
 
 
 def build_keyword_list(mnt):
@@ -265,7 +263,7 @@ def prepare_keywords(verbosity, output_directory, auto, imgs, flags, keywords, s
                     )
                 )
                 keywords_target_list = build_keyword_list(mnt)
-                print_done(verbosity)
+
                 search_keywords(
                     verbosity,
                     output_directory,

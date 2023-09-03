@@ -10,7 +10,6 @@ import time
 from datetime import datetime
 from io import StringIO
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
@@ -478,7 +477,7 @@ def ingest_elastic_data(
                 convert_json_to_ndjson(output_directory, case, img, each_dir)
             else:
                 pass
-        print_done(verbosity)
+
         print("     elasticsearch ingestion completed for {}".format(vssimage))
         entry, prnt = "{},{},{},completed\n".format(
             datetime.now().isoformat(), vssimage, stage

@@ -4,7 +4,6 @@ import os
 import re
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 from rivendell.process.extractions.mail import (
     extract_email_artefacts,
@@ -174,7 +173,6 @@ def process_bash_history(
         ) as bashcsv:
             for bashline in bashcontent:
                 bashcsv.write(bashline)
-    print_done(verbosity)
 
 
 def process_email(
@@ -413,7 +411,6 @@ def process_email(
         else:
             pass
         mailjsonlist.clear()
-    print_done(verbosity)
 
 
 def process_group(
@@ -463,7 +460,6 @@ def process_group(
                     groupcsv.write(groupline.replace(":", ","))
                 else:
                     pass
-    print_done(verbosity)
 
 
 def process_logs(
@@ -893,7 +889,7 @@ def process_logs(
                     pass
                 logjsonlist.clear()
                 jsonlist.clear()
-                print_done(verbosity)
+
             else:
                 pass
     else:
@@ -999,6 +995,6 @@ def process_service(
                 servicejson.write(service_json)
             else:
                 pass
-            print_done(verbosity)
+
     else:
         pass

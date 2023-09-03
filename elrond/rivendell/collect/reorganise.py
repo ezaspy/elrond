@@ -5,7 +5,6 @@ import sys
 import time
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 from rivendell.core.identify import print_identification
 
@@ -427,7 +426,7 @@ def reorganise_artefacts(
                                 + eachartefact.replace(" ", "")
                                 + "_MEMORY.DMP",
                             )
-                            print_done(verbosity)
+
                         else:
                             print(
                                 "  OK. '{}' will not be processed as a memory image.".format(

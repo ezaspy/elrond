@@ -5,7 +5,6 @@ import subprocess
 from datetime import datetime
 from zipfile import ZipFile
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 from rivendell.collect.files.carve import carve_files
 from rivendell.collect.files.compare import compare_include_exclude
@@ -158,7 +157,7 @@ def select_files(
                                     collected_file
                                 )
                             )
-                    print_done(verbosity)
+
                     entry, prnt = "{},{},{},completed\n".format(
                         datetime.now().isoformat(),
                         vssimage.replace("'", ""),
@@ -254,7 +253,7 @@ def select_files(
                             pass
                     else:
                         pass
-                    print_done(verbosity)
+
                     entry, prnt = "{},{},{},completed\n".format(
                         datetime.now().isoformat(),
                         vssimage.replace("'", ""),
@@ -365,7 +364,7 @@ def select_files(
                                 pass
                     else:
                         pass
-                    print_done(verbosity)
+
                     entry, prnt = "{},{},{},completed\n".format(
                         datetime.now().isoformat(),
                         vssimage.replace("'", ""),

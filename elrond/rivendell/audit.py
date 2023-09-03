@@ -2,13 +2,6 @@
 from datetime import datetime
 
 
-def print_done(verbosity):
-    if verbosity != "":
-        print("      Done.")
-    else:
-        pass
-
-
 def write_audit_log_entry(verbosity, output_directory, entry, prnt):
     if "LastWriteTime,elrond_host,elrond_stage,elrond_log_entry\n" in entry:
         writemode = "w"
@@ -21,7 +14,7 @@ def write_audit_log_entry(verbosity, output_directory, entry, prnt):
         writemode,
     ) as logentry:
         logentry.write(entry.replace("'", ""))
-    if prnt != "" and verbosity == "veryverbose":
+    if prnt != "":
         print(prnt)
     else:
         pass

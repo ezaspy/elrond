@@ -2,7 +2,6 @@
 import os
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
@@ -377,7 +376,7 @@ def ingest_splunk_data(
             )
         else:
             pass
-        print_done(verbosity)
+
         print("     Splunk indexing completed for {}".format(vssimage))
         entry, prnt = "{},{},{},completed\n".format(
             datetime.now().isoformat(), vssimage, stage

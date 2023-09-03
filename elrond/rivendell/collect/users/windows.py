@@ -3,7 +3,6 @@ import os
 import shutil
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
@@ -52,7 +51,10 @@ def windows_users(
                 )
             else:
                 pass
-            (entry, prnt,) = "{},{},{},'{}' (NTUSER.DAT) registry hive\n".format(
+            (
+                entry,
+                prnt,
+            ) = "{},{},{},'{}' (NTUSER.DAT) registry hive\n".format(
                 datetime.now().isoformat(),
                 img.split("::")[0],
                 stage,
@@ -77,7 +79,7 @@ def windows_users(
                 )
             except:
                 pass
-            print_done(verbosity)
+
             try:
                 os.stat(regdest)
             except:
@@ -90,7 +92,10 @@ def windows_users(
                 )
             else:
                 pass
-            (entry, prnt,) = "{},{},{},'{}' (UsrClass.dat) registry hive\n".format(
+            (
+                entry,
+                prnt,
+            ) = "{},{},{},'{}' (UsrClass.dat) registry hive\n".format(
                 datetime.now().isoformat(),
                 img.split("::")[0],
                 stage,
@@ -115,7 +120,7 @@ def windows_users(
                 )
             except:
                 pass
-            print_done(verbosity)
+
             try:
                 os.stat(clipdest)
             except:
@@ -128,7 +133,10 @@ def windows_users(
                 )
             else:
                 pass
-            (entry, prnt,) = "{},{},{},'{}' clipboard\n".format(
+            (
+                entry,
+                prnt,
+            ) = "{},{},{},'{}' clipboard\n".format(
                 datetime.now().isoformat(),
                 img.split("::")[0],
                 stage,
@@ -217,7 +225,7 @@ def windows_users(
                             pass
             else:
                 pass
-            print_done(verbosity)
+
             try:
                 os.stat(jumpdest)
             except:
@@ -230,7 +238,10 @@ def windows_users(
                 )
             else:
                 pass
-            (entry, prnt,) = "{},{},{},'{}' jumplists\n".format(
+            (
+                entry,
+                prnt,
+            ) = "{},{},{},'{}' jumplists\n".format(
                 datetime.now().isoformat(),
                 img.split("::")[0],
                 stage,
@@ -292,7 +303,7 @@ def windows_users(
                         pass
             else:
                 pass
-            print_done(verbosity)
+
             try:
                 os.stat(maildest)
             except:
@@ -353,7 +364,10 @@ def windows_users(
                     )
                 else:
                     pass
-                (entry, prnt,) = "{},{},{},'{}' outlook artefacts\n".format(
+                (
+                    entry,
+                    prnt,
+                ) = "{},{},{},'{}' outlook artefacts\n".format(
                     datetime.now().isoformat(),
                     img.split("::")[0],
                     stage,
@@ -392,7 +406,7 @@ def windows_users(
                             )
                         except:
                             pass
-                print_done(verbosity)
+
             else:
                 pass
             try:
@@ -423,7 +437,10 @@ def windows_users(
                         )
                     else:
                         pass
-                    (entry, prnt,) = "{},{},{},Edge artefacts\n".format(
+                    (
+                        entry,
+                        prnt,
+                    ) = "{},{},{},Edge artefacts\n".format(
                         datetime.now().isoformat(),
                         img.split("::")[0],
                         stage,
@@ -470,7 +487,7 @@ def windows_users(
                                 pass
                         else:
                             pass
-                    print_done(verbosity)
+
                 elif os.path.exists(
                     item + each + "/AppData/Local/Microsoft/Windows/History/"
                 ):
@@ -482,7 +499,10 @@ def windows_users(
                         )
                     else:
                         pass
-                    (entry, prnt,) = "{},{},{},Internet Explorer artefacts\n".format(
+                    (
+                        entry,
+                        prnt,
+                    ) = "{},{},{},Internet Explorer artefacts\n".format(
                         datetime.now().isoformat(),
                         img.split("::")[0],
                         stage,
@@ -539,7 +559,7 @@ def windows_users(
                                 pass
                         else:
                             pass
-                    print_done(verbosity)
+
                 else:
                     if verbosity != "":
                         print(
@@ -549,7 +569,10 @@ def windows_users(
                         )
                     else:
                         pass
-                    (entry, prnt,) = "{},{},{},Temporary Internet Files\n".format(
+                    (
+                        entry,
+                        prnt,
+                    ) = "{},{},{},Temporary Internet Files\n".format(
                         datetime.now().isoformat(),
                         img.split("::")[0],
                         stage,
@@ -615,7 +638,7 @@ def windows_users(
                                 pass
                         else:
                             pass
-                    print_done(verbosity)
+
             else:
                 pass
             if os.path.exists(
@@ -639,7 +662,10 @@ def windows_users(
                         )
                     else:
                         pass
-                    (entry, prnt,) = "{},{},{},Google Chrome artefacts\n".format(
+                    (
+                        entry,
+                        prnt,
+                    ) = "{},{},{},Google Chrome artefacts\n".format(
                         datetime.now().isoformat(),
                         img.split("::")[0],
                         stage,
@@ -687,7 +713,7 @@ def windows_users(
                                 pass
                         except:
                             pass
-                    print_done(verbosity)
+
                 else:
                     pass
             else:
@@ -709,7 +735,10 @@ def windows_users(
                         )
                     else:
                         pass
-                    (entry, prnt,) = "{},{},{},Mozilla Firefox artefacts\n".format(
+                    (
+                        entry,
+                        prnt,
+                    ) = "{},{},{},Mozilla Firefox artefacts\n".format(
                         datetime.now().isoformat(),
                         img.split("::")[0],
                         stage,
@@ -755,7 +784,7 @@ def windows_users(
                                 pass
                         except:
                             pass
-                    print_done(verbosity)
+
                 else:
                     pass
             else:
@@ -777,7 +806,10 @@ def windows_users(
                     )
                 else:
                     pass
-                (entry, prnt,) = "{},{},{},'{}' user profile\n".format(
+                (
+                    entry,
+                    prnt,
+                ) = "{},{},{},'{}' user profile\n".format(
                     datetime.now().isoformat(),
                     img.split("::")[0],
                     stage,
@@ -806,7 +838,7 @@ def windows_users(
                     )
                 except:
                     pass
-                print_done(verbosity)
+
             else:
                 pass
     else:

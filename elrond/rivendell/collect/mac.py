@@ -3,7 +3,6 @@ import os
 import shutil
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 from rivendell.collect.users.mac import mac_users
 
@@ -53,7 +52,7 @@ def collect_mac_artefacts(
                 shutil.copy2(item, dest)
             except:
                 pass
-            print_done(verbosity)
+
         else:
             pass
         if item == mnt + "/etc/hosts":
@@ -75,7 +74,7 @@ def collect_mac_artefacts(
                 shutil.copy2(item, dest)
             except:
                 pass
-            print_done(verbosity)
+
         else:
             pass
         if item == mnt + "/etc/crontab":
@@ -100,7 +99,7 @@ def collect_mac_artefacts(
                 shutil.copy2(item, dest)
             except:
                 pass
-            print_done(verbosity)
+
         else:
             pass
     elif len(os.listdir(item)) > 0:  # directories
@@ -163,7 +162,7 @@ def collect_mac_artefacts(
                     )
                 except:
                     pass
-            print_done(verbosity)
+
         else:
             pass
         if (
@@ -242,7 +241,7 @@ def collect_mac_artefacts(
                         pass
                 else:
                     pass
-            print_done(verbosity)
+
         else:
             pass
         if item == mnt + "/.Trashes":
@@ -282,7 +281,7 @@ def collect_mac_artefacts(
                     shutil.copy2(item + "/" + each, dest + "trash/")
                 except:
                     pass
-            print_done(verbosity)
+
         else:
             pass
         if item == mnt + "/tmp":
@@ -360,7 +359,7 @@ def collect_mac_artefacts(
                         )
                     except:
                         pass
-            print_done(verbosity)
+
         else:
             pass
         if item == mnt + "/Users/":
@@ -419,7 +418,7 @@ def collect_mac_artefacts(
                             shutil.copy2(item + each, dest + each)
                     else:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
         else:

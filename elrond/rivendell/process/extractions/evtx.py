@@ -3,7 +3,6 @@ import re
 import subprocess
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
@@ -141,4 +140,3 @@ def extract_evtx(
             pass
         evtjsonlist.clear()
         jsonlist.clear()
-        print_done(verbosity)

@@ -4,7 +4,6 @@ import re
 import sqlite3
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
@@ -267,7 +266,7 @@ def process_browser_index(
                         description,
                     )
                     indexout.write("{}".format(index_dat_row))
-            print_done(verbosity)
+
         else:
             pass
 
@@ -677,4 +676,3 @@ def process_browser(
                 )
     else:
         pass
-    print_done(verbosity)

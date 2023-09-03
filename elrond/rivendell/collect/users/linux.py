@@ -3,7 +3,6 @@ import os
 import shutil
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
@@ -79,7 +78,7 @@ def linux_users(
                         )
                     except:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
             if (
@@ -127,7 +126,7 @@ def linux_users(
                         )
                     except:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
             if os.path.exists(item + "/" + each + "/.local/share/keyrings/"):
@@ -172,7 +171,7 @@ def linux_users(
                             pass
                     else:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
             if os.path.exists(item + "/" + each + "/.ssh/"):
@@ -215,7 +214,7 @@ def linux_users(
                         )
                     except:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
             if os.path.exists(item + "/" + each + "/.config/autostart/"):
@@ -258,7 +257,7 @@ def linux_users(
                         )
                     except:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
             if os.path.exists(
@@ -327,7 +326,7 @@ def linux_users(
                         )
                     except:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
             if os.path.exists(item + "/" + each + "/.thunderbird"):
@@ -408,7 +407,7 @@ def linux_users(
                                 pass
                         else:
                             pass
-                print_done(verbosity)
+
             if os.path.exists(item + "/" + each + "/.mozilla/firefox"):
                 try:
                     os.stat(bwsrdest + each + "/firefox/")
@@ -474,7 +473,7 @@ def linux_users(
                                 pass
                         else:
                             pass
-                    print_done(verbosity)
+
                 else:
                     pass
                 if os.path.exists(item + "/" + each + "/.config/google-chrome"):
@@ -541,7 +540,7 @@ def linux_users(
                                 pass
                         else:
                             pass
-                    print_done(verbosity)
+
                 else:
                     pass
             else:
