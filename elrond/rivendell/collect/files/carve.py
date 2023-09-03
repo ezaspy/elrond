@@ -4,7 +4,6 @@ import subprocess
 import time
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
