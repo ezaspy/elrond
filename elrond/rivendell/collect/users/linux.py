@@ -590,7 +590,6 @@ def linux_users(
                     )
                 except:
                     pass
-                print_done(verbosity)
             else:
                 pass
         else:
