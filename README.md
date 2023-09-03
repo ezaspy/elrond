@@ -39,11 +39,13 @@
 - [Configuration](#configuration)
   - [SIFT-elrond (recommended)](#sift-elrond-(recommended))
   - [Self-build](#configure)
+  - [Updating](#updating)
 - [Usage](#usage)
 - [Artefacts](#artefacts)
-- [Notices](#notices)
-- [Contact](#contributing)
-  - [Contributing](#contact)
+  - [Windows](#windows)
+  - [Linux](#linux)
+  - [macOS](#macos)
+  - [Notices](#notices)
 - [Acknowledgements](#acknowledgements)
 
 <br><br>
@@ -54,13 +56,26 @@
 
 elrond has been created to help fellow digitial forensicators with the identification, extraction, collection, processing, analysis and outputting of forensic artefacts from (up to 20 paritions for) Windows E01 or VMDK, macOS DMG/E01 or VMDK, Linux dd or VMDK disk images as well as raw memory images and previously collected artefacts which can all be outputted into Splunk. I have spent many an incident repeating the same processes by mounting, collecting (mainly Windows) forensic artefacts and then attempting to correlate them together with other data sources and artefacts. Thus, as mentioned above elrond has been built to consolidate those seperate processes into one single script helping to accerlate and automate these otherwise repetitive, tedious and often occasionally-referenced commands. As elrond outputs the artefact information as either CSV or JSON, they can be processed by many commonly-used log file analysis tools, consequently, elrond does have the capability to stand up a local [Splunk](https://www.splunk.com/) (with acompanying [app](https://splunkbase.splunk.com/app/6606/)) or [elastic](https://www.elastic.co/) instance, whereby the artefacts are automatically assigned and aligned with the [MITRE ATT&CK® Framework](https://attack.mitre.org/). In addition, elrond can also populate a local [ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/) instance providing a visual representation of potential attack techniques leveraged as part of said incident.<br>
 Additional features include image and file hashing, metadata extraction, file recovery and carving, AV scanning, IOC extraction, keyword searching and timelining.
-<br><br>
+<br>
 
 It is important to note that elrond utilises many existing tools which have been built by other developers. elrond does do custom structuring of the outputted data but the conversion of the data is done by the other aforementioned toolsets. This is perhaps easier to explain with a [meme](https://github.com/ezaspy/elrond/blob/main/elrond/images/elrond_meme.jpeg).
 
+<!--### Wild West Hackin' Fest 2023
+
+I presented elrond, at [Wild West Hackin' Fest 2023](https://wildwesthackinfest.com) as part of the Toolshed Talks. The full talk can be found on the [WWHF website]() and on [YouTube](). -->
+<!-- [![Watch the video](https://img.youtube.com/vi/nTQUwghvy5Q/default.jpg)](https://youtu.be/nTQUwghvy5Q)
+
+<p align="center">
+  <a href="http://www.youtube.com/watch?feature=player_embedded&v=nTQUwghvy5Q" target="_blank">
+  <img src="http://img.youtube.com/vi/nTQUwghvy5Q/mqdefault.jpg" alt="Watch the video" width="240" height="180" border="10" />
+  </a>
+</p>
+
+<br> -->
+
 ### Related Projects
 
-elrond is responsible for the analysis-side of digital forensic, but what about acquisition? An acompanying script called [gandalf](https://github.com/ezaspy/gandalf) can be deployed (locally or remotely) on either Windows ([PowerShell](https://learn.microsoft.com/en-us/powershell/)), macOS or Linux ([Python](https://www.python.org)) hosts to acquire forensic artefacts. 
+elrond is responsible for the analysis-side of digital forensic, but what about acquisition? An acompanying script called [gandalf](https://github.com/ezaspy/gandalf) can be deployed (locally or remotely) on either Windows (using [PowerShell](https://learn.microsoft.com/en-us/powershell/)), Linux, or macOS (using [Python](https://www.python.org) or [bash]()) hosts to acquire forensic artefacts. 
 <br><br><br>
 
 <!-- PREREQUISITES -->
@@ -72,17 +87,18 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 #### SIFT-elrond (recommended)
 
 - Download [SIFT-elrond](https://drive.google.com/file/d/1-Yi6tIBLJr1Dc6XCvs0l2RP5m6Kak3Qr/view?usp=share_link) OVA, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
-  - ***Note***: *the OVA does not contain the NSRL dataset*; execute [nsrl.sh](https://github.com/ezaspy/elrond/blob/main/elrond/tools/config/scripts/nsrl.sh) and follow instructions to download.
-  - If you encounter errors with SIFT-elrond, try running [update.sh](https://github.com/ezaspy/elrond/blob/main/elrond/update.sh) which will download the **latest version of elrond** onto your existing SIFT instance, before raising an [issue](https://github.com/ezaspy/elrond/issues).
+  - ***Note***: *the OVA does not contain the NSRL dataset; execute [nsrl.sh](https://github.com/ezaspy/elrond/blob/main/elrond/tools/config/scripts/nsrl.sh) and follow instructions to download.*
+  - If you encounter errors with SIFT-elrond, try running [update.sh](https://github.com/ezaspy/elrond/blob/main/elrond/update.sh) which will download and configure the **latest version of elrond** onto your existing SIFT instance. If this does not resolve the problem, before raising an [issue](https://github.com/ezaspy/elrond/issues).
 <br>
 
 #### Self-build
 
 There are several software package required for using elrond but almost all of them are contained within the [SANS SIFT Worksation](https://www.sans.org/tools/sift-workstation/) virtual machine OVA. However, for the software which is not included, I have provided a script ([make.sh](https://github.com/ezaspy/elrond/blob/main/make.sh)) which installs and configures the additional software required for all potential functionality leveraged by elrond (for example: volatility3, apfs-fuse, ClamAV etc.).<br>
-To invoke the script, follow the instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md#configuration). **Note: you will only need to run the make.sh script once, per SIFT instance**
+To invoke the script, follow the instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md#configuration).
+  - ***Note***: *you will only need to run the make.sh script once, per SIFT instance*
 
 - [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (20.04)
-  - Note: SANS SIFT 18.04 is not supported.
+  - ***Note***: *SANS SIFT 18.04 is not supported.*
 - [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md) to install and configure the additional software for SIFT 20.04.
   - If you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [.../elrond/elrond/tools/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/scripts/)
 <br><br>
@@ -139,10 +155,6 @@ To invoke the script, follow the instructions in [CONFIG.md](https://github.com/
 
 `python3 elrond.py case_name /path/to/disk/images -BRPS -Y <directory/of/yara/files>`
 <br><br>
-
-### Screenshot
-
-![elrond_screenshot](https://github.com/ezaspy/elrond/blob/main/elrond/images/elrond_screenshot.jpg)
 
 ### Support
 
@@ -203,42 +215,6 @@ Below is a list of all the artefacts collected and processed from the respective
 - C:\\Users\\%USERPROFILE%\\*
 <br>
 
-### macOS
-- /.Trashes
-- /Library/Logs
-- /Library/Preferences
-- /Library/LaunchAgents
-- /Library/LaunchDaemons
-- /Library/StartupItems
-- /System/Library/Preferences
-- /System/Library/LaunchAgents
-- /System/Library/LaunchDaemons
-- /System/Library/StartupItems
-- /Users/%USERPROFILE%/
-- /Users/%USERPROFILE%/.bash_aliases
-- /Users/%USERPROFILE%/.bash_history
-- /Users/%USERPROFILE%/.bash_logout
-- /Users/%USERPROFILE%/.bashrc
-- /Users/%USERPROFILE%/.bash_session
-- /Users/%USERPROFILE%/.ssh
-- /Users/%USERPROFILE%/.Trash/
-- /Users/%USERPROFILE%/Library/keychains/.keychain-db
-- /Users/%USERPROFILE%/Library/Mail/*.plist
-- /Users/%USERPROFILE%/Library/Preferences/*.plist
-- /Users/%USERPROFILE%/Library/Safari/*.plist
-- /Users/%USERPROFILE%/Library/Safari/History.db
-- /Users/%USERPROFILE%/Library/Application Support/Google/Chrome/Default/
-- /Users/%USERPROFILE%/Library/Application Support/Firefox/Profiles/
-- /etc/passwd
-- /etc/shadow
-- /etc/group
-- /etc/hosts
-- /etc/crontab
-- /etc/security
-- /tmp/*
-- /var/log
-<br>
-
 ### Linux
 - /.Trashes
 - /etc/passwd
@@ -283,6 +259,42 @@ Below is a list of all the artefacts collected and processed from the respective
 - /var/log
 - /var/vm/sleepimage
 - /var/vm/swapfile
+<br>
+
+### macOS
+- /.Trashes
+- /Library/Logs
+- /Library/Preferences
+- /Library/LaunchAgents
+- /Library/LaunchDaemons
+- /Library/StartupItems
+- /System/Library/Preferences
+- /System/Library/LaunchAgents
+- /System/Library/LaunchDaemons
+- /System/Library/StartupItems
+- /Users/%USERPROFILE%/
+- /Users/%USERPROFILE%/.bash_aliases
+- /Users/%USERPROFILE%/.bash_history
+- /Users/%USERPROFILE%/.bash_logout
+- /Users/%USERPROFILE%/.bashrc
+- /Users/%USERPROFILE%/.bash_session
+- /Users/%USERPROFILE%/.ssh
+- /Users/%USERPROFILE%/.Trash/
+- /Users/%USERPROFILE%/Library/keychains/.keychain-db
+- /Users/%USERPROFILE%/Library/Mail/*.plist
+- /Users/%USERPROFILE%/Library/Preferences/*.plist
+- /Users/%USERPROFILE%/Library/Safari/*.plist
+- /Users/%USERPROFILE%/Library/Safari/History.db
+- /Users/%USERPROFILE%/Library/Application Support/Google/Chrome/Default/
+- /Users/%USERPROFILE%/Library/Application Support/Firefox/Profiles/
+- /etc/passwd
+- /etc/shadow
+- /etc/group
+- /etc/hosts
+- /etc/crontab
+- /etc/security
+- /tmp/*
+- /var/log
 <br><br>
 
 ### Notices
