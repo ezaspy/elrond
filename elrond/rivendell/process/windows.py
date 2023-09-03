@@ -3,7 +3,6 @@ import os
 import subprocess
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 from rivendell.memory.memory import process_memory
 from rivendell.process.extractions.clipboard import extract_clipboard
