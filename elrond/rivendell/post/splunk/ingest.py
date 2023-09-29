@@ -159,7 +159,7 @@ def ingest_splunk_data(
                                     os.listdir(os.path.join(atftroot, atftdir))
                                 ) > 0 and (atftdir == "registry" or atftdir == "evt"):
                                     inputsconf.write(
-                                        "[monitor://{}/*.json]\ndisabled = false\nhost = {}\nsourcetype = elrondJSON\nindex = {}\n\n".format(
+                                        "[monitor://{}/*.json]\ndisabled = false\ncrcSalt = <SOURCE>\nhost = {}\nsourcetype = elrondJSON\nindex = {}\n\n".format(
                                             os.path.join(atftroot, atftdir),
                                             str(img.split("::")[0]),
                                             case,
@@ -169,7 +169,7 @@ def ingest_splunk_data(
                                     os.listdir(os.path.join(atftroot, atftdir))
                                 ) > 0 and (atftdir == "IE"):
                                     inputsconf.write(
-                                        "[monitor://{}/*.csv]\ndisabled = false\nhost = {}\nsourcetype = elrondCSV_noTime\nindex = {}\n\n".format(
+                                        "[monitor://{}/*.csv]\ndisabled = false\ncrcSalt = <SOURCE>\nhost = {}\nsourcetype = elrondCSV_noTime\nindex = {}\n\n".format(
                                             os.path.join(atftroot, atftdir),
                                             str(img.split("::")[0]),
                                             case,
@@ -179,7 +179,7 @@ def ingest_splunk_data(
                                     os.listdir(os.path.join(atftroot, atftdir))
                                 ) > 0 and (atftdir == "chrome"):
                                     inputsconf.write(
-                                        "[monitor://{}/*.csv]\ndisabled = false\nhost = {}\nsourcetype = elrondCSV\nindex = {}\n\n".format(
+                                        "[monitor://{}/*.csv]\ndisabled = false\ncrcSalt = <SOURCE>\nhost = {}\nsourcetype = elrondCSV\nindex = {}\n\n".format(
                                             os.path.join(atftroot, atftdir),
                                             str(img.split("::")[0]),
                                             case,
@@ -194,7 +194,7 @@ def ingest_splunk_data(
                                     os.listdir(os.path.join(atftroot, atftdir))
                                 ) > 0 and (atftdir == "logs" or atftdir == "plists"):
                                     inputsconf.write(
-                                        "[monitor://{}/*.json]\ndisabled = false\nhost = {}\nsourcetype = elrondJSON\nindex = {}\n\n".format(
+                                        "[monitor://{}/*.json]\ndisabled = false\ncrcSalt = <SOURCE>\nhost = {}\nsourcetype = elrondJSON\nindex = {}\n\n".format(
                                             os.path.join(atftroot, atftdir),
                                             str(img.split("::")[0]),
                                             case,
@@ -209,7 +209,7 @@ def ingest_splunk_data(
                                     os.listdir(os.path.join(atftroot, atftdir))
                                 ) > 0 and (atftdir == "logs" or atftdir == "services"):
                                     inputsconf.write(
-                                        "[monitor://{}/*.json]\ndisabled = false\nhost = {}\nsourcetype = elrondJSON\nindex = {}\n\n".format(
+                                        "[monitor://{}/*.json]\ndisabled = false\ncrcSalt = <SOURCE>\nhost = {}\nsourcetype = elrondJSON\nindex = {}\n\n".format(
                                             os.path.join(atftroot, atftdir),
                                             str(img.split("::")[0]),
                                             case,
@@ -226,7 +226,7 @@ def ingest_splunk_data(
                     + "/artefacts/cooked/memory/"
                 ):
                     inputsconf.write(
-                        "[monitor://{}/artefacts/cooked/memory/*.json]\ndisabled = false\nhost = {}\nsourcetype = elrondJSON\nindex = {}\n\n".format(
+                        "[monitor://{}/artefacts/cooked/memory/*.json]\ndisabled = false\ncrcSalt = <SOURCE>\nhost = {}\nsourcetype = elrondJSON\nindex = {}\n\n".format(
                             os.path.realpath(output_directory + img.split("::")[0]),
                             img.split("::")[0],
                             case,
@@ -274,7 +274,7 @@ def ingest_splunk_data(
                                 or atftfile.endswith("yara.csv")
                             ):
                                 inputsconf.write(
-                                    "[monitor://{}/*.csv]\ndisabled = false\nhost = {}\nsourcetype = elrondCSV\nindex = {}\n\n".format(
+                                    "[monitor://{}/*.csv]\ndisabled = false\ncrcSalt = <SOURCE>\nhost = {}\nsourcetype = elrondCSV\nindex = {}\n\n".format(
                                         atftroot,
                                         str(img.split("::")[0]),
                                         case,
@@ -309,7 +309,7 @@ def ingest_splunk_data(
                 os.listdir(os.path.realpath(output_directory + img.split("::")[0]))
             ):
                 inputsconf.write(
-                    "[monitor://{}/*.json]\ndisabled = false\nhost = {}\nsourcetype = elrondJSON\nindex = {}\n\n".format(
+                    "[monitor://{}/*.json]\ndisabled = false\ncrcSalt = <SOURCE>\nhost = {}\nsourcetype = elrondJSON\nindex = {}\n\n".format(
                         os.path.realpath(output_directory + img.split("::")[0]),
                         img.split("::")[0],
                         case,
