@@ -644,7 +644,9 @@ def main(
                     vssmem,
                     memtimeline,
                 )
-                allimgs = {**allimgs, **ot}
+                for mempath, memimg in ot.items():
+                    allimgs[memimg] = mempath
+                allimgs = OrderedDict(sorted(allimgs.items(), key=lambda x: x[1]))
                 print()
             else:
                 pass
