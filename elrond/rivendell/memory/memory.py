@@ -100,6 +100,8 @@ def process_memory(
             memtimeline,
         )
         vssmem = profile
+        print(profile)
+        time.sleep(600)
         profiledirs = []
         for eachfile in os.listdir(
             "/usr/local/lib/python2.7/dist-packages/volatility/plugins/overlays/mac/"
@@ -158,9 +160,9 @@ def process_memory(
             pass
         vol3oscheck = vol3_check_os(artefact, memext, "windows.info.Info")
         if (
-            "Windows" in vol3oscheck
+            ("Windows" in vol3oscheck
             and "windows" in vol3oscheck
-            and "ntkrnl" in vol3oscheck
+            and "ntkrnl" in vol3oscheck) or (vssmem.startswith("Win"))
         ):
             profile, profileplatform = "Windows", "Windows"
         else:
@@ -229,7 +231,7 @@ def process_memory(
                 )
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
             else:
-                entry, prnt = "{},identification,{},SKIPPED\n".format(
+                entry, prnt = "{},identification,{},skipped\n".format(
                     datetime.now().isoformat(),
                     artefact.split("/")[-1],
                 ), " -> {} -> identification of platform SKIPPED for '{}'".format(
