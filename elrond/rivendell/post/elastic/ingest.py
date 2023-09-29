@@ -20,21 +20,26 @@ def split_large_csv_files(root_dir):
         ) in (
             atftfiles
         ):  # spliting the large csv files into smaller chunks for easing ingestion
-            if os.path.getsize(
-                os.path.join(atftroot, atftfile)
-            ) > 52427769 and atftfile.endswith(".csv"):
-                subprocess.Popen(
-                    [
-                        "split",
-                        "-C",
-                        "20m",
-                        "--numeric-suffixes",
-                        os.path.join(atftroot, atftfile),
-                        "{}-split".format(os.path.join(atftroot, atftfile[0:-4])),
-                    ],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                ).communicate()[0]
+            if os.path.exists(os.path.join(atftroot, atftfile)):
+                if os.path.getsize(
+                    os.path.join(atftroot, atftfile)
+                ) > 52427769 and atftfile.endswith(".csv"):
+                    subprocess.Popen(
+                        [
+                            "split",
+                            "-C",
+                            "20m",
+                            "--numeric-suffixes",
+                            os.path.join(atftroot, atftfile),
+                            "{}-split".format(os.path.join(atftroot, atftfile[0:-4])),
+                        ],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                    ).communicate()[0]
+                else:
+                    pass
+            else:
+                pass
     time.sleep(0.2)
 
 
