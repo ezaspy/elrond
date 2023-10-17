@@ -4,11 +4,118 @@ import os
 import re
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 from rivendell.process.extractions.mail import (
     extract_email_artefacts,
 )
+
+
+def repair_malformed_service(service_json):
+    def repair_malformed_service_iteration(service_json):
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        service_json = re.sub(r"(\\'[^']+)\"([^']+')", r"\1'\2", service_json)
+        return service_json
+
+    service_json = repair_malformed_service_iteration(service_json)
+    service_json = (
+        service_json.replace("\\'", '"')
+        .replace("', '", "")
+        .replace("n\\\\\", '", '", "')
+        .replace("'", "'")
+        .replace("n', \\\"    ", "")
+    )
+    service_json = re.sub(r'(", "[^"]+"),( "[^"]+"): "[^"]+"', r"\1:\2", service_json)
+    service_json = re.sub(r'([^:,] )"([^\\]+\\")', r"\1'\2", service_json)
+    service_json = (
+        service_json.replace('n", \\"    ', "")
+        .replace('\'n\\\\", "', '\'", "')
+        .replace('\\\\\\\\n\\\\", "', '", "')
+    )
+    service_json = re.sub(r'", "([^"]+)\\\\\\\\n", \\"', r".  \1.  ", service_json)
+    service_json = re.sub(r'(", ")\\\\\\\\n", \\"[^"]+", "', r"\1", service_json)
+    service_json = service_json.replace('n", \\"', ".  ")
+    service_json = re.sub(r'n\\\\", "[^"]+("\})', r"\1", service_json)
+    service_json = (
+        service_json.replace('n\\\\", \\\\"', ".  ")
+        .replace('n\\\\", "', '", "')
+        .replace("[Unit]\\\\\\\\.  ", "")
+    )
+    service_json = re.sub(r"(\{\"[^\"]+)': '([^\"]+\", \")", r'\1": "\2', service_json)
+    service_json = service_json.replace("\\\\\"': '", "\\\"': '").replace(
+        'n", \\\\"        ', ""
+    )
+    service_json = service_json.replace("n\\', \\\\\"", ".  ")
+    service_json = re.sub(r"(\w+)\\'(\w+)", r"\1`\2", service_json)
+    service_json = re.sub(r"n\\\\\", \\'[^\"]+(\"\}\])$", r"\1", service_json)
+    service_json = re.sub(r"n\\\", \\'(\w+)", r".  \1", service_json)
+    service_json = re.sub(r"(\w+)\\\\\\\\n\\', \\\\\"(\w+)", r"\1\.  \2", service_json)
+    service_json = re.sub(r"(\w+)\\\\\\\\n\\\\\", \'(\w+)", r"\1\.  \2", service_json)
+    service_json = re.sub(r"(\w+)n\\', \\\\\"(\w+)", r"\1.  \2", service_json)
+    service_json = re.sub(r"\"\[Unit\]\\\\\\\\n\\', \\\\\"", r'"', service_json)
+    service_json = re.sub(r'"\\\\", \\\'"', r'", "', service_json)
+    service_json = re.sub(
+        r'(\w+)", "\\\\\\\\n\\\', \\\\"(\w+)', r'\1", "\2', service_json
+    )
+    service_json = re.sub(r'(": None)([,\}])', r'\1"\2', service_json)
+    return service_json
 
 
 def process_bash_history(
@@ -66,7 +173,6 @@ def process_bash_history(
         ) as bashcsv:
             for bashline in bashcontent:
                 bashcsv.write(bashline)
-    print_done(verbosity)
 
 
 def process_email(
@@ -305,7 +411,6 @@ def process_email(
         else:
             pass
         mailjsonlist.clear()
-    print_done(verbosity)
 
 
 def process_group(
@@ -355,7 +460,6 @@ def process_group(
                     groupcsv.write(groupline.replace(":", ","))
                 else:
                     pass
-    print_done(verbosity)
 
 
 def process_logs(
@@ -759,7 +863,7 @@ def process_logs(
                     else:
                         logjsonlist.append(json.dumps(eachjson))
                 if len(logjsonlist) > 0:
-                    logjson.write(
+                    log_json = (
                         str(logjsonlist)
                         .replace('\\\\"', '"')
                         .replace('"{"', '{"')
@@ -779,11 +883,13 @@ def process_logs(
                         .replace("\\'", "'")
                         .replace("\\", "\\\\")
                     )
+                    log_json = re.sub(r'\\\\"(\}\} "\}, \{")', r"'\1", log_json)
+                    logjson.write(log_json)
                 else:
                     pass
                 logjsonlist.clear()
                 jsonlist.clear()
-                print_done(verbosity)
+
             else:
                 pass
     else:
@@ -882,11 +988,13 @@ def process_service(
                     .replace("#", "")
                     .replace("n', \\\"", ".  ")
                     .replace("n\\\", '", ".  ")
-                    .replace('[Unit]\\\\n\', \\"',''),
+                    .replace("n', \\\"", "")
+                    .replace("[Unit]\\\\n', \\\"", ""),
                 )
+                service_json = repair_malformed_service(service_json)
                 servicejson.write(service_json)
             else:
                 pass
-            print_done(verbosity)
+
     else:
         pass

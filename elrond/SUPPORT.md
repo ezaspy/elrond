@@ -51,12 +51,12 @@ If you have collected a macOS disk image in the form of a DMG, you can convert i
 ### macOS
 * Download osxpmem from https://github.com/ezaspy/elrond/tree/main/tools/<br>
 
-`sudo chown -R root:wheel osxpmem.app/ && sudo osxpmem.app/osxpmem -o mem.aff4 && sudo osxpmem.app/osxpmem -e /dev/pmem -o mem.raw mem.aff4`
+`sudo chown -R root:wheel osxpmem.app/ && sudo chmod +x osxpmem.app/osxpmem && sudo osxpmem.app/osxpmem -o mem.aff4 && sudo osxpmem.app/osxpmem -e /dev/pmem -o mem.raw mem.aff4`
 <br>
 ### Linux
 * Download avml from https://github.com/ezaspy/elrond/tree/main/tools/<br>
 
-`HOSTNAME=$(uname -r) && sudo chmod +x avml && HOSTNAME=$(uname -r) && sudo ./avml <path/to/directory>/$(uname -r).mem`
+` sudo chmod +x avml && sudo ./avml $(uname -r).mem`
 
 <br>
 

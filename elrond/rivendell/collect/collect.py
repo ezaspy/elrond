@@ -8,7 +8,6 @@ from datetime import datetime
 
 from rivendell.analysis.keywords import prepare_keywords
 from rivendell.audit import manage_error
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 from rivendell.collect.linux import collect_linux_artefacts
 from rivendell.collect.mac import collect_mac_artefacts
@@ -264,7 +263,7 @@ def collect_artefacts(
                                     pass
                             else:
                                 pass
-                print_done(verbosity)
+
                 entry, prnt = "{},{},{},completed\n".format(
                     datetime.now().isoformat(),
                     metaimage.replace("'", ""),

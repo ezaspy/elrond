@@ -3,7 +3,6 @@ import os
 import subprocess
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 from rivendell.memory.memory import process_memory
 from rivendell.process.extractions.clipboard import extract_clipboard
@@ -139,7 +138,6 @@ def process_mft(
         )
     else:
         pass
-    print_done(verbosity)
 
 
 def process_usb(
@@ -178,7 +176,6 @@ def process_usb(
         jsonlist,
         setupdata,
     )
-    print_done(verbosity)
 
 
 def process_shimcache(verbosity, vssimage, output_directory, img, vssartefact, stage):
@@ -187,7 +184,6 @@ def process_shimcache(verbosity, vssimage, output_directory, img, vssartefact, s
     else:
         pass
     extract_shimcache(verbosity, vssimage, output_directory, img, vssartefact, stage)
-    print_done(verbosity)
 
 
 def process_registry_system(
@@ -250,7 +246,7 @@ def process_registry_system(
             jsonlist,
             regjsonlist,
         )
-        print_done(verbosity)
+
     else:
         pass
 
@@ -322,7 +318,7 @@ def process_registry_profile(
             regusr,
             regart,
         )
-        print_done(verbosity)
+
     else:
         pass
 
@@ -529,7 +525,7 @@ def process_jumplists(
                     + artefact.split("+")[1].split(".")[1]
                     + "\n"
                 )
-                print_done(verbosity)
+
             else:
                 pass
 
@@ -580,7 +576,6 @@ def process_outlook(
         ).communicate()
     else:
         pass
-    print_done(verbosity)
 
 
 def process_hiberfil(
@@ -686,6 +681,6 @@ def process_pagefile(verbosity, vssimage, output_directory, img, vssartefact, ar
             artefact.split("/")[-1],
             vssimage,
         )
-        print_done(verbosity)
+
     else:
         pass

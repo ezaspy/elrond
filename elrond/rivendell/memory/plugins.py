@@ -381,7 +381,7 @@ def extract_memory_artefacts(
                     plugin,
                     artefact.split("/")[-1],
                     profile,
-                ), " -> {} -> evidence extraction or '{}' failed from {}".format(
+                ), " -> {} -> evidence extraction of '{}' failed from {}".format(
                     datetime.now().isoformat().replace("T", " "),
                     plugin,
                     vssimage,

@@ -3,7 +3,6 @@ import re
 import sqlite3
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
@@ -910,4 +909,3 @@ def extract_clipboard(
             pass
         clipjsonlist.clear()
         jsonlist.clear()
-        print_done(verbosity)

@@ -3,7 +3,6 @@ import os
 import shutil
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 from rivendell.collect.users.linux import linux_users
 
@@ -52,7 +51,7 @@ def collect_linux_artefacts(
                 shutil.copy2(item, dest)
             except:
                 pass
-            print_done(verbosity)
+
         else:
             pass
         if item == mnt + "/etc/hosts":
@@ -74,7 +73,7 @@ def collect_linux_artefacts(
                 shutil.copy2(item, dest)
             except:
                 pass
-            print_done(verbosity)
+
         else:
             pass
         if item == mnt + "/etc/crontab":
@@ -99,7 +98,7 @@ def collect_linux_artefacts(
                 shutil.copy2(item, dest)
             except:
                 pass
-            print_done(verbosity)
+
         else:
             pass
     elif len(os.listdir(item)) > 0:  # directories
@@ -158,7 +157,7 @@ def collect_linux_artefacts(
                         pass
                 else:
                     pass
-            print_done(verbosity)
+
         else:
             pass
         if item == mnt + "/var/log":
@@ -205,7 +204,7 @@ def collect_linux_artefacts(
                     )
                 except:
                     pass
-            print_done(verbosity)
+
         else:
             pass
         if item == mnt + "/usr/lib/systemd/user":
@@ -262,7 +261,7 @@ def collect_linux_artefacts(
                         pass
                 else:
                     pass
-            print_done(verbosity)
+
         else:
             pass
         if item == mnt + "/var/cache/cups" or item == mnt + "/var/cups":
@@ -315,7 +314,7 @@ def collect_linux_artefacts(
                         pass
                 else:
                     pass
-            print_done(verbosity)
+
         else:
             pass
         if item == mnt + "/tmp":
@@ -393,7 +392,7 @@ def collect_linux_artefacts(
                         )
                     except:
                         pass
-            print_done(verbosity)
+
         else:
             pass
         if item == mnt + "/root":
@@ -445,7 +444,7 @@ def collect_linux_artefacts(
                     )
                 except:
                     pass
-                print_done(verbosity)
+
             else:
                 pass
             if os.path.exists(item + "/.local/share/keyrings/"):
@@ -490,7 +489,7 @@ def collect_linux_artefacts(
                             pass
                     else:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
         else:
@@ -550,7 +549,7 @@ def collect_linux_artefacts(
                             shutil.copy2(item + each, dest + each)
                     else:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
         else:

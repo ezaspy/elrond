@@ -10,7 +10,6 @@ import time
 from datetime import datetime
 from io import StringIO
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
@@ -21,21 +20,26 @@ def split_large_csv_files(root_dir):
         ) in (
             atftfiles
         ):  # spliting the large csv files into smaller chunks for easing ingestion
-            if os.path.getsize(
-                os.path.join(atftroot, atftfile)
-            ) > 52427769 and atftfile.endswith(".csv"):
-                subprocess.Popen(
-                    [
-                        "split",
-                        "-C",
-                        "20m",
-                        "--numeric-suffixes",
-                        os.path.join(atftroot, atftfile),
-                        "{}-split".format(os.path.join(atftroot, atftfile[0:-4])),
-                    ],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                ).communicate()[0]
+            if os.path.exists(os.path.join(atftroot, atftfile)):
+                if os.path.getsize(
+                    os.path.join(atftroot, atftfile)
+                ) > 52427769 and atftfile.endswith(".csv"):
+                    subprocess.Popen(
+                        [
+                            "split",
+                            "-C",
+                            "20m",
+                            "--numeric-suffixes",
+                            os.path.join(atftroot, atftfile),
+                            "{}-split".format(os.path.join(atftroot, atftfile[0:-4])),
+                        ],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                    ).communicate()[0]
+                else:
+                    pass
+            else:
+                pass
     time.sleep(0.2)
 
 
@@ -180,10 +184,13 @@ def convert_csv_to_ndjson(output_directory, case, img, root_dir):
                                         '"@timestamp": "',
                                     ),
                                 )
+                                data = re.sub(r'(": )(None)([,:\}])', r'\1"\2"\3', data)
+                                data = data.replace("', None: ['", '", "None": ["')
+                                data = re.sub(r'(": \["[^\']+)\'(\])', r'\1"\2', data)
                                 converted_timestamp = convert_timestamps(data)
                                 write_json.write(
                                     re.sub(
-                                        r'([^\{ ])"([^:,\}])',
+                                        r'([^\{\[ ])"([^:,\}])',
                                         r"\1%22\2",
                                         re.sub(
                                             r'([^:,] )"([^:,])',
@@ -215,14 +222,12 @@ def convert_json_to_ndjson(output_directory, case, img, root_dir):
                     with open(os.path.join(atftroot, atftfile)) as read_json:
                         json_content = read_json.read()
                     in_json = StringIO(json_content)
-                    # try/catch with file-reading error
                     results = [json.dumps(record) for record in json.load(in_json)]
                     with open(
                         os.path.join(atftroot, atftfile)[0:-5] + ".ndjson", "w"
                     ) as write_json:
                         for result in results:
                             if result != "{}":
-                                # malformed field matching in SOFTWARE - wbem plugin
                                 data = '{{"index": {{"_index": "{}"}}}}\n{{"hostname": "{}", "artefact": "{}", {}\n\n'.format(
                                     case.lower(),
                                     img.split("::")[0],
@@ -237,6 +242,7 @@ def convert_json_to_ndjson(output_directory, case, img, root_dir):
                                         '"@timestamp": "',
                                     ),
                                 )
+                                data = re.sub(r'(": )(None)([,:\}])', r'\1"\2"\3', data)
                                 converted_timestamp = convert_timestamps(data)
                                 write_json.write(converted_timestamp)
                             else:
@@ -247,7 +253,7 @@ def convert_json_to_ndjson(output_directory, case, img, root_dir):
                         case.lower(),
                         os.path.join(atftroot, atftfile)[0:-5] + ".ndjson",
                     )
-                except Exception as e:
+                except:
                     print(
                         "       Could not ingest\t'{}'\t- perhaps the json did not format correctly?".format(
                             atftfile
@@ -476,7 +482,7 @@ def ingest_elastic_data(
                 convert_json_to_ndjson(output_directory, case, img, each_dir)
             else:
                 pass
-        print_done(verbosity)
+
         print("     elasticsearch ingestion completed for {}".format(vssimage))
         entry, prnt = "{},{},{},completed\n".format(
             datetime.now().isoformat(), vssimage, stage

@@ -4,7 +4,6 @@ import re
 import subprocess
 import time
 
-from rivendell.audit import print_done
 from rivendell.post.mitre.nav_attack import create_attack_navigator
 
 
@@ -165,7 +164,7 @@ def configure_navigator(verbosity, case, splunk, elastic, usercred, pswdcred):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         ).communicate(),
-        print_done(verbosity)
+
         os.chdir("/opt/attack-navigator/nav-app")
         subprocess.Popen(
             [

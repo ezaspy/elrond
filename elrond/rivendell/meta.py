@@ -4,7 +4,6 @@ import re
 import subprocess
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
@@ -235,7 +234,7 @@ def extract_metadata(
                         else:
                             pass
                         metaimglog.write(metaentry + "\n")
-                        print_done(verbosity)
+
                     else:
                         pass
                 except:

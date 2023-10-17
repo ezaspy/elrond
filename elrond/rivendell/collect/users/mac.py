@@ -4,7 +4,6 @@ import re
 import shutil
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 
 
@@ -56,7 +55,10 @@ def mac_users(
                             item + "/" + each + "/." + eachbash,
                             dest + each + "+" + eachbash,
                         )
-                        (entry, prnt,) = "{},{},{},'{}' ({})\n".format(
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' ({})\n".format(
                             datetime.now().isoformat(),
                             img.split("::")[0],
                             stage,
@@ -77,7 +79,7 @@ def mac_users(
                         )
                     except:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
             if os.path.exists(item + "/" + each + "/Library/keychains/"):
@@ -87,7 +89,10 @@ def mac_users(
                     )
                 else:
                     pass
-                (entry, prnt,) = "{},{},{},keychain ({})\n".format(
+                (
+                    entry,
+                    prnt,
+                ) = "{},{},{},keychain ({})\n".format(
                     datetime.now().isoformat(),
                     img.split("::")[0],
                     stage,
@@ -115,7 +120,7 @@ def mac_users(
                             pass
                     else:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
             if os.path.exists(
@@ -135,7 +140,10 @@ def mac_users(
                     pass
                 for eachplist in os.listdir(item + each + "/Library/Preferences/"):
                     try:
-                        (entry, prnt,) = "{},{},{},'{}' ({})\n".format(
+                        (
+                            entry,
+                            prnt,
+                        ) = "{},{},{},'{}' ({})\n".format(
                             datetime.now().isoformat(),
                             img.split("::")[0],
                             stage,
@@ -163,7 +171,10 @@ def mac_users(
                 for eachplist in os.listdir(item + each + "/Library/Safari/"):
                     if eachplist.endswith(".plist"):
                         try:
-                            (entry, prnt,) = "{},{},{},'{}' ({})\n".format(
+                            (
+                                entry,
+                                prnt,
+                            ) = "{},{},{},'{}' ({})\n".format(
                                 datetime.now().isoformat(),
                                 img.split("::")[0],
                                 stage,
@@ -190,7 +201,7 @@ def mac_users(
                             pass
                     else:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
             if os.path.exists(item + "/" + each + "/.ssh/"):
@@ -202,7 +213,10 @@ def mac_users(
                     )
                 else:
                     pass
-                (entry, prnt,) = "{},{},{},ssh files\n".format(
+                (
+                    entry,
+                    prnt,
+                ) = "{},{},{},ssh files\n".format(
                     datetime.now().isoformat(),
                     img.split("::")[0],
                     stage,
@@ -230,7 +244,7 @@ def mac_users(
                         )
                     except:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
             if os.path.exists(item + "/" + each + "/.Trash/"):
@@ -246,7 +260,10 @@ def mac_users(
                     )
                 else:
                     pass
-                (entry, prnt,) = "{},{},{},deleted files\n".format(
+                (
+                    entry,
+                    prnt,
+                ) = "{},{},{},deleted files\n".format(
                     datetime.now().isoformat(),
                     img.split("::")[0],
                     stage,
@@ -274,7 +291,7 @@ def mac_users(
                         )
                     except:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
             if os.path.exists(item + "/" + each + "/Library/Mail"):
@@ -290,7 +307,10 @@ def mac_users(
                     )
                 else:
                     pass
-                (entry, prnt,) = "{},{},{},'{}' mail artefacts\n".format(
+                (
+                    entry,
+                    prnt,
+                ) = "{},{},{},'{}' mail artefacts\n".format(
                     datetime.now().isoformat(),
                     img.split("::")[0],
                     stage,
@@ -431,7 +451,7 @@ def mac_users(
                                 pass
                         else:
                             pass
-                print_done(verbosity)
+
             else:
                 pass
             if not each.startswith("."):
@@ -448,7 +468,10 @@ def mac_users(
                 else:
                     pass
                 try:
-                    (entry, prnt,) = "{},{},{},'{}' Safari browser artefacts\n".format(
+                    (
+                        entry,
+                        prnt,
+                    ) = "{},{},{},'{}' Safari browser artefacts\n".format(
                         datetime.now().isoformat(),
                         img.split("::")[0],
                         stage,
@@ -475,7 +498,7 @@ def mac_users(
                     )
                 except:
                     pass
-                print_done(verbosity)
+
             else:
                 pass
             if os.path.exists(
@@ -499,7 +522,10 @@ def mac_users(
                         )
                     else:
                         pass
-                    (entry, prnt,) = "{},{},{},Google Chrome artefacts\n".format(
+                    (
+                        entry,
+                        prnt,
+                    ) = "{},{},{},Google Chrome artefacts\n".format(
                         datetime.now().isoformat(),
                         img.split("::")[0],
                         stage,
@@ -549,7 +575,7 @@ def mac_users(
                                 pass
                         except:
                             pass
-                    print_done(verbosity)
+
                 else:
                     pass
             else:
@@ -633,7 +659,7 @@ def mac_users(
                                 pass
                     except:
                         pass
-                print_done(verbosity)
+
             else:
                 pass
             if userprofiles:
@@ -650,7 +676,10 @@ def mac_users(
                         )
                     else:
                         pass
-                    (entry, prnt,) = "{},{},{},'{}' user profile\n".format(
+                    (
+                        entry,
+                        prnt,
+                    ) = "{},{},{},'{}' user profile\n".format(
                         datetime.now().isoformat(),
                         img.split("::")[0],
                         stage,
@@ -679,7 +708,7 @@ def mac_users(
                         )
                     except:
                         pass
-                    print_done(verbosity)
+
                 else:
                     pass
             else:

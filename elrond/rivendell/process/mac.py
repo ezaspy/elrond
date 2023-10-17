@@ -5,7 +5,6 @@ import plistlib
 import re
 from datetime import datetime
 
-from rivendell.audit import print_done
 from rivendell.audit import write_audit_log_entry
 from rivendell.process.extractions.plist import (
     format_plist_extractions,
@@ -268,7 +267,7 @@ def process_plist(
                 )
                 plist_out = repair_malformed_plist(plist_out)
                 plistjson.write("[{}]".format(plist_out))
-                print_done(verbosity)
+
             except:
                 pass
     else:
