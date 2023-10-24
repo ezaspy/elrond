@@ -1,5 +1,6 @@
 #!/usr/bin/env python3 -tt
 import os
+import re
 
 from rivendell.process.browser import process_browser_index
 from rivendell.process.browser import process_browser
@@ -253,6 +254,86 @@ def process_artefacts(
             process_pagefile(
                 verbosity, vssimage, output_directory, img, vssartefact, artefact
             )
+        elif artefact.endswith("LastAccessTimes.txt"):
+            with open(artefact) as last_access_times:
+                access_times = last_access_times.read()
+            with open(
+                output_directory
+                + img.split("::")[0]
+                + "/artefacts/LastAccessTimes.csv",
+                "a",
+            ) as access_time_handle:
+                for segment in access_times.split("\n\n"):
+                    directory = segment.split("\n")[0]
+                    blocks = segment.split("\n")[1]
+                    for line in segment.split("\n")[2:]:
+                        metadata = re.findall(
+                            r"^\s*(\d+)\s+([\-dlbcnpsDEOS])([rwxacsht\-\+]+)\s+(\d+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+(\d+)(?:,\s+\d+)?\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}\.\d+)\s+([^\s]+)\s(.*)$",
+                            line,
+                        )
+                        try:  # https://www.mkssoftware.com/docs/man1/ls.1.asp
+                            if metadata[0][-1] != '"."' and metadata[0][-1] != '".."':
+                                inode = metadata[0][0]
+                                item = metadata[0][1]
+                                if item == "-":
+                                    item = "file"
+                                elif item == "d":
+                                    item = "directory"
+                                elif item == "l":
+                                    item = "link"
+                                elif item == "b":
+                                    item = "block-special"
+                                elif item == "c":
+                                    item = "character-special"
+                                elif item == "n":
+                                    item = "network"
+                                elif item == "p":
+                                    item = "FIFO"
+                                elif item == "s":
+                                    item = "socket"
+                                elif item == "D":
+                                    item = "demand-recall"
+                                elif item == "E":
+                                    item = "encrypted"
+                                elif item == "O":
+                                    item = "offline"
+                                elif item == "S":
+                                    item = "sparse"
+                                else:
+                                    pass
+                                permissions = metadata[0][
+                                    2
+                                ]  # read (r), write (w), execute (x), archive (a), compressed (c), system (s), hidden (h), temporary (t)
+                                links = metadata[0][3]
+                                user = metadata[0][4]
+                                group = metadata[0][5]
+                                author = metadata[0][6]
+                                size = metadata[0][7]
+                                timestamp = metadata[0][8]
+                                timezone = metadata[0][9]
+                                name = metadata[0][10]
+                                access_time_handle.write(
+                                    "{},{},{},{},{},{},{},{},{},{},{},{},{}\n".format(
+                                        directory,
+                                        blocks,
+                                        inode,
+                                        item,
+                                        permissions,
+                                        links,
+                                        user,
+                                        group,
+                                        author,
+                                        size,
+                                        timestamp,
+                                        timezone,
+                                        name,
+                                    )
+                                )
+                            else:
+                                pass
+                        except:
+                            pass
+
         else:
             pass
     else:
