@@ -58,7 +58,7 @@ elrond has been created to help fellow digitial forensicators with the identific
 Additional features include image and file hashing, metadata extraction, file recovery and carving, AV scanning, IOC extraction, keyword searching and timelining.
 <br>
 
-It is important to note that elrond utilises many existing tools which have been built by other developers. elrond does do custom structuring of the outputted data but the conversion of the data is done by the other aforementioned toolsets. This is perhaps easier to explain with a [meme](https://github.com/ezaspy/elrond/blob/main/elrond/images/elrond_meme.jpeg).
+It is important to note that elrond utilises many existing tools which have been built by other developers. elrond does do custom structuring of the outputted data but the conversion of the data is done by the other aforementioned toolsets.
 
 <!--### Wild West Hackin' Fest 2023
 
@@ -88,7 +88,7 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 
 - Download [SIFT-elrond](https://drive.google.com/file/d/1-Yi6tIBLJr1Dc6XCvs0l2RP5m6Kak3Qr/view?usp=share_link) OVA, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
   - ***Note***: *the OVA does not contain the NSRL dataset; execute [nsrl.sh](https://github.com/ezaspy/elrond/blob/main/elrond/tools/config/scripts/nsrl.sh) and follow instructions to download.*
-  - If you encounter errors with SIFT-elrond, try running [update.sh](https://github.com/ezaspy/elrond/blob/main/elrond/update.sh) which will download and configure the **latest version of elrond** onto your existing SIFT instance. If this does not resolve the problem, before raising an [issue](https://github.com/ezaspy/elrond/issues).
+  - It is recommended to run [update.sh](https://github.com/ezaspy/elrond/blob/main/elrond/update.sh) which will download and configure the **latest version of elrond** onto your existing SIFT instance.
 <br>
 
 #### Self-build
@@ -301,6 +301,7 @@ Below is a list of all the artefacts collected and processed from the respective
 
 If you notice 'nixCommand' or 'nixProcess' in files processed from a Windows OS, this is somewhat intentional. I debated with myself whether to try and change these to 'WinCommand' and 'WinProcess', respectively but also considered the situation of Windows Subsystem for Linux (WSL) being installed. As a result, I have left them as they are. If you know of a way to identify whether a file belongs inside the Linux element of WSL based on file path, file type, file content etc. please raise an [issue](https://github.com/ezaspy/elrond/issues) and let me know.
 <br><br><br>
+
 
 <!-- ACKNOWLEDGEMENTS -->
 
