@@ -60,18 +60,15 @@ Additional features include image and file hashing, metadata extraction, file re
 
 It is important to note that elrond utilises many existing tools which have been built by other developers. elrond does do custom structuring of the outputted data but the conversion of the data is done by the other aforementioned toolsets.
 
-<!--### Wild West Hackin' Fest 2023
+### Wild West Hackin' Fest 2023
 
-I presented elrond, at [Wild West Hackin' Fest 2023](https://wildwesthackinfest.com) as part of the Toolshed Talks. The full talk can be found on the [WWHF website]() and on [YouTube](). -->
-<!-- [![Watch the video](https://img.youtube.com/vi/nTQUwghvy5Q/default.jpg)](https://youtu.be/nTQUwghvy5Q)
-
+I presented elrond, at [Wild West Hackin' Fest 2023](https://wildwesthackinfest.com) as part of the Toolshed Talks. The associated slidedeck can be found [here](https://github.com/ezaspy/elrond/blob/main/elrond.pdf).<br>
 <p align="center">
   <a href="http://www.youtube.com/watch?feature=player_embedded&v=nTQUwghvy5Q" target="_blank">
-  <img src="http://img.youtube.com/vi/nTQUwghvy5Q/mqdefault.jpg" alt="Watch the video" width="240" height="180" border="10" />
+  <img src="http://img.youtube.com/vi/nTQUwghvy5Q/mqdefault.jpg" alt="elrond Demo" width="240" height="180" border="10" />
   </a>
 </p>
-
-<br> -->
+<br>
 
 ### Related Projects
 
