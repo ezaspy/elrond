@@ -381,7 +381,6 @@ def mount_vmdk_image(
                     elif (
                         "overlapping loop device exists" in mount_attempt
                     ):  # mounted the first valid partition, but cannot mount another partition in the same way
-                        print("TEST2")
                         nbd_mount = re.findall(
                             r"\\n[\w\-\.\/]+(nbd\dp\d+)|\.(?:raw|dd|img)\d[\ \*]+(?:\d+)[\w\d\.\ \*]+\s+(?:NTFS|Microsoft\ basic\ data|HPFS|Linux|exFAT)",
                             str(
@@ -896,18 +895,12 @@ def mount_images(
             )
         ):
             if d.startswith("/"):
-                (
-                    destination_mount,
-                    intermediate_mount,
-                ) = (
+                (destination_mount, intermediate_mount,) = (
                     elrond_mount[0],
                     "/" + d.strip("/") + "/" + disk_file.strip("/"),
                 )
             else:
-                (
-                    destination_mount,
-                    intermediate_mount,
-                ) = (
+                (destination_mount, intermediate_mount,) = (
                     elrond_mount[0],
                     d.strip("/") + "/" + disk_file.strip("/"),
                 )
