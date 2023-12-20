@@ -62,7 +62,7 @@ It is important to note that elrond utilises many existing tools which have been
 
 ### Wild West Hackin' Fest 2023
 
-I presented elrond, at [Wild West Hackin' Fest 2023](https://wildwesthackinfest.com) as part of the Toolshed Talks. The full talk can be found on [Vimeo](https://vimeo.com/890364778) and the associated slidedeck can be found [here](https://github.com/ezaspy/elrond/blob/main/elrond.pdf).<br>
+I presented elrond, at [Wild West Hackin' Fest 2023](https://wildwesthackinfest.com) as part of the Toolshed Talks. The full talk can be found on [Vimeo](https://vimeo.com/showcase/10830332/video/890364778) and the associated slidedeck can be found [here](https://github.com/ezaspy/elrond/blob/main/elrond.pdf).<br>
 <!-- <p align="center">
   <a href="http://www.youtube.com/watch?feature=player_embedded&v=nTQUwghvy5Q" target="_blank">
   <img src="http://img.youtube.com/vi/nTQUwghvy5Q/mqdefault.jpg" alt="elrond Demo" width="240" height="180" border="10" />
