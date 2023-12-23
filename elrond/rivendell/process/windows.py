@@ -405,6 +405,12 @@ def process_clipboard(
         )
 
 
+def process_prefetch(
+    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+):  # git clone https://github.com/
+    print()  #
+
+
 def process_wmi(
     verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
 ):  # git clone https://github.com/airbus-cert/etl-parser
@@ -470,28 +476,29 @@ def process_ual(
                     stderr=subprocess.PIPE,
                 ).communicate()[0]
             )[2:-4].split("\\r\\n")
-            with open(
-                output_directory
-                + img.split("::")[0]
-                + "/artefacts/cooked"
-                + vssartefact
-                + "ual/"
-                + artefact.split("/")[-1]
-                + ".csv",
-                "a",
-            ) as ual_csv:
-                ual_csv.write(
-                    "{},LastWriteTime\n".format(
-                        kstrike_list[0][0:-4].replace(",", "").replace("||", ","),
-                    )
-                )
-                for ual_entry in kstrike_list[1:]:
+            if len(kstrike_list) > 0:
+                with open(
+                    output_directory
+                    + img.split("::")[0]
+                    + "/artefacts/cooked"
+                    + vssartefact
+                    + "ual/"
+                    + artefact.split("/")[-1]
+                    + ".csv",
+                    "a",
+                ) as ual_csv:
                     ual_csv.write(
-                        "{},{}\n".format(
-                            ual_entry[0:-4].replace(",", "").replace("||", ","),
-                            ual_entry.split("||")[4],
+                        "{},LastWriteTime\n".format(
+                            kstrike_list[0][0:-4].replace(",", "").replace("||", ","),
                         )
                     )
+                    for ual_entry in kstrike_list[1:]:
+                        ual_csv.write(
+                            "{},{}\n".format(
+                                ual_entry[0:-4].replace(",", "").replace("||", ","),
+                                ual_entry.split("||")[4],
+                            )
+                        )
         except KeyError as error:
             entry, prnt = "{},{},{},'{}' user access log [{}]\n".format(
                 error,
