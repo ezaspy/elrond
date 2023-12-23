@@ -64,14 +64,8 @@ def use_profile_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0].replace(" time", "Time")] = kv[1]
-                            else:
-                                pass
-                    else:
-                        pass
                 if len(jsondict) > 6:
                     jsonlist.append(json.dumps(jsondict))
-                else:
-                    pass
                 jsondict.clear()
             elif (
                 profile.split(" v.")[0].replace("\\n", "").strip("-") == "proxysettings"
@@ -136,12 +130,8 @@ def use_profile_plugins(
                                     .split("\\n")[1],
                                     kv[1],
                                 )
-                            else:
-                                pass
                     if len(jsondict) > 5:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif (
                 profile.split(" v.")[0].replace("\\n", "").strip("-")
@@ -213,12 +203,8 @@ def use_profile_plugins(
                                     .split("\\n")[1],
                                     kv[1],
                                 )
-                            else:
-                                pass
                     if len(jsondict) > 6:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "comdlg32":
                 if len(profile.split(" v.")[1].split("\\n\\n")[0]) > 8:
@@ -268,8 +254,6 @@ def use_profile_plugins(
                             kv[0].replace("\\\\", "\\"),
                             kv[1],
                         )
-                    else:
-                        pass
                     for info in kv[2].replace("\\\\\\\\n", "\\\\\\\\ n").split("\\n"):
                         if "\\" in info.strip("'").strip("\\").replace(
                             "\\\\", "\\"
@@ -281,12 +265,8 @@ def use_profile_plugins(
                                 .replace("\\\\", "\\")
                                 .replace("\\ n", "\\n")
                             )
-                        else:
-                            pass
                 if len(jsondict) > 7:
                     jsonlist.append(json.dumps(jsondict))
-                else:
-                    pass
                 jsondict.clear()
             elif (
                 profile.split(" v.")[0].replace("\\n", "").strip("-") == "shellfolders"
@@ -353,12 +333,8 @@ def use_profile_plugins(
                                     kv[0],
                                     kv[1],
                                 )
-                            else:
-                                pass
                     if len(jsondict) > 5:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "mixer":
                 if len(profile.split(" v.")[1].split("\\n\\n")[0]) > 8:
@@ -425,12 +401,8 @@ def use_profile_plugins(
                                     kv[2],
                                     kv[0],
                                 )
-                            else:
-                                pass
                     if len(jsondict) > 5:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "ie_settings":
                 if len(profile.split(" v.")[1].split("\\n\\n")[0]) > 8:
@@ -484,14 +456,8 @@ def use_profile_plugins(
                                     kv = list(eachkv)
                                     if len(kv) > 0:
                                         jsondict[kv[0]] = kv[1]
-                                    else:
-                                        pass
-                            else:
-                                pass
                     if len(jsondict) > 7:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "ie_main":
                 if len(profile.split(" v.")[1].split("\\n\\n")[0]) > 8:
@@ -556,12 +522,8 @@ def use_profile_plugins(
                                     kv[0],
                                     kv[1],
                                 )
-                            else:
-                                pass
                     if len(jsondict) > 5:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "ie_zones":
                 if len(profile.split(" v.")[1].split("\\n\\n")[0]) > 8:
@@ -669,14 +631,8 @@ def use_profile_plugins(
                                         kv[1],
                                         kv[2],
                                     )
-                                else:
-                                    pass
-                    else:
-                        pass
                     if len(jsondict) > 8:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "typedurls":
                 if len(profile.split(" v.")[1].split("\\n\\n")[0]) > 8:
@@ -726,8 +682,6 @@ def use_profile_plugins(
                                 jsondict["URL"] = eachkv
                         if len(jsondict) > 6:
                             jsonlist.append(json.dumps(jsondict))
-                        else:
-                            pass
                 jsondict.clear()
             elif (
                 profile.split(" v.")[0].replace("\\n", "").strip("-")
@@ -793,12 +747,8 @@ def use_profile_plugins(
                                     .split("\\n")[1],
                                     kv[0],
                                 )
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif (
                 profile.split(" v.")[0].replace("\\n", "").strip("-")
@@ -878,16 +828,8 @@ def use_profile_plugins(
                                             kv[1],
                                             kv[0],
                                         )
-                                    else:
-                                        pass
-                            else:
-                                pass
-                    else:
-                        pass
                     if len(jsondict) > 6:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "cached":
                 if len(profile.split(" v.")[1].split("\\n\\n")[0]) > 8:
@@ -954,12 +896,8 @@ def use_profile_plugins(
                                     kv[1],
                                     kv[0],
                                 )
-                            else:
-                                pass
                     if len(jsondict) > 5:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "reveton":
                 if len(profile.split(" v.")[1].split("\\n\\n")[0]) > 8:
@@ -1036,14 +974,8 @@ def use_profile_plugins(
                                         )
                                     else:
                                         jsondict["Assessment"] = kv[1].replace(".", "")
-                                else:
-                                    pass
-                        else:
-                            pass
                     if len(jsondict) > 5:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "recentdocs":
                 if len(profile.split(" v.")[1].split("\\n\\n")[0]) > 8:
@@ -1146,16 +1078,8 @@ def use_profile_plugins(
                                             kv[0],
                                             kv[1],
                                         )
-                                    else:
-                                        pass
-                                else:
-                                    pass
-                        else:
-                            pass
                     if len(jsondict) > 6:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "itempos":
                 if len(profile.split(" v.")[1].split("\\n\\n")[0]) > 8:
@@ -1235,16 +1159,8 @@ def use_profile_plugins(
                                                 kv[2],
                                                 kv[3],
                                             )
-                                        else:
-                                            pass
-                            else:
-                                pass
-                    else:
-                        pass
                     if len(jsondict) > 6:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "user_run":
                 if len(profile.split(" v.")[1].split("\\n\\n")[0]) > 8:
@@ -1318,16 +1234,8 @@ def use_profile_plugins(
                                             kv[1],
                                             kv[2],
                                         )
-                                    else:
-                                        pass
-                        else:
-                            pass
-                    else:
-                        pass
                     if len(jsondict) > 7:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "outlook2":
                 if len(profile.split(" v.")[1].split("\\n\\n")[0]) > 8:
@@ -1391,12 +1299,8 @@ def use_profile_plugins(
                                         .split("\\n")[1],
                                         kv[1],
                                     )
-                                else:
-                                    pass
                     if len(jsondict) > 5:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "mmc":
                 if len(profile.split(" v.")[1].split("\\n\\n")[0]) > 8:
@@ -1463,17 +1367,9 @@ def use_profile_plugins(
                                         .split("\\n")[1],
                                         kv[0],
                                     )
-                                else:
-                                    pass
                         if len(jsondict) > 6:
                             jsonlist.append(json.dumps(jsondict))
-                        else:
-                            pass
                 jsondict.clear()
-            else:
-                pass
-        else:
-            pass
     for eachjson in jsonlist:
         try:
             eachjson = str(eachjson).replace('""', '"-"')
@@ -1588,7 +1484,5 @@ def extract_registry_profile(
                 regdata,
             )
             regjson.write(regdata)
-        else:
-            pass
         regjsonlist.clear()
         jsonlist.clear()

@@ -24,8 +24,6 @@ def extract_metadata(
                     metaimglog.write(
                         "Filename,SHA256,NSRL,Entropy,Filesize,LastWriteTime,LastAccessTime,LastInodeChangeTime,Permissions,FileType\n"
                     )
-            else:
-                pass
             with open(output_directory + metaimg + "/meta.audit", "a") as metaimglog:
                 try:
                     iinfo = os.stat(metapath)
@@ -60,8 +58,6 @@ def extract_metadata(
                                     .replace("vss", "volume shadow copy #")
                                     + ")"
                                 )
-                            else:
-                                pass
                         else:
                             metaimage = "'" + img.split("::")[0] + "'"
                         if verbosity != "":
@@ -70,8 +66,6 @@ def extract_metadata(
                                     metapath.split("/")[-1], metaimage
                                 )
                             )
-                        else:
-                            pass
                         metaentry = metapath + ","
                         try:
                             with open(metapath, "rb") as metafile:
@@ -106,10 +100,6 @@ def extract_metadata(
                                                     unknowngoods[sha256] = "Y"
                                                 else:
                                                     unknowngoods[sha256] = "N"
-                                            else:
-                                                pass
-                                        else:
-                                            pass
                                 for _, state in unknowngoods.items():
                                     if state == "Y":
                                         metaentry = metaentry + "Y,"
@@ -231,11 +221,6 @@ def extract_metadata(
                                     metaentry = metaentry + "N/A,N/A,N/A,N/A,N/A,N/A"
                             except:
                                 metaentry = metaentry + "N/A,N/A,N/A,N/A,N/A,N/A"
-                        else:
-                            pass
                         metaimglog.write(metaentry + "\n")
-
-                    else:
-                        pass
                 except:
                     pass

@@ -133,8 +133,6 @@ def extract_mft(
                         + ","
                         + mftentries[0][22].strip('"').strip(",")
                     )
-                else:
-                    pass
                 if len(mftentries[0][25].strip('"').strip(",")) > 0:
                     mftrow = (
                         "\n"
@@ -152,8 +150,6 @@ def extract_mft(
                         + ","
                         + mftentries[0][27].strip('"').strip(",")
                     )
-                else:
-                    pass
                 if len(mftentries[0][30].strip('"').strip(",")) > 0:
                     mftrow = (
                         "\n"
@@ -171,8 +167,6 @@ def extract_mft(
                         + ","
                         + mftentries[0][32].strip('"').strip(",")
                     )
-                else:
-                    pass
                 if (
                     "record number,good,active,record type,sequence number,parent file rec"
                     not in mftrow.lower()

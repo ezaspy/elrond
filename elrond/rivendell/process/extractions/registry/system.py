@@ -46,20 +46,14 @@ def use_system_plugins(
                                 kv = list(eachkv)
                                 if len(kv) > 1:
                                     jsondict[kv[0]] = kv[1]
-                                else:
-                                    pass
                     if len(userinfo) > 0:
                         jsondict["account_info"] = (
                             "(" + str(userinfo)[1:-1].replace("'", "") + ")"
                         )
                     elif len(sids) > 0:
                         jsondict["sids"] = "(" + str(sids)[1:-1].replace("'", "") + ")"
-                    else:
-                        pass
                 if len(jsondict) > 4:
                     jsonlist.append(json.dumps(jsondict))
-                else:
-                    pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "lsasecrets":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -85,12 +79,8 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0]] = kv[1]
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "auditpol":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -125,14 +115,8 @@ def use_system_plugins(
                                         kv[1],
                                         kv[2],
                                     )
-                                else:
-                                    pass
-                        else:
-                            pass
                     if len(jsondict) > 0:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "gpohist":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -165,14 +149,8 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0].replace(" time", "Time")] = kv[1]
-                            else:
-                                pass
-                    else:
-                        pass
                 if len(jsondict) > 5:
                     jsonlist.append(json.dumps(jsondict))
-                else:
-                    pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "apppaths":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -217,16 +195,8 @@ def use_system_plugins(
                                             jsondict["Filepath"],
                                             jsondict["Timestamp"],
                                         ) = (kv[0], Filepath.strip('"').strip('/').strip('"').strip('/').replace("\\\\\\\\", "\\\\"), Timestamp)
-                                    else:
-                                        pass
-                                else:
-                                    pass
-                        else:
-                            pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif (
                 profile.split(" v.")[0].replace("\\n", "").strip("-") == "lastloggedon"
@@ -254,12 +224,8 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0]] = kv[1]
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "shellext":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -289,12 +255,8 @@ def use_system_plugins(
                                 jsondict["DLLShellPath"],
                                 jsondict["Timestamp"],
                             ) = (kv[0], kv[1], kv[2], kv[3])
-                        else:
-                            pass
                 if len(jsondict) > 4:
                     jsonlist.append(json.dumps(jsondict))
-                else:
-                    pass
                 jsondict.clear()
             elif (
                 profile.split(" v.")[0].replace("\\n", "").strip("-") == "inprocserver"
@@ -324,12 +286,8 @@ def use_system_plugins(
                                 jsondict["File"],
                                 jsondict["MalwareDesc"],
                             ) = (kv[1], kv[0])
-                        else:
-                            pass
                 if len(jsondict) > 4:
                     jsonlist.append(json.dumps(jsondict))
-                else:
-                    pass
                 jsondict.clear()
             elif (
                 profile.split(" v.")[0].replace("\\n", "").strip("-")
@@ -360,12 +318,8 @@ def use_system_plugins(
                                 jsondict["File"],
                                 jsondict["FileAttributes"],
                             ) = (kv[1], kv[0])
-                        else:
-                            pass
                 if len(jsondict) > 4:
                     jsonlist.append(json.dumps(jsondict))
-                else:
-                    pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "wbem":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -402,12 +356,8 @@ def use_system_plugins(
                                 kv[2],
                                 kv[3],
                             )
-                        else:
-                            pass
                 if len(jsondict) > 4:
                     jsonlist.append(json.dumps(jsondict))
-                else:
-                    pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "svchost":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -437,14 +387,8 @@ def use_system_plugins(
                                         jsondict["ServiceGroup"],
                                         jsondict["ServiceList"],
                                     ) = (kv[0], kv[1])
-                                else:
-                                    pass
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "drivers32":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -474,16 +418,10 @@ def use_system_plugins(
                                         jsondict["File"],
                                         jsondict["Driver"],
                                     ) = (kv[1], kv[0])
-                                else:
-                                    pass
                         elif "\\" in info:
                             jsondict["Filepath"] = info
-                        else:
-                            pass
                     if len(jsondict) > 5:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "emdmgmt":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1::][1::]:
@@ -520,12 +458,8 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0]] = kv[1]
-                            else:
-                                pass
                     if len(jsondict) > 6:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif (
                 profile.split(" v.")[0].replace("\\n", "").strip("-")
@@ -553,12 +487,8 @@ def use_system_plugins(
                         kv = list(eachkv)
                         if len(kv) > 0:
                             jsondict[kv[0]] = kv[1]
-                        else:
-                            pass
                 if len(jsondict) > 4:
                     jsonlist.append(json.dumps(jsondict))
-                else:
-                    pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "winlogon":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -586,16 +516,8 @@ def use_system_plugins(
                                     kv = list(eachkv)
                                     if len(kv) > 0:
                                         jsondict[kv[0]] = kv[1]
-                                    else:
-                                        pass
-                        else:
-                            pass
-                    else:
-                        pass
                 if len(jsondict) > 4:
                     jsonlist.append(json.dumps(jsondict))
-                else:
-                    pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "win_cv":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1::][1:]:
@@ -624,12 +546,8 @@ def use_system_plugins(
                                     jsondict["DirectoryName"],
                                     jsondict["DirectoryPath"],
                                 ) = (kv[0], kv[1])
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "uac":
                 for eachinfo in range(
@@ -679,16 +597,8 @@ def use_system_plugins(
                                             jsondict["UACPolicy"],
                                             jsondict["UACValue"],
                                         ) = (kv[0], kv[1])
-                                    else:
-                                        pass
-                            else:
-                                pass
                         if len(jsondict) > 4:
                             jsonlist.append(json.dumps(jsondict))
-                        else:
-                            pass
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "clsid":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -718,12 +628,8 @@ def use_system_plugins(
                                 jsondict["ClassAppDLL"],
                                 jsondict["LastWriteTime"],
                             ) = (kv[1], kv[0], kv[3], kv[2])
-                        else:
-                            pass
                 if len(jsondict) > 4:
                     jsonlist.append(json.dumps(jsondict))
-                else:
-                    pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "port_dev":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -749,12 +655,8 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0]] = kv[1]
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "soft_run":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -791,14 +693,8 @@ def use_system_plugins(
                                         jsondict["AppName"],
                                         jsondict["AppLocation"],
                                     ) = (kv[0], kv[1])
-                                else:
-                                    pass
                         if len(jsondict) > 6:
                             jsonlist.append(json.dumps(jsondict))
-                        else:
-                            pass
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "assoc":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -840,14 +736,8 @@ def use_system_plugins(
                                         + '"',
                                         kv[0],
                                     )
-                                else:
-                                    pass
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "regback":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -873,12 +763,8 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0]] = kv[1]
-                            else:
-                                pass
                     if len(jsondict) > 5:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "profilelist":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -904,12 +790,8 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0]] = kv[1]
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "winnt_cv":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -935,12 +817,8 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0]] = kv[1]
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "bho":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -972,14 +850,8 @@ def use_system_plugins(
                                 kv = list(eachkv)
                                 if len(kv) > 0:
                                     jsondict[kv[0]] = kv[1]
-                                else:
-                                    pass
                         if len(jsondict) > 5:
                             jsonlist.append(json.dumps(jsondict))
-                        else:
-                            pass
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "ie_version":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -1005,12 +877,8 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0]] = kv[1]
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif (
                 profile.split(" v.")[0].replace("\\n", "").strip("-")
@@ -1041,12 +909,8 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0]] = kv[1]
-                            else:
-                                pass
                     if len(jsondict) > 5:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif (
                 profile.split(" v.")[0].replace("\\n", "").strip("-")
@@ -1082,14 +946,8 @@ def use_system_plugins(
                                     kvv = list(eachkv)
                                     if len(kvv) > 0:
                                         jsondict[kv[0]] = kv[1]
-                                    else:
-                                        pass
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "schedagent":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -1115,12 +973,8 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0]] = kv[1]
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "svc":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -1162,12 +1016,8 @@ def use_system_plugins(
                                     kv[6],
                                     kv[0],
                                 )
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "profiler":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -1193,12 +1043,8 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0]] = kv[1]
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "netsvcs":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -1236,12 +1082,8 @@ def use_system_plugins(
                                     kv[3],
                                     kv[0],
                                 )
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "services":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -1270,12 +1112,8 @@ def use_system_plugins(
                                     jsondict["ServiceName"],
                                     jsondict["ServiceDLL"],
                                 ) = (kv[0], kv[1])
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif (
                 profile.split(" v.")[0].replace("\\n", "").strip("-") == "ewf_mountev"
@@ -1318,12 +1156,8 @@ def use_system_plugins(
                             else:
                                 if len(list(filter(None, kv))[0]) == 1:
                                     jsondict["MountLocation"] = kv[0]
-                                else:
-                                    pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "svc_plus":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -1384,12 +1218,8 @@ def use_system_plugins(
                                     kv[6],
                                     kv[0],
                                 )
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "wpdbusenum":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -1419,12 +1249,8 @@ def use_system_plugins(
                                     jsondict["DeviceSerialNumber"],
                                     jsondict[kv[2]],
                                 ) = (kv[0], kv[1], kv[3])
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "compname":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -1450,12 +1276,8 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0]] = kv[1]
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "svcdll":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -1481,12 +1303,8 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0]] = kv[1]
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif (
                 profile.split(" v.")[0].replace("\\n", "").strip("-")
@@ -1518,12 +1336,8 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0]] = kv[1]
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "timezone":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -1549,12 +1363,8 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0]] = kv[1]
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "usb":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -1582,12 +1392,8 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0]] = kv[1]
-                            else:
-                                pass
                     if len(jsondict) > 5:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
             elif profile.split(" v.")[0].replace("\\n", "").strip("-") == "nic":
                 for eachinfo in profile.split(" v.")[1].split("\\n\\n")[1:]:
@@ -1613,17 +1419,9 @@ def use_system_plugins(
                             kv = list(eachkv)
                             if len(kv) > 0:
                                 jsondict[kv[0]] = kv[1]
-                            else:
-                                pass
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
-                    else:
-                        pass
                 jsondict.clear()
-            else:
-                pass
-        else:
-            pass
     for eachjson in jsonlist:
         try:
             eachjson = str(eachjson).replace('""', '"-"')
@@ -1719,7 +1517,5 @@ def extract_registry_system(
                 .replace('[\'"{"', '[{"')
                 .replace('"}"\']', '"}]')
             )
-        else:
-            pass
         regjsonlist.clear()
         jsonlist.clear()

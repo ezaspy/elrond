@@ -21,8 +21,6 @@ def process_mft(
         print(
             "     Processing '{}' for {}...".format(artefact.split("/")[-1], vssimage)
         )
-    else:
-        pass
     with open(
         output_directory
         + img.split("::")[0]
@@ -85,8 +83,6 @@ def process_mft(
                 mftwrite.write(
                     "record,state,active,record_type,seq_number,parent_file_record,parent_file_record_seq,std_info_creation_date,std_info_modification_date,std_info_access_date,std_info_entry_date,object_id,birth_volume_id,birth_object_id,birth_domain_id,std_info,attribute_list,has_filename,has_object_id,volume_name,volume_info,data,index_root,index_allocation,bitmap,reparse_point,ea_information,ea,property_set,logged_utility_stream,log/notes,stf_fn_shift,usec_zero,ads,possible_copy,possible_volume_move,Filename,fn_info_creation_date,fn_info_modification_date,fn_info_access_date,fn_info_entry_date,LastWriteTime\n"
                 )
-            else:
-                pass
             extract_mft(
                 output_directory,
                 img,
@@ -113,8 +109,6 @@ def process_mft(
                     mftwrite.write(
                         eachentry.strip().strip(",").replace(",,", ",-,") + "\n"
                     )
-                else:
-                    pass
     if os.path.exists(
         output_directory
         + img.split("::")[0]
@@ -136,8 +130,6 @@ def process_mft(
             + vssartefact
             + ".journal_mft.csv"
         )
-    else:
-        pass
 
 
 def process_usb(
@@ -155,8 +147,6 @@ def process_usb(
         print(
             "     Processing '{}' for {}...".format(artefact.split("/")[-1], vssimage)
         )
-    else:
-        pass
     entry, prnt = "{},{},{},'{}'\n".format(
         datetime.now().isoformat(), vssimage.replace("'", ""), stage, vssartefact
     ), " -> {} -> {} '{}' from {}".format(
@@ -181,8 +171,6 @@ def process_usb(
 def process_shimcache(verbosity, vssimage, output_directory, img, vssartefact, stage):
     if verbosity != "":
         print("     Processing shimcache for {}...".format(vssimage))
-    else:
-        pass
     extract_shimcache(verbosity, vssimage, output_directory, img, vssartefact, stage)
 
 
@@ -223,8 +211,6 @@ def process_registry_system(
                     artefact.split("/")[-1], vssimage
                 )
             )
-        else:
-            pass
         entry, prnt = "{},{},{},'{}' registry hive\n".format(
             datetime.now().isoformat(),
             vssimage.replace("'", ""),
@@ -246,9 +232,6 @@ def process_registry_system(
             jsonlist,
             regjsonlist,
         )
-
-    else:
-        pass
 
 
 def process_registry_profile(
@@ -291,8 +274,6 @@ def process_registry_profile(
                     regusr, regart, vssimage
                 )
             )
-        else:
-            pass
         entry, prnt = "{},{},{},'{}' ({}) registry hive\n".format(
             datetime.now().isoformat(),
             vssimage.replace("'", ""),
@@ -318,9 +299,6 @@ def process_registry_profile(
             regusr,
             regart,
         )
-
-    else:
-        pass
 
 
 def process_evtx(
@@ -360,8 +338,6 @@ def process_evtx(
                     artefact.split("/")[-1], vssimage
                 )
             )
-        else:
-            pass
         extract_evtx(
             verbosity,
             vssimage,
@@ -374,8 +350,6 @@ def process_evtx(
             jsonlist,
             evtjsonlist,
         )
-    else:
-        pass
 
 
 def process_clipboard(
@@ -417,8 +391,6 @@ def process_clipboard(
                     vssimage,
                 )
             )
-        else:
-            pass
         extract_clipboard(
             verbosity,
             vssimage,
@@ -431,8 +403,6 @@ def process_clipboard(
             jsonlist,
             clipjsonlist,
         )
-    else:
-        pass
 
 
 def process_wmi(
@@ -450,7 +420,93 @@ def process_wbem(
 def process_ual(
     verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
 ):
-    print()  #
+    if not os.path.exists(
+        output_directory
+        + img.split("::")[0]
+        + "/artefacts/cooked"
+        + vssartefact
+        + "ual/"
+        + artefact.split("/")[-1]
+        + ".csv"
+    ):
+        try:
+            os.makedirs(
+                output_directory
+                + img.split("::")[0]
+                + "/artefacts/cooked"
+                + vssartefact
+                + "ual"
+            )
+        except:
+            pass
+        if verbosity != "":
+            print(
+                "     Processing User Access Log '{}' for {}...".format(
+                    artefact.split("/")[-1].split("_")[-1],
+                    vssimage,
+                )
+            )
+        entry, prnt = "{},{},{},'{}' user access log \n".format(
+            datetime.now().isoformat(),
+            vssimage.replace("'", ""),
+            stage,
+            artefact.split("/")[-1].split("_")[-1],
+        ), " -> {} -> {} '{}' for {}".format(
+            datetime.now().isoformat().replace("T", " "),
+            stage,
+            artefact.split("/")[-1].split("_")[-1],
+            vssimage,
+        )
+        write_audit_log_entry(verbosity, output_directory, entry, prnt)
+        try:
+            kstrike_list = str(
+                subprocess.Popen(
+                    [
+                        "python3",
+                        "/opt/elrond/elrond/tools/KStrike/KStrike.py",
+                        artefact,
+                    ],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                ).communicate()[0]
+            )[2:-4].split("\\r\\n")
+            with open(
+                output_directory
+                + img.split("::")[0]
+                + "/artefacts/cooked"
+                + vssartefact
+                + "ual/"
+                + artefact.split("/")[-1]
+                + ".csv",
+                "a",
+            ) as ual_csv:
+                ual_csv.write(
+                    "{},LastWriteTime\n".format(
+                        kstrike_list[0][0:-4].replace(",", "").replace("||", ","),
+                    )
+                )
+                for ual_entry in kstrike_list[1:]:
+                    ual_csv.write(
+                        "{},{}\n".format(
+                            ual_entry[0:-4].replace(",", "").replace("||", ","),
+                            ual_entry.split("||")[4],
+                        )
+                    )
+        except KeyError as error:
+            entry, prnt = "{},{},{},'{}' user access log [{}]\n".format(
+                error,
+                datetime.now().isoformat(),
+                vssimage.replace("'", ""),
+                stage,
+                artefact.split("/")[-1].split("_")[-1],
+            ), " -> {} -> {} '{}' experienced {} for {}".format(
+                datetime.now().isoformat().replace("T", " "),
+                stage,
+                artefact.split("/")[-1].split("_")[-1],
+                error,
+                vssimage,
+            )
+            write_audit_log_entry(verbosity, output_directory, entry, prnt)
 
 
 def process_jumplists(
@@ -496,8 +552,6 @@ def process_jumplists(
                             vssimage,
                         )
                     )
-                else:
-                    pass
                 (
                     entry,
                     prnt,
@@ -526,9 +580,6 @@ def process_jumplists(
                     + "\n"
                 )
 
-            else:
-                pass
-
 
 def process_outlook(
     verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
@@ -541,8 +592,6 @@ def process_outlook(
                 vssimage,
             )
         )
-    else:
-        pass
     (
         entry,
         prnt,
@@ -574,8 +623,6 @@ def process_outlook(
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         ).communicate()
-    else:
-        pass
 
 
 def process_hiberfil(
@@ -596,8 +643,6 @@ def process_hiberfil(
         print(
             "     Processing '{}' for {}...".format(artefact.split("/")[-1], vssimage)
         )
-    else:
-        pass
     os.makedirs(
         output_directory
         + img.split("::")[0]
@@ -634,8 +679,6 @@ def process_pagefile(verbosity, vssimage, output_directory, img, vssartefact, ar
                     artefact.split("/")[-1], vssimage
                 )
             )
-        else:
-            pass
         os.makedirs(
             output_directory
             + img.split("::")[0]
@@ -681,6 +724,3 @@ def process_pagefile(verbosity, vssimage, output_directory, img, vssartefact, ar
             artefact.split("/")[-1],
             vssimage,
         )
-
-    else:
-        pass

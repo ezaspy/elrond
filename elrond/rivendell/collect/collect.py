@@ -207,9 +207,9 @@ def collect_artefacts(
                     output_directory + img.split("::")[0] + "/lat.audit", "a"
                 ) as lathef:
                     if "Windows" in img.split("::")[1]:
-                        processtype = "WinProcess"
+                        processtype = "Process"
                     else:
-                        processtype = "nixProcess"
+                        processtype = "Process"
                     lathef.write(
                         "Filename,CreationTime,LastAccessTime,LastWriteTime,{}\n".format(
                             processtype

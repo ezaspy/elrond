@@ -342,6 +342,7 @@ ewf_mount = [
     "/mnt/ewf_mount18",
     "/mnt/ewf_mount19",
 ]
+# to add new artefacts, include the directory or file in this list, and include it in select.py
 system_artefacts = [
     "/",
     "/$MFT",

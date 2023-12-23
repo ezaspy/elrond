@@ -38,6 +38,9 @@ def select_artefacts_to_process(img, process_list, artefacts_list, processed_art
                         or f.endswith("swapfile.sys")
                         or f.endswith("-ms")
                         or f.endswith(".pf")
+                        or f.endswith(".etl")
+                        or f.endswith(".OBJECTS.DATA")
+                        or f.endswith(".mdb")
                         or f.endswith(".db")
                         or f.endswith(".bcf")
                         or f.endswith(".hve")
@@ -67,10 +70,6 @@ def select_artefacts_to_process(img, process_list, artefacts_list, processed_art
                     ):
                         artefacts_list.append(each + ": " + root + "/" + f)
                         processed_artefacts.append(root + "/" + f)
-                    else:
-                        pass
-                else:
-                    pass
     return artefacts_list
 
 
@@ -141,11 +140,7 @@ def select_pre_process_artefacts(
                                 + img.split("::")[0]
                                 + "/artefacts/cooked/"
                             )
-                        else:
-                            pass
                     process_list.append(output_directory + each + "/artefacts/raw/")
-                else:
-                    pass
             try:
                 os.remove(".temp.log")
             except:
@@ -159,11 +154,7 @@ def select_pre_process_artefacts(
                         img.split("::")[0]
                     )
                 )
-            else:
-                pass
             processed_imgs.append(img.split("::")[0])
-        else:
-            pass
     for _, img in imgs.items():  # processing identified artefacts
         if "vss" in img.split("::")[1]:
             vssimage = (
@@ -204,8 +195,6 @@ def select_pre_process_artefacts(
                     vss,
                     memtimeline,
                 )
-            else:
-                pass
         # below sections are for multi-paritied drives
         for each in artefacts_list:
             ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
@@ -227,8 +216,6 @@ def select_pre_process_artefacts(
                     vss,
                     memtimeline,
                 )
-            else:
-                pass
         for each in artefacts_list:
             ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
             artefact = str(ia[0][1])
@@ -249,8 +236,6 @@ def select_pre_process_artefacts(
                     vss,
                     memtimeline,
                 )
-            else:
-                pass
         for each in artefacts_list:
             ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
             artefact = str(ia[0][1])
@@ -271,8 +256,6 @@ def select_pre_process_artefacts(
                     vss,
                     memtimeline,
                 )
-            else:
-                pass
         for each in artefacts_list:
             ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
             artefact = str(ia[0][1])
@@ -293,8 +276,6 @@ def select_pre_process_artefacts(
                     vss,
                     memtimeline,
                 )
-            else:
-                pass
         for each in artefacts_list:
             ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
             artefact = str(ia[0][1])
@@ -315,8 +296,6 @@ def select_pre_process_artefacts(
                     vss,
                     memtimeline,
                 )
-            else:
-                pass
         for each in artefacts_list:
             ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
             artefact = str(ia[0][1])
@@ -337,8 +316,6 @@ def select_pre_process_artefacts(
                     vss,
                     memtimeline,
                 )
-            else:
-                pass
         for each in artefacts_list:
             ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
             artefact = str(ia[0][1])
@@ -359,8 +336,6 @@ def select_pre_process_artefacts(
                     vss,
                     memtimeline,
                 )
-            else:
-                pass
         for each in artefacts_list:
             ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
             artefact = str(ia[0][1])
@@ -381,8 +356,6 @@ def select_pre_process_artefacts(
                     vss,
                     memtimeline,
                 )
-            else:
-                pass
         for each in artefacts_list:
             ia = re.findall(r"(?P<i>[^\:]+)\:\ (?P<a>[^\:]+)", each)
             artefact = str(ia[0][1])
@@ -403,8 +376,6 @@ def select_pre_process_artefacts(
                     vss,
                     memtimeline,
                 )
-            else:
-                pass
         if collectfiles:
             process_list.clear()
             if os.path.exists(
@@ -445,10 +416,6 @@ def select_pre_process_artefacts(
                         vssimage
                     )
                 )
-            else:
-                pass
-        else:
-            pass
         print("  -> Completed Processing Phase for {}".format(vssimage))
         entry, prnt = "{},{},{},completed\n".format(
             datetime.now().isoformat(), vssimage.replace("'", ""), stage
@@ -458,12 +425,8 @@ def select_pre_process_artefacts(
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
         print()
         processed_imgs.append(img.split("::")[0])
-    else:
-        pass
     if "02processing" not in str(flags):
         flags.append("02processing")
-    else:
-        pass
     os.chdir(cwd)
     print(
         "  ----------------------------------------\n  -> Completed Processing Phase.\n"

@@ -71,12 +71,8 @@ def extract_clipboard(
             jsondict["UserActionState"] = clipitems[0][17]
             jsondict["IsRead"] = clipitems[0][18]
             jsondict["ETag"] = clipitems[0][19]
-        else:
-            pass
         if len(jsondict) > 0:
             clipjsonlist.append(json.dumps(jsondict))
-        else:
-            pass
         if len(clipjsonlist) > 0:
             clipjson = re.sub(
                 r"(\"\[\{'[^\"]+)\"([^\]]+\]\")",
@@ -905,7 +901,5 @@ def extract_clipboard(
                 .replace("\\\\\\\\", "\\\\")
                 .replace("\\\\\\", "\\\\")
             )
-        else:
-            pass
         clipjsonlist.clear()
         jsonlist.clear()

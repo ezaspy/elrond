@@ -16,13 +16,9 @@ def extract_usb(
             kv = list(eachkv)
             if len(kv) > 0:
                 jsondict[kv[0]] = kv[1]
-            else:
-                pass
     if len(jsondict) > 0:
         jsonlist.append(json.dumps(jsondict))
         jsondict.clear()
-    else:
-        pass
     for session in setupdata.split("[Boot Session: ")[1:]:
         for section in session.split(">>>  ["):
             jsondict["BootDateStart"], jsondict["BootTimeStart"] = (
@@ -67,8 +63,6 @@ def extract_usb(
                                 jsondict["ActionObject"],
                                 jsondict["ActionInstruction"],
                             ) = (kv[1], kv[0])
-                        else:
-                            pass
                     for eachkv in re.findall(
                         r"\ (?P<ActionTime>\d{2}\:\d{2}\:\d{2}\.\d{3})",
                         eachinfo.replace("__", "_").replace("__", "_").strip("."),
@@ -77,10 +71,6 @@ def extract_usb(
                     if len(jsondict) > 8:
                         jsonlist.append(json.dumps(jsondict))
                         jsondict.clear()
-                    else:
-                        pass
-            else:
-                pass
     if len(jsonlist) > 0:
         with open(
             output_directory
@@ -138,7 +128,3 @@ def extract_usb(
                         .replace('="', "="),
                     )
                     usbjson.write(usb_json)
-                else:
-                    pass
-    else:
-        pass

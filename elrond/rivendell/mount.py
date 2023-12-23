@@ -36,13 +36,9 @@ def unmount_images(elrond_mount, ewf_mount):
         for eachvss in os.listdir("/mnt/vss/" + eachimg):
             if os.path.exists("/mnt/vss/" + eachimg + "/" + eachvss):
                 unmount_locations("/mnt/vss/" + eachimg + "/" + eachvss)
-            else:
-                pass
         if os.path.exists("/mnt/vss/" + eachimg):
             unmount_locations("/mnt/vss/" + eachimg)
             remove_directories("/mnt/vss/" + eachimg)
-        else:
-            pass
     for devnbd in range(1, 15):
         if os.path.exists("/dev/nbd" + str(devnbd)):
             unmount_locations("/dev/nbd" + str(devnbd))
@@ -55,23 +51,15 @@ def unmount_images(elrond_mount, ewf_mount):
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             ).communicate()
-        else:
-            pass
     for eachelrond in elrond_mount:
         if os.path.exists(eachelrond):
             unmount_locations(eachelrond)
             remove_directories(eachelrond)
-        else:
-            pass
     for eachewf in ewf_mount:
         if os.path.exists(eachewf):
             unmount_locations(eachewf + "/")
             if eachewf != "/mnt/ewf_mount":
                 remove_directories(eachewf)
-            else:
-                pass
-        else:
-            pass
 
 
 def collect_ewfinfo(elrond_mount, ewf_mount, path, intermediate_mount, cwd):
@@ -120,8 +108,6 @@ def collect_ewfinfo(elrond_mount, ewf_mount, path, intermediate_mount, cwd):
     if conelrond == "n":
         unmount_images(elrond_mount, ewf_mount)
         sys.exit()
-    else:
-        pass
 
 
 def obtain_offset(
@@ -208,8 +194,6 @@ def mount_vmdk_image(
         ):
             if os.path.exists("/usr/local/bin/apfs"):
                 shutil.rmtree("/usr/local/bin/apfs")
-            else:
-                pass
             sys.exit()
         else:
             apfs = ""
@@ -234,8 +218,6 @@ def mount_vmdk_image(
                 if "Inappropriate ioctl for device" in validfile:
                     intermediate_mount = "/dev/nbd" + str(devnbd)
                     break
-                else:
-                    pass
             subprocess.Popen(
                 [
                     "qemu-nbd",
@@ -247,8 +229,6 @@ def mount_vmdk_image(
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             ).communicate()
-        else:
-            pass
         offset_values = obtain_offset(intermediate_mount)
         if len(offset_values) > 0:
             for offset_value in offset_values:
@@ -410,8 +390,6 @@ def mount_vmdk_image(
                                     )
                                 if not os.path.exists(new_destination):
                                     os.mkdir(new_destination)
-                                else:
-                                    pass
                                 destination_mount = new_destination + "/"
                                 subprocess.Popen(
                                     ["mount", "/dev/" + eachnbd, destination_mount],
@@ -477,8 +455,6 @@ def mount_vmdk_image(
                                     output_directory, intermediate_mount.split("/")[-1]
                                 )
                             )
-                        else:
-                            pass
         else:
             disk_image = identify_disk_image(
                 verbosity, output_directory, disk_file, destination_mount
@@ -504,8 +480,6 @@ def mount_vmdk_image(
                     disk_image,
                 )
             )
-    else:
-        pass
     return partitions
 
 
@@ -545,8 +519,6 @@ def mount_images(
                 )
             )
             sys.exit()
-    else:
-        pass
     if len(os.listdir(elrond_mount[0])) != 0:
         elrond_mount.pop(0)
         allimgs, partitions = mount_images(
@@ -579,8 +551,6 @@ def mount_images(
                         )
                     )
                     sys.exit()
-            else:
-                pass
             if len(os.listdir(ewf_mount[0])) != 0:
                 ewf_mount.pop(0)
                 allimgs, partitions = mount_images(
@@ -601,8 +571,6 @@ def mount_images(
                     quotes,
                     partitions,
                 )
-            else:
-                pass
             destination_mount, intermediate_mount = elrond_mount[0], ewf_mount[0]
             mount_ewf(path, intermediate_mount)
             if imageinfo:
@@ -616,8 +584,6 @@ def mount_images(
                     )
                 elrond_mount.pop(0)
                 ewf_mount.pop(0)
-            else:
-                pass
             mounterr = str(
                 subprocess.Popen(
                     [
@@ -663,8 +629,6 @@ def mount_images(
                                 disk_file
                             )
                         )
-                    else:
-                        pass
                     os.mkdir("/mnt/vss/" + disk_file.split("::")[0] + "/")
                     subprocess.Popen(
                         [
@@ -741,11 +705,7 @@ def mount_images(
                                 disk_file
                             )
                         )
-                    else:
-                        pass
                     os.chdir(cwd)
-                else:
-                    pass
             elif (
                 "unknown filesystem type 'apfs'" in mounterr
                 or "wrong fs type" in mounterr
@@ -798,11 +758,7 @@ def mount_images(
                                         disk_image,
                                     )
                                 )
-                            else:
-                                pass
                         elif "mountpoint is not empty" in attempt_to_mount:
-                            pass
-                        else:
                             pass
                     except:
                         pass
@@ -816,13 +772,9 @@ def mount_images(
                             )
                             if not os.path.exists(intermediate_mount):
                                 os.mkdir(intermediate_mount)
-                            else:
-                                pass
                             mount_ewf(path, intermediate_mount)
                             if not os.path.exists(destination_mount):
                                 os.mkdir(destination_mount)
-                            else:
-                                pass
                             attempt_to_mount = str(
                                 subprocess.Popen(
                                     [
@@ -848,8 +800,6 @@ def mount_images(
                                         disk_file,
                                         destination_mount,
                                     )
-                                else:
-                                    pass
                                 partition = mounted_image(
                                     allimgs,
                                     disk_image,
@@ -875,15 +825,9 @@ def mount_images(
                                         disk_image,
                                     )
                                 )
-                            else:
-                                pass
                             elrond_mount.pop(0)
                             ewf_mount.pop(0)
-                    else:
-                        pass
             elif "is already mounted." in mounterr:
-                pass
-            else:
                 pass
         elif ("VMware" in imgformat and " disk image" in imgformat) or (
             "DOS/MBR boot sector" in imgformat
@@ -934,8 +878,6 @@ def mount_images(
                             )
                         )
                         # insert Continue? here...
-                else:
-                    pass
                 partitions = mount_vmdk_image(
                     verbosity,
                     output_directory,
@@ -957,8 +899,6 @@ def mount_images(
                     allimgs,
                     partitions,
                 )
-        else:
-            pass
         entry, prnt = "{},{},{},commenced\n".format(
             datetime.now().isoformat(), disk_file, stage
         ), " -> {} -> mounting '{}'".format(

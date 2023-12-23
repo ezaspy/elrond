@@ -134,7 +134,11 @@ def process_artefacts(
             process_wbem(
                 verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
             )
-        elif artefact.endswith(".mdb"):
+        elif (
+            artefact.endswith("Current.mdb")
+            or artefact.endswith("SystemIdentity.mdb")
+            or artefact.endswith("}}.mdb")
+        ):
             process_ual(
                 verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
             )
@@ -244,8 +248,6 @@ def process_artefacts(
                     vssmem,
                     memtimeline,
                 )
-            else:
-                pass
         elif artefact.endswith("MEMORY.DMP") and volatility:
             pass
         elif (
@@ -299,8 +301,6 @@ def process_artefacts(
                                     item = "offline"
                                 elif item == "S":
                                     item = "sparse"
-                                else:
-                                    pass
                                 permissions = metadata[0][
                                     2
                                 ]  # read (r), write (w), execute (x), archive (a), compressed (c), system (s), hidden (h), temporary (t)
@@ -329,15 +329,8 @@ def process_artefacts(
                                         name,
                                     )
                                 )
-                            else:
-                                pass
                         except:
                             pass
-
-        else:
-            pass
-    else:
-        pass
     return vssmem
 
 
@@ -397,6 +390,4 @@ def determine_vss_image(
             vss,
             memtimeline,
         )
-    else:
-        pass
     return vssmem

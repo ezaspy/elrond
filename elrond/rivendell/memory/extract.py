@@ -236,7 +236,7 @@ def use_plugins(
                     and '{"CommandLine"' in eachjson
                     and '{"ShellFolderPath"' in eachjson
                 ):
-                    insert = ', "WinProcess{}, "WinCommand{}, "Registry{}'.format(
+                    insert = ', "Process{}, "Command{}, "Registry{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -272,7 +272,7 @@ def use_plugins(
                     and '{"CommandLine"' in eachjson
                     and '{"RegistryKey"' in eachjson
                 ):
-                    insert = ', "WinProcess{}, "WinCommand{}, "Registry{}'.format(
+                    insert = ', "Process{}, "Command{}, "Registry{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -302,7 +302,7 @@ def use_plugins(
                 elif (', "ProcessName"' in eachjson and ', "Path"' in eachjson) or (
                     '{"ProcessName"' in eachjson and '{"Path"' in eachjson
                 ):
-                    insert = ', "WinProcess{}, "WinCommand{}'.format(
+                    insert = ', "Process{}, "Command{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -324,7 +324,7 @@ def use_plugins(
                 elif (
                     ', "ProcessName"' in eachjson and ', "CommandLine"' in eachjson
                 ) or ('{"ProcessName"' in eachjson and '{"CommandLine"' in eachjson):
-                    insert = ', "WinProcess{}, "WinCommand{}'.format(
+                    insert = ', "Process{}, "Command{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -348,7 +348,7 @@ def use_plugins(
                 ) or (
                     '{"ProcessName"' in eachjson and '{"ShellFolderPath"' in eachjson
                 ):
-                    insert = ', "WinProcess{}, "Registry{}'.format(
+                    insert = ', "Process{}, "Registry{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -370,7 +370,7 @@ def use_plugins(
                 elif (
                     ', "ProcessName"' in eachjson and ', "RegistryKey"' in eachjson
                 ) or ('{"ProcessName"' in eachjson and '{"RegistryKey"' in eachjson):
-                    insert = ', "WinProcess{}, "Registry{}'.format(
+                    insert = ', "Process{}, "Registry{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -398,7 +398,7 @@ def use_plugins(
                     and '{"CommandLine"' in eachjson
                     and '{"RegistryKey"' in eachjson
                 ):
-                    insert = ', "WinProcess{}, "WinCommand{}, "Registry{}'.format(
+                    insert = ', "Process{}, "Command{}, "Registry{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -428,7 +428,7 @@ def use_plugins(
                 elif (', "Path"' in eachjson and ', "CommandLine"' in eachjson) or (
                     '{"Path"' in eachjson and '{"CommandLine"' in eachjson
                 ):
-                    insert = ', "WinProcess{}, "WinCommand{}'.format(
+                    insert = ', "Process{}, "Command{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -450,7 +450,7 @@ def use_plugins(
                 elif (', "Path"' in eachjson and ', "ShellFolderPath"' in eachjson) or (
                     '{"Path"' in eachjson and '{"ShellFolderPath"' in eachjson
                 ):
-                    insert = ', "WinProcess{}, "Registry{}'.format(
+                    insert = ', "Process{}, "Registry{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -472,7 +472,7 @@ def use_plugins(
                 elif (
                     ', "CommandLine"' in eachjson and ', "RegistryKey"' in eachjson
                 ) or ('{"CommandLine"' in eachjson and '{"RegistryKey"' in eachjson):
-                    insert = ', "WinCommand{}, "Registry{}'.format(
+                    insert = ', "Command{}, "Registry{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -492,7 +492,7 @@ def use_plugins(
                     )
                     voljsonlist.append(json.dumps(eachjson[0:-1] + insert + "}"))
                 elif ', "ProcessName"' in eachjson or '{"ProcessName"' in eachjson:
-                    insert = ', "WinProcess{}'.format(
+                    insert = ', "Process{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -504,7 +504,7 @@ def use_plugins(
                     )
                     voljsonlist.append(json.dumps(eachjson[0:-1] + insert + "}"))
                 elif ', "Path"' in eachjson or '{"Path"' in eachjson:
-                    insert = ', "WinProcess{}'.format(
+                    insert = ', "Process{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -516,7 +516,7 @@ def use_plugins(
                     )
                     voljsonlist.append(json.dumps(eachjson[0:-1] + insert + "}"))
                 elif ', "CommandLine"' in eachjson or '{"CommandLine"' in eachjson:
-                    insert = ', "WinCommand{}'.format(
+                    insert = ', "Command{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -560,7 +560,7 @@ def use_plugins(
                 if (
                     '", "ProcessName"' in eachjson and '", "CommandLine"' in eachjson
                 ) or ('{"ProcessName"' in eachjson and '{"CommandLine"' in eachjson):
-                    insert = ', "nixProcess{}, "nixCommand{}'.format(
+                    insert = ', "Process{}, "Command{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -582,7 +582,7 @@ def use_plugins(
                 elif ('", "Path"' in eachjson and '", "CommandLine"' in eachjson) or (
                     '{"Path"' in eachjson and '{"CommandLine"' in eachjson
                 ):
-                    insert = ', "nixProcess{}, "nixCommand{}'.format(
+                    insert = ', "Process{}, "Command{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -604,7 +604,7 @@ def use_plugins(
                 elif ('", "ProcessName"' in eachjson and '", "Path"' in eachjson) or (
                     '{"ProcessName"' in eachjson and '{"Path"' in eachjson
                 ):
-                    insert = ', "nixProcess{}, "nixCommand{}'.format(
+                    insert = ', "Process{}, "Command{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -624,7 +624,7 @@ def use_plugins(
                     )
                     voljsonlist.append(json.dumps(eachjson[0:-1] + insert + "}"))
                 elif '", "ProcessName"' in eachjson or '{"ProcessName"' in eachjson:
-                    insert = ', "nixProcess{}'.format(
+                    insert = ', "Process{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -636,7 +636,7 @@ def use_plugins(
                     )
                     voljsonlist.append(json.dumps(eachjson[0:-1] + insert + "}"))
                 elif '", "Path"' in eachjson or '{"Path"' in eachjson:
-                    insert = ', "nixProcess{}'.format(
+                    insert = ', "Process{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -648,7 +648,7 @@ def use_plugins(
                     )
                     voljsonlist.append(json.dumps(eachjson[0:-1] + insert + "}"))
                 elif '", "CommandLine"' in eachjson or '{"CommandLine"' in eachjson:
-                    insert = ', "nixCommand{}'.format(
+                    insert = ', "Command{}'.format(
                         str(
                             str(
                                 re.findall(

@@ -71,9 +71,6 @@ def collect_windows_artefacts(
                 shutil.copy2(item, dest)
             except:
                 pass
-
-        else:
-            pass
         if item == mnt + "/Windows/inf/setupapi.dev.log":
             if verbosity != "":
                 print("     Collecting 'setupapi.dev.log' for {}...".format(vssimage))
@@ -101,9 +98,6 @@ def collect_windows_artefacts(
                 shutil.copy2(item, dest)
             except:
                 pass
-
-        else:
-            pass
         if (
             item == mnt + "/Windows/AppCompat/Programs/RecentFileCache.bcf"
             or item == mnt + "/Windows/AppCompat/Programs/Amcache.hve"
@@ -147,9 +141,6 @@ def collect_windows_artefacts(
                     )
             except:
                 pass
-
-        else:
-            pass
     elif len(os.listdir(item)) > 0:  # directories
         if item == mnt + "/Windows/System32/config/":
             dest = dest + "registry/"
@@ -221,7 +212,6 @@ def collect_windows_artefacts(
                         pass
                 else:
                     pass
-
         else:
             pass
         if item == mnt + "/Windows/System32/winevt/Logs/":

@@ -35,8 +35,6 @@ def extract_dumpreg_system(
             jsonlist, regjsonlist = use_system_plugins(
                 artefact, jsondict, jsonlist, regjsonlist, rgrplistj, [], []
             )
-        else:
-            pass
         if len(regjsonlist) > 0:
             regjson.write(
                 str(regjsonlist)
@@ -69,8 +67,6 @@ def extract_dumpreg_system(
                 .replace('[\'"{"', '[{"')
                 .replace('"}"\']', '"}]')
             )
-        else:
-            pass
         regjsonlist.clear()
         jsonlist.clear()
 
@@ -145,12 +141,8 @@ def extract_dumpreg_profile(
                     .replace('[\'"{"', '[{"')
                     .replace('"}"\']', '"}]')
                 )
-            else:
-                pass
             regjsonlist.clear()
             jsonlist.clear()
-        else:
-            pass
 
 
 def extract_dumpreg_guess(

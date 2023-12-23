@@ -124,7 +124,7 @@ def install_splunk_stack(
             )
         if not str(vrfypswd) == "b''":
             request_password = getpass.getpass(
-                "     -> Password did not meet complexity requirements...\n       * Password must contain at least 8 printable ASCII character(s)\n       Splunk admin password: "
+                "     -> Password did not meet complexity requirements...\n       * Password must contain at least 8 printable ASCII characters\n       Splunk admin password: "
             )
             verify_splunk_password(request_password, splunk_install_path)
         else:

@@ -83,8 +83,6 @@ def main(
             "\n  You MUST use the collect switch (-C), gandalf switch (-G) or the reorganise switch (-O)\n   If you are processing acquired disk and/or memory images, you must invoke the collect switch (-C)\n   If you have previously collected artefacts having used gandalf, you must invoke the gandalf switch (-G)\n   If you have previously collected artefacts NOT having used gandalf, you must invoke the reorganise switch (-O)\n\n  Please try again.\n\n\n"
         )
         sys.exit()
-    else:
-        pass
     if collect and gandalf:
         print(
             "\n  You cannot use the collect switch (-C) and the collect gandalf (-G).\n   If you are processing acquired disk and/or memory images, you must invoke the collect switch (-C).\n   If you have previously collected artefacts using gandalf, you must invoke the gandalf switch (-G).\n\n  Please try again.\n\n\n"
@@ -100,15 +98,11 @@ def main(
             "\n  You cannot use the gandalf switch (-G) and the reorganise switch (-O).\n   If you have previously collected artefacts using gandalf, you must invoke the gandalf switch (-G).\n   If you have previously collected artefacts NOT using gandalf, you must invoke the reorganise switch (-O).\n\n  Please try again.\n\n\n"
         )
         sys.exit()
-    else:
-        pass
     if volatility and not process:
         print(
             "\n  If you are just processing memory images, you must invoke the process switch (-P) with the memory switch (-M).\n\n  Please try again.\n\n\n"
         )
         sys.exit()
-    else:
-        pass
     if (not collect or gandalf) and (
         vss or collectfiles or imageinfo or symlinks or timeline or userprofiles
     ):
@@ -128,16 +122,12 @@ def main(
             collectand = "timeline switch (-t)"
         elif (not collect or gandalf) and userprofiles:
             collectand = "userprofiles switch (-U)"
-        else:
-            pass
         print(
             "\n\n  In order to use the {}, you must also invoke the {}. Please try again.\n\n\n\n".format(
                 collectand, gandalforcollect
             )
         )
         sys.exit()
-    else:
-        pass
     if memorytimeline and not volatility:
         print(
             "\n\n  You cannot provide the memorytimeline switch (-t) without provided the Volatility switch (-M). Please try again.\n\n\n\n"
@@ -148,15 +138,11 @@ def main(
             "\n\n  You cannot provide the Analysis switch (-A) without provided the Processing switch (-P). Please try again.\n\n\n\n"
         )
         sys.exit()
-    else:
-        pass
     if not metacollected and nsrl and (superquick or quick):
         print(
             "\n\n  In order to use the NSRL switch (-H), you must either provide the metacollected switch (-o) - with or without the Superquick (-Q) and Quick Flags (-q).\n  Or, if not using the metacollected switch (-o), remove the Superquick (-Q) and Quick Flags (-q) altogether. Please try again.\n\n\n\n"
         )
         sys.exit()
-    else:
-        pass
     if yara:
         if not os.path.isdir(yara[0]):
             print(
@@ -165,22 +151,16 @@ def main(
                 )
             )
             sys.exit()
-    else:
-        pass
     if navigator and not splunk:
         print(
             "\n\n  You cannot provide the Navigator switch (-N) without providing the Splunk switch (-S). Please try again.\n\n\n\n"
         )
         sys.exit()
-    else:
-        pass
     if lotr:
         print(random.choice(asciitext))
         input("\n\n\n\n\n\n     Press Enter to continue... ")
         subprocess.Popen(["clear"])
         time.sleep(2)
-    else:
-        pass
     starttime, ot, imgs, foundimgs, doneimgs, d, vssmem = (
         datetime.now().isoformat(),
         {},
@@ -206,8 +186,6 @@ def main(
                         "\n  [-F --collectfiles] - if providing an inclusion or exclusion list, the optional argument must start with 'include:' or 'exclude:' respectively\n   The correct syntax is: [include/exclude]:/path/to/inclusion_or_exclusion.list\n  Please try again.\n\n"
                     )
                     sys.exit()
-                else:
-                    pass
                 if not os.path.exists(collectfiles[8:]):
                     print(
                         "\n  [-F --collectfiles] - '{}' does not exist and/or is an invalid file, please try again.\n\n".format(
@@ -215,14 +193,6 @@ def main(
                         )
                     )
                     sys.exit()
-                else:
-                    pass
-            else:
-                pass
-        else:
-            pass
-    else:
-        pass
     if yara:
         if not os.path.exists(yara[0]):
             print(
@@ -231,10 +201,6 @@ def main(
                 )
             )
             sys.exit()
-        else:
-            pass
-    else:
-        pass
     apfsexists = str(
         subprocess.Popen(
             [
@@ -257,23 +223,13 @@ def main(
             )
             if os.path.exists("/usr/local/bin/apfs"):
                 shutil.rmtree("/usr/local/bin/apfs")
-            else:
-                pass
             sys.exit()
-        else:
-            pass
-    else:
-        pass
     if os.path.exists("/opt/elrond/elrond/tools/.profiles"):
         os.remove("/opt/elrond/elrond/tools/.profiles")
-    else:
-        pass
     if len(directory) > 1:
         od = directory[1]
         if not od.endswith("/"):
             od = od + "/"
-        else:
-            pass
         if not os.path.isdir(od):
             if not auto:
                 make_od = input(
@@ -317,8 +273,6 @@ def main(
                     "\n    You have three choices:\n     -> Specify a directory that exists\n     -> Confirm creation of a specified directory\n     -> Provide no output directory (cwd is default)\n\n  Please try again.\n  ----------------------------------------\n\n"
                 )
                 sys.exit()
-        else:
-            pass
         output_directory = os.path.dirname(od) + "/"
     else:
         output_directory = "./"
@@ -343,12 +297,8 @@ def main(
             )
         )
         sys.exit()
-    else:
-        pass
     if not unmount:
         unmount_images(elrond_mount, ewf_mount)
-    else:
-        pass
     if volatility:
         volchoice, volcheck = (
             "2.6",
@@ -369,12 +319,8 @@ def main(
                     volchoice = "Both"
                 elif volchoose == "3":
                     volchoice = "3"
-                else:
-                    pass
             else:
                 volchoice = "Both"
-        else:
-            pass
         if memorytimeline:
             memtimeline = memorytimeline
         else:
@@ -458,12 +404,6 @@ def main(
                                     )
                                 )
                                 sys.exit()
-                        else:
-                            pass
-                    else:
-                        pass
-                else:
-                    pass
         for (
             foundimg
         ) in (
@@ -499,16 +439,12 @@ def main(
                                 metaimglog.write(
                                     "Filename,SHA256,NSRL,Entropy,Filesize,LastWriteTime,LastAccessTime,LastInodeChangeTime,Permissions,FileType\n"
                                 )
-                        else:
-                            pass
                         if verbosity != "":
                             print(
                                 "    Calculating SHA256 hash for '{}', please stand by...".format(
                                     f
                                 )
                             )
-                        else:
-                            pass
                         with open(path, "rb") as metaimg:
                             buffer = metaimg.read(262144)
                             while len(buffer) > 0:
@@ -533,8 +469,6 @@ def main(
                             sha256,
                             nsrl,
                         )
-                    else:
-                        pass
                     entry, prnt = (
                         "LastWriteTime,elrond_host,elrond_stage,elrond_log_entry\n",
                         " -> {} -> created audit log file for '{}'".format(
@@ -590,16 +524,12 @@ def main(
                             metaimglog.write(
                                 "Filename,SHA256,known-good,Entropy,Filesize,LastWriteTime,LastAccessTime,LastInodeChangeTime,Permissions,FileType\n"
                             )
-                    else:
-                        pass
                     if verbosity != "":
                         print(
                             "    Calculating SHA256 hash for '{}', please stand by...".format(
                                 f
                             )
                         )
-                    else:
-                        pass
                     with open(path, "rb") as metaimg:
                         buffer = metaimg.read(262144)
                         while len(buffer) > 0:
@@ -622,8 +552,6 @@ def main(
                         sha256,
                         nsrl,
                     )
-                else:
-                    pass
                 ot = identify_memory_image(
                     verbosity,
                     output_directory,
@@ -648,8 +576,6 @@ def main(
                     allimgs[memimg] = mempath
                 allimgs = OrderedDict(sorted(allimgs.items(), key=lambda x: x[1]))
                 print()
-            else:
-                pass
     elif gandalf:  # populate allimgs and imgs dictionaries
         assess_gandalf(
             auto,
@@ -683,8 +609,6 @@ def main(
         ) in allimgs.items():  # populating just a 'disk image' dictionary
             if "::" in image_name and "::memory_" not in image_name:
                 imgs[image_location] = image_name
-            else:
-                pass
         time.sleep(1)
         if volatility:
             print(
@@ -704,10 +628,6 @@ def main(
                     "  ----------------------------------------\n  -> Completed Identification Phase.\n\n\n  ----------------------------------------\n   If you are confident there are valid images in this directory, maybe try with the Memory switch (-M)?\n   Otherwise review the path location and ensure the images are supported by elrond.\n  ----------------------------------------\n\n\n"
                 )
                 sys.exit()
-            else:
-                pass
-        else:
-            pass
     time.sleep(1)
     if (
         collect or reorganise
@@ -810,8 +730,6 @@ def main(
                         sha256,
                         nsrl,
                     )
-                else:
-                    pass
                 if os.path.exists(
                     output_directory + img.split("::")[0] + "/artefacts/carved/"
                 ):
@@ -824,8 +742,6 @@ def main(
                         sha256,
                         nsrl,
                     )
-                else:
-                    pass
                 if os.path.exists(output_directory + img.split("::")[0] + "/analysis/"):
                     extract_metadata(
                         verbosity,
@@ -836,8 +752,6 @@ def main(
                         sha256,
                         nsrl,
                     )
-                else:
-                    pass
                 if os.path.exists(output_directory + img.split("::")[0] + "/files/"):
                     extract_metadata(
                         verbosity,
@@ -848,8 +762,6 @@ def main(
                         sha256,
                         nsrl,
                     )
-                else:
-                    pass
                 if (
                     os.path.exists(output_directory + img.split("::")[0])
                     and "memory_" in img.split("::")[1]
@@ -863,12 +775,8 @@ def main(
                         sha256,
                         nsrl,
                     )
-                else:
-                    pass
                 if img.split("::")[0] not in str(imgs_metad):
                     imgs_metad.append(img.split("::")[0])
-                else:
-                    pass
                 print(
                     "     Completed collection of metadata from processed artefacts for '{}'".format(
                         img.split("::")[0]
@@ -878,8 +786,6 @@ def main(
                 "  ----------------------------------------\n  -> Completed Metadata phase for proccessed artefacts.\n"
             )
             time.sleep(1)
-        else:
-            pass
         if clamav:
             print(
                 "\n\n  -> \033[1;36mCommencing ClamAV Phase...\033[1;m\n  ----------------------------------------"
@@ -892,19 +798,13 @@ def main(
                             img.split("::")[0]
                         )
                     )
-                else:
-                    pass
                 if auto or yes_clam != "n":
                     run_clamscan(verbosity, output_directory, loc, img, collectfiles)
-                else:
-                    pass
             flags.append("06clam")
             print(
                 "  ----------------------------------------\n  -> Completed ClamAV Phase.\n"
             )
             time.sleep(1)
-        else:
-            pass
         if yara:
             print(
                 "\n\n  -> \033[1;36mCommencing Yara Phase...\033[1;m\n  ----------------------------------------"
@@ -915,8 +815,6 @@ def main(
                 for yfile in yfiles:
                     if yfile.endswith(".yara"):
                         yara_files.append(os.path.join(yroot, yfile))
-                    else:
-                        pass
             for loc, img in imgs.items():
                 if not auto:
                     yes_yara = input(
@@ -924,21 +822,15 @@ def main(
                             img.split("::")[0]
                         )
                     )
-                else:
-                    pass
                 if auto or yes_yara != "n":
                     run_yara_signatures(
                         verbosity, output_directory, loc, img, collectfiles, yara_files
                     )
-                else:
-                    pass
             flags.append("07yara")
             print(
                 "  ----------------------------------------\n  -> Completed Yara Phase.\n"
             )
             time.sleep(1)
-        else:
-            pass
         if splunk:
             usercred, pswdcred = configure_splunk_stack(
                 verbosity,
@@ -952,8 +844,6 @@ def main(
                 "  ----------------------------------------\n  -> Completed Splunk Phase.\n"
             )
             time.sleep(1)
-        else:
-            pass
         if elastic:
             configure_elastic_stack(
                 verbosity,
@@ -967,8 +857,6 @@ def main(
                 "  ----------------------------------------\n  -> Completed Elastic Phase.\n"
             )
             time.sleep(1)
-        else:
-            pass
         if (splunk or elastic) and navigator:  # mapping to attack-navigator
             print(
                 "\n\n  -> \033[1;36mBuilding ATT&CK® Navigator...\033[1;m\n  ----------------------------------------"
@@ -979,33 +867,19 @@ def main(
             )
             if navresults != "":
                 flags.append("10navigator")
-            else:
-                pass
             print(
                 "  ----------------------------------------\n  -> Completed ATT&CK® Navigator Phase.\n"
             )
             time.sleep(1)
-        else:
-            pass
         if archive or delete:
             for img, mntlocation in imgs.items():
                 if "vss" not in img and "vss" not in mntlocation:
                     if archive:
                         archive_artefacts(verbosity, output_directory)
                         flags.append("11archiving")
-                    else:
-                        pass
                     if delete:
                         delete_artefacts(verbosity, output_directory)
                         flags.append("12deletion")
-                    else:
-                        pass
-                else:
-                    pass
-        else:
-            pass
-    else:
-        pass
     endtime, fmt, timestringprefix = (
         datetime.now().isoformat(),
         "%Y-%m-%dT%H:%M:%S.%f",
@@ -1059,8 +933,6 @@ def main(
             timetaken = "{} hours.".format(str(hours))
         elif hours == 1 and mins == 0 and secs == 0:
             timetaken = "{} hour.".format(str(hours))
-        else:
-            pass
     elif 3600 > round((et - st).total_seconds()) > 60:
         mins = round((et - st).total_seconds() / 60)
         if mins > 1 and secs > 1:
@@ -1110,10 +982,6 @@ def main(
                             eachimg.split("::")[0]
                         )
                     )
-                else:
-                    pass
-            else:
-                pass
     else:
         unmount_images(elrond_mount, ewf_mount)
     print(
@@ -1141,10 +1009,6 @@ def main(
             print("      {} {} completed for...".format(flags, more_than_one_phase))
             for _, eachimg in allimgs.items():
                 doneimgs.append(eachimg.split("::")[0])
-        else:
-            pass
-    else:
-        pass
     doneimgs = sorted(list(set(doneimgs)))
     unmount_images(elrond_mount, ewf_mount)
     for eachimg, _ in allimgs.items():
@@ -1158,10 +1022,6 @@ def main(
                             os.remove(os.path.join(doneroot, donefile))
                         except:
                             pass
-                    else:
-                        pass
-                else:
-                    pass
             for donedir in donedirs:
                 if os.path.exists(doneroot + "/artefacts/raw/"):
                     for eachdir in os.listdir(doneroot + "/artefacts/raw/"):
@@ -1169,17 +1029,11 @@ def main(
                             doneroot + "/artefacts/raw/" + eachdir + "/IE/"
                         ):
                             shutil.rmtree(doneroot + "/artefacts/raw/" + eachdir)
-                        else:
-                            pass
-                else:
-                    pass
                 if len(os.listdir(os.path.join(doneroot, donedir))) < 1:
                     try:
                         shutil.rmtree(os.path.join(doneroot, donedir))
                     except:
                         pass
-                else:
-                    pass
     for doneimg in doneimgs:
         print("       '{}'".format(doneimg))
         entry, prnt = "{},{},finished,'{}'-'{}': ({} seconds)".format(
@@ -1194,22 +1048,14 @@ def main(
         print()
         if splunk:
             print("    Splunk Web:           127.0.0.1:8000/en-US/app/elrond/")
-        else:
-            pass
         if elastic:
             print(
                 "    elasticsearch:        127.0.0.1:9200\n    Kibana:               127.0.0.1:5601"
             )
-        else:
-            pass
         if navigator:
             print("    ATT&CK® Navigator:    127.0.0.1:4200")
-        else:
-            pass
         print()
         print("  ----------------------------------------")
         print("\n")
-    else:
-        pass
     print("\n\n     \033[1;36m{}\033[1;m".format(random.choice(quotes) + "\n\n\n"))
     os.chdir(cwd)

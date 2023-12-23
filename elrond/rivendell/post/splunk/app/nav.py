@@ -1,5 +1,8 @@
 #!/usr/bin/env python3 -tt
+
+
 def create_nav_menu(defaultnav):
+    # Add new parent techniques to nav.py
     defaultnav.write('<collection label="MITRE">\n		')
     defaultnav.write('<view name="mitre" default="true" />\n		')
     defaultnav.write(
@@ -9,6 +12,7 @@ def create_nav_menu(defaultnav):
     defaultnav.write("</collection>\n	")
     defaultnav.write('<collection label="ATT&amp;CK® Techniques">\n		')
     defaultnav.write('<collection label="Initial Access">\n			')
+    defaultnav.write('<view name="t1659" />\n			')
     defaultnav.write('<view name="t1189" />\n			')
     defaultnav.write('<view name="t1190" />\n			')
     defaultnav.write('<view name="t1133" />\n			')
@@ -20,6 +24,7 @@ def create_nav_menu(defaultnav):
     defaultnav.write('<view name="t1078" />\n			')
     defaultnav.write("</collection>\n		")
     defaultnav.write('<collection label="Execution">\n			')
+    defaultnav.write('<view name="t1651" />\n			')
     defaultnav.write('<view name="t1059" />\n			')
     defaultnav.write('<view name="t1609" />\n			')
     defaultnav.write('<view name="t1610" />\n			')
@@ -48,6 +53,7 @@ def create_nav_menu(defaultnav):
     defaultnav.write('<view name="t1525" />\n			')
     defaultnav.write('<view name="t1556" />\n			')
     defaultnav.write('<view name="t1137" />\n			')
+    defaultnav.write('<view name="t1653" />\n			')
     defaultnav.write('<view name="t1542" />\n			')
     defaultnav.write('<view name="t1053" />\n			')
     defaultnav.write('<view name="t1505" />\n			')
@@ -86,6 +92,7 @@ def create_nav_menu(defaultnav):
     defaultnav.write('<view name="t1564" />\n			')
     defaultnav.write('<view name="t1574" />\n			')
     defaultnav.write('<view name="t1562" />\n			')
+    defaultnav.write('<view name="t1656" />\n			')
     defaultnav.write('<view name="t1070" />\n			')
     defaultnav.write('<view name="t1202" />\n			')
     defaultnav.write('<view name="t1036" />\n			')
@@ -140,10 +147,12 @@ def create_nav_menu(defaultnav):
     defaultnav.write('<view name="t1526" />\n			')
     defaultnav.write('<view name="t1613" />\n			')
     defaultnav.write('<view name="t1622" />\n			')
+    defaultnav.write('<view name="t1652" />\n			')
     defaultnav.write('<view name="t1642" />\n			')
     defaultnav.write('<view name="t1482" />\n			')
     defaultnav.write('<view name="t1083" />\n			')
     defaultnav.write('<view name="t1615" />\n			')
+    defaultnav.write('<view name="t1654" />\n			')
     defaultnav.write('<view name="t1046" />\n			')
     defaultnav.write('<view name="t1135" />\n			')
     defaultnav.write('<view name="t1040" />\n			')
@@ -196,6 +205,7 @@ def create_nav_menu(defaultnav):
     defaultnav.write('<collection label="Command &amp; Control">\n			')
     defaultnav.write('<view name="t1071" />\n			')
     defaultnav.write('<view name="t1092" />\n			')
+    defaultnav.write('<view name="t1659" />\n			')
     defaultnav.write('<view name="t1132" />\n			')
     defaultnav.write('<view name="t1001" />\n			')
     defaultnav.write('<view name="t1568" />\n			')
@@ -230,6 +240,7 @@ def create_nav_menu(defaultnav):
     defaultnav.write('<view name="t1491" />\n			')
     defaultnav.write('<view name="t1561" />\n			')
     defaultnav.write('<view name="t1499" />\n			')
+    defaultnav.write('<view name="t1657" />\n			')
     defaultnav.write('<view name="t1495" />\n			')
     defaultnav.write('<view name="t1490" />\n			')
     defaultnav.write('<view name="t1498" />\n			')

@@ -110,8 +110,6 @@ def process_plist(
                             vssimage,
                         )
                     )
-                else:
-                    pass
                 entry, prnt = "{},{},{},'{}' plist file\n".format(
                     datetime.now().isoformat(),
                     vssimage.replace("'", ""),
@@ -130,7 +128,7 @@ def process_plist(
                     and '"ProgramArguments"' in pliststr
                     and '"Label"' in pliststr
                 ):
-                    insert = ', "nixProcess{}, "nixCommandLine{}, "Plist{}'.format(
+                    insert = ', "Process{}, "CommandLine{}, "Plist{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -159,7 +157,7 @@ def process_plist(
                     )
                     plistout = str(pliststr[0:-1] + insert + "}")
                 elif '"Program"' in pliststr and '"ProgramArguments"' in pliststr:
-                    insert = ', "nixProcess{}", "nixCommandLine{}'.format(
+                    insert = ', "Process{}", "CommandLine{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -183,7 +181,7 @@ def process_plist(
                     )
                     plistout = str(pliststr[0:-1] + insert + "}")
                 elif '"Program"' in pliststr and '"Label"' in pliststr:
-                    insert = ', "nixProcess{}", "Plist{}'.format(
+                    insert = ', "Process{}", "Plist{}'.format(
                         str(
                             str(
                                 re.findall(
@@ -200,7 +198,7 @@ def process_plist(
                     )
                     plistout = str(pliststr[0:-1] + insert + "}")
                 elif '"ProgramArguments"' in pliststr and '"Label"' in pliststr:
-                    insert = ', "nixCommandLine{}, "Plist{}'.format(
+                    insert = ', "CommandLine{}, "Plist{}'.format(
                         str(
                             str(
                                 str(
@@ -221,7 +219,7 @@ def process_plist(
                     )
                     plistout = str(pliststr[0:-1] + insert + "}")
                 elif '"Program"' in pliststr:
-                    insert = ', "nixProcess{}"'.format(
+                    insert = ', "Process{}"'.format(
                         str(
                             str(
                                 re.findall(
@@ -233,7 +231,7 @@ def process_plist(
                     )
                     plistout = str(pliststr[0:-1] + insert + "}")
                 elif '"ProgramArguments"' in pliststr:
-                    insert = ', "nixCommand{}'.format(
+                    insert = ', "Command{}'.format(
                         str(
                             str(
                                 str(
@@ -270,5 +268,3 @@ def process_plist(
 
             except:
                 pass
-    else:
-        pass

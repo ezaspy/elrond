@@ -127,8 +127,6 @@ def process_bash_history(
                 artefact.split("/")[-1].split("+")[0], vssimage
             )
         )
-    else:
-        pass
     entry, prnt = "{},{},{},bash_history ({}) file\n".format(
         datetime.now().isoformat(),
         vssimage.replace("'", ""),
@@ -158,9 +156,7 @@ def process_bash_history(
             + "+bash_history.csv",
             "a",
         ) as bashcsv:
-            bashcsv.write("nixCommand\n")
-    else:
-        pass
+            bashcsv.write("Command\n")
     with open(artefact) as bashcontent:
         with open(
             output_directory
@@ -204,8 +200,6 @@ def process_email(
             )
         except:
             pass
-    else:
-        pass
     if not os.path.exists(
         output_directory
         + img.split("::")[0]
@@ -225,8 +219,6 @@ def process_email(
             )
         except:
             pass
-    else:
-        pass
     if verbosity != "":
         print(
             "     Processing Mail artefact '{}' ({}) for {}...".format(
@@ -235,8 +227,6 @@ def process_email(
                 vssimage,
             )
         )
-    else:
-        pass
     entry, prnt = "{},{},{},'{}' ({}) Mail artefact\n".format(
         datetime.now().isoformat(),
         vssimage.replace("'", ""),
@@ -408,8 +398,6 @@ def process_email(
                 .replace("}']", "}]")
                 .replace("\\' >", "")
             )
-        else:
-            pass
         mailjsonlist.clear()
 
 
@@ -418,8 +406,6 @@ def process_group(
 ):
     if verbosity != "":
         print("     Processing 'group' file for {}...".format(vssimage))
-    else:
-        pass
     entry, prnt = "{},{},{},group file\n".format(
         datetime.now().isoformat(), vssimage.replace("'", ""), stage
     ), " -> {} -> {} group file from {}".format(
@@ -444,8 +430,6 @@ def process_group(
             "a",
         ) as groupcsv:
             groupcsv.write("group_name,password,groupID,group_list\n")
-    else:
-        pass
     with open(artefact) as groupcontent:
         with open(
             output_directory
@@ -458,8 +442,6 @@ def process_group(
             for groupline in groupcontent:
                 if ":*:" or ":x:" in groupline:
                     groupcsv.write(groupline.replace(":", ","))
-                else:
-                    pass
 
 
 def process_logs(
@@ -534,8 +516,6 @@ def process_logs(
                             vssimage,
                         )
                     )
-                else:
-                    pass
                 entry, prnt = "{},{},{},'{}' file\n".format(
                     datetime.now().isoformat(),
                     vssimage.replace("'", ""),
@@ -580,8 +560,6 @@ def process_logs(
                                         jsondict["Account"],
                                         jsondict["Message"],
                                     ) = (kv[0], kv[1], kv[2], kv[3])
-                                else:
-                                    pass
                                 jsonlist.append(json.dumps(jsondict))
                             jsondict.clear()
                 elif "kern" in artefact.split("/")[-1].split("+")[-1].split(".log")[0]:
@@ -622,8 +600,6 @@ def process_logs(
                                         kv[3],
                                         kv[4],
                                     )
-                                else:
-                                    pass
                                 jsonlist.append(json.dumps(jsondict))
                         jsondict.clear()
                 elif (
@@ -643,8 +619,6 @@ def process_logs(
                                         jsondict["Service"],
                                         jsondict["Message"],
                                     ) = (kv[0], kv[1], kv[2])
-                                else:
-                                    pass
                                 jsonlist.append(json.dumps(jsondict))
                         jsondict.clear()
                 elif (
@@ -668,8 +642,6 @@ def process_logs(
                                         jsondict["Service"],
                                         jsondict["Message"],
                                     ) = (kv[0], kv[1], kv[2])
-                                else:
-                                    pass
                                 jsonlist.append(json.dumps(jsondict))
                         jsondict.clear()
                 elif (
@@ -689,8 +661,6 @@ def process_logs(
                                     jsondict[kv[0].replace(" ", "")] = (
                                         kv[1].strip("\\n").strip()
                                     )
-                                else:
-                                    pass
                             for info in eachinfo.split("', 'Extension struct")[1:]:
                                 for extinfo in info.split("\\n', '"):
                                     for extkv in re.findall(
@@ -702,8 +672,6 @@ def process_logs(
                                             jsondict[ekv[0].replace(" ", "")] = (
                                                 ekv[1].strip("\\n").strip()
                                             )
-                                        else:
-                                            pass
                                 jsonlist.append(json.dumps(jsondict))
                         jsondict.clear()
                 elif (
@@ -735,8 +703,6 @@ def process_logs(
                                         kv[4],
                                         str(kv[3])[6:-6],
                                     )
-                                else:
-                                    pass
                                 jsonlist.append(json.dumps(jsondict))
                         jsondict.clear()
                 elif (
@@ -794,8 +760,6 @@ def process_logs(
                                         ),
                                         everyinfo.strip(),
                                     )
-                                else:
-                                    pass
                                 jsonlist.append(json.dumps(jsondict))
                     jsondict.clear()
                 elif (
@@ -838,12 +802,8 @@ def process_logs(
                                     eachkv[3],
                                     eachkv[4].replace("\\", ""),
                                 )
-                            else:
-                                pass
                             jsonlist.append(json.dumps(jsondict))
                     jsondict.clear()
-                else:
-                    pass
                 for eachjson in jsonlist:
                     eachjson = str(eachjson).replace('""', '"-"')
                     if '"CommonName"' in eachjson:
@@ -885,15 +845,8 @@ def process_logs(
                     )
                     log_json = re.sub(r'\\\\"(\}\} "\}, \{")', r"'\1", log_json)
                     logjson.write(log_json)
-                else:
-                    pass
                 logjsonlist.clear()
                 jsonlist.clear()
-
-            else:
-                pass
-    else:
-        pass
 
 
 def process_service(
@@ -932,8 +885,6 @@ def process_service(
                     artefact.split("/")[-1], vssimage
                 )
             )
-        else:
-            pass
         with open(
             output_directory
             + img.split("::")[0]
@@ -963,18 +914,16 @@ def process_service(
                         jsondict[
                             str(eachinfo.split("=")[0])
                             .strip()
-                            .replace("Service", "nixCommand")
-                            .replace("BusName", "nixCommand")
-                            .replace("ExecStart", "nixCommand")
-                            .replace("Description", "nixProcess")
+                            .replace("Service", "Command")
+                            .replace("BusName", "Command")
+                            .replace("ExecStart", "Command")
+                            .replace("Description", "Process")
                         ] = (
                             str(eachinfo.split("=")[1])
                             .strip()
                             .replace("\\", "")
                             .replace("n']", "")
                         )
-                    else:
-                        pass
                 jsonlist.append(json.dumps(jsondict))
             jsondict.clear()
             if len(jsonlist) > 0:
@@ -993,8 +942,3 @@ def process_service(
                 )
                 service_json = repair_malformed_service(service_json)
                 servicejson.write(service_json)
-            else:
-                pass
-
-    else:
-        pass

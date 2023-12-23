@@ -50,10 +50,6 @@ def convert_plaso_timeline(verbosity, output_directory, stage, img):
                                 .replace("\\", "/"),
                             )
                         )
-                    else:
-                        pass
-                else:
-                    pass
                 lineno += 1
     entry, prnt = "{},{},{},{}\n".format(
         datetime.now().isoformat(),
@@ -79,8 +75,6 @@ def create_plaso_timeline(verbosity, output_directory, stage, img, d, timelineim
     for image_directory in os.listdir(d):
         if os.path.exists(os.path.join(d, image_directory, img.split("::")[0])):
             timelineimagepath = os.path.join(d, image_directory, img.split("::")[0])
-        else:
-            pass
     print(
         "     Entering plaso to create timeline for '{}', please stand by...".format(
             timelineimage
@@ -89,8 +83,6 @@ def create_plaso_timeline(verbosity, output_directory, stage, img, d, timelineim
     time.sleep(2)
     if os.path.exists(".plaso"):
         shutil.rmtree("./.plaso")
-    else:
-        pass
     os.mkdir(".plaso")
     os.chdir("./.plaso")
     subprocess.Popen(

@@ -49,8 +49,6 @@ def process_browser_index(
                         artefact.split("/")[-1], indexuser, vssimage
                     )
                 )
-            else:
-                pass
             (
                 entry,
                 prnt,
@@ -82,8 +80,6 @@ def process_browser_index(
                     + vssartefact
                     + "browsers/ie"
                 )
-            else:
-                pass
             if not os.path.exists(
                 output_directory
                 + img.split("::")[0]
@@ -108,8 +104,6 @@ def process_browser_index(
                     "w",
                 ) as indexout:
                     indexout.write("Profile,Protocol,Domain,url,Description\n")
-            else:
-                pass
             with open(
                 output_directory
                 + img.split("::")[0]
@@ -235,20 +229,12 @@ def process_browser_index(
                         ).strip(
                             ","
                         )
-                    else:
-                        pass
                     if len(details) < 5:
                         details = "-"
-                    else:
-                        pass
                     if len(description) < 5:
                         description = "-"
-                    else:
-                        pass
                     if description.endswith(", "):
                         description = description[0:-2]
-                    else:
-                        pass
                     if "/" in site:
                         details = site
                         site = (
@@ -256,8 +242,6 @@ def process_browser_index(
                             .replace("http://", "")
                             .split("/")[0]
                         )
-                    else:
-                        pass
                     index_dat_row = "{},{},{},{},{}\n".format(
                         profile,
                         protocol,
@@ -266,9 +250,6 @@ def process_browser_index(
                         description,
                     )
                     indexout.write("{}".format(index_dat_row))
-
-        else:
-            pass
 
 
 def format_browser_entries(artefact, browsertype, eachentry):
@@ -287,8 +268,6 @@ def format_browser_entries(artefact, browsertype, eachentry):
                 float(int(str(eachentry).split(",")[-1].split(".")[0]) + 978307200)
             )
         )
-    else:
-        pass
     if browsertype == "history" and (
         "', '" in str(eachentry)
         or '", "' in str(eachentry)
@@ -336,8 +315,6 @@ def process_browser(
             )
         except:
             pass
-    else:
-        pass
     if verbosity != "":
         if "Edge" in artefact:
             print(
@@ -371,10 +348,6 @@ def process_browser(
                     vssimage,
                 )
             )
-        else:
-            pass
-    else:
-        pass
     (
         entry,
         prnt,
@@ -410,8 +383,6 @@ def process_browser(
             + "browsers/"
             + artefact.split("/raw/")[1].split("/")[2]
         )
-    else:
-        pass
     if not os.path.exists(
         output_directory
         + img.split("::")[0]
@@ -440,8 +411,6 @@ def process_browser(
             "w",
         ) as bwsr:
             bwsr.write("url,title,visit_count,from_visit,visit_date,LastWriteTime\n")
-    else:
-        pass
     if not os.path.exists(
         output_directory
         + img.split("::")[0]
@@ -472,8 +441,6 @@ def process_browser(
             downloads.write(
                 "url,downloaded_file,received_bytes,total_bytes,start_time,end_time,LastWriteTime\n"
             )
-    else:
-        pass
     if artefact.endswith("/Edge/History") or artefact.endswith("/chrome/History"):
         cursor_items = (
             sqlite3.connect(artefact)
@@ -504,8 +471,6 @@ def process_browser(
                             eachitem[4],
                         )
                     )
-                else:
-                    pass
         bwsrhist = bwsrentries
         try:
             cursor_downloads = (
@@ -562,8 +527,6 @@ def process_browser(
                             eachitem[4],
                         )
                     )
-                else:
-                    pass
         bwsrhist = bwsrentries
         try:
             cursor_downloads = (
@@ -585,8 +548,6 @@ def process_browser(
                             eachdownload[4],
                         )
                     )
-                else:
-                    pass
             bwsrdwnlds = bwsrdownloadentries
         except:
             bwsrdwnlds = ""
@@ -615,12 +576,8 @@ def process_browser(
                             eachvisit[3],
                         )
                     )
-                else:
-                    pass
         bwsrhist = bwsrentries
         bwsrdwnlds = ""
-    else:
-        pass
     for eachentry in bwsrhist:
         hist, histtime = format_browser_entries(artefact, "history", eachentry)
         with open(
@@ -674,5 +631,3 @@ def process_browser(
                     + downloadtime
                     + "\n"
                 )
-    else:
-        pass

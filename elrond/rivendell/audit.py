@@ -16,8 +16,6 @@ def write_audit_log_entry(verbosity, output_directory, entry, prnt):
         logentry.write(entry.replace("'", ""))
     if prnt != "":
         print(prnt)
-    else:
-        pass
 
 
 def manage_error(output_directory, verbosity, error, state, img, item, vsstext):

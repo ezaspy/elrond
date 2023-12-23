@@ -72,7 +72,7 @@ def extract_shimcache(verbosity, vssimage, output_directory, img, vssartefact, s
             ) as shimwrite:
                 shimwrite.write(
                     newshimline.replace("Last Modified", "LastWriteTime")
-                    .replace(",path", ",WinProcess")
+                    .replace(",path", ",Process")
                     .replace("\\", "/")
                 )
     try:

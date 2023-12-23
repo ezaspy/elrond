@@ -68,12 +68,8 @@ def extract_evtx(
                         kv = list(filter(None, eachkv))
                         if len(kv) > 0:
                             jsondict[kv[0]] = kv[1]
-                        else:
-                            pass
                 if len(jsondict) > 0:
                     jsonlist.append(json.dumps(jsondict))
-                else:
-                    pass
         for eachjson in jsonlist:
             try:
                 eachjson = str(eachjson).replace('""', '"-"')
@@ -133,10 +129,8 @@ def extract_evtx(
                     .replace('/, "', '/", "')
                     .replace('/}, {"', '/"}, {"')
                     .replace("/}]", '/"}]')
-                    .replace("ProcessName", "WinProcess"),
+                    .replace("ProcessName", "Process"),
                 )
             )
-        else:
-            pass
         evtjsonlist.clear()
         jsonlist.clear()
