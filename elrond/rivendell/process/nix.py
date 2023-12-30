@@ -119,7 +119,7 @@ def repair_malformed_service(service_json):
 
 
 def process_bash_history(
-    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+    verbosity, vssimage, output_directory, img, vss_path_insert, stage, artefact
 ):
     if verbosity != "":
         print(
@@ -143,7 +143,7 @@ def process_bash_history(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + artefact.split("/")[-1].split("+")[0]
         + "+bash_history.csv"
     ):
@@ -151,7 +151,7 @@ def process_bash_history(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + artefact.split("/")[-1].split("+")[0]
             + "+bash_history.csv",
             "a",
@@ -162,7 +162,7 @@ def process_bash_history(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + artefact.split("/")[-1].split("+")[0]
             + "+bash_history.csv",
             "a",
@@ -176,7 +176,7 @@ def process_email(
     vssimage,
     output_directory,
     img,
-    vssartefact,
+    vss_path_insert,
     stage,
     artefact,
     jsondict,
@@ -187,7 +187,7 @@ def process_email(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "mail"
     ):
         try:
@@ -195,7 +195,7 @@ def process_email(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "mail"
             )
         except:
@@ -204,7 +204,7 @@ def process_email(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "mail/"
         + artefact.split("/")[-2]
     ):
@@ -213,7 +213,7 @@ def process_email(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "mail/"
                 + artefact.split("/")[-2]
             )
@@ -245,7 +245,7 @@ def process_email(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "mail/"
         + artefact.split("/")[-2]
         + "/"
@@ -258,7 +258,7 @@ def process_email(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/raw"
-                + vssartefact
+                + vss_path_insert
                 + "mail/emails/"
                 + artefact.split("/")[-2]
                 + "/"
@@ -272,7 +272,7 @@ def process_email(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/raw"
-                + vssartefact
+                + vss_path_insert
                 + "mail/emails/"
                 + artefact.split("/")[-2]
                 + "/"
@@ -402,7 +402,7 @@ def process_email(
 
 
 def process_group(
-    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+    verbosity, vssimage, output_directory, img, vss_path_insert, stage, artefact
 ):
     if verbosity != "":
         print("     Processing 'group' file for {}...".format(vssimage))
@@ -418,14 +418,14 @@ def process_group(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "group.csv"
     ):
         with open(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + "group.csv",
             "a",
         ) as groupcsv:
@@ -435,7 +435,7 @@ def process_group(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + "group.csv",
             "a",
         ) as groupcsv:
@@ -449,7 +449,7 @@ def process_logs(
     vssimage,
     output_directory,
     img,
-    vssartefact,
+    vss_path_insert,
     stage,
     artefact,
     jsondict,
@@ -460,7 +460,7 @@ def process_logs(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "logs/"
         + artefact.split("/")[-1]
         + ".json"
@@ -470,7 +470,7 @@ def process_logs(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "logs"
             )
         except:
@@ -479,7 +479,7 @@ def process_logs(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + "logs/"
             + artefact.split("/")[-1]
             + ".json",
@@ -854,7 +854,7 @@ def process_service(
     vssimage,
     output_directory,
     img,
-    vssartefact,
+    vss_path_insert,
     stage,
     artefact,
     jsondict,
@@ -864,7 +864,7 @@ def process_service(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "services/"
         + artefact.split("/")[-1]
         + ".json"
@@ -874,7 +874,7 @@ def process_service(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "services"
             )
         except:
@@ -889,7 +889,7 @@ def process_service(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + "services/"
             + artefact.split("/")[-1]
             + ".json",
