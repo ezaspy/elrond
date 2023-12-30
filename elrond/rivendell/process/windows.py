@@ -12,10 +12,13 @@ from rivendell.process.extractions.registry.profile import extract_registry_prof
 from rivendell.process.extractions.registry.system import extract_registry_system
 from rivendell.process.extractions.shimcache import extract_shimcache
 from rivendell.process.extractions.usb import extract_usb
+from rivendell.process.extractions.usn import extract_usn
+from rivendell.process.extractions.wbem import extract_wbem
+from rivendell.process.extractions.wmi import extract_wmi
 
 
 def process_mft(
-    verbosity, vssimage, output_directory, img, artefact, vssartefact, stage
+    verbosity, vssimage, output_directory, img, artefact, vss_path_insert, stage
 ):
     if verbosity != "":
         print(
@@ -25,7 +28,7 @@ def process_mft(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "..journal_mft.csv",
         "a",
     ) as mftcsv:
@@ -34,7 +37,7 @@ def process_mft(
                 datetime.now().isoformat(),
                 vssimage.replace("'", ""),
                 stage,
-                vssartefact,
+                vss_path_insert,
             ), " -> {} -> {} '{}' from {}".format(
                 datetime.now().isoformat().replace("T", " "),
                 stage,
@@ -50,13 +53,13 @@ def process_mft(
                     output_directory
                     + img.split("::")[0]
                     + "/artefacts/raw"
-                    + vssartefact
+                    + vss_path_insert
                     + "$MFT",
                     "-o",
                     output_directory
                     + img.split("::")[0]
                     + "/artefacts/cooked"
-                    + vssartefact
+                    + vss_path_insert
                     + "..journal_mft.csv",
                 ],
                 stdout=subprocess.PIPE,
@@ -69,7 +72,7 @@ def process_mft(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + ".journal_mft.csv",
             "a",
         ) as mftwrite:
@@ -77,7 +80,7 @@ def process_mft(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "journal_mft.csv"
             ):
                 mftwrite.write(
@@ -86,14 +89,14 @@ def process_mft(
             extract_mft(
                 output_directory,
                 img,
-                vssartefact,
+                vss_path_insert,
                 mftwrite,
             )
     with open(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "journal_mft.csv",
         "a",
     ) as mftwrite:
@@ -101,7 +104,7 @@ def process_mft(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + ".journal_mft.csv"
         ) as mftread:
             for eachentry in mftread:
@@ -113,23 +116,33 @@ def process_mft(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "..journal_mft.csv"
     ):
         os.remove(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + "..journal_mft.csv"
         )
         os.remove(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + ".journal_mft.csv"
         )
+
+
+def process_usn(
+    verbosity, vssimage, output_directory, img, artefact, vss_path_insert, stage
+):
+    if verbosity != "":
+        print(
+            "     Processing '{}' for {}...".format(artefact.split("/")[-1], vssimage)
+        )
+    extract_usn(verbosity, vssimage, output_directory, img, vss_path_insert, stage)
 
 
 def process_usb(
@@ -137,7 +150,7 @@ def process_usb(
     vssimage,
     output_directory,
     img,
-    vssartefact,
+    vss_path_insert,
     stage,
     artefact,
     jsondict,
@@ -148,7 +161,7 @@ def process_usb(
             "     Processing '{}' for {}...".format(artefact.split("/")[-1], vssimage)
         )
     entry, prnt = "{},{},{},'{}'\n".format(
-        datetime.now().isoformat(), vssimage.replace("'", ""), stage, vssartefact
+        datetime.now().isoformat(), vssimage.replace("'", ""), stage, vss_path_insert
     ), " -> {} -> {} '{}' from {}".format(
         datetime.now().isoformat().replace("T", " "),
         stage,
@@ -161,17 +174,21 @@ def process_usb(
     extract_usb(
         output_directory,
         img,
-        vssartefact,
+        vss_path_insert,
         jsondict,
         jsonlist,
         setupdata,
     )
 
 
-def process_shimcache(verbosity, vssimage, output_directory, img, vssartefact, stage):
+def process_shimcache(
+    verbosity, vssimage, output_directory, img, vss_path_insert, stage
+):
     if verbosity != "":
         print("     Processing shimcache for {}...".format(vssimage))
-    extract_shimcache(verbosity, vssimage, output_directory, img, vssartefact, stage)
+    extract_shimcache(
+        verbosity, vssimage, output_directory, img, vss_path_insert, stage
+    )
 
 
 def process_registry_system(
@@ -179,7 +196,7 @@ def process_registry_system(
     vssimage,
     output_directory,
     img,
-    vssartefact,
+    vss_path_insert,
     stage,
     artefact,
     jsondict,
@@ -190,7 +207,7 @@ def process_registry_system(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "registry/"
         + artefact.split("/")[-1]
         + ".json"
@@ -200,7 +217,7 @@ def process_registry_system(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "registry"
             )
         except:
@@ -226,7 +243,7 @@ def process_registry_system(
         extract_registry_system(
             output_directory,
             img,
-            vssartefact,
+            vss_path_insert,
             artefact,
             jsondict,
             jsonlist,
@@ -239,7 +256,7 @@ def process_registry_profile(
     vssimage,
     output_directory,
     img,
-    vssartefact,
+    vss_path_insert,
     stage,
     artefact,
     jsondict,
@@ -251,7 +268,7 @@ def process_registry_profile(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "/registry/"
         + regusr
         + "+"
@@ -263,7 +280,7 @@ def process_registry_profile(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "/registry"
             )
         except:
@@ -291,7 +308,7 @@ def process_registry_profile(
         extract_registry_profile(
             output_directory,
             img,
-            vssartefact,
+            vss_path_insert,
             artefact,
             jsondict,
             jsonlist,
@@ -306,7 +323,7 @@ def process_evtx(
     vssimage,
     output_directory,
     img,
-    vssartefact,
+    vss_path_insert,
     stage,
     artefact,
     jsondict,
@@ -317,7 +334,7 @@ def process_evtx(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "evt/"
         + artefact.split("/")[-1]
         + ".json"
@@ -327,7 +344,7 @@ def process_evtx(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "evt"
             )
         except:
@@ -343,7 +360,7 @@ def process_evtx(
             vssimage,
             output_directory,
             img,
-            vssartefact,
+            vss_path_insert,
             stage,
             artefact,
             jsondict,
@@ -357,7 +374,7 @@ def process_clipboard(
     vssimage,
     output_directory,
     img,
-    vssartefact,
+    vss_path_insert,
     stage,
     artefact,
     jsondict,
@@ -368,7 +385,7 @@ def process_clipboard(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "clipboard/"
         + artefact.split("/")[-1]
         + ".json"
@@ -378,7 +395,7 @@ def process_clipboard(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "clipboard"
             )
         except:
@@ -396,7 +413,7 @@ def process_clipboard(
             vssimage,
             output_directory,
             img,
-            vssartefact,
+            vss_path_insert,
             stage,
             artefact,
             jsondict,
@@ -406,31 +423,195 @@ def process_clipboard(
 
 
 def process_prefetch(
-    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
-):  # git clone https://github.com/
-    print()  #
-
-
-def process_wmi(
-    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
-):  # git clone https://github.com/airbus-cert/etl-parser
-    print()  # python3 /mnt/hgfs/elrond_dev/issues/etl-parser/bin/etl2xml -i /mnt/hgfs/elrond_dev/issues/wmi/Terminal-Services-RPC-Client.etl -o /mnt/hgfs/elrond_dev/issues/wmi/Terminal-Services-RPC-Client.xml
-
-
-def process_wbem(
-    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
-):  # git clone https://github.com/davidpany/WMI_Forensics
-    print()  # python2.7 /mnt/hgfs/elrond_dev/issues/WMI_Forensics/CCM_RUA_Finder.py -i /mnt/hgfs/elrond_dev/issues/wbem/OBJECTS.DATA -o /mnt/hgfs/elrond_dev/issues/wbem/OBJECTS.DATA.xls
-
-
-def process_ual(
-    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+    verbosity,
+    vssimage,
+    output_directory,
+    img,
+    vss_path_insert,
+    stage,
+    mount_location,
 ):
     if not os.path.exists(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
+        + "prefetch"
+    ):
+        os.makedirs(
+            output_directory
+            + img.split("::")[0]
+            + "/artefacts/cooked"
+            + vss_path_insert
+            + "prefetch"
+        )
+        if verbosity != "":
+            print("     Processing prefetch files for {}...".format(vssimage))
+        entry, prnt = "{},{},{},prefetch files\n".format(
+            datetime.now().isoformat(),
+            vssimage.replace("'", ""),
+            stage,
+        ), " -> {} -> {} prefetch files for {}".format(
+            datetime.now().isoformat().replace("T", " "),
+            stage,
+            vssimage,
+        )
+        write_audit_log_entry(verbosity, output_directory, entry, prnt)
+        subprocess.Popen(
+            [
+                "log2timeline.py",
+                "--parsers",
+                "prefetch",
+                "{}/Windows/Prefetch/".format(mount_location),
+                "--storage_file",
+                output_directory
+                + img.split("::")[0]
+                + "/artefacts/cooked"
+                + vss_path_insert
+                + "prefetch/prefetch.plaso",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate()
+        subprocess.Popen(
+            [
+                "psteal.py",
+                "--source",
+                output_directory
+                + img.split("::")[0]
+                + "/artefacts/cooked"
+                + vss_path_insert
+                + "prefetch/prefetch.plaso",
+                "-o",
+                "dynamic",
+                "-w",
+                "prefetch.csv",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate()
+        if os.path.exists(
+            output_directory
+            + img.split("::")[0]
+            + "/artefacts/cooked"
+            + vss_path_insert
+            + "prefetch/prefetch.plaso"
+        ):
+            os.remove(
+                output_directory
+                + img.split("::")[0]
+                + "/artefacts/cooked"
+                + vss_path_insert
+                + "prefetch/prefetch.plaso"
+            )
+
+
+def process_wmi(
+    verbosity,
+    vssimage,
+    output_directory,
+    img,
+    vss_path_insert,
+    stage,
+    artefact,
+    jsondict,
+    jsonlist,
+):
+    wmijsonlist = []
+    if not os.path.exists(
+        output_directory
+        + img.split("::")[0]
+        + "/artefacts/cooked"
+        + vss_path_insert
+        + "wmi/"
+        + artefact.split("/")[-1]
+        + ".json"
+    ):
+        try:
+            os.makedirs(
+                output_directory
+                + img.split("::")[0]
+                + "/artefacts/cooked"
+                + vss_path_insert
+                + "wmi"
+            )
+        except:
+            pass
+        if verbosity != "":
+            print(
+                "     Processing WMI '{}' for {}...".format(
+                    artefact.split("/")[-1].split("_")[-1],
+                    vssimage,
+                )
+            )
+        extract_wmi(
+            verbosity,
+            vssimage,
+            output_directory,
+            img,
+            vss_path_insert,
+            stage,
+            artefact,
+            jsondict,
+            jsonlist,
+            wmijsonlist,
+        )
+
+
+def process_wbem(
+    verbosity,
+    vssimage,
+    output_directory,
+    img,
+    vss_path_insert,
+    stage,
+    artefact,
+):
+    if not os.path.exists(
+        output_directory
+        + img.split("::")[0]
+        + "/artefacts/cooked"
+        + vss_path_insert
+        + "wbem/"
+        + artefact.split("/")[-1]
+        + ".json"
+    ):
+        try:
+            os.makedirs(
+                output_directory
+                + img.split("::")[0]
+                + "/artefacts/cooked"
+                + vss_path_insert
+                + "wbem"
+            )
+        except:
+            pass
+        if verbosity != "":
+            print(
+                "     Processing WBEM '{}' for {}...".format(
+                    artefact.split("/")[-1].split("_")[-1],
+                    vssimage,
+                )
+            )
+        extract_wbem(
+            verbosity,
+            vssimage,
+            output_directory,
+            img,
+            vss_path_insert,
+            stage,
+            artefact,
+        )
+
+
+def process_ual(
+    verbosity, vssimage, output_directory, img, vss_path_insert, stage, artefact
+):
+    if not os.path.exists(
+        output_directory
+        + img.split("::")[0]
+        + "/artefacts/cooked"
+        + vss_path_insert
         + "ual/"
         + artefact.split("/")[-1]
         + ".csv"
@@ -440,7 +621,7 @@ def process_ual(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "ual"
             )
         except:
@@ -481,7 +662,7 @@ def process_ual(
                     output_directory
                     + img.split("::")[0]
                     + "/artefacts/cooked"
-                    + vssartefact
+                    + vss_path_insert
                     + "ual/"
                     + artefact.split("/")[-1]
                     + ".csv",
@@ -517,20 +698,20 @@ def process_ual(
 
 
 def process_jumplists(
-    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+    verbosity, vssimage, output_directory, img, vss_path_insert, stage, artefact
 ):
     if not os.path.exists(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "jumplists.csv"
     ):
         with open(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + "jumplists.csv",
             "a",
         ) as jumplistcsv:
@@ -540,7 +721,7 @@ def process_jumplists(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + "jumplists.csv",
             "a",
         ) as jumplistcsv:
@@ -548,7 +729,7 @@ def process_jumplists(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "jumplists.csv"
             ):
                 if verbosity != "":
@@ -589,7 +770,7 @@ def process_jumplists(
 
 
 def process_outlook(
-    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+    verbosity, vssimage, output_directory, img, vss_path_insert, stage, artefact
 ):
     if verbosity != "":
         print(
@@ -638,7 +819,7 @@ def process_hiberfil(
     vssimage,
     output_directory,
     img,
-    vssartefact,
+    vss_path_insert,
     stage,
     artefact,
     volchoice,
@@ -654,7 +835,7 @@ def process_hiberfil(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "memory"
     )
     profile, vssmem = process_memory(
@@ -672,12 +853,14 @@ def process_hiberfil(
     return profile, vssmem
 
 
-def process_pagefile(verbosity, vssimage, output_directory, img, vssartefact, artefact):
+def process_pagefile(
+    verbosity, vssimage, output_directory, img, vss_path_insert, artefact
+):
     if not os.path.exists(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "memory"
     ):
         if verbosity != "":
@@ -690,7 +873,7 @@ def process_pagefile(verbosity, vssimage, output_directory, img, vssartefact, ar
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + "memory"
         )
         entry, prnt = "{},{},extracting strings,'{}'\n".format(
@@ -711,7 +894,7 @@ def process_pagefile(verbosity, vssimage, output_directory, img, vssartefact, ar
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "memory/"
                 + artefact.split("/")[-1]
                 + ".strings",
