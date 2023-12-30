@@ -183,8 +183,12 @@ def use_system_plugins(
                             ):
                                 kv = list(eachkv)
                                 if len(kv) > 0:
-                                    Filepath = re.sub(r"\\n\d{4}-\d{2}-\d{2}.*", r"", kv[1])
-                                    kv_info = re.findall(r"\S(?:\\n)(\d{4}-\d{2}-\d{2}.*)", kv[1])
+                                    Filepath = re.sub(
+                                        r"\\n\d{4}-\d{2}-\d{2}.*", r"", kv[1]
+                                    )
+                                    kv_info = re.findall(
+                                        r"\S(?:\\n)(\d{4}-\d{2}-\d{2}.*)", kv[1]
+                                    )
                                     if len(kv_info) > 0:
                                         Timestamp = kv_info[0]
                                     else:
@@ -194,7 +198,15 @@ def use_system_plugins(
                                             jsondict["File"],
                                             jsondict["Filepath"],
                                             jsondict["Timestamp"],
-                                        ) = (kv[0], Filepath.strip('"').strip('/').strip('"').strip('/').replace("\\\\\\\\", "\\\\"), Timestamp)
+                                        ) = (
+                                            kv[0],
+                                            Filepath.strip('"')
+                                            .strip("/")
+                                            .strip('"')
+                                            .strip("/")
+                                            .replace("\\\\\\\\", "\\\\"),
+                                            Timestamp,
+                                        )
                     if len(jsondict) > 4:
                         jsonlist.append(json.dumps(jsondict))
                 jsondict.clear()
@@ -1449,7 +1461,7 @@ def use_system_plugins(
 def extract_registry_system(
     output_directory,
     img,
-    vssartefact,
+    vss_path_insert,
     artefact,
     jsondict,
     jsonlist,
@@ -1459,7 +1471,7 @@ def extract_registry_system(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "registry/"
         + artefact.split("/")[-1]
         + ".json",

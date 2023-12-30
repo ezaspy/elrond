@@ -11,7 +11,7 @@ def extract_evtx(
     vssimage,
     output_directory,
     img,
-    vssartefact,
+    vss_path_insert,
     stage,
     artefact,
     jsondict,
@@ -22,7 +22,7 @@ def extract_evtx(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "evt/"
         + artefact.split("/")[-1]
         + ".json",
@@ -47,7 +47,7 @@ def extract_evtx(
                     output_directory
                     + img.split("::")[0]
                     + "/artefacts/raw"
-                    + vssartefact
+                    + vss_path_insert
                     + "evt/"
                     + artefact.split("/")[-1],
                 ],

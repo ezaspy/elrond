@@ -1397,7 +1397,7 @@ def use_profile_plugins(
 def extract_registry_profile(
     output_directory,
     img,
-    vssartefact,
+    vss_path_insert,
     artefact,
     jsondict,
     jsonlist,
@@ -1409,7 +1409,7 @@ def extract_registry_profile(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "/registry/"
         + regusr
         + "+"
@@ -1425,7 +1425,7 @@ def extract_registry_profile(
                     output_directory
                     + img.split("::")[0]
                     + "/artefacts/raw"
-                    + vssartefact
+                    + vss_path_insert
                     + "/registry/"
                     + regusr
                     + "+"

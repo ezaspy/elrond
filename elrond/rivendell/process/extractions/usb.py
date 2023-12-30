@@ -6,7 +6,7 @@ import re
 def extract_usb(
     output_directory,
     img,
-    vssartefact,
+    vss_path_insert,
     jsondict,
     jsonlist,
     setupdata,
@@ -76,7 +76,7 @@ def extract_usb(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + "usb.log.json",
             "a",
         ) as usbjson:

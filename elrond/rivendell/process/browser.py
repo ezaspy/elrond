@@ -8,13 +8,13 @@ from rivendell.audit import write_audit_log_entry
 
 
 def process_browser_index(
-    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+    verbosity, vssimage, output_directory, img, vss_path_insert, stage, artefact
 ):
     if not os.path.exists(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "browsers"
     ):
         try:
@@ -22,7 +22,7 @@ def process_browser_index(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "browsers"
             )
         except:
@@ -31,14 +31,14 @@ def process_browser_index(
         output_directory
         + img.split("::")[0]
         + "/artefacts/raw"
-        + vssartefact
+        + vss_path_insert
         + "browsers"
     ):
         if os.path.exists(
             output_directory
             + img.split("::")[0]
             + "/artefacts/raw"
-            + vssartefact
+            + vss_path_insert
             + "browsers/"
             + indexuser
             + "/ie/History.IE5/index.dat"
@@ -70,21 +70,21 @@ def process_browser_index(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "browsers/ie"
             ):
                 os.makedirs(
                     output_directory
                     + img.split("::")[0]
                     + "/artefacts/cooked"
-                    + vssartefact
+                    + vss_path_insert
                     + "browsers/ie"
                 )
             if not os.path.exists(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "browsers/ie/"
                 + indexuser
                 + "+"
@@ -95,7 +95,7 @@ def process_browser_index(
                     output_directory
                     + img.split("::")[0]
                     + "/artefacts/cooked"
-                    + vssartefact
+                    + vss_path_insert
                     + "browsers/ie/"
                     + indexuser
                     + "+"
@@ -108,7 +108,7 @@ def process_browser_index(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "browsers/ie/"
                 + indexuser
                 + "+"
@@ -296,13 +296,13 @@ def format_browser_entries(artefact, browsertype, eachentry):
 
 
 def process_browser(
-    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+    verbosity, vssimage, output_directory, img, vss_path_insert, stage, artefact
 ):
     if not os.path.exists(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "browsers"
     ):
         try:
@@ -310,7 +310,7 @@ def process_browser(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "browsers"
             )
         except:
@@ -371,7 +371,7 @@ def process_browser(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "browsers/"
         + artefact.split("/raw/")[1].split("/")[2]
     ):
@@ -379,7 +379,7 @@ def process_browser(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + "browsers/"
             + artefact.split("/raw/")[1].split("/")[2]
         )
@@ -387,7 +387,7 @@ def process_browser(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "browsers/"
         + artefact.split("/raw/")[1].split("/")[2]
         + "/"
@@ -400,7 +400,7 @@ def process_browser(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + "browsers/"
             + artefact.split("/raw/")[1].split("/")[2]
             + "/"
@@ -415,7 +415,7 @@ def process_browser(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "browsers/"
         + artefact.split("/raw/")[1].split("/")[2]
         + "/"
@@ -428,7 +428,7 @@ def process_browser(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + "browsers/"
             + artefact.split("/raw/")[1].split("/")[2]
             + "/"
@@ -584,7 +584,7 @@ def process_browser(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + "browsers/"
             + artefact.split("/raw/")[1].split("/")[2]
             + "/"
@@ -612,7 +612,7 @@ def process_browser(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "browsers/"
                 + artefact.split("/raw/")[1].split("/")[2]
                 + "/"

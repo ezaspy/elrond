@@ -5,14 +5,14 @@ import re
 def extract_mft(
     output_directory,
     img,
-    vssartefact,
+    vss_path_insert,
     mftwrite,
 ):
     with open(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "..journal_mft.csv"
     ) as mftread:
         for eachinfo in mftread:

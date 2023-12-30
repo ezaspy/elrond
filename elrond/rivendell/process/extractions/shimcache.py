@@ -6,12 +6,14 @@ from datetime import datetime
 from rivendell.audit import write_audit_log_entry
 
 
-def extract_shimcache(verbosity, vssimage, output_directory, img, vssartefact, stage):
+def extract_shimcache(
+    verbosity, vssimage, output_directory, img, vss_path_insert, stage
+):
     with open(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + ".shimcache.csv",
         "a",
     ):
@@ -32,13 +34,13 @@ def extract_shimcache(verbosity, vssimage, output_directory, img, vssartefact, s
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/raw"
-                + vssartefact
+                + vss_path_insert
                 + ".SYSTEM",
                 "-o",
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + ".shimcache.csv",
             ],
             stdout=subprocess.PIPE,
@@ -48,7 +50,7 @@ def extract_shimcache(verbosity, vssimage, output_directory, img, vssartefact, s
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + ".shimcache.csv",
         "r",
     ) as shimread:
@@ -66,7 +68,7 @@ def extract_shimcache(verbosity, vssimage, output_directory, img, vssartefact, s
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "shimcache.csv",
                 "a",
             ) as shimwrite:
@@ -80,14 +82,14 @@ def extract_shimcache(verbosity, vssimage, output_directory, img, vssartefact, s
             output_directory
             + img.split("::")[0]
             + "/artefacts/raw"
-            + vssartefact
+            + vss_path_insert
             + ".SYSTEM"
         )
         os.remove(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + ".shimcache.csv"
         )
     except:
