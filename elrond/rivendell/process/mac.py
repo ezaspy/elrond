@@ -69,13 +69,13 @@ def repair_malformed_plist(plist_out):
 
 
 def process_plist(
-    verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+    verbosity, vssimage, output_directory, img, vss_path_insert, stage, artefact
 ):
     if not os.path.exists(
         output_directory
         + img.split("::")[0]
         + "/artefacts/cooked"
-        + vssartefact
+        + vss_path_insert
         + "plists/"
         + artefact.split("/")[-1]
         + ".json"
@@ -85,7 +85,7 @@ def process_plist(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "plists"
             )
         except:
@@ -94,7 +94,7 @@ def process_plist(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + "plists/"
             + artefact.split("/")[-1]
             + ".json",
