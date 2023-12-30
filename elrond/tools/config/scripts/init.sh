@@ -1,7 +1,4 @@
 #!/bin/bash
-sleep 1
-clear
-printf "\n  -> Running initialization script for elrond...\n\n"
 # downloading additional repo files
 /opt/elrond/elrond/tools/config/scripts/./repo.sh
 # installing vmware_tools
@@ -21,7 +18,6 @@ wget -q "https://www.clamav.net/downloads/production/clamav-0.105.1-2.linux.x86_
 sudo dpkg -i clamav-0.105.1-2.linux.x86_64.deb
 sudo apt update
 sudo apt install mlocate net-tools build-essential qemu apt-transport-https software-properties-common systemd gnupg xz-utils powershell code sqlite3 mdbtools yara clamav clamav-daemon john gparted dos2unix -y --fix-missing
-
 sudo rm -rf packages-microsoft-prod.deb
 sudo systemctl stop clamav-freshclam
 sudo freshclam
