@@ -39,7 +39,7 @@ def select_artefacts_to_process(img, process_list, artefacts_list, processed_art
                         or f.endswith("-ms")
                         or f.endswith(".pf")
                         or f.endswith(".etl")
-                        or f.endswith(".OBJECTS.DATA")
+                        or f.endswith("OBJECTS.DATA")
                         or f.endswith(".mdb")
                         or f.endswith(".db")
                         or f.endswith(".bcf")
@@ -187,6 +187,7 @@ def select_pre_process_artefacts(
                     volatility,
                     d,
                     stage,
+                    imgs,
                     img,
                     vssimage,
                     artefact,
@@ -208,6 +209,7 @@ def select_pre_process_artefacts(
                     volatility,
                     d,
                     stage,
+                    imgs,
                     img,
                     vssimage,
                     artefact,
@@ -228,6 +230,7 @@ def select_pre_process_artefacts(
                     volatility,
                     d,
                     stage,
+                    imgs,
                     img,
                     vssimage,
                     artefact,
@@ -248,6 +251,7 @@ def select_pre_process_artefacts(
                     volatility,
                     d,
                     stage,
+                    imgs,
                     img,
                     vssimage,
                     artefact,
@@ -268,6 +272,7 @@ def select_pre_process_artefacts(
                     volatility,
                     d,
                     stage,
+                    imgs,
                     img,
                     vssimage,
                     artefact,
@@ -288,6 +293,7 @@ def select_pre_process_artefacts(
                     volatility,
                     d,
                     stage,
+                    imgs,
                     img,
                     vssimage,
                     artefact,
@@ -308,6 +314,7 @@ def select_pre_process_artefacts(
                     volatility,
                     d,
                     stage,
+                    imgs,
                     img,
                     vssimage,
                     artefact,
@@ -328,6 +335,7 @@ def select_pre_process_artefacts(
                     volatility,
                     d,
                     stage,
+                    imgs,
                     img,
                     vssimage,
                     artefact,
@@ -348,6 +356,7 @@ def select_pre_process_artefacts(
                     volatility,
                     d,
                     stage,
+                    imgs,
                     img,
                     vssimage,
                     artefact,
@@ -368,6 +377,7 @@ def select_pre_process_artefacts(
                     volatility,
                     d,
                     stage,
+                    imgs,
                     img,
                     vssimage,
                     artefact,
@@ -402,6 +412,7 @@ def select_pre_process_artefacts(
                         volatility,
                         d,
                         stage,
+                        imgs,
                         img,
                         vssimage,
                         "/",
