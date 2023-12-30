@@ -4,29 +4,12 @@ clear
 printf "\n  -> Downloading python libraries...\n\n"
 # installing python libraries
 python3 -m pip install --upgrade pip
-python3 -m pip install requests pandas openpyxl usnparser
+python3 -m pip install requests pandas openpyxl
 sudo python3 -m pip install --upgrade pip
-sudo python3 -m pip install requests pandas openpyxl usnparser
+sudo python3 -m pip install requests pandas openpyxl
 # installing additional github tools
 cd /opt/elrond/elrond/tools/
 sudo git clone https://github.com/PoorBillionaire/USN-Journal-Parser.git
-
-#sudo wget -q https://github.com/libyal/libscca/releases/download/20231203/libscca-alpha-20231203.tar.gz
-#sudo tar xfv libscca-alpha-20231203.tar.gz
-#cd libscca-20231203
-#sudo ./configure --enable-python
-#sudo make
-#sudo ldconfig
-#sudo git clone https://github.com/libyal/libscca.git
-#cd /opt/elrond/elrond/tools/libscca
-#sudo ./synclibs.sh
-#./autogen.sh
-
-#python setup.py build
-#sudo python setup.py install
-#cd ..
-#sudo git clone https://github.com/bromiley/tools.git win10_pf
-
 sudo git clone https://github.com/ezaspy/KStrike.git
 sudo git clone https://github.com/ezaspy/WMI_Forensics
 sudo git clone https://github.com/ezaspy/etl-parser
