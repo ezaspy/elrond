@@ -17,13 +17,15 @@ from rivendell.process.windows import process_jumplists
 from rivendell.process.windows import process_mft
 from rivendell.process.windows import process_outlook
 from rivendell.process.windows import process_pagefile
+from rivendell.process.windows import process_prefetch
 from rivendell.process.windows import (
     process_registry_system,
 )
 from rivendell.process.windows import process_registry_profile
 from rivendell.process.windows import process_shimcache
-from rivendell.process.windows import process_usb
 from rivendell.process.windows import process_ual
+from rivendell.process.windows import process_usb
+from rivendell.process.windows import process_usn
 from rivendell.process.windows import process_wbem
 from rivendell.process.windows import process_wmi
 
@@ -34,9 +36,10 @@ def process_artefacts(
     volatility,
     d,
     stage,
+    imgs,
     img,
     vssimage,
-    vssartefact,
+    vss_path_insert,
     artefact,
     vssmem,
     volchoice,
@@ -52,7 +55,7 @@ def process_artefacts(
                 vssimage,
                 output_directory,
                 img,
-                vssartefact,
+                vss_path_insert,
                 stage,
                 artefact,
                 jsondict,
@@ -60,17 +63,33 @@ def process_artefacts(
             )
         elif artefact.endswith("$MFT"):
             process_mft(
-                verbosity, vssimage, output_directory, img, artefact, vssartefact, stage
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                artefact,
+                vss_path_insert,
+                stage,
+            )
+        elif artefact.endswith("$UsnJrnl"):
+            process_usn(
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                artefact,
+                vss_path_insert,
+                stage,
             )
         elif artefact.endswith(".SYSTEM") and not os.path.exists(
             output_directory
             + img.split("::")[0]
             + "/artefacts/cooked"
-            + vssartefact
+            + vss_path_insert
             + "ShimCache.csv"
         ):
             process_shimcache(
-                verbosity, vssimage, output_directory, img, vssartefact, stage
+                verbosity, vssimage, output_directory, img, vss_path_insert, stage
             )
         elif (
             artefact.endswith("SAM")
@@ -84,7 +103,7 @@ def process_artefacts(
                 vssimage,
                 output_directory,
                 img,
-                vssartefact,
+                vss_path_insert,
                 stage,
                 artefact,
                 jsondict,
@@ -96,7 +115,7 @@ def process_artefacts(
                 vssimage,
                 output_directory,
                 img,
-                vssartefact,
+                vss_path_insert,
                 stage,
                 artefact,
                 jsondict,
@@ -108,11 +127,21 @@ def process_artefacts(
                 vssimage,
                 output_directory,
                 img,
-                vssartefact,
+                vss_path_insert,
                 stage,
                 artefact,
                 jsondict,
                 jsonlist,
+            )
+        elif "/prefetch" in artefact:
+            process_prefetch(
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vss_path_insert,
+                stage,
+                re.findall(r"'([^']+)', '" + re.escape(img), str(imgs))[0],
             )
         elif artefact.endswith("_ActivitiesCache.db"):
             process_clipboard(
@@ -120,7 +149,7 @@ def process_artefacts(
                 vssimage,
                 output_directory,
                 img,
-                vssartefact,
+                vss_path_insert,
                 stage,
                 artefact,
                 jsondict,
@@ -128,11 +157,25 @@ def process_artefacts(
             )
         elif artefact.endswith(".etl"):
             process_wmi(
-                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vss_path_insert,
+                stage,
+                artefact,
+                jsondict,
+                jsonlist,
             )
         elif artefact.endswith("OBJECTS.DATA"):
             process_wbem(
-                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vss_path_insert,
+                stage,
+                artefact,
             )
         elif (
             artefact.endswith("Current.mdb")
@@ -140,11 +183,23 @@ def process_artefacts(
             or artefact.endswith("}}.mdb")
         ):
             process_ual(
-                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vss_path_insert,
+                stage,
+                artefact,
             )
         elif artefact.endswith("-ms") and "+" in artefact:
             process_jumplists(
-                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vss_path_insert,
+                stage,
+                artefact,
             )
         elif artefact.endswith(".pst"):
             process_outlook(
@@ -152,17 +207,29 @@ def process_artefacts(
                 vssimage,
                 output_directory,
                 img,
-                vssartefact,
+                vss_path_insert,
                 stage,
                 artefact,
             )
         elif artefact.endswith(".plist"):
             process_plist(
-                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vss_path_insert,
+                stage,
+                artefact,
             )
         elif artefact.endswith("bash_history"):
             process_bash_history(
-                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vss_path_insert,
+                stage,
+                artefact,
             )
         elif artefact.endswith(".emlx"):
             process_email(
@@ -170,7 +237,7 @@ def process_artefacts(
                 vssimage,
                 output_directory,
                 img,
-                vssartefact,
+                vss_path_insert,
                 stage,
                 artefact,
                 jsondict,
@@ -178,7 +245,13 @@ def process_artefacts(
             )
         elif artefact.endswith("/group"):
             process_group(
-                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vss_path_insert,
+                stage,
+                artefact,
             )
         elif (
             artefact.endswith("log") or artefact.endswith("log.1")
@@ -188,7 +261,7 @@ def process_artefacts(
                 vssimage,
                 output_directory,
                 img,
-                vssartefact,
+                vss_path_insert,
                 stage,
                 artefact,
                 jsondict,
@@ -205,7 +278,7 @@ def process_artefacts(
                 vssimage,
                 output_directory,
                 img,
-                vssartefact,
+                vss_path_insert,
                 stage,
                 artefact,
                 jsondict,
@@ -213,7 +286,13 @@ def process_artefacts(
             )
         elif artefact.endswith("index.dat") and os.stat(artefact).st_size > 32768:
             process_browser_index(
-                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vss_path_insert,
+                stage,
+                artefact,
             )
         elif (
             (
@@ -224,14 +303,20 @@ def process_artefacts(
             or ("places.sqlite" in artefact and "firefox" in artefact)
         ):
             process_browser(
-                verbosity, vssimage, output_directory, img, vssartefact, stage, artefact
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vss_path_insert,
+                stage,
+                artefact,
             )
         elif artefact.endswith("hiberfil.sys") and volatility:
             if not os.path.exists(
                 output_directory
                 + img.split("::")[0]
                 + "/artefacts/cooked"
-                + vssartefact
+                + vss_path_insert
                 + "memory"
             ):
                 process_hiberfil(
@@ -240,7 +325,7 @@ def process_artefacts(
                     vssimage,
                     output_directory,
                     img,
-                    vssartefact,
+                    vss_path_insert,
                     stage,
                     artefact,
                     volchoice,
@@ -254,7 +339,7 @@ def process_artefacts(
             artefact.endswith("pagefile.sys") or artefact.endswith("swapfile.sys")
         ) and volatility:
             process_pagefile(
-                verbosity, vssimage, output_directory, img, vssartefact, artefact
+                verbosity, vssimage, output_directory, img, vss_path_insert, artefact
             )
         elif artefact.endswith("LastAccessTimes.txt"):
             with open(artefact) as last_access_times:
@@ -340,6 +425,7 @@ def determine_vss_image(
     volatility,
     d,
     stage,
+    imgs,
     img,
     vssimage,
     artefact,
@@ -359,6 +445,7 @@ def determine_vss_image(
             volatility,
             d,
             stage,
+            imgs,
             img,
             vssimage,
             "/"
@@ -381,6 +468,7 @@ def determine_vss_image(
             volatility,
             d,
             stage,
+            imgs,
             img,
             vssimage,
             "/",
