@@ -819,8 +819,6 @@ def collect_files(
                 )
             else:
                 pass
-        else:
-            pass
     else:
         compare_include_exclude(
             output_directory,

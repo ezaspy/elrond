@@ -16,8 +16,6 @@ def archive_artefacts(verbosity, output_directory):
     for each in os.listdir(output_directory):
         if os.path.exists(output_directory + each + "/artefacts"):
             alist.append(output_directory + each)
-        else:
-            pass
     for zeach in alist:
         print("    Archiving artefacts for {}...".format(zeach.split("/")[-1]))
         entry, prnt = "{},{},{},commenced\n".format(
@@ -64,8 +62,6 @@ def delete_artefacts(verbosity, output_directory):
     for each in os.listdir(output_directory):
         if os.path.exists(output_directory + each + "/artefacts"):
             alist.append(output_directory + each)
-        else:
-            pass
     for deach in alist:
         print("    Deleting artefacts for {}...".format(deach.split("/")[-1]))
         entry, prnt = "{},{},{},commenced\n".format(

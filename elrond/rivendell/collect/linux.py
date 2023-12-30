@@ -52,8 +52,6 @@ def collect_linux_artefacts(
             except:
                 pass
 
-        else:
-            pass
         if item == mnt + "/etc/hosts":
             if verbosity != "":
                 print("     Collecting '/etc/hosts' for {}...".format(vssimage))
@@ -74,8 +72,6 @@ def collect_linux_artefacts(
             except:
                 pass
 
-        else:
-            pass
         if item == mnt + "/etc/crontab":
             if verbosity != "":
                 print("     Collecting crontab for {}...".format(vssimage))
@@ -99,8 +95,6 @@ def collect_linux_artefacts(
             except:
                 pass
 
-        else:
-            pass
     elif len(os.listdir(item)) > 0:  # directories
         if (
             item == mnt + "/etc/security"
@@ -158,8 +152,6 @@ def collect_linux_artefacts(
                 else:
                     pass
 
-        else:
-            pass
         if item == mnt + "/var/log":
             try:
                 os.stat(dest + "logs/")
@@ -205,8 +197,6 @@ def collect_linux_artefacts(
                 except:
                     pass
 
-        else:
-            pass
         if item == mnt + "/usr/lib/systemd/user":
             try:
                 os.stat(dest + "services/")
@@ -262,8 +252,6 @@ def collect_linux_artefacts(
                 else:
                     pass
 
-        else:
-            pass
         if item == mnt + "/var/cache/cups" or item == mnt + "/var/cups":
             try:
                 os.stat(dest + "jobs/")
@@ -315,8 +303,6 @@ def collect_linux_artefacts(
                 else:
                     pass
 
-        else:
-            pass
         if item == mnt + "/tmp":
             try:
                 os.stat(dest + "tmp/")
@@ -393,8 +379,6 @@ def collect_linux_artefacts(
                     except:
                         pass
 
-        else:
-            pass
         if item == mnt + "/root":
             if os.path.exists(item + "/.bash_history"):
                 if verbosity != "":
@@ -492,8 +476,6 @@ def collect_linux_artefacts(
 
             else:
                 pass
-        else:
-            pass
         if item == mnt + "/home":
             dest = linux_users(
                 dest,
@@ -507,8 +489,6 @@ def collect_linux_artefacts(
                 vssimage,
                 vsstext,
             )
-        else:
-            pass
         if volatility and item == mnt + "/":
             item_list = os.listdir(item)
             if len(item_list) > 0:
@@ -552,7 +532,5 @@ def collect_linux_artefacts(
 
             else:
                 pass
-        else:
-            pass
     else:
         pass

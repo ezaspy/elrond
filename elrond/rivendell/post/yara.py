@@ -66,8 +66,6 @@ def invoke_yara(verbosity, output_directory, img, yara_file, binary_dir):
     if len(yara_results) > 0:
         if not os.path.exists(output_directory + img.split("::")[0] + "/analysis"):
             os.mkdir(output_directory + img.split("::")[0] + "/analysis")
-        else:
-            pass
         with open(
             output_directory + img.split("::")[0] + "/analysis/yara.csv", "w"
         ) as yara_out_file:

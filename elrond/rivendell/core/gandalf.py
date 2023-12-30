@@ -55,8 +55,6 @@ def assess_gandalf(
             else:
                 pw_7z = getpass.getpass("    Incorrect password; please try again: ")
             out_7z = extract7z(output_directory, verbosity, groot, gfile, pw_7z, "1")
-        else:
-            pass
 
     if not d.endswith("/"):
         d = d + "/"

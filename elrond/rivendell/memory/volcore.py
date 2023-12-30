@@ -309,16 +309,10 @@ def dump_nix_ziphex(d, profileselect, profile, ziphexdump):
                 )
             else:
                 pass
-        else:
-            pass
         if os.path.exists(d + "/..profile.hex"):
             os.remove(d + "/..profile.hex")
-        else:
-            pass
         if os.path.exists(d + "/.profile.zip"):
             os.remove(d + "/.profile.zip")
-        else:
-            pass
     else:
         pass
 
@@ -425,8 +419,6 @@ def process_custom_profile(imported, symbolorprofile, customprofileinsert):
             customsymbolorprofile = process_custom_profile(
                 imported, symbolorprofile, ":"
             )
-        else:
-            pass
     else:
         pass
     return customsymbolorprofile

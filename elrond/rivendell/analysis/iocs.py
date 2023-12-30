@@ -328,6 +328,4 @@ def compare_iocs(
                         pass
                 else:
                     pass
-        else:
-            pass
     print("      IOC extraction completed for {}.\n".format(vssimage))

@@ -81,8 +81,6 @@ def write_keywords(
                 encoding=encoding_choice,
             ) as keyword_matches_results_file:
                 keyword_matches_results_file.write(kw_match_entry)
-        else:
-            pass
         keyword_line_number += 1
 
 
@@ -221,8 +219,6 @@ def prepare_keywords(verbosity, output_directory, auto, imgs, flags, keywords, s
                     img.split("::")[0]
                 )
             )
-        else:
-            pass
         if auto or yes_kw != "n":
             print(
                 "\n\n  -> \033[1;36mCommencing Keyword Searching Phase...\033[1;m\n  ----------------------------------------"
@@ -288,8 +284,6 @@ def prepare_keywords(verbosity, output_directory, auto, imgs, flags, keywords, s
                 "  ----------------------------------------\n  -> Completed Keyword Searching Phase.\n"
             )
             time.sleep(1)
-        else:
-            pass
     else:
         for each in imgs:
             if os.path.exists(

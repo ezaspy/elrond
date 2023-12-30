@@ -224,8 +224,6 @@ def analyse_artefacts(
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
         if not os.path.exists(anysd):
             os.mkdir(anysd)
-        else:
-            pass
         with open(anysd + "/analysis.csv", "a") as analysisfile:
             analysisfile.write(
                 "LastWriteTime,hostname,Filename,analysis_type,analysis_value\n"
@@ -496,8 +494,6 @@ def analyse_artefacts(
                     img.split("::")[0]
                 )
             )
-        else:
-            pass
         print(
             "     Assessing readable files to extract IOCs from, for '{}'...".format(
                 img.split("::")[0]
@@ -540,8 +536,6 @@ def analyse_artefacts(
         iocfiles = list(set(iocfilelist))
         if not os.path.exists(anysd):
             os.mkdir(anysd)
-        else:
-            pass
         if not os.path.exists(
             output_directory + img.split("::")[0] + "/analysis/iocs.csv"
         ):
@@ -552,8 +546,6 @@ def analyse_artefacts(
                 ioccsv.write(
                     "CreationTime,LastAccessTime,LastWriteTime,Filename,ioc,indicator_type,line_number,resolvable\n"
                 )
-        else:
-            pass
         compare_iocs(
             output_directory,
             verbosity,

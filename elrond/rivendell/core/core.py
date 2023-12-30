@@ -111,12 +111,8 @@ def collect_process_keyword_analysis_timeline(
                 memtimeline,
                 collectfiles,
             )
-        else:
-            pass
         if os.path.exists("/opt/elrond/elrond/tools/.profiles"):
             os.remove("/opt/elrond/elrond/tools/.profiles")
-        else:
-            pass
     else:
         pass
     if keywords:
@@ -279,7 +275,5 @@ def collect_process_keyword_analysis_timeline(
                 "  ----------------------------------------\n  -> Completed Timelining Phase.\n"
             )
             time.sleep(1)
-        else:
-            pass
     else:
         pass

@@ -343,8 +343,6 @@ def prepare_elastic_ndjson(output_directory, img, case, source_location):
                     + "/elastic/documents{}".format(vss_path_insert)
                 )
             )
-        else:
-            pass
     else:
         vss_path_insert = ""
     ndjsonfile = os.path.join(
@@ -372,8 +370,6 @@ def ingest_elastic_data(
     for _, img in allimgs.items():
         if img not in str(imgs_to_ingest):
             imgs_to_ingest.append(img)
-        else:
-            pass
         if not os.path.exists(output_directory + img.split("::")[0] + "/elastic/"):
             os.makedirs(
                 os.path.join(output_directory + img.split("::")[0] + "/elastic")
@@ -383,8 +379,6 @@ def ingest_elastic_data(
                     output_directory + img.split("::")[0] + "/elastic/documents/"
                 )
             )
-        else:
-            pass
     # creating index based on case name in elasticsearch
     make_index = shlex.split(
         'curl -X PUT "localhost:9200/{}?pretty" -H "Content-Type: application/json" -d\'{{"mappings": {{"properties": {{"@timestamp": {{"type": "date", "format": "YYYY-MM-DD HH:mm:ss.SSSSSS"}}}}}}}}\''.format(
@@ -472,8 +466,6 @@ def ingest_elastic_data(
                     )
                 else:
                     pass
-        else:
-            pass
         for each_dir in directories_with_data:
             if os.path.exists(each_dir):
                 split_large_csv_files(each_dir)

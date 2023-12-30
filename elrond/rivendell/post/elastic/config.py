@@ -174,8 +174,6 @@ def configure_elastic_stack(verbosity, output_directory, case, stage, allimgs):
                 allocate = "1024m"
             else:
                 allocate = "2048m"
-        else:
-            pass
         with open(
             "/usr/lib/systemd/system/elasticsearch.service", "w"
         ) as elastic_service:

@@ -53,8 +53,6 @@ def collect_mac_artefacts(
             except:
                 pass
 
-        else:
-            pass
         if item == mnt + "/etc/hosts":
             if verbosity != "":
                 print("     Collecting '/etc/hosts' for {}...".format(vssimage))
@@ -75,8 +73,6 @@ def collect_mac_artefacts(
             except:
                 pass
 
-        else:
-            pass
         if item == mnt + "/etc/crontab":
             if verbosity != "":
                 print("     Collecting crontab for {}...".format(vssimage))
@@ -100,8 +96,6 @@ def collect_mac_artefacts(
             except:
                 pass
 
-        else:
-            pass
     elif len(os.listdir(item)) > 0:  # directories
         if (
             item == mnt + "/Library/Logs"
@@ -163,8 +157,6 @@ def collect_mac_artefacts(
                 except:
                     pass
 
-        else:
-            pass
         if (
             item == mnt + "/Library/Preferences"
             or item == mnt + "/Library/LaunchAgents"
@@ -242,8 +234,6 @@ def collect_mac_artefacts(
                 else:
                     pass
 
-        else:
-            pass
         if item == mnt + "/.Trashes":
             dest = dest + "trash/"
             try:
@@ -282,8 +272,6 @@ def collect_mac_artefacts(
                 except:
                     pass
 
-        else:
-            pass
         if item == mnt + "/tmp":
             try:
                 os.stat(dest + "tmp/")
@@ -360,8 +348,6 @@ def collect_mac_artefacts(
                     except:
                         pass
 
-        else:
-            pass
         if item == mnt + "/Users/":
             dest = mac_users(
                 dest,
@@ -376,8 +362,6 @@ def collect_mac_artefacts(
                 vssimage,
                 vsstext,
             )
-        else:
-            pass
         if volatility and item == mnt + "/":
             item_list = os.listdir(item)
             if len(item_list) > 0:
@@ -421,7 +405,5 @@ def collect_mac_artefacts(
 
             else:
                 pass
-        else:
-            pass
     else:
         pass

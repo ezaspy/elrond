@@ -76,8 +76,6 @@ def collect_artefacts(
                     + "_"
                     + everyshdw.split("||")[1].split("/")[-1]
                 )
-        else:
-            pass
         imgs = OrderedDict(sorted(imgs.items(), key=lambda x: x[1]))
         if nsrl:
             if not os.path.exists("/opt/elrond/elrond/tools/rds_modernm/NSRLFile.txt"):
@@ -93,8 +91,6 @@ def collect_artefacts(
                     pass
             else:
                 pass
-        else:
-            pass
         if not superquick and not quick and not metacollected:
             print(
                 "\n\n  -> \033[1;36mCommencing Metadata Phase...\033[1;m\n  ----------------------------------------"
@@ -281,14 +277,10 @@ def collect_artefacts(
                 "  ----------------------------------------\n  -> Completed Metadata Phase.\n"
             )
             time.sleep(1)
-        else:
-            pass
         if keywords:
             prepare_keywords(
                 verbosity, output_directory, auto, imgs, flags, keywords, stage
             )
-        else:
-            pass
     imgs, stage = (
         OrderedDict(sorted(imgs.items(), key=lambda x: x[1])),
         "collecting",
@@ -539,8 +531,6 @@ def collect_artefacts(
                     vssimage
                 )
             )
-        else:
-            pass
         for tyr, tyd, _ in os.walk(img + "/artefacts/"):
             for td in tyd:
                 if len(os.listdir(tyr + "/" + td)) == 0:

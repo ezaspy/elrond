@@ -592,5 +592,3 @@ def linux_users(
                     pass
             else:
                 pass
-        else:
-            pass

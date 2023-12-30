@@ -377,8 +377,6 @@ def select_files(
                     write_audit_log_entry(verbosity, output_directory, entry, prnt)
             else:
                 pass
-        else:
-            pass
         if "U" in file_selection or "A" in file_selection:
             carve_files(
                 output_directory,
@@ -388,8 +386,6 @@ def select_files(
                 img,
                 vssimage,
             )
-        else:
-            pass
         print(
             "       \033[1;33mFinished {} files from {}\033[1;m\n".format(
                 stage.replace(",", " &"), vssimage

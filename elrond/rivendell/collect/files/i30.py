@@ -55,8 +55,6 @@ def extract_i30(
             print(
                 "     Extracting '$I30' records from '{}'...".format(img.split("::")[0])
             )
-        else:
-            pass
         for image_root, _, image_files in os.walk(d):
             for image_file in image_files:
                 if (

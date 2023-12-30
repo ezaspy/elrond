@@ -249,8 +249,6 @@ def build_app_elrond(case, postpath):
                 )
             create_static_pages(sd)
             create_xmls(sd)
-        else:
-            pass
     for sd in [
         "/" + postpath + "splunk/etc/apps/elrond/",
         "/" + postpath + "splunk/etc/apps/elrond/appserver/",
@@ -266,6 +264,4 @@ def build_app_elrond(case, postpath):
     ]:
         if os.path.exists(sd + ".DS_Store"):
             os.remove(sd + ".DS_Store")
-        else:
-            pass
     create_cyberchef("/var/www/html/cyberchef/")

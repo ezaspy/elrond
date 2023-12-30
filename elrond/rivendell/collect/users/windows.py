@@ -789,8 +789,6 @@ def windows_users(
                     pass
             else:
                 pass
-        else:
-            pass
     if userprofiles:
         for each in item_list:
             try:

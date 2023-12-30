@@ -137,8 +137,6 @@ def process_memory(
                         )
             else:
                 pass
-        else:
-            pass
     else:
         if artefact.endswith("hiberfil.sys"):
             profile, vssmem = identify_profile(
@@ -156,14 +154,12 @@ def process_memory(
                 memext,
                 memtimeline,
             )
-        else:
-            pass
         vol3oscheck = vol3_check_os(artefact, memext, "windows.info.Info")
         if (
-            ("Windows" in vol3oscheck
+            "Windows" in vol3oscheck
             and "windows" in vol3oscheck
-            and "ntkrnl" in vol3oscheck) or (vssmem.startswith("Win"))
-        ):
+            and "ntkrnl" in vol3oscheck
+        ) or (vssmem.startswith("Win")):
             profile, profileplatform = "Windows", "Windows"
         else:
             profile, ziphexdump1, ziphexdump2 = "macOS", macOS1(), macOS2()
@@ -202,16 +198,12 @@ def process_memory(
             shutil.rmtree(
                 "/usr/local/lib/python3.8/dist-packages/volatility3/volatility3/symbols/__pycache__"
             )
-        else:
-            pass
         if os.path.exists(
             "/usr/local/lib/python3.8/dist-packages/volatility3/volatility3/symbols/__MACOSX"
         ):
             shutil.rmtree(
                 "/usr/local/lib/python3.8/dist-packages/volatility3/volatility3/symbols/__MACOSX"
             )
-        else:
-            pass
         if stage != "processing":
             if profile != "":
                 entry, prnt = "{},identification,{},{} ({})\n".format(
@@ -244,8 +236,6 @@ def process_memory(
                     )
                 )
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
-        else:
-            pass
         if profile != "" and profileplatform != "":
             assess_volatility_choice(
                 verbosity,
@@ -259,6 +249,4 @@ def process_memory(
                 vssimage,
                 memtimeline,
             )
-        else:
-            pass
     return profile, vssmem

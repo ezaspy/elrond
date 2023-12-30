@@ -14,8 +14,6 @@ def check_existence(item, dest, occurance):
         split_dest = dest.split("/")
         split_dest.pop()
         dest = check_existence(item, "/".join(split_dest), str(occurance))
-    else:
-        pass
     return dest
 
 
@@ -48,8 +46,6 @@ def collect_windows_artefacts(
                         item.split("/")[-1], vssimage
                     )
                 )
-            else:
-                pass
             entry, prnt = "{},{},{},'{}'\n".format(
                 datetime.now().isoformat(),
                 img.split("::")[0],
@@ -65,8 +61,6 @@ def collect_windows_artefacts(
             write_audit_log_entry(verbosity, output_directory, entry, prnt)
             if os.path.exists(os.path.join(dest, item.split("/")[-1])):
                 dest = check_existence(item, dest, 1)
-            else:
-                pass
             try:
                 shutil.copy2(item, dest)
             except:
@@ -74,8 +68,6 @@ def collect_windows_artefacts(
         if item == mnt + "/Windows/inf/setupapi.dev.log":
             if verbosity != "":
                 print("     Collecting 'setupapi.dev.log' for {}...".format(vssimage))
-            else:
-                pass
             (
                 entry,
                 prnt,
@@ -92,8 +84,6 @@ def collect_windows_artefacts(
             write_audit_log_entry(verbosity, output_directory, entry, prnt)
             if os.path.exists(os.path.join(dest, item.split("/")[-1])):
                 dest = check_existence(item, dest, 1)
-            else:
-                pass
             try:
                 shutil.copy2(item, dest)
             except:
@@ -108,8 +98,6 @@ def collect_windows_artefacts(
                         item.split("/")[-1], vssimage
                     )
                 )
-            else:
-                pass
             entry, prnt = "{},{},{},'{}'\n".format(
                 datetime.now().isoformat(),
                 img.split("::")[0],
@@ -125,8 +113,6 @@ def collect_windows_artefacts(
             write_audit_log_entry(verbosity, output_directory, entry, prnt)
             if os.path.exists(os.path.join(dest, item.split("/")[-1])):
                 dest = check_existence(item, dest, 1)
-            else:
-                pass
             try:
                 shutil.copy2(item, dest)
                 if "vss" in mnt:
@@ -152,8 +138,6 @@ def collect_windows_artefacts(
                 print(
                     "     Collecting system registry hives for {}...".format(vssimage)
                 )
-            else:
-                pass
             item_list = os.listdir(item)
             for each in item_list:
                 if (
@@ -210,10 +194,6 @@ def collect_windows_artefacts(
                         shutil.copy2(item + each, dest)
                     except:
                         pass
-                else:
-                    pass
-        else:
-            pass
         if item == mnt + "/Windows/System32/winevt/Logs/":
             item_list, dest = (
                 os.listdir(item),
@@ -228,8 +208,6 @@ def collect_windows_artefacts(
                     print(
                         "     Collecting Windows Event logs for {}...".format(vssimage)
                     )
-                else:
-                    pass
                 for each in item_list:
                     try:
                         (
@@ -264,11 +242,6 @@ def collect_windows_artefacts(
                         shutil.copy2(item + each, dest)
                     except:
                         pass
-
-            else:
-                pass
-        else:
-            pass
         if (
             item == mnt + "/Windows/System32/wbem/Repository/"
             or item == mnt + "/Windows/System32/wbem/Logs/"
@@ -288,8 +261,6 @@ def collect_windows_artefacts(
                             vssimage
                         )
                     )
-                else:
-                    pass
                 for each in item_list:
                     try:
                         (
@@ -324,11 +295,6 @@ def collect_windows_artefacts(
                         shutil.copy2(item + each, dest)
                     except:
                         pass
-
-            else:
-                pass
-        else:
-            pass
         if item == mnt + "/Windows/System32/LogFiles/WMI/":
             item_list, dest = (
                 os.listdir(item),
@@ -345,8 +311,6 @@ def collect_windows_artefacts(
                             vssimage
                         )
                     )
-                else:
-                    pass
                 for each in item_list:
                     try:
                         (
@@ -473,13 +437,6 @@ def collect_windows_artefacts(
                                 pass
                         else:
                             pass
-                    else:
-                        pass
-
-            else:
-                pass
-        else:
-            pass
         if item == mnt + "/Windows/System32/LogFiles/Sum/":
             item_list, dest = (
                 os.listdir(item),
@@ -496,8 +453,6 @@ def collect_windows_artefacts(
                             vssimage
                         )
                     )
-                else:
-                    pass
                 for each in item_list:
                     if each.endswith(".mdb"):
                         try:
@@ -533,13 +488,6 @@ def collect_windows_artefacts(
                             shutil.copy2(item + each, dest)
                         except:
                             pass
-                    else:
-                        pass
-
-            else:
-                pass
-        else:
-            pass
         if item == mnt + "/$Recycle.Bin":
             item_list, dest = (
                 os.listdir(item),
@@ -547,8 +495,6 @@ def collect_windows_artefacts(
             )
             if verbosity != "":
                 print("     Collecting deleted files for {}...".format(vssimage))
-            else:
-                pass
             try:
                 os.makedirs(dest)
             except:
@@ -575,9 +521,6 @@ def collect_windows_artefacts(
                     img.split("::")[0],
                 )
                 write_audit_log_entry(verbosity, output_directory, entry, prnt)
-
-        else:
-            pass
         if item == mnt + "/Windows/Prefetch/":
             item_list, dest = (
                 os.listdir(item),
@@ -590,8 +533,6 @@ def collect_windows_artefacts(
             if len(item_list) > 0:
                 if verbosity != "":
                     print("     Collecting prefetch files for {}...".format(vssimage))
-                else:
-                    pass
                 for each in item_list:
                     try:
                         (
@@ -626,11 +567,6 @@ def collect_windows_artefacts(
                         shutil.copy2(item + each, dest)
                     except:
                         pass
-
-            else:
-                pass
-        else:
-            pass
         if item == mnt + "/Users/":
             windows_users(
                 dest,
@@ -644,8 +580,6 @@ def collect_windows_artefacts(
                 vssimage,
                 vsstext,
             )
-        else:
-            pass
         if volatility and item == mnt + "/":
             item_list = os.listdir(item)
             if len(item_list) > 0:
@@ -656,8 +590,6 @@ def collect_windows_artefacts(
                     or "MEMORY.DMP" in str(os.listdir(mnt))
                 ) and verbosity != "":
                     print("     Collecting memory files...")
-                else:
-                    pass
                 for each in item_list:
                     if (
                         item + each == mnt + "/hiberfil.sys"
@@ -688,12 +620,3 @@ def collect_windows_artefacts(
                                 prnt,
                             )
                             shutil.copy2(item + each, dest + each)
-                    else:
-                        pass
-
-            else:
-                pass
-        else:
-            pass
-    else:
-        pass

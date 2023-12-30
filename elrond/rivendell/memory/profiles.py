@@ -86,8 +86,6 @@ def select_volatility_profile(finalprofiles):
                 profile = re.findall(r"11\)\ ([\S]+)", finalprofiles)[0]
             else:
                 profile = re.findall(r"12\)\ ([\S]+)", finalprofiles)[0]
-        else:
-            pass
     else:
         print("\tInvalid selection, please select a valid profile:")
         profile = select_volatility_profile(finalprofiles)
@@ -452,8 +450,6 @@ def check_profile(
                     temp_profiles.write(img.split("::")[0] + ">>" + profile + "\n")
                 else:
                     pass
-        else:
-            pass
     return profile
 
 
@@ -574,8 +570,6 @@ def identify_profile(
                     artefact.split("/")[-1]
                 )
             )
-        else:
-            pass
         assess_volatility_choice(
             verbosity,
             output_directory,

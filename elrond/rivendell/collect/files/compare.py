@@ -10,8 +10,6 @@ def multiple_files(source, destination, increment):
     def copy_files(source, destination, increment):
         if os.path.exists(source):
             shutil.copy2(source, destination + "." + str(increment))
-        else:
-            pass
 
     if os.path.exists(destination + "." + str(increment)):
         increment += 1

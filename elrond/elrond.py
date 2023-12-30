@@ -352,10 +352,10 @@ system_artefacts = [
     "/$LogFile",
     "/$Recycle.Bin",
     "/Users/",
-    "/Windows/Prefetch/",
     "/Windows/AppCompat/Programs/RecentFileCache.bcf",
     "/Windows/AppCompat/Programs/Amcache.hve",
     "/Windows/inf/setupapi.dev.log",
+    "/Windows/Prefetch/",
     "/Windows/System32/config/",
     "/Windows/System32/LogFiles/Sum/",
     "/Windows/System32/LogFiles/WMI/",
@@ -470,8 +470,6 @@ if __name__ == "__main__":
         timeline = True
         memorytimeline = True
         archive = True
-    else:
-        pass
     if brisk:
         analysis = True
         auto = True
@@ -484,8 +482,6 @@ if __name__ == "__main__":
         quick = True
         userprofiles = True
         clamav = True
-    else:
-        pass
     veryverbose = True
     verbose = True
     main(

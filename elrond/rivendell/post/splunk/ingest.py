@@ -17,8 +17,6 @@ def ingest_splunk_data(
     for _, img in allimgs.items():
         if img not in str(imgs_to_index):
             imgs_to_index.append(img)
-        else:
-            pass
     for img in imgs_to_index:
         if "vss" in img.split("::")[1]:
             vssimage, vsstext = "'" + img.split("::")[0] + "' (" + img.split("::")[
@@ -374,8 +372,6 @@ def ingest_splunk_data(
                 r"/" + postpath + "splunk/etc/apps/elrond/default/tags.conf.orig.pre41",
                 r"/" + postpath + "splunk/etc/apps/elrond/default/tags.conf",
             )
-        else:
-            pass
 
         print("     Splunk indexing completed for {}".format(vssimage))
         entry, prnt = "{},{},{},completed\n".format(

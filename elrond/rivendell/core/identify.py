@@ -77,8 +77,6 @@ def identify_disk_image(verbosity, output_directory, disk_image, mount_location)
                 disk_image = disk_image + "::macOS"
             else:
                 pass
-        else:
-            pass
     else:
         pass
     return disk_image
@@ -119,8 +117,6 @@ def identify_memory_image(
                 sha256,
                 nsrl,
             )
-        else:
-            pass
         entry, prnt = (
             "LastWriteTime,elrond_host,elrond_stage,elrond_log_entry\n",
             " -> {} -> created audit log file for '{}'".format(
@@ -197,8 +193,6 @@ def identify_memory_image(
         )
         if "02processing" not in str(flags):
             flags.append("02processing")
-        else:
-            pass
         os.chdir(cwd)
     else:
         print("    OK. '{}' will not be processed.\n".format(f))

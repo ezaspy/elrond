@@ -1043,9 +1043,9 @@ def main(
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
         time.sleep(1)
-    if len(allimgs.items()) > 0:
-        print("  ----------------------------------------")
-        print()
+    print("  ----------------------------------------")
+    print()
+    if len(allimgs.items()) > 0 and (splunk or elastic or navigator):
         if splunk:
             print("    Splunk Web:           127.0.0.1:8000/en-US/app/elrond/")
         if elastic:

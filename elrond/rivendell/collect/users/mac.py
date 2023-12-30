@@ -713,5 +713,3 @@ def mac_users(
                     pass
             else:
                 pass
-        else:
-            pass

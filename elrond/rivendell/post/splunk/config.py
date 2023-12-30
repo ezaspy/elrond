@@ -127,8 +127,6 @@ def install_splunk_stack(
                 "     -> Password did not meet complexity requirements...\n       * Password must contain at least 8 printable ASCII characters\n       Splunk admin password: "
             )
             verify_splunk_password(request_password, splunk_install_path)
-        else:
-            pass
 
     subprocess.Popen(
         ["dpkg", "-i", splunk_deb_file],
@@ -210,8 +208,6 @@ def configure_splunk_stack(verbosity, output_directory, case, stage, allimgs):
         if "Unauthorized" in str(testcreds)[3:-4] and "ERROR" in str(testcreds)[3:-4]:
             print("\n     Invalid credentials. Please try again...")
             splunkuser, splunkpswd = request_splunk_creds()
-        else:
-            pass
         splunk_service(splunk_install_path, "stop")
         return splunkuser, splunkpswd
 
@@ -227,8 +223,6 @@ def configure_splunk_stack(verbosity, output_directory, case, stage, allimgs):
             and str(splunk_location) != "b''"
         ):
             splunk_install_locations.append(str(splunk_location)[2:-3])
-        else:
-            pass
     splunk_install_locations = list(set(splunk_install_locations))
     allimgs = OrderedDict(sorted(allimgs.items(), key=lambda x: x[1]))
     splunk_install_path = "opt/"
@@ -259,8 +253,6 @@ def configure_splunk_stack(verbosity, output_directory, case, stage, allimgs):
                 splunkuser, splunkpswd = request_splunk_creds()
             else:
                 pass
-        else:
-            pass
     else:
         print("    Splunk is not installed, please stand by...")
         splunkuser, splunkpswd = install_splunk_stack(
@@ -418,8 +410,6 @@ def configure_splunk_stack(verbosity, output_directory, case, stage, allimgs):
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                 ).communicate()
-        else:
-            pass
     os.chdir("/" + splunk_install_path + "splunk/etc/apps/")
     for root, dirs, files in os.walk(
         "/" + splunk_install_path + "splunk/etc/apps/elrond/"

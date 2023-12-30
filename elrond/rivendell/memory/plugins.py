@@ -214,8 +214,6 @@ def extract_memory_artefacts(
                     )
                 except:
                     pass
-        else:
-            pass
     else:  # volatility2.6
         print_extraction(
             verbosity,
@@ -565,8 +563,6 @@ def extract_memory_artefacts(
                                 pass
             else:
                 pass
-        else:
-            pass
     vssmem = profile
     if artefact.split("/")[-1] == vssimage:
         insertvssimage = " for " + vssimage
