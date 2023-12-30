@@ -17,7 +17,7 @@ sudo chmod 664 /etc/fstab
 wget -q "https://www.clamav.net/downloads/production/clamav-0.105.1-2.linux.x86_64.deb"
 sudo dpkg -i clamav-0.105.1-2.linux.x86_64.deb
 sudo apt update
-sudo apt install mlocate net-tools build-essential qemu apt-transport-https software-properties-common systemd gnupg xz-utils powershell code sqlite3 mdbtools yara clamav clamav-daemon john gparted dos2unix -y --fix-missing
+sudo apt install mlocate net-tools build-essential qemu apt-transport-https software-properties-common systemd gnupg xz-utils sqlite3 mdbtools yara clamav clamav-daemon john gparted dos2unix -y --fix-missing
 sudo rm -rf packages-microsoft-prod.deb
 sudo systemctl stop clamav-freshclam
 sudo freshclam
