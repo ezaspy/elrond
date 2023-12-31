@@ -10,7 +10,7 @@ sudo chmod +x /opt/elrond/elrond/elrond.py
 echo "export PATH=$PATH:/opt/elrond/elrond" >> /home/sansforensics/.bashrc
 cd /opt/elrond/elrond/
 clear
-printf "\n\n  -> SIFT has been successfully configured for elrond. Press ENTER to continue..."
+printf "\n\n  -> SIFT-Workstation has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
 read answer
 sleep 1
 sudo updatedb
@@ -18,3 +18,4 @@ echo '' | sudo tee ~/.bash_history
 history -c
 sleep 1
 clear
+sudo reboot
