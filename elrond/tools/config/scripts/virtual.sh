@@ -5,6 +5,8 @@ cd vmware-tools-distrib
 sudo rm -rf vmware-install.pl
 sudo cp /opt/elrond/elrond/tools/config/vmware-install.pl .
 sudo chmod 755 vmware-install.pl
+sudo apt remove open-vm-tools --purge -y
+sudo rm -rf /etc/vmware-tools/
 yes '' | sudo ./vmware-install.pl -f
 cd ..
 sudo rm -rf vmware-tools-distrib
