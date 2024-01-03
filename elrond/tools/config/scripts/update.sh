@@ -29,6 +29,23 @@ sudo rm -rf /tmp/elrond-archive.zip
 cd ~
 # installing vmware_tools
 /opt/elrond/elrond/tools/config/scripts/./virtual.sh
+# pulling down additional github repos
+sudo git clone https://github.com/harelsegev/INDXRipper /opt/elrond/elrond/tools/INDXRipper
+sudo git clone https://github.com/PoorBillionaire/USN-Journal-Parser.git
+sudo git clone https://github.com/ezaspy/KStrike.git
+sudo git clone https://github.com/ezaspy/WMI_Forensics
+sudo git clone https://github.com/ezaspy/etl-parser
+sudo wget -O /opt/elrond/elrond/tools/.splunk.deb "https://download.splunk.com/products/splunk/releases/9.0.5/linux/splunk-9.0.5-e9494146ae5c-linux-2.6-amd64.deb"
+# tidying up
+sudo apt update
+echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf
+echo '
+export PS1="\e[1;36m\u@\h:\e[m \e[0;32m\w\e[m\n$ "' >> /home/sansforensics/.bashrc
+# configuring elrond
+sudo chmod -R 755 /opt/elrond/
+sudo chown -R sansforensics:sansforensics /opt/elrond
+sudo chmod +x /opt/elrond/elrond/elrond.py
+echo "export PATH=$PATH:/opt/elrond/elrond" >> /home/sansforensics/.bashrc
 cd ~
 printf "\n\n  -> elrond has been successfully updated. Press ENTER to continue..."
 read answer
