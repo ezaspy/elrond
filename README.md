@@ -83,7 +83,7 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 
 #### SIFT-elrond (recommended)
 
-- Download [SIFT-elrond](https://drive.google.com/file/d/1-a9LZTURxHgA4vYWreZkRsX-Jl201IHf/view?usp=sharing) OVA, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
+- Download [SIFT-elrond](https://drive.google.com/file/d/1-dSyRSav_h7V-kFmSjv4jIuyxNJnnTKE/view?usp=sharing) OVA, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
   - ***Note***: *the OVA does not contain the NSRL dataset; execute [nsrl.sh](https://github.com/ezaspy/elrond/blob/main/elrond/tools/config/scripts/nsrl.sh) and follow instructions to download.*
   - It is recommended to run [update.sh](https://github.com/ezaspy/elrond/blob/main/elrond/update.sh) which will download and configure the **latest version of elrond** onto your existing SIFT instance.
 <br>
