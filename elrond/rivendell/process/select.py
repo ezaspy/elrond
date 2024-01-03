@@ -44,6 +44,7 @@ def select_artefacts_to_process(img, process_list, artefacts_list, processed_art
                         or f.endswith(".db")
                         or f.endswith(".bcf")
                         or f.endswith(".hve")
+                        or f.endswith("SRUDB.dat")
                         or "/S-1-5-21-" in root + "/" + f
                         or f.endswith("+bash_aliases")
                         or f.endswith("+bash_history")

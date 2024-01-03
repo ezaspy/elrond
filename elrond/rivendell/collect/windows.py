@@ -488,6 +488,57 @@ def collect_windows_artefacts(
                             shutil.copy2(item + each, dest)
                         except:
                             pass
+        if item == mnt + "/Windows/System32/LogFiles/sru/":
+            item_list, dest = (
+                os.listdir(item),
+                dest + "sru/",
+            )
+            try:
+                os.stat(dest)
+            except:
+                os.makedirs(dest)
+            if len(item_list) > 0 and "SRUDB.dat" in str(os.listdir(item)):
+                if verbosity != "":
+                    print(
+                        "     Collecting System Resource Utilization (SRU) evidence for {}...".format(
+                            vssimage
+                        )
+                    )
+                for each in item_list:
+                    if each.endswith("SRUDB.dat"):
+                        try:
+                            (
+                                entry,
+                                prnt,
+                            ) = "{},{},{},'{}' SRU evidence\n".format(
+                                datetime.now().isoformat(),
+                                img.split("::")[0],
+                                stage,
+                                each,
+                            ), " -> {} -> {} SRU evidence '{}'{} from '{}'".format(
+                                datetime.now().isoformat().replace("T", " "),
+                                stage,
+                                each,
+                                vsstext.replace("vss", "volume shadow copy #"),
+                                img.split("::")[0],
+                            )
+                            write_audit_log_entry(
+                                verbosity,
+                                output_directory,
+                                entry,
+                                prnt,
+                            )
+                            if os.path.exists(
+                                os.path.join(dest, item.split("/")[-1], each)
+                            ):
+                                dest = check_existence(
+                                    os.path.join(item.split("/")[-1], each), dest, 1
+                                )
+                            else:
+                                pass
+                            shutil.copy2(item + each, dest)
+                        except:
+                            pass
         if item == mnt + "/$Recycle.Bin":
             item_list, dest = (
                 os.listdir(item),

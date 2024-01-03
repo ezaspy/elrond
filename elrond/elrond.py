@@ -359,6 +359,7 @@ system_artefacts = [
     "/Windows/System32/config/",
     "/Windows/System32/LogFiles/Sum/",
     "/Windows/System32/LogFiles/WMI/",
+    "/Windows/System32/sru/",
     "/Windows/System32/wbem/Repository/",
     "/Windows/System32/wbem/Logs/",
     "/Windows/System32/winevt/Logs/",
