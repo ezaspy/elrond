@@ -23,7 +23,7 @@ from rivendell.process.windows import (
 )
 from rivendell.process.windows import process_registry_profile
 from rivendell.process.windows import process_shimcache
-from rivendell.process.windows import process_sru
+#from rivendell.process.windows import process_sru
 from rivendell.process.windows import process_ual
 from rivendell.process.windows import process_usb
 from rivendell.process.windows import process_usn
