@@ -4,7 +4,11 @@ clear
 printf "\n  -> Downloading additional elrond repository components...\n\n"
 # downloading additional tools for elrond
 cd /tmp
-wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1mVrkLp84jchHRrAxqXvSpDdZhIKsH9Fi' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1mVrkLp84jchHRrAxqXvSpDdZhIKsH9Fi" -O elrond-archive.zip && rm -rf /tmp/cookies.txt
+sudo apt install python3-pip -y
+python3 -m pip install gdown
+export PATH="$HOME/.local/bin:$PATH"
+source ~/.bashrc
+gdown https://drive.google.com/uc?id=1mVrkLp84jchHRrAxqXvSpDdZhIKsH9Fi
 unzip elrond-archive.zip 1> /dev/null
 rm -rf __MACOSX/
 #/opt/elrond/elrond/tools/
@@ -20,9 +24,7 @@ sudo mv volatility /opt/elrond/elrond/rivendell/memory/
 sudo mv volatility3 /opt/elrond/elrond/rivendell/memory/
 #/opt/elrond/elrond/rivendell/post/splunk/
 unzip apps.zip 1> /dev/null
-sudo mkdir /opt/elrond/elrond/rivendell/post/splunk/apps/
-sudo mv apps/*.py /opt/elrond/elrond/rivendell/post/splunk/apps/
-#/opt/elrond/elrond/tools/config/VMwareTools-10.3.23-16594550.tar.gz
-sudo mv VMwareTools-10.3.23-16594550.tar.gz /opt/elrond/elrond/tools/config/
-sudo rm -rf /tmp/elrond-archive.zip
+#sudo mkdir /opt/elrond/elrond/rivendell/post/splunk/apps/
+sudo mv /tmp/apps/*.py /opt/elrond/elrond/rivendell/post/splunk/apps/
+sudo rm -rf /tmp/*.zip
 cd ~

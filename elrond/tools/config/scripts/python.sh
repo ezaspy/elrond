@@ -14,7 +14,7 @@ sudo git clone https://github.com/ezaspy/KStrike.git
 sudo git clone https://github.com/ezaspy/WMI_Forensics
 sudo git clone https://github.com/ezaspy/etl-parser
 sudo chmod -R 744 /opt/elrond/
-sudo chown -R sansforensics:sansforensics /opt/elrond
+sudo chown -R $USER:$USER /opt/elrond
 cd /opt/elrond/elrond/tools/etl-parser
 python3 -m pip install -e .
 cd /opt/elrond/elrond

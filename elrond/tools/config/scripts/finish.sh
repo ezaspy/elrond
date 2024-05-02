@@ -5,7 +5,7 @@ echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf
 echo '
 export PS1="\e[1;36m\u@\h:\e[m \e[0;32m\w\e[m\n$ "' >> /home/sansforensics/.bashrc
 sudo chmod -R 755 /opt/elrond/
-sudo chown -R sansforensics:sansforensics /opt/elrond
+sudo chown -R $USER:$USER /opt/elrond
 sudo chmod +x /opt/elrond/elrond/elrond.py
 echo "export PATH=$PATH:/opt/elrond/elrond" >> /home/sansforensics/.bashrc
 cd /opt/elrond/elrond/

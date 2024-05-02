@@ -2,7 +2,7 @@ cd /
 sudo rm -rf /opt/elrond
 sudo git clone https://github.com/ezaspy/elrond.git /opt/elrond
 sudo chmod -R 755 /opt/elrond/
-sudo chown -R sansforensics:sansforensics /opt/elrond/
+sudo chown -R $USER:$USER /opt/elrond/
 # downloading additional tools for elrond
 cd /tmp
 wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1mVrkLp84jchHRrAxqXvSpDdZhIKsH9Fi' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1mVrkLp84jchHRrAxqXvSpDdZhIKsH9Fi" -O elrond-archive.zip && rm -rf /tmp/cookies.txt
@@ -43,7 +43,7 @@ echo '
 export PS1="\e[1;36m\u@\h:\e[m \e[0;32m\w\e[m\n$ "' >> /home/sansforensics/.bashrc
 # configuring elrond
 sudo chmod -R 755 /opt/elrond/
-sudo chown -R sansforensics:sansforensics /opt/elrond
+sudo chown -R $USER:$USER /opt/elrond
 sudo chmod +x /opt/elrond/elrond/elrond.py
 echo "export PATH=$PATH:/opt/elrond/elrond" >> /home/sansforensics/.bashrc
 cd ~
