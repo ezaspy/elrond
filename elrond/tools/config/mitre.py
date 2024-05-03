@@ -10,7 +10,7 @@ import sys
 
 def append_threat_actors(related_threat_actors, csv_row):
     with open(
-        "/opt/elrond/elrond/tools/.enterprise-attack-v14.1-procedures.csv",
+        "/opt/elrond/elrond/tools/.enterprise-attack-v15.0-procedures.csv",
     ) as techniquecsv:
         procedures_file_content = str(techniquecsv.readlines())
         procedures_contents = re.sub(
@@ -609,17 +609,17 @@ def main():
     # collecting techniques
     try:
         mitre_spreadsheet = requests.get(
-            "https://attack.mitre.org/docs/enterprise-attack-v14.1/enterprise-attack-v14.1-techniques.xlsx"
+            "https://attack.mitre.org/docs/enterprise-attack-v15.0/enterprise-attack-v15.0-techniques.xlsx"
         )
     except requests.exceptions.ConnectionError:
         print("\n\n\tUnable to connect to the Internet. Please try again.\n\n\n")
         sys.exit()
     with open(
-        "/opt/elrond/elrond/tools/enterprise-attack-v14.1-techniques.xlsx", "wb"
+        "/opt/elrond/elrond/tools/enterprise-attack-v15.0-techniques.xlsx", "wb"
     ) as spreadsheet_file:
         spreadsheet_file.write(mitre_spreadsheet.content)
     xlsx_file = pandas.read_excel(
-        "/opt/elrond/elrond/tools/enterprise-attack-v14.1-techniques.xlsx",
+        "/opt/elrond/elrond/tools/enterprise-attack-v15.0-techniques.xlsx",
         "techniques",
         engine="openpyxl",
     )
@@ -638,17 +638,17 @@ def main():
         malformed_csv = re.sub(r"([\)\"])\n([^S])", r"\1.  \2", malformed_csv)
         formatted_csv = malformed_csv.replace('\\"', '"')
     with open(
-        "/opt/elrond/elrond/tools/.enterprise-attack-v14.1-techniques.csv", "w"
+        "/opt/elrond/elrond/tools/.enterprise-attack-v15.0-techniques.csv", "w"
     ) as final_csv:
         final_csv.write(formatted_csv)
     os.remove("/opt/elrond/elrond/tools/.enterprise-attack.temp")
     # collecting procedure examples
     with open(
-        "/opt/elrond/elrond/tools/enterprise-attack-v14.1-techniques.xlsx", "wb"
+        "/opt/elrond/elrond/tools/enterprise-attack-v15.0-techniques.xlsx", "wb"
     ) as spreadsheet_file:
         spreadsheet_file.write(mitre_spreadsheet.content)
     xlsx_file = pandas.read_excel(
-        "/opt/elrond/elrond/tools/enterprise-attack-v14.1-techniques.xlsx",
+        "/opt/elrond/elrond/tools/enterprise-attack-v15.0-techniques.xlsx",
         "procedure examples",
         engine="openpyxl",
     )
@@ -667,7 +667,7 @@ def main():
         malformed_csv = re.sub(r"([\)\"])\n([^S])", r"\1.  \2", malformed_csv)
         formatted_csv = malformed_csv.replace('\\"', '"')
     with open(
-        "/opt/elrond/elrond/tools/.enterprise-attack-v14.1-procedures.csv", "w"
+        "/opt/elrond/elrond/tools/.enterprise-attack-v15.0-procedures.csv", "w"
     ) as final_csv:
         final_csv.write(formatted_csv)
     os.remove("/opt/elrond/elrond/tools/.enterprise-attack.temp")
@@ -684,14 +684,14 @@ def main():
         parent_technique_all_evidence,
     ) = ({} for _ in range(2))
     with open(
-        "/opt/elrond/elrond/tools/enterprise-attack-v14.1-techniques.csv", "w"
+        "/opt/elrond/elrond/tools/enterprise-attack-v15.0-techniques.csv", "w"
     ) as mitre_csv:
         mitre_csv.write(
             "id,name,technique_description,url,tactic,detection,platform,procedure_example\n"
         )
     # cleaning the newline formatting in the csv
     with open(
-        "/opt/elrond/elrond/tools/.enterprise-attack-v14.1-techniques.csv",
+        "/opt/elrond/elrond/tools/.enterprise-attack-v15.0-techniques.csv",
     ) as techniquecsv:
         techniques_file_content = str(techniquecsv.readlines())
         techniques_contents = re.sub(
@@ -782,7 +782,7 @@ def main():
         csv_rows.append(csv_row.replace('||"||', "||"))
         procedure_examples = append_threat_actors(related_threat_actors, csv_row)
         with open(
-            "/opt/elrond/elrond/tools/enterprise-attack-v14.1-techniques.csv", "a"
+            "/opt/elrond/elrond/tools/enterprise-attack-v15.0-techniques.csv", "a"
         ) as mitre_csv:
             mitre_csv.write(
                 "{},{}\n".format(
