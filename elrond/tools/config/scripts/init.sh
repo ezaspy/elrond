@@ -12,9 +12,19 @@ echo "/dev/sdb swap swap defaults 0 0" >> /etc/fstab
 sudo chmod 664 /etc/fstab
 # installing additional features for elrond
 sudo apt update
-sudo apt install vim mlocate net-tools build-essential qemu apt-transport-https software-properties-common systemd gnupg xz-utils sqlite3 mdbtools yara clamav clamav-daemon john gparted dos2unix sqlitebrowser python3-apt wireshark cutter bless sqlitebrowser flameshot securityonion-networkminer libguestfs -y --fix-missing
+sudo apt install vim mlocate net-tools build-essential qemu apt-transport-https software-properties-common systemd gnupg xz-utils sqlite3 mdbtools yara clamav clamav-daemon john gparted dos2unix sqlitebrowser python3-apt wireshark cutter bless sqlitebrowser flameshot libguestfs-tools mono-devel -y --fix-missing
 sudo snap install cyberchef
 sudo dpkg -i /tmp/vscode.deb
+sleep 1
+# installing network-miner
+sudo wget https://www.netresec.com/?download=NetworkMiner -O /tmp/nm.zip
+sudo unzip /tmp/nm.zip -d /opt/
+cd /opt/NetworkMiner*
+sudo chmod +x NetworkMiner.exe
+sudo chmod -R go+w AssembledFiles/
+sudo chmod -R go+w Captures/
+cd ~
+sleep 1
 # installing maltego
 sudo apt install openjdk-17-jdk openjdk-17-jre
 wget -O /tmp/Maltego.v4.7.0.deb https://downloads.maltego.com/maltego-v4/linux/Maltego.v4.7.0.deb
