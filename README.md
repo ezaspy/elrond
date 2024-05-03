@@ -83,34 +83,24 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 
 #### SIFT-elrond (recommended)
 
-- Download SIFT-elrond, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
-  - [x64](https://drive.google.com/file/d/1-dSyRSav_h7V-kFmSjv4jIuyxNJnnTKE/view?usp=sharing) OVA
-  - [ARM]()
-- *The OVA does not contain the NSRL dataset; execute [nsrl.sh](https://github.com/ezaspy/elrond/blob/main/elrond/tools/config/scripts/nsrl.sh) and follow instructions to download.*
-- It is recommended to run [update.sh](https://github.com/ezaspy/elrond/blob/main/elrond/update.sh) which will download and configure the **latest version of elrond** onto your existing SIFT instance.
+> Download the respective elrond OVA; the latest version of SIFT (20.04) or Ubuntu (22.04) with all of the elrond software packages, pre-installed.
+  - For **x64**, download [SIFT-elrond (x64)](https://drive.google.com/file/d/1-dSyRSav_h7V-kFmSjv4jIuyxNJnnTKE/view?usp=sharing) OVA
+  - For **ARM**, download [Ubuntu-elrond (ARM)]() OVA
+> *Neither OVA does not contain the NSRL dataset; execute [nsrl.sh](https://github.com/ezaspy/elrond/blob/main/elrond/tools/config/scripts/nsrl.sh) and follow instructions to download.*<br>
+> It is recommended to run [/opt/elrond/update.sh](https://github.com/ezaspy/elrond/blob/main/elrond/update.sh) which will download and configure the **latest version of elrond** onto your existing SIFT instance.
 <br>
 
 #### Self-build
 
-There are several software package required for using elrond but almost all of them are contained within the [SANS SIFT Worksation](https://www.sans.org/tools/sift-workstation/) virtual machine OVA. For the software which is not included ([make.sh](https://github.com/ezaspy/elrond/blob/main/make.sh)) installs and configures the additional software required for all potential functionality leveraged by elrond (volatility3, apfs-fuse, ClamAV etc.). To invoke the script, follow the instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md#configuration).
+There are several software package required for using elrond. Almost all of them are contained within the [SANS SIFT Worksation](https://www.sans.org/tools/sift-workstation/) virtual machine OVA. For the software which is not included ([make.sh](https://github.com/ezaspy/elrond/blob/main/make.sh)) installs and configures the additional software required for all potential functionality leveraged by elrond (volatility3, apfs-fuse, ClamAV etc.).
+- For **x64**, download [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (20.04)
+- For **ARM**, download [Ubuntu for ARM](https://ubuntu.com/download/server/arm) (22.04)
+<br><br>
 
-##### x64
-- Download [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) 20.04; (18.04 not supported).
-- Run [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md) to install and configure the additional software.
-
-##### ARM
-- Download [Ubuntu for ARM](https://ubuntu.com/download/server/arm) (22.04)
-- Run [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md) to install and configure the additional software.
-  - *apfs-fuse is not installed on ARM due to incompatibility*
-
-##### Notes
+> Follow instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md)
 - *You will only need to run the make.sh script once, per SIFT instance*
 - *If you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [.../elrond/elrond/tools/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/scripts/)*
 <br><br>
-
-### Updating
-- `/opt/elrond/./update.sh`
-<br><br><br>
 
 <!-- USAGE EXAMPLES -->
 
