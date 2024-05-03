@@ -1,13 +1,13 @@
 #!/bin/bash
 sleep 1
-clear
-printf "\n  -> Downloading additional elrond repository components...\n\n"
-# downloading additional tools for elrond
 cd /tmp
 sudo apt install python3-pip -y
 python3 -m pip install gdown
 export PATH="$HOME/.local/bin:$PATH"
 source ~/.bashrc
+clear
+printf "\n  -> Downloading additional elrond repository components...\n\n"
+# downloading additional tools for elrond
 gdown https://drive.google.com/uc?id=1mVrkLp84jchHRrAxqXvSpDdZhIKsH9Fi
 unzip elrond-archive.zip 1> /dev/null
 rm -rf __MACOSX/
