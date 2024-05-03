@@ -1,12 +1,15 @@
 # install azure cli
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash > /dev/null 2>&1
+
 # install aws cli
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" > /dev/null 2>&1
 unzip awscliv2.zip > /dev/null 2>&1
 sudo ./aws/install > /dev/null 2>&1
 rm awscliv2.zip
+
 # install gcp cli
 sudo apt-get install google-cloud-cli
+
 # installing additional github tools
 sudo git clone https://github.com/PoorBillionaire/USN-Journal-Parser.git /opt/USN-Journal-Parser > /dev/null 2>&1
 sudo git clone https://github.com/ezaspy/KStrike.git /opt/KStrike > /dev/null 2>&1
