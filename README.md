@@ -87,14 +87,15 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
   - For **x64**, download [SIFT-elrond (x64)](https://drive.google.com/file/d/1-dSyRSav_h7V-kFmSjv4jIuyxNJnnTKE/view?usp=sharing) OVA
   - For **ARM**, download [Ubuntu-elrond (ARM)]() OVA
 > *Neither OVA does not contain the NSRL dataset; execute [nsrl.sh](https://github.com/ezaspy/elrond/blob/main/elrond/tools/config/scripts/nsrl.sh) and follow instructions to download.*<br>
-> It is recommended to run [/opt/elrond/update.sh](https://github.com/ezaspy/elrond/blob/main/elrond/update.sh) which will download and configure the **latest version of elrond** onto your existing SIFT instance.
+> It is recommended to run [/opt/elrond/update.sh](https://github.com/ezaspy/elrond/blob/main/elrond/update.sh) which will download and configure the **latest version of elrond** onto your existing system.
 <br>
 
 #### Self-build
 
 There are several software package required for using elrond. Almost all of them are contained within the [SANS SIFT Worksation](https://www.sans.org/tools/sift-workstation/) virtual machine OVA. For the software which is not included ([make.sh](https://github.com/ezaspy/elrond/blob/main/make.sh)) installs and configures the additional software required for all potential functionality leveraged by elrond (volatility3, apfs-fuse, ClamAV etc.).
-- For **x64**, download [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (20.04)
-- For **ARM**, download [Ubuntu for ARM](https://ubuntu.com/download/server/arm) (22.04)
+- For **x64**, download [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (20.04 LTS)
+  - Can also download [Ubuntu x64](https://ubuntu.com/download/desktop) (24.04 LTS)
+- For **ARM**, download [Ubuntu for ARM](https://ubuntu.com/download/server/arm) (22.04 LTS)
 <br><br>
 
 > Follow instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md)
