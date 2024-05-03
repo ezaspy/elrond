@@ -12,8 +12,6 @@ HYPER=$(sudo dmesg | grep -E "DMI|Hypervisor")
 if [[ "$HYPER" == *"VMware"* ]]; then
     # installing vmware_tools
     /opt/elrond/elrond/tools/config/scripts/./virtual.sh
-    # change desktop background
-    gsettings set org.gnome.desktop.background picture-uri file:///opt/elrond/elrond/images/elrond_background.jpg
 fi
 
 # installing apfs-fuse if architecture is not ARM
@@ -21,6 +19,11 @@ UNAME=$(uname -a)
 if [[ "$UNAME" != *"aarch"* ]]; then
     # installing apfs-fuse
     /opt/elrond/elrond/tools/config/scripts/./apfs-fuse.sh
+    # installing code
+    wget -O /tmp/vscode.deb https://vscode.download.prss.microsoft.com/dbazure/download/stable/b58957e67ee1e712cebf466b995adf4c5307b2bd/code_1.89.0-1714530869_amd64.deb
+else
+    # installing code
+    wget -O /tmp/vscode.deb https://vscode.download.prss.microsoft.com/dbazure/download/stable/b58957e67ee1e712cebf466b995adf4c5307b2bd/code_1.89.0-1714529372_arm64.deb
 fi
 
 # installing regripper if not installed
@@ -35,7 +38,6 @@ fi
 /opt/elrond/elrond/tools/config/scripts/./nsrl.sh
 /opt/elrond/elrond/tools/config/scripts/./volatility3.sh
 /opt/elrond/elrond/tools/config/scripts/./dwarf2json.sh
-/opt/elrond/elrond/tools/config/scripts/./python.sh
 /opt/elrond/elrond/tools/config/scripts/./mitre.sh
 /opt/elrond/elrond/tools/config/scripts/./splunk.sh
 /opt/elrond/elrond/tools/config/scripts/./elastic.sh #E: Unable to locate package openjdk-16-jre-headless
