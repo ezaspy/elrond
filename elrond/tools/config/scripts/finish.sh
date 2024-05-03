@@ -9,6 +9,9 @@ sudo chown -R $USER:$USER /opt/elrond
 sudo chmod +x /opt/elrond/elrond/elrond.py
 echo "export PATH=$PATH:/opt/elrond/elrond" >> /home/sansforensics/.bashrc
 cd /opt/elrond/elrond/
+# change desktop background
+gsettings set org.gnome.desktop.background picture-uri file:///opt/elrond/elrond/images/elrond_background.jpg
+sleep 1
 clear
 printf "\n\n  -> SIFT-Workstation has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
 read answer
