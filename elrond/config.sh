@@ -32,8 +32,6 @@ if [ -d "/usr/local/src/regripper" ]; then
     sudo sed -i 's/my \$VERSION/# Add: Define the variable plugindir\nmy \$plugindir = File::Spec->catfile\(\$scriptdir, "plugins"\);\n\nmy \$VERSION/' /usr/share/regripper/rip.pl
 else
     /opt/elrond/elrond/tools/config/scripts/./regrip.sh
-    # change desktop background
-    gsettings set org.gnome.desktop.background picture-uri file:///opt/elrond/elrond/images/elrond_background.jpg
 fi
 
 /opt/elrond/elrond/tools/config/scripts/./nsrl.sh
