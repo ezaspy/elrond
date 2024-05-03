@@ -12,7 +12,7 @@ echo "/dev/sdb swap swap defaults 0 0" >> /etc/fstab
 sudo chmod 664 /etc/fstab
 # installing additional features for elrond
 sudo apt update
-sudo apt install mlocate net-tools build-essential qemu apt-transport-https software-properties-common systemd gnupg xz-utils sqlite3 mdbtools yara clamav clamav-daemon john gparted dos2unix -y --fix-missing
+sudo apt install vim mlocate net-tools build-essential qemu apt-transport-https software-properties-common systemd gnupg xz-utils sqlite3 mdbtools yara clamav clamav-daemon john gparted dos2unix -y --fix-missing
 sudo apt update
 sudo systemctl stop clamav-freshclam
 sudo freshclam
