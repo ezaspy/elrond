@@ -7,6 +7,8 @@ export PATH="$HOME/.local/bin:$PATH"
 source ~/.bashrc
 clear
 printf "\n  -> Downloading additional elrond repository components...\n\n"
+sudo add-apt-repository -y ppa:linuxgndu/sqlitebrowser > /dev/null 2>&1 # db browser for sqlite
+sudo add-apt-repository -y ppa:securityonion/stable > /dev/null 2>&1 # network-miner
 # downloading additional tools for elrond
 gdown https://drive.google.com/uc?id=1mVrkLp84jchHRrAxqXvSpDdZhIKsH9Fi
 unzip elrond-archive.zip 1> /dev/null
