@@ -17,7 +17,7 @@ sudo apt-get autoremove --purge > /dev/null 2>&1
 sudo apt-get clean > /dev/null 2>&1
 # change desktop background
 gsettings set org.gnome.desktop.background picture-uri file:///opt/elrond/elrond/images/elrond_background.jpg
-gsettings set org.gnome.shell favorite-apps "['org.gnome.seahorse.Application.desktop', 'org.gnome.Nautilus.desktop', 'org.flameshot.Flameshot.desktop', 'firefox_firefox.desktop', 'org.gnome.Terminal.desktop', 'code.desktop', 'bless.desktop', 'wireshark.desktop', 'networkminer.desktop', 'cyberchef.desktop', 'cutter.desktop', 'sqlitebrowser.desktop', 'maltego.desktop']"
+gsettings set org.gnome.shell favorite-apps "['org.gnome.seahorse.Application.desktop', 'org.gnome.Nautilus.desktop', 'org.flameshot.Flameshot.desktop', 'firefox_firefox.desktop', 'org.gnome.Terminal.desktop', 'code.desktop', 'bless.desktop', 'wireshark.desktop', 'cutter.desktop', 'sqlitebrowser.desktop', 'maltego.desktop']"
 # configure .bashrc
 echo "[Desktop Entry]
 Type=Application
