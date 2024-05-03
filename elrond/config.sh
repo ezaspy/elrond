@@ -21,8 +21,6 @@ UNAME=$(uname -a)
 if [[ "$UNAME" != *"aarch"* ]]; then
     # installing apfs-fuse
     /opt/elrond/elrond/tools/config/scripts/./apfs-fuse.sh
-    # change desktop background
-    gsettings set org.gnome.desktop.background picture-uri file:///opt/elrond/elrond/images/elrond_background.jpg
 fi
 
 # installing regripper if not installed
