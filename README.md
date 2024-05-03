@@ -83,21 +83,29 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 
 #### SIFT-elrond (recommended)
 
-- Download [SIFT-elrond](https://drive.google.com/file/d/1-dSyRSav_h7V-kFmSjv4jIuyxNJnnTKE/view?usp=sharing) OVA, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
-  - ***Note***: *the OVA does not contain the NSRL dataset; execute [nsrl.sh](https://github.com/ezaspy/elrond/blob/main/elrond/tools/config/scripts/nsrl.sh) and follow instructions to download.*
-  - It is recommended to run [update.sh](https://github.com/ezaspy/elrond/blob/main/elrond/update.sh) which will download and configure the **latest version of elrond** onto your existing SIFT instance.
+- Download SIFT-elrond, which is the latest version of SIFT with all of the software packages required by elrond, pre-installed.
+  - [x64](https://drive.google.com/file/d/1-dSyRSav_h7V-kFmSjv4jIuyxNJnnTKE/view?usp=sharing) OVA
+  - [ARM]()
+- *The OVA does not contain the NSRL dataset; execute [nsrl.sh](https://github.com/ezaspy/elrond/blob/main/elrond/tools/config/scripts/nsrl.sh) and follow instructions to download.*
+- It is recommended to run [update.sh](https://github.com/ezaspy/elrond/blob/main/elrond/update.sh) which will download and configure the **latest version of elrond** onto your existing SIFT instance.
 <br>
 
 #### Self-build
 
-There are several software package required for using elrond but almost all of them are contained within the [SANS SIFT Worksation](https://www.sans.org/tools/sift-workstation/) virtual machine OVA. However, for the software which is not included, I have provided a script ([make.sh](https://github.com/ezaspy/elrond/blob/main/make.sh)) which installs and configures the additional software required for all potential functionality leveraged by elrond (for example: volatility3, apfs-fuse, ClamAV etc.).<br>
-To invoke the script, follow the instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md#configuration).
-  - ***Note***: *you will only need to run the make.sh script once, per SIFT instance*
+There are several software package required for using elrond but almost all of them are contained within the [SANS SIFT Worksation](https://www.sans.org/tools/sift-workstation/) virtual machine OVA. For the software which is not included ([make.sh](https://github.com/ezaspy/elrond/blob/main/make.sh)) installs and configures the additional software required for all potential functionality leveraged by elrond (volatility3, apfs-fuse, ClamAV etc.). To invoke the script, follow the instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md#configuration).
 
-- [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (20.04)
-  - ***Note***: *SANS SIFT 18.04 is not supported.*
-- [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md) to install and configure the additional software for SIFT 20.04.
-  - If you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [.../elrond/elrond/tools/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/scripts/)
+##### x64
+- Download [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) 20.04; (18.04 not supported).
+- Run [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md) to install and configure the additional software.
+
+##### ARM
+- Download [Ubuntu for ARM](https://ubuntu.com/download/server/arm) (22.04)
+- Run [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md) to install and configure the additional software.
+  - *apfs-fuse is not installed on ARM due to incompatibility*
+
+##### Notes
+- *You will only need to run the make.sh script once, per SIFT instance*
+- *If you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [.../elrond/elrond/tools/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/scripts/)*
 <br><br>
 
 ### Updating
@@ -109,7 +117,6 @@ To invoke the script, follow the instructions in [CONFIG.md](https://github.com/
 ## Usage
 
 `python3 elrond.py <case_id> <directory> [<output_directory>] [-h] [-AaBCcDEGIiMmNnPQqRSsTtUuVXZ] [-K <keyword_file>] [-Y <yara_dir>] -F (include|exclude):[<include/exclude_file>]`
-
 <br>
 
 ### Collect (-C)<br>
