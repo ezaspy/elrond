@@ -8,7 +8,7 @@ sudo ./aws/install > /dev/null 2>&1
 rm awscliv2.zip
 
 # install gcp cli
-sudo apt-get install google-cloud-cli
+sudo snap install google-cloud-cli
 
 # installing additional github tools
 sudo git clone https://github.com/PoorBillionaire/USN-Journal-Parser.git /opt/USN-Journal-Parser > /dev/null 2>&1
