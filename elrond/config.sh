@@ -25,6 +25,7 @@ else
     # installing code
     wget -O /tmp/vscode.deb https://vscode.download.prss.microsoft.com/dbazure/download/stable/b58957e67ee1e712cebf466b995adf4c5307b2bd/code_1.89.0-1714529372_arm64.deb
 fi
+sudo dpkg -i /tmp/vscode.deb
 
 # installing regripper if not installed
 if [ -d "/usr/local/src/regripper" ]; then
