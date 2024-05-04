@@ -19,7 +19,7 @@ sudo apt-get clean > /dev/null 2>&1
 
 # change desktop background
 gsettings set org.gnome.desktop.background picture-uri file:///opt/elrond/elrond/images/elrond_background.jpg
-gsettings set org.gnome.shell favorite-apps "['org.gnome.seahorse.Application.desktop', 'org.gnome.Nautilus.desktop', 'org.flameshot.Flameshot.desktop', 'firefox_firefox.desktop', 'org.gnome.Terminal.desktop', 'code.desktop', 'bless.desktop', 'wireshark.desktop', 'cutter.desktop', 'sqlitebrowser.desktop', 'maltego.desktop']"
+gsettings set org.gnome.shell favorite-apps "['org.gnome.seahorse.Application.desktop', 'org.gnome.Nautilus.desktop', 'org.flameshot.Flameshot.desktop', 'firefox_firefox.desktop', 'firefox.desktop', 'org.gnome.Terminal.desktop', 'code.desktop', 'bless.desktop', 'wireshark.desktop', 'cutter.desktop', 'sqlitebrowser.desktop', 'maltego.desktop']"
 
 # configure .bashrc
 echo "[Desktop Entry]
@@ -32,7 +32,9 @@ Name[en_NG]=Terminal
 Name=Terminal
 Comment[en_NG]=Start Terminal On Startup
 Comment=Start Terminal On Startup" > gnome-terminal.desktop
+
 sudo rm -rf /home/$USER/.config/autostart/gnome-terminal.desktop
+mkdir /home/parallels/.config/autostart
 sudo mv gnome-terminal.desktop /home/$USER/.config/autostart/
 sudo chmod 755 /home/$USER/.config/autostart/gnome-terminal.desktop
 sudo chown -R $USER:$USER /opt/
