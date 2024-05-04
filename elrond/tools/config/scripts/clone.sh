@@ -15,7 +15,7 @@ sudo git clone https://github.com/PoorBillionaire/USN-Journal-Parser.git /opt/US
 sudo git clone https://github.com/ezaspy/KStrike.git /opt/KStrike
 sudo git clone https://github.com/ezaspy/WMI_Forensics /opt/WMI_Forensics
 sudo git clone https://github.com/ezaspy/etl-parser /opt/etl-parser
-sudo mkdir -p /opt/TZWorks /opt/BlueTeamPowerShell /opt/Sysmon/SysmonForLinux /home/sansforensics/Desktop/CobaltStrike-Defence/content
+sudo mkdir -p /opt/TZWorks /opt/BlueTeamPowerShell /opt/Sysmon/SysmonForLinux /home$USERDesktop/CobaltStrike-Defence/content
 sudo git clone https://github.com/ezaspy/bruce.git /opt/bruce
 sudo git clone https://github.com/BookStackApp/BookStack.git /opt/bookstack
 sudo git clone https://github.com/ezaspy/gandalf.git /opt/gandalf
@@ -26,7 +26,7 @@ sudo git clone https://github.com/EricZimmerman/KapeFiles.git /opt/KAPE
 sudo git clone https://github.com/Invoke-IR/PowerForensics.git /opt/PowerForensics
 sudo git clone https://github.com/ufrisk/MemProcFS.git /opt/MemProcFS
 sudo git clone https://github.com/vinaypamnani/wmie2/ /opt/WMIExplorer
-sudo git clone https://github.com/MichaelKoczwara/Awesome-CobaltStrike-Defence /home/sansforensics/Desktop/CobaltStrike-Defence
+sudo git clone https://github.com/MichaelKoczwara/Awesome-CobaltStrike-Defence /home$USERDesktop/CobaltStrike-Defence
 sudo git clone https://github.com/MarkBaggett/freq.git /opt/freq
 sudo git clone https://github.com/elceef/dnstwist.git /opt/dnstwist
 sudo git clone https://github.com/ezaspy/rdap.git /opt/rdap
