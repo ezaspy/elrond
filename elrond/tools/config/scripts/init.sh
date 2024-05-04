@@ -15,7 +15,8 @@ sudo chmod 664 /etc/fstab
 
 # installing additional features for elrond
 sudo apt update
-sudo apt install vim mlocate net-tools build-essential qemu apt-transport-https software-properties-common systemd gnupg xz-utils sqlite3 mdbtools yara clamav clamav-daemon john gparted dos2unix sqlitebrowser python3-apt wireshark cutter bless flameshot libguestfs-tools mono-devel openjdk-17-jdk openjdk-17-jre -y --fix-missing
+sudo apt install vim mlocate net-tools build-essential libreadline-dev libncursesw5-dev libssl-dev libc6-dev libffi-dev zlib1g-dev qemu apt-transport-https software-properties-common systemd gnupg xz-utils sqlite3 mdbtools yara clamav clamav-daemon john gparted dos2unix sqlitebrowser python3-apt wireshark cutter bless flameshot libguestfs-tools mono-devel openjdk-17-jdk openjdk-17-jre -y --fix-missing
+sudo apt-get install checkinstall libgdbm-dev libreadline-dev libnss3-dev libsqlite3-dev tk-dev liblzma-dev -y --fix-missing
 sudo snap install cyberchef
 sleep 1
 
