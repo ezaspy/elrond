@@ -1,6 +1,10 @@
 #!/bin/bash
 
 # installing additional github tools
+sudo rm -rf /opt/TZWorks 
+sudo rm -rf /opt/BlueTeamPowerShell
+sudo rm -rf /opt/Sysmon/SysmonForLinux
+sudo rm -rf /home/$USER/Desktop/CobaltStrike-Defence/content
 sudo mkdir -p /opt/TZWorks /opt/BlueTeamPowerShell /opt/Sysmon/SysmonForLinux /home/$USER/Desktop/CobaltStrike-Defence/content
 
 sudo rm -rf /opt/USN-Journal-Parser
