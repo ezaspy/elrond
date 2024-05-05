@@ -7,6 +7,12 @@ sudo chmod -R 755 /opt/elrond/
 chown -R $USER:$USER /opt/elrond
 /opt/elrond/elrond/tools/config/scripts/./init.sh
 
+# setting hostname to elrond if not SANS SIFT
+HOST=$(hostname)
+if [[ "$HOST" != *"siftworkstation"* ]]; then
+    sudo hostnamectl set-hostname elrond
+fi
+
 # installing vmware-tools if applicable
 HYPER=$(sudo dmesg | grep -E "DMI|Hypervisor")
 if [[ "$HYPER" == *"VMware"* ]]; then
@@ -47,3 +53,13 @@ sleep 20
 /opt/elrond/elrond/tools/config/scripts/./elastic.sh #E: Unable to locate package openjdk-16-jre-headless
 /opt/elrond/elrond/tools/config/scripts/./navigator.sh
 /opt/elrond/elrond/tools/config/scripts/./finish.sh
+sleep 1
+clear
+printf "\n\n  -> SIFT-Workstation has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
+read answer
+sleep 1
+echo '' | sudo tee ~/.bash_history
+history -c
+sleep 1
+clear
+sudo reboot
