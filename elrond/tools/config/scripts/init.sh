@@ -36,7 +36,7 @@ wget -O /tmp/Maltego.v4.7.0.deb https://downloads.maltego.com/maltego-v4/linux/M
 sudo dpkg -i /tmp/Maltego.v4.7.0.deb
 
 # cloning additional repositories
-/opt/elrond/elrond/tools/config/scripts/./cloud.sh
+#/opt/elrond/elrond/tools/config/scripts/./cloud.sh
 /opt/elrond/elrond/tools/config/scripts/./tools.sh
 sudo apt update
 sudo systemctl stop clamav-freshclam
