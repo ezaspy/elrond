@@ -16,6 +16,7 @@ if [ -f "elrond-archive.zip" ]; then
     rm -rf __MACOSX/
 else
     printf "\n 'elrond-archive.zip' did not download successfully.\n Exiting. Please run 'sudo /opt/elrond/./make.sh' again."
+    exit
 fi
 
 #/opt/elrond/elrond/tools/
