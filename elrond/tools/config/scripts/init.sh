@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # downloading additional repo files
+sudo add-apt-repository -y ppa:linuxgndu/sqlitebrowser > /dev/null 2>&1 # db browser for sqlite
 /opt/elrond/elrond/tools/config/scripts/./repo.sh
 
 # creating linux_swap space
@@ -35,7 +36,8 @@ wget -O /tmp/Maltego.v4.7.0.deb https://downloads.maltego.com/maltego-v4/linux/M
 sudo dpkg -i /tmp/Maltego.v4.7.0.deb
 
 # cloning additional repositories
-/opt/elrond/elrond/tools/config/scripts/./clone.sh
+/opt/elrond/elrond/tools/config/scripts/./cloud.sh
+/opt/elrond/elrond/tools/config/scripts/./tools.sh
 sudo apt update
 sudo systemctl stop clamav-freshclam
 sudo freshclam
