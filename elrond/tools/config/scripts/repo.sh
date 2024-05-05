@@ -1,13 +1,13 @@
 #!/bin/bash
+
 sleep 1
 cd /tmp
 sudo apt install python3-pip -y
-python3 -m pip install gdown
+sudo python3 -m pip install gdown
 export PATH="$HOME/.local/bin:$PATH"
 source ~/.bashrc
 clear
 printf "\n  -> Downloading additional elrond components...\n\n"
-sudo add-apt-repository -y ppa:linuxgndu/sqlitebrowser > /dev/null 2>&1 # db browser for sqlite
 
 # downloading additional tools for elrond
 gdown https://drive.google.com/uc?id=1mVrkLp84jchHRrAxqXvSpDdZhIKsH9Fi
