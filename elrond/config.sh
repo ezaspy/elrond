@@ -1,6 +1,9 @@
 #!/bin/bash
 sleep 1
 clear
+printf "\n\n  +--------- \e[1;31mOPTIONAL\e[m: RDS Hash Sets Download ---------+\n\n   \e[0;36m$ /opt/elrond/elrond/tools/config/scripts/./nsrl.sh\e[m \n\n\n"
+sleep 20
+clear
 sudo apt update
 cd /opt/elrond/elrond
 sudo chmod -R 755 /opt/elrond/
@@ -42,10 +45,6 @@ else
     /opt/elrond/elrond/tools/config/scripts/./regrip.sh
 fi
 
-sleep 1
-clear
-printf "\n\n  +--------- \e[1;31mOPTIONAL\e[m: RDS Hash Sets Download ---------+\n\n   \e[0;36m$ /opt/elrond/elrond/tools/config/scripts/./nsrl.sh\e[m \n\n\n"
-sleep 20
 /opt/elrond/elrond/tools/config/scripts/./volatility3.sh
 /opt/elrond/elrond/tools/config/scripts/./dwarf2json.sh
 /opt/elrond/elrond/tools/config/scripts/./mitre.sh
