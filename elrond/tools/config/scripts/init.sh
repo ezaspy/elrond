@@ -2,7 +2,17 @@
 
 # downloading additional repo files
 sudo add-apt-repository -y ppa:linuxgndu/sqlitebrowser > /dev/null 2>&1 # db browser for sqlite
+yes '' | sudo add-apt-repository ppa:deadsnakes/ppa # INDXRipper
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list
+#echo "deb https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
+#sudo /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token --scope kibana
+#sudo /usr/share/kibana/bin/kibana-verification-code
+#sudo /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
 /opt/elrond/elrond/tools/config/scripts/./repo.sh
+sudo wget https://www.netresec.com/?download=NetworkMiner -O /tmp/nm.zip
+wget -O /tmp/Maltego.v4.7.0.deb https://downloads.maltego.com/maltego-v4/linux/Maltego.v4.7.0.deb
+sudo wget -O /opt/elrond/elrond/tools/.splunk.deb "https://download.splunk.com/products/splunk/releases/9.0.5/linux/splunk-9.0.5-e9494146ae5c-linux-2.6-amd64.deb"
 
 # creating linux_swap space
 sudo swapoff /dev/sdb
@@ -16,13 +26,12 @@ sudo chmod 664 /etc/fstab
 
 # installing additional features for elrond
 sudo apt update
-sudo apt install vim mlocate net-tools build-essential libreadline-dev libncursesw5-dev libssl-dev libc6-dev libffi-dev zlib1g-dev qemu apt-transport-https software-properties-common systemd gnupg xz-utils sqlite3 mdbtools yara clamav clamav-daemon john gparted dos2unix sqlitebrowser python3-apt wireshark cutter bless flameshot libguestfs-tools mono-devel openjdk-17-jdk openjdk-17-jre -y --fix-missing
+sudo apt install vim mlocate net-tools build-essential libreadline-dev libncursesw5-dev libssl-dev libc6-dev libffi-dev zlib1g-dev qemu apt-transport-https software-properties-common systemd gnupg xz-utils sqlite3 mdbtools yara clamav clamav-daemon john gparted dos2unix sqlitebrowser python3-apt wireshark cutter bless flameshot libguestfs-tools mono-devel openjdk-17-jdk openjdk-17-jre curl jq openjdk-16-jre-headless elasticsearch kibana python3.9 python3.9-venv -y --fix-missing
 sudo apt-get install checkinstall libgdbm-dev libreadline-dev libnss3-dev libsqlite3-dev tk-dev liblzma-dev -y --fix-missing
 sudo snap install cyberchef
 sleep 1
 
 # installing network-miner
-sudo wget https://www.netresec.com/?download=NetworkMiner -O /tmp/nm.zip
 sudo unzip /tmp/nm.zip -d /opt/
 cd /opt/NetworkMiner*
 sudo chmod +x NetworkMiner.exe
@@ -32,7 +41,6 @@ cd ~
 sleep 1
 
 # installing maltego
-wget -O /tmp/Maltego.v4.7.0.deb https://downloads.maltego.com/maltego-v4/linux/Maltego.v4.7.0.deb
 sudo dpkg -i /tmp/Maltego.v4.7.0.deb
 
 # cloning additional repositories
