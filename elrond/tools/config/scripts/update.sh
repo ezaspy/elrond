@@ -27,7 +27,7 @@ printf "\n\n  -> elrond has been successfully updated; a reboot is required. Pre
 read answer
 sleep 1
 sudo updatedb
-#echo '' | sudo tee ~/.bash_history
-#history -c
+# echo '' | sudo tee ~/.bash_history
+# history -c
 sleep 1
 clear
