@@ -1,31 +1,16 @@
 <!-- PROJECT LOGO -->
 <p align="center">
-  <a href="https://github.com/ezaspy/elrond">
-    <img src="elrond/images/logo_trans_big.png" alt="Logo" width="400" height="400">
-  </a>
+  <a href="https://github.com/ezaspy/elrond"><img src="elrond/images/logo_trans_big.png" alt="Logo" width="400" height="400"></a>
   <p align="center">
     Accelerating the collection, processing, analysis and outputting of digital forensic artefacts.
     <br><br>
-    <a href="https://mit-license.org">
-      <img src="https://img.shields.io/github/license/ezaspy/elrond" alt="License: MIT">
-    </a>
-    <a href="https://github.com/ezaspy/elrond/issues">
-      <img src="https://img.shields.io/github/issues/ezaspy/elrond" alt="Issues">
-    </a>
-    <a href="https://github.com/ezaspy/elrond/network/members">
-      <img src="https://img.shields.io/github/forks/ezaspy/elrond" alt="Forks">
-    <a href="https://github.com/ezaspy/elrond/stargazers">
-      <img src="https://img.shields.io/github/stars/ezaspy/elrond" alt="Stars">
-    </a>
-    <a>
-      <img src="https://img.shields.io/badge/subject-DFIR-red" alt="Subject">
-    </a>
-    </a>
-      <img src="https://img.shields.io/github/last-commit/ezaspy/elrond" alt="Last Commit">
-    </a>
-    <a href="https://github.com/psf/black">
-      <img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg">
-    </a>
+    <a href="https://mit-license.org"><img src="https://img.shields.io/github/license/ezaspy/elrond" alt="License: MIT"></a>
+    <a href="https://github.com/ezaspy/elrond/issues"><img src="https://img.shields.io/github/issues/ezaspy/elrond" alt="Issues"></a>
+    <a href="https://github.com/ezaspy/elrond/network/members"><img src="https://img.shields.io/github/forks/ezaspy/elrond" alt="Forks"></a>
+    <a href="https://github.com/ezaspy/elrond/stargazers"><img src="https://img.shields.io/github/stars/ezaspy/elrond" alt="Stars"></a>
+    <a><img src="https://img.shields.io/badge/subject-DFIR-red" alt="Subject"></a>
+    <a><img src="https://img.shields.io/github/last-commit/ezaspy/elrond" alt="Last Commit"></a>
+    <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
     <br><br>
   </p>
 </p>
