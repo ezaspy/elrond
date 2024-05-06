@@ -51,7 +51,7 @@ It is important to note that elrond utilises many existing tools which have been
 
 I presented elrond, at [Wild West Hackin' Fest 2023](https://wildwesthackinfest.com) as part of the Toolshed Talks.
 
-[![Little red ridning hood](https://i.stack.imgur.com/XCRlR.png)](https://vimeo.com/showcase/10830332/video/890364778 "Using elrond in DFIR - acquired artefacts to TTPs, all before elevenses.")
+[![elrond on Vimeo](https://github.com/ezaspy/elrond/blob/main/elrond/images/vimeo.png)](https://vimeo.com/showcase/10830332/video/890364778 "Using elrond in DFIR - acquired artefacts to TTPs, all before elevenses.")
 
 
 - [Vimeo Video](https://vimeo.com/showcase/10830332/video/890364778)
