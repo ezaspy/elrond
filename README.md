@@ -49,13 +49,14 @@ It is important to note that elrond utilises many existing tools which have been
 
 ### Wild West Hackin' Fest 2023
 
-I presented elrond, at [Wild West Hackin' Fest 2023](https://wildwesthackinfest.com) as part of the Toolshed Talks. The full talk can be found on [Vimeo](https://vimeo.com/showcase/10830332/video/890364778) and the associated slidedeck can be found [here](https://github.com/ezaspy/elrond/blob/main/elrond.pdf).<br>
-<!-- <p align="center">
-  <a href="http://www.youtube.com/watch?feature=player_embedded&v=nTQUwghvy5Q" target="_blank">
-  <img src="http://img.youtube.com/vi/nTQUwghvy5Q/mqdefault.jpg" alt="elrond Demo" width="240" height="180" border="10" />
-  </a>
-</p>
-<br> -->
+I presented elrond, at [Wild West Hackin' Fest 2023](https://wildwesthackinfest.com) as part of the Toolshed Talks.
+
+[![Little red ridning hood](https://i.stack.imgur.com/XCRlR.png)](https://vimeo.com/showcase/10830332/video/890364778 "Using elrond in DFIR - acquired artefacts to TTPs, all before elevenses.")
+
+
+- [Vimeo Video](https://vimeo.com/showcase/10830332/video/890364778)
+- [Slidedeck](https://github.com/ezaspy/elrond/blob/main/elrond.pdf)
+<br>
 
 ### Related Projects
 
@@ -63,7 +64,6 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 <br><br><br>
 
 <!-- PREREQUISITES -->
-
 ## Configuration
 
 ### Initial Configuration
@@ -81,7 +81,7 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 #### Self-build
 
 ##### Download Virtual Machine
-There are several software package required for using elrond. Almost all of them are contained within the [SANS SIFT Worksation](https://www.sans.org/tools/sift-workstation/) virtual machine OVA. For the software which is not included ([make.sh](https://github.com/ezaspy/elrond/blob/main/make.sh)) installs and configures the additional software required for all potential functionality leveraged by elrond (volatility3, apfs-fuse, ClamAV etc.).
+> There are several software package required for using elrond. Almost all of them are contained within the [SANS SIFT Worksation](https://www.sans.org/tools/sift-workstation/) virtual machine OVA. For the software which is not included ([make.sh](https://github.com/ezaspy/elrond/blob/main/make.sh)) installs and configures the additional software required for all potential functionality leveraged by elrond (volatility3, apfs-fuse, ClamAV etc.).
 - For **x64**, download [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (20.04 LTS)
   - Can also download [Ubuntu x64](https://ubuntu.com/download/desktop) (24.04 LTS)
 - For **ARM**, download [Ubuntu for ARM](https://ubuntu.com/download/server/arm) (22.04 LTS)
@@ -89,12 +89,10 @@ There are several software package required for using elrond. Almost all of them
 
 ##### Configure
 Follow instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md)
-> *You will only need to run the make.sh script once, per SIFT instance*<br>
-> *If you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [.../elrond/elrond/tools/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/scripts/)*
-<br><br>
+> *You will only need to run the make.sh script once, per SIFT instance; if you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [.../elrond/elrond/tools/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/scripts/)*
+<br>
 
 <!-- USAGE EXAMPLES -->
-
 ## Usage
 
 `python3 elrond.py <case_id> <directory> [<output_directory>] [-h] [-AaBCcDEGIiMmNnPQqRSsTtUuVXZ] [-K <keyword_file>] [-Y <yara_dir>] -F (include|exclude):[<include/exclude_file>]`
