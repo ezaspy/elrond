@@ -88,9 +88,9 @@ There are several software package required for using elrond. Almost all of them
 <br><br>
 
 ##### Configure
-> Follow instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md)
-- *You will only need to run the make.sh script once, per SIFT instance*
-- *If you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [.../elrond/elrond/tools/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/scripts/)*
+Follow instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md)
+> *You will only need to run the make.sh script once, per SIFT instance*<br>
+> *If you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [.../elrond/elrond/tools/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/scripts/)*
 <br><br>
 
 <!-- USAGE EXAMPLES -->
