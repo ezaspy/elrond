@@ -3,6 +3,8 @@
 # downloading additional repo files
 sudo add-apt-repository -y ppa:linuxgndu/sqlitebrowser > /dev/null 2>&1 # db browser for sqlite
 yes '' | sudo add-apt-repository ppa:deadsnakes/ppa # INDXRipper
+echo 'deb http://download.opensuse.org/repositories/home:/RizinOrg/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/home:RizinOrg.list # cutter-re
+curl -fsSL https://download.opensuse.org/repositories/home:RizinOrg/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_RizinOrg.gpg > /dev/null # cutter-re
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list
 #echo "deb https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
@@ -26,8 +28,9 @@ sudo chmod 664 /etc/fstab
 
 # installing additional features for elrond
 sudo apt update
-sudo apt install vim mlocate net-tools build-essential libreadline-dev libncursesw5-dev libssl-dev libc6-dev libffi-dev zlib1g-dev qemu apt-transport-https software-properties-common systemd gnupg xz-utils sqlite3 mdbtools yara clamav clamav-daemon john gparted dos2unix sqlitebrowser python3-apt wireshark cutter bless flameshot libguestfs-tools mono-devel openjdk-17-jdk openjdk-17-jre curl jq openjdk-16-jre-headless elasticsearch kibana python3.9 python3.9-venv -y --fix-missing
+sudo apt install vim mlocate net-tools build-essential libreadline-dev libncursesw5-dev libssl-dev libc6-dev libffi-dev zlib1g-dev qemu apt-transport-https software-properties-common systemd gnupg xz-utils sqlite3 mdbtools yara clamav clamav-daemon john gparted dos2unix sqlitebrowser python3-apt wireshark libguestfs-tools mono-devel openjdk-17-jdk openjdk-17-jre curl jq openjdk-16-jre-headless elasticsearch kibana python3.9 python3.9-venv -y --fix-missing
 sudo apt-get install checkinstall libgdbm-dev libreadline-dev libnss3-dev libsqlite3-dev tk-dev liblzma-dev -y --fix-missing
+snap install sqlitebrowser
 sudo snap install cyberchef
 sleep 1
 
