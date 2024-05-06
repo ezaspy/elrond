@@ -14,7 +14,7 @@ sleep 2
 sudo chmod 644 /etc/sysctl.conf
 sudo du -sh /var/cache/apt/archives
 sudo apt update
-sudo apt install cutter bless flameshot
+sudo apt install bless flameshot cutter-re
 sudo apt-get remove --auto-remove --purge thunderbird rhythmbox yelp libreoffice* kdeconnect aisleriot gnome-mines gnome-sudoku gnome-mahjongg cheese ghex simple-scan wxhexeditor scite -y
 sudo apt-get autoremove --purge
 sudo apt-get clean
@@ -24,7 +24,7 @@ sleep 2
 
 # change desktop background
 gsettings set org.gnome.desktop.background picture-uri file:///opt/elrond/elrond/images/elrond_background.jpg
-gsettings set org.gnome.shell favorite-apps "['org.gnome.seahorse.Application.desktop', 'org.gnome.Nautilus.desktop', 'org.flameshot.Flameshot.desktop', 'firefox_firefox.desktop', 'firefox.desktop', 'org.gnome.Terminal.desktop', 'code.desktop', 'bless.desktop', 'wireshark.desktop', 'cutter.desktop', 'sqlitebrowser.desktop', 'maltego.desktop']"
+gsettings set org.gnome.shell favorite-apps "['org.gnome.seahorse.Application.desktop', 'org.gnome.Nautilus.desktop', 'org.flameshot.Flameshot.desktop', 'firefox_firefox.desktop', 'firefox.desktop', 'org.gnome.Terminal.desktop', 'code.desktop', 'bless.desktop', 'wireshark.desktop', 'cutter-re.desktop', 'sqlitebrowser.desktop', 'maltego.desktop']"
 sleep 2
 
 # configure .bashrc
