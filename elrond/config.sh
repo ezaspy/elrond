@@ -20,7 +20,7 @@ fi
 HYPER=$(sudo dmesg | grep -E "DMI|Hypervisor")
 if [[ "$HYPER" == *"VMware"* ]]; then
     # installing vmware_tools
-    /opt/elrond/elrond/tools/config/scripts/./virtual.sh
+    /opt/elrond/elrond/tools/config/scripts/./VMware.sh
 fi
 
 # installing apfs-fuse if architecture is not ARM
@@ -47,7 +47,8 @@ fi
 
 /opt/elrond/elrond/tools/config/scripts/./volatility3.sh
 /opt/elrond/elrond/tools/config/scripts/./dwarf2json.sh
-/opt/elrond/elrond/tools/config/scripts/./mitre.sh
+printf "\n  -> Downloading MITRE ATT&CK Framework Enterprise v15.1...\n\n"
+python3 /opt/elrond/elrond/tools/config/mitre.py
 /opt/elrond/elrond/tools/config/scripts/./splunk.sh
 /opt/elrond/elrond/tools/config/scripts/./elastic.sh #E: Unable to locate package openjdk-16-jre-headless
 /opt/elrond/elrond/tools/config/scripts/./navigator.sh
