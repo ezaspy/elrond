@@ -13,9 +13,13 @@ sleep 2
 # removing uneeded applications
 sudo chmod 644 /etc/sysctl.conf
 sudo du -sh /var/cache/apt/archives
+sudo apt update
+sudo apt install cutter bless flameshot
 sudo apt-get remove --auto-remove --purge thunderbird rhythmbox yelp libreoffice* kdeconnect aisleriot gnome-mines gnome-sudoku gnome-mahjongg cheese ghex simple-scan wxhexeditor scite -y
 sudo apt-get autoremove --purge
 sudo apt-get clean
+sudo apt update
+sudo updatedb
 sleep 2
 
 # change desktop background
