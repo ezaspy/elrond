@@ -30,7 +30,7 @@ sudo chmod 664 /etc/fstab
 sudo apt update
 sudo apt install vim mlocate net-tools build-essential libreadline-dev libncursesw5-dev libssl-dev libc6-dev libffi-dev zlib1g-dev qemu apt-transport-https software-properties-common systemd gnupg xz-utils sqlite3 mdbtools yara clamav clamav-daemon john gparted dos2unix sqlitebrowser python3-apt wireshark libguestfs-tools mono-devel openjdk-17-jdk openjdk-17-jre curl jq openjdk-16-jre-headless elasticsearch kibana python3.9 python3.9-venv -y --fix-missing
 sudo apt-get install checkinstall libgdbm-dev libreadline-dev libnss3-dev libsqlite3-dev tk-dev liblzma-dev -y --fix-missing
-snap install sqlitebrowser
+sudo snap install sqlitebrowser
 sudo snap install cyberchef
 sleep 1
 
