@@ -5,7 +5,7 @@ sudo rm -rf /opt/TZWorks
 sudo rm -rf /opt/BlueTeamPowerShell
 sudo rm -rf /opt/Sysmon/SysmonForLinux
 sudo rm -rf /home/$USER/Desktop/CobaltStrike-Defence/content
-sudo mkdir -p /opt/TZWorks /opt/BlueTeamPowerShell /opt/Sysmon/SysmonForLinux /home/$USER/Desktop/CobaltStrike-Defence/content
+sudo mkdir -p /opt/TZWorks /opt/BlueTeamPowerShell /opt/Sysmon/SysmonForLinux
 
 sudo rm -rf /opt/USN-Journal-Parser
 sudo git clone https://github.com/PoorBillionaire/USN-Journal-Parser.git /opt/USN-Journal-Parser
@@ -36,6 +36,7 @@ sudo git clone https://github.com/ufrisk/MemProcFS.git /opt/MemProcFS
 sudo rm -rf /opt/WMIExplorer
 sudo git clone https://github.com/vinaypamnani/wmie2/ /opt/WMIExplorer
 sudo git clone https://github.com/MichaelKoczwara/Awesome-CobaltStrike-Defence /home/$USER/Desktop/CobaltStrike-Defence
+sudo mkdir -p /home/$USER/Desktop/CobaltStrike-Defence/content
 sudo rm -rf /opt/freq
 sudo git clone https://github.com/MarkBaggett/freq.git /opt/freq
 sudo rm -rf /opt/dnstwist
