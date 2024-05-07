@@ -54,14 +54,14 @@ printf "\n  -> Downloading MITRE ATT&CK Framework Enterprise v15.1...\n\n"
 python3 /opt/elrond/elrond/tools/config/mitre.py
 /opt/elrond/elrond/tools/config/scripts/./elastic.sh
 /opt/elrond/elrond/tools/config/scripts/./navigator.sh
-/opt/elrond/elrond/tools/config/scripts/./finish.sh
-sleep 1
-clear
-printf "\n\n  -> SIFT-Workstation has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
-read answer
-sleep 1
-echo '' | sudo tee ~/.bash_history
-history -c
-sleep 1
-clear
-sudo reboot
+#/opt/elrond/elrond/tools/config/scripts/./finish.sh
+#sleep 1
+#clear
+#printf "\n\n  -> SIFT-Workstation has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
+#read answer
+#sleep 1
+#echo '' | sudo tee ~/.bash_history
+#history -c
+#sleep 1
+#clear
+#sudo reboot
