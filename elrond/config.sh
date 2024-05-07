@@ -49,8 +49,7 @@ fi
 /opt/elrond/elrond/tools/config/scripts/./dwarf2json.sh
 printf "\n  -> Downloading MITRE ATT&CK Framework Enterprise v15.1...\n\n"
 python3 /opt/elrond/elrond/tools/config/mitre.py
-/opt/elrond/elrond/tools/config/scripts/./splunk.sh
-/opt/elrond/elrond/tools/config/scripts/./elastic.sh #E: Unable to locate package openjdk-16-jre-headless
+/opt/elrond/elrond/tools/config/scripts/./elastic.sh
 /opt/elrond/elrond/tools/config/scripts/./navigator.sh
 /opt/elrond/elrond/tools/config/scripts/./finish.sh
 sleep 1
