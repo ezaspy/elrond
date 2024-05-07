@@ -1,5 +1,6 @@
 #!/bin/bash
 
+USER=$(echo $USERNAME)
 # removing old versions
 sudo rm -rf /opt/elrond/elrond/tools/avml
 sudo rm -rf /opt/elrond/elrond/tools/avml.zip

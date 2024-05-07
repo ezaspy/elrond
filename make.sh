@@ -1,5 +1,6 @@
 #!/bin/bash
 
+USER=$(echo $USERNAME)
 cd /opt/elrond
 sudo chmod 744 -R /opt/elrond/
 sudo chown $USER:$USER -R /opt/elrond/

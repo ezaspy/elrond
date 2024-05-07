@@ -1,5 +1,6 @@
 #!/bin/bash
 
+USER=$(echo $USERNAME)
 sleep 1
 clear
 printf "\n  -> Configuring python3.9...\n\n"

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+USER=$(echo $USERNAME)
 sleep 1
 clear
 printf "\n  -> Installing & configuring attack-navigator...\n\n"

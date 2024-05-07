@@ -1,5 +1,6 @@
 #!/bin/bash
 
+USER=$(echo $USERNAME)
 # downloading additional repo files
 sudo add-apt-repository -y ppa:linuxgndu/sqlitebrowser > /dev/null 2>&1 # db browser for sqlite
 yes '' | sudo add-apt-repository ppa:deadsnakes/ppa # INDXRipper

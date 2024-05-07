@@ -1,5 +1,6 @@
 #!/bin/bash
 
+USER=$(echo $USERNAME)
 # installing additional github tools
 sudo rm -rf /opt/TZWorks 
 sudo rm -rf /opt/BlueTeamPowerShell

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+USER=$(echo $USERNAME)
 sleep 1
 sudo apt update
 echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf
