@@ -1,4 +1,5 @@
 #!/bin/bash
+
 sudo mv VMwareTools-10.3.23-16594550.tar.gz /opt/elrond/elrond/tools/config/
 sudo tar -xvf /opt/elrond/elrond/tools/config/VMwareTools-10.3.23-16594550.tar.gz
 sleep 1

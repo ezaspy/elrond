@@ -1,4 +1,5 @@
 #!/bin/bash
+
 sleep 1
 clear
 printf "\n  -> Installing & configuring volatility3 and dependancies...\n\n"

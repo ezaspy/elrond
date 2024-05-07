@@ -1,4 +1,5 @@
 #!/bin/bash
+
 sleep 1
 clear
 printf "\n  -> Installing & configuring dwarf2json...\n\n"

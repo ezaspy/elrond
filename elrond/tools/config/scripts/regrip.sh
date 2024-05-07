@@ -1,4 +1,5 @@
 #!/bin/bash
+
 sleep 1
 clear
 printf "\n  -> Installing and configuring regripper...\n\n"
