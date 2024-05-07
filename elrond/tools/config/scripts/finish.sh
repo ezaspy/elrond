@@ -4,6 +4,7 @@ USER=$(echo $USERNAME)
 sleep 1
 sudo apt update
 echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf
+exit
 
 # configure .bashrc
 sudo chown +x /opt/elrond/elrond/tools/config/custom.sh
