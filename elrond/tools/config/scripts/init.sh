@@ -13,7 +13,7 @@ echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee 
 #sudo /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
 /opt/elrond/elrond/tools/config/scripts/./repo.sh
 sudo wget https://www.netresec.com/?download=NetworkMiner -O /tmp/nm.zip
-wget -O /tmp/Maltego.v4.7.0.deb https://downloads.maltego.com/maltego-v4/linux/Maltego.v4.7.0.deb
+sudo wget -O /tmp/Maltego.v4.7.0.deb https://downloads.maltego.com/maltego-v4/linux/Maltego.v4.7.0.deb
 sudo wget -O /opt/elrond/elrond/tools/.splunk.deb "https://download.splunk.com/products/splunk/releases/9.0.5/linux/splunk-9.0.5-e9494146ae5c-linux-2.6-amd64.deb"
 
 # creating linux_swap space
