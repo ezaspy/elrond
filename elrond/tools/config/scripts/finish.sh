@@ -1,4 +1,5 @@
 #!/bin/bash
+
 sleep 1
 sudo apt update
 echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf
@@ -14,7 +15,7 @@ sleep 2
 sudo chmod 644 /etc/sysctl.conf
 sudo du -sh /var/cache/apt/archives
 sudo apt update
-sudo apt install bless flameshot cutter-re
+sudo apt install bless flameshot cutter-re mlocate -y --fix-missing
 sudo apt-get remove --auto-remove --purge thunderbird rhythmbox yelp libreoffice* kdeconnect aisleriot gnome-mines gnome-sudoku gnome-mahjongg cheese ghex simple-scan wxhexeditor scite -y
 sudo apt-get autoremove --purge
 sudo apt-get clean
