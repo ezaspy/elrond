@@ -2,6 +2,7 @@
 import os
 import re
 import subprocess
+import shlex
 import time
 
 from rivendell.post.mitre.nav_attack import create_attack_navigator
@@ -149,6 +150,14 @@ def configure_navigator(verbosity, case, splunk, elastic, usercred, pswdcred):
                 "-R",
                 "755",
                 "/opt/attack-navigator/nav-app/src/assets/",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate(),
+        user = shlex.join(['USER=$(echo', '$USERNAME)'])
+        subprocess.Popen(
+            [
+                user,
             ],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
