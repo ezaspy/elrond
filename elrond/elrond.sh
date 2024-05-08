@@ -31,3 +31,4 @@ sudo chmod 744 /home/$USERPROFILE/.config/autostart/gnome-terminal.desktop
 echo '' | sudo tee ~/.bash_history
 history -c
 clear
+sudo reboot
