@@ -77,7 +77,6 @@ HOSTNAME=$(hostname)
 clear
 printf "\n\n  -> '"$(hostname)"' has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
 read answer
-#sudo /opt/elrond/elrond/./elrond.sh
 echo '' | sudo tee ~/.bash_history
 history -c
 sudo reboot
