@@ -46,8 +46,12 @@ sudo chmod -R go+w /opt/NetworkMiner_2-8-1/Captures/
 
 # initialising clamav
 sudo apt update
-sudo systemctl stop clamav-freshclam && sudo freshclam && sudo systemctl start clamav-freshclam
-sudo systemctl stop clamav-freshclam && sudo freshclam && sudo systemctl start clamav-freshclam
+sudo systemctl stop clamav-freshclam
+sudo freshclam
+sudo systemctl start clamav-freshclam
+sudo systemctl stop clamav-freshclam
+sudo freshclam
+sudo systemctl start clamav-freshclam
 
 # installing additional github tools
 sudo rm -rf /opt/TZWorks 
