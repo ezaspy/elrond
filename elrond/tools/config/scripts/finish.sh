@@ -3,13 +3,27 @@
 USER=$(echo $USERNAME)
 
 # configure .bashrc
-sudo -u $USER bash -c '/opt/elrond/elrond/tools/config/./elrond.sh'
 echo '
-export PS1="\e[1;36m\u@\h:\e[m \e[0;32m\w\e[m\n$ "
-
-/opt/elrond/elrond/tools/config/./elrond.sh' >> /home/$USER/.bashrc
+export PS1="\e[1;36m\u@\h:\e[m \e[0;32m\w\e[m\n$ "' >> /home/$USER/.bashrc
 echo "export PATH=$PATH:/opt/elrond/elrond" >> /home/$USER/.bashrc
 source ~/.bashrc
+
+# configure elrondDesktop.service
+echo "[Unit]
+Description=elrond Desktop
+After=network.target
+
+[Service]
+ExecStart=/opt/elrond/elrond/tools/config/elrond.sh
+
+[Install]
+WantedBy=default.target" >> elrondDesktop.service
+
+sudo cp elrondDesktop.service /etc/systemd/system/
+
+sudo systemctl daemon-reload
+sudo systemctl enable elrondDesktop.service
+sudo systemctl start elrondDesktop.service
 
 # cleaning uneeded applications
 sudo du -sh /var/cache/apt/archives
