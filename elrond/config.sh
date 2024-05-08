@@ -76,9 +76,9 @@ sleep 2
 /opt/elrond/elrond/tools/config/scripts/./finish.sh
 sudo chown -R $USER:$USER /opt/
 sudo updatedb
-HOSTNAME=$(whoami)
+HOSTNAME=$(hostname)
 clear
-printf "\n\n  -> $HOSTNAME has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
+printf "\n\n  -> '$HOSTNAME' has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
 read answer
 echo '' | sudo tee ~/.bash_history
 history -c
