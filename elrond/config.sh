@@ -64,8 +64,7 @@ fi
 
 /opt/elrond/elrond/tools/config/scripts/./volatility3.sh
 /opt/elrond/elrond/tools/config/scripts/./dwarf2json.sh
-clear
-printf "\n\n  -> Downloading MITRE ATT&CK Framework Enterprise v15.1...\n\n"
+printf "\n  -> Downloading MITRE ATT&CK Framework Enterprise v15.1..."
 python3 /opt/elrond/elrond/tools/config/mitre.py
 /opt/elrond/elrond/tools/config/scripts/./elastic.sh
 /opt/elrond/elrond/tools/config/scripts/./navigator.sh
