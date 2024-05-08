@@ -20,7 +20,8 @@ sudo git clone https://github.com/ezaspy/elrond.git
 /opt/elrond/elrond/tools/config/scripts/./finish.sh
 
 # finalising update
-sudo chmod -R 744 /opt/elrond/ && sudo chown -R $USER:$USER /opt/elrond
+sudo chmod -R 744 /opt/elrond/
+sudo chown -R $USER:$USER /opt/elrond
 sudo chmod +x /opt/elrond/elrond/elrond.py
 echo "export PATH=$PATH:/opt/elrond/elrond" >> /home$USER.bashrc
 printf "\n\n  -> elrond has been successfully updated; a reboot is required. Press ENTER to continue..."
