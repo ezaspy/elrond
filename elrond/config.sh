@@ -3,11 +3,6 @@
 clear
 printf "\n\n  +--------- \e[1;31mOPTIONAL\e[m: RDS Hash Sets Download ---------+\n\n   \e[0;36m$ /opt/elrond/elrond/tools/config/scripts/./nsrl.sh\e[m \n\n\n"
 sleep 20
-sudo apt update
-sudo chmod -R 744 /opt/elrond/
-sudo chown -R $(whoami):$(whoami) /opt/elrond
-sudo chmod +x /opt/elrond/elrond/elrond.py
-sudo chmod +x /opt/elrond/elrond/elrond.sh
 
 sudo chmod 777 /etc/sysctl.conf
 echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf
@@ -40,12 +35,11 @@ fi
 if [[ "$(uname -a)" != *"aarch"* ]]; then
     # installing apfs-fuse
     /opt/elrond/elrond/tools/config/scripts/./apfs-fuse.sh
-    # installing code
     wget -O /tmp/vscode.deb https://vscode.download.prss.microsoft.com/dbazure/download/stable/b58957e67ee1e712cebf466b995adf4c5307b2bd/code_1.89.0-1714530869_amd64.deb
 else
-    # installing code
     wget -O /tmp/vscode.deb https://vscode.download.prss.microsoft.com/dbazure/download/stable/b58957e67ee1e712cebf466b995adf4c5307b2bd/code_1.89.0-1714529372_arm64.deb
 fi
+# installing code
 sudo dpkg -i /tmp/vscode.deb
 
 # installing regripper if not installed
@@ -73,11 +67,7 @@ sudo sysctl -p
 
 /opt/elrond/elrond/tools/config/scripts/./navigator.sh
 /opt/elrond/elrond/tools/config/scripts/./finish.sh
-sleep 1
-sudo cp /opt/elrond/elrond/elrond.sh ~/elrond.sh
-sudo chmod -R 777 ~/elrond.sh
-sudo chown -R $(whoami):$(whoami) ~/elrond.sh
-sleep 4
+sleep 2
 clear
 printf "\n\n  -> '$(hostname)' has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
 read answer
