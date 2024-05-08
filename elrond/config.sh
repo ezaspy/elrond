@@ -10,6 +10,7 @@ sudo apt update
 cd /opt/elrond/elrond
 sudo chmod -R 755 /opt/elrond/
 chown -R $USER:$USER /opt/elrond
+/opt/elrond/elrond/tools/config/./elrond.sh
 
 # creating linux_swap space
 sudo swapoff /dev/sdb
