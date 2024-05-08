@@ -6,6 +6,7 @@ echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf
 
 # configure .bashrc
 sudo chmod +x /opt/elrond/elrond/tools/config/elrond.sh
+/opt/elrond/elrond/tools/config/./elrond.sh
 echo '
 export PS1="\e[1;36m\u@\h:\e[m \e[0;32m\w\e[m\n$ "
 
@@ -22,6 +23,7 @@ sudo du -sh /var/cache/apt/archives
 sudo apt update && sudo apt-get clean && sudo apt update && sudo updatedb
 
 # configure terminal to launch on login
+sudo rm -rf /home/$USER/.config/autostart/gnome-terminal.desktop
 sudo rm -rf gnome-terminal.desktop
 echo "[Desktop Entry]
 Type=Application
@@ -35,11 +37,6 @@ Comment[en_NG]=Start Terminal On Startup
 Comment=Start Terminal On Startup" > gnome-terminal.desktop
 sudo chmod 755 gnome-terminal.desktop
 sudo chown -R $USER:$USER gnome-terminal.desktop
-
-sudo rm -rf /home/$USER/.config/autostart/gnome-terminal.desktop
-mkdir /home/parallels/.config/autostart
+mkdir -p /home/$USER/.config/autostart
 sudo mv gnome-terminal.desktop /home/$USER/.config/autostart/
 sudo chmod 755 /home/$USER/.config/autostart/gnome-terminal.desktop
-sudo chown -R $USER:$USER /opt/
-sudo updatedb
-clear
