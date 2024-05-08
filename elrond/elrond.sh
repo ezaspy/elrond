@@ -5,3 +5,7 @@ gsettings set org.gnome.desktop.background picture-uri file:///opt/elrond/elrond
 
 # change favourite apps
 gsettings set org.gnome.shell favorite-apps "['org.gnome.seahorse.Application.desktop', 'org.gnome.Nautilus.desktop', 'org.flameshot.Flameshot.desktop', 'firefox_firefox.desktop', 'firefox.desktop', 'org.gnome.Terminal.desktop', 'code.desktop', 'bless.desktop', 'wireshark.desktop', 'cutter-re.desktop', 'sqlitebrowser_sqlitebrowser.desktop', 'maltego.desktop']"
+
+echo '' | sudo tee ~/.bash_history
+history -c
+clear
