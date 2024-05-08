@@ -65,11 +65,11 @@ fi
 /opt/elrond/elrond/tools/config/scripts/./volatility3.sh
 /opt/elrond/elrond/tools/config/scripts/./dwarf2json.sh
 clear
-printf "\n  -> Downloading MITRE ATT&CK Framework Enterprise v15.1...\n\n"
+printf "\n\n  -> Downloading MITRE ATT&CK Framework Enterprise v15.1...\n\n"
 python3 /opt/elrond/elrond/tools/config/mitre.py
 /opt/elrond/elrond/tools/config/scripts/./elastic.sh
 /opt/elrond/elrond/tools/config/scripts/./navigator.sh
-USER=$(echo whoami) && HOST=$(echo hostname)
+USER=$(whoami) && HOST=$(hostname)
 sudo chmod -R 744 /opt/elrond/
 sudo chown -R $USER:$USER /opt/elrond
 sudo chmod +x /opt/elrond/elrond/elrond.py
