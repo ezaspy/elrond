@@ -13,7 +13,7 @@ sudo rm -rf /home/$USER/.config/autostart/gnome-terminal.desktop
 sudo rm -rf gnome-terminal.desktop
 echo "[Desktop Entry]
 Type=Application
-Exec=gnome-terminal -e \"bash -c '/opt/elrond/elrond/tools/config/./elrond.sh'\"
+Exec=gnome-terminal
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
