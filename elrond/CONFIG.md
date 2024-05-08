@@ -10,6 +10,8 @@
   - **&darr; &darr; `ENTER c g`** (apfs-fuse on x64 architecture only)
 <br>
 
+> OPTIONAL: `/opt/elrond/elrond/./elrond.sh`<br>
+
 ---
 <br>
 
