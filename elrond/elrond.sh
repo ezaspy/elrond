@@ -1,8 +1,5 @@
 #!/bin/bash
 
-USERPROFILE=$(cat /etc/passwd | grep 1000 | cut -d ":" -f 1)
-HOSTNAME=$(hostname)
-
 # change desktop background
 gsettings set org.gnome.desktop.background picture-uri file:///opt/elrond/elrond/images/elrond_background.jpg
 
