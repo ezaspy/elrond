@@ -15,10 +15,11 @@ sudo git clone https://github.com/ezaspy/elrond.git
 /opt/elrond/elrond/tools/config/scripts/./finish.sh
 
 # finalising update
-sudo chmod -R 744 /opt/elrond/
-sudo chown -R $(whoami):$(whoami) /opt/elrond
+sudo chmod 744 -R /opt/elrond/
+sudo chown $(whoami):$(whoami) -R /opt/elrond/
+sudo chmod +x /opt/elrond/elrond/config.sh
 sudo chmod +x /opt/elrond/elrond/elrond.py
-echo "export PATH=$PATH:/opt/elrond/elrond" >> /home/$USER.bashrc
+echo "export PATH=$PATH:/opt/elrond/elrond" >> /home/$(whoami)/.bashrc
 printf "\n\n  -> '$(hostname)' has been successfully updated; a reboot is required. Press ENTER to continue..."
 read answer
 sleep 1
