@@ -69,6 +69,7 @@ printf "\n  -> Downloading MITRE ATT&CK Framework Enterprise v15.1...\n\n"
 python3 /opt/elrond/elrond/tools/config/mitre.py
 /opt/elrond/elrond/tools/config/scripts/./elastic.sh
 /opt/elrond/elrond/tools/config/scripts/./navigator.sh
+USER=$(echo whoami) && HOST=$(echo hostname)
 sudo chmod -R 744 /opt/elrond/
 sudo chown -R $USER:$USER /opt/elrond
 sudo chmod +x /opt/elrond/elrond/elrond.py
@@ -76,9 +77,8 @@ sleep 2
 /opt/elrond/elrond/tools/config/scripts/./finish.sh
 sudo chown -R $USER:$USER /opt/
 sudo updatedb
-HOSTNAME=$(hostname)
 clear
-printf "\n\n  -> '$HOSTNAME' has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
+printf "\n\n  -> '$HOST' has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
 read answer
 echo '' | sudo tee ~/.bash_history
 history -c
