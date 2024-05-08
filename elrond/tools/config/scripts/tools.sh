@@ -56,9 +56,9 @@ sudo systemctl start clamav-freshclam
 sudo rm -rf /opt/TZWorks 
 sudo rm -rf /opt/BlueTeamPowerShell
 sudo rm -rf /opt/Sysmon/SysmonForLinux
-sudo rm -rf /home/$(whoami)/Desktop/CobaltStrike-Defence/content
-sudo git clone https://github.com/MichaelKoczwara/Awesome-CobaltStrike-Defence /home/$(whoami)/Desktop/CobaltStrike-Defence
-sudo mkdir -p /home/$(whoami)/Desktop/CobaltStrike-Defence/content
+sudo rm -rf /home/"$(whoami)"/Desktop/CobaltStrike-Defence/content
+sudo git clone https://github.com/MichaelKoczwara/Awesome-CobaltStrike-Defence /home/"$(whoami)"/Desktop/CobaltStrike-Defence
+sudo mkdir -p /home/"$(whoami)"/Desktop/CobaltStrike-Defence/content
 sudo mkdir -p /opt/TZWorks /opt/BlueTeamPowerShell /opt/Sysmon/SysmonForLinux
 
 sudo rm -rf /opt/USN-Journal-Parser

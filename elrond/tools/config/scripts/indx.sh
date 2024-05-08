@@ -6,13 +6,13 @@ printf "\n  -> Configuring python3.9...\n\n"
 python3 -m keyring --disable
 
 # installing python libraries
-USER=$(whoami)
+USER="$(whoami)"
 python3 -m pip install --upgrade pip
 sudo python3 -m pip install --upgrade pip
 python3 -m pip install requests pandas openpyxl jupyterlab notebook voila
 sudo python3 -m pip install requests pandas openpyxl jupyterlab notebook voila
 sudo chmod -R 744 /opt/elrond/
-sudo chown -R $(whoami):$(whoami) /opt/elrond
+sudo chown -R "$(whoami)":"$(whoami)" /opt/elrond
 cd /opt/etl-parser
 sudo python3 -m pip install -e .
 cd /opt/elrond/elrond

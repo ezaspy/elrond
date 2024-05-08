@@ -1,7 +1,7 @@
 #!/bin/bash
 
 sudo chmod -R 744 /opt/elrond/
-sudo chown -R $(whoami):$(whoami) /opt/elrond
+sudo chown -R "$(whoami)":"$(whoami)" /opt/elrond
 
 # change desktop background
 gsettings set org.gnome.desktop.background picture-uri file:///opt/elrond/elrond/images/elrond_background.jpg

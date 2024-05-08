@@ -21,7 +21,7 @@ sudo chmod 664 /etc/fstab
 /opt/elrond/elrond/tools/config/scripts/./tools.sh
 
 # setting hostname to elrond if not SANS SIFT
-if [[ "$(hostname)" != *"siftworkstation"* ]]; then
+if [[ ""$(hostname)"" != *"siftworkstation"* ]]; then
     sudo hostnamectl set-hostname elrond
 fi
 
@@ -69,10 +69,10 @@ sudo sysctl -p
 /opt/elrond/elrond/tools/config/scripts/./finish.sh
 sleep 2
 clear
-printf "\n\n  -> '$(hostname)' has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
+printf "\n\n  -> '"$(hostname)"' has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
 read answer
 sudo chmod -R 744 /opt/elrond/
-sudo chown -R $(whoami):$(whoami) /opt/elrond
+sudo chown -R "$(whoami)":"$(whoami)" /opt/elrond
 echo '' | sudo tee ~/.bash_history
 history -c
 sudo reboot
