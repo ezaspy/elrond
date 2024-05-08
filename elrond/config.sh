@@ -1,7 +1,6 @@
 #!/bin/bash
 
 USER=$(echo $USERNAME)
-sleep 1
 clear
 printf "\n\n  +--------- \e[1;31mOPTIONAL\e[m: RDS Hash Sets Download ---------+\n\n   \e[0;36m$ /opt/elrond/elrond/tools/config/scripts/./nsrl.sh\e[m \n\n\n"
 sleep 20
@@ -11,8 +10,6 @@ cd /opt/elrond/elrond
 sudo chmod -R 744 /opt/elrond/ && sudo chown -R $USER:$USER /opt/elrond
 sudo chmod +x /opt/elrond/elrond/elrond.py
 sudo chmod +x /opt/elrond/elrond/tools/config/./elrond.sh
-sudo -u $USER bash -c '/opt/elrond/elrond/tools/config/./elrond.sh'
-exit
 
 sudo chmod 777 /etc/sysctl.conf
 echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf
