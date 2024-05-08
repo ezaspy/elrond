@@ -27,6 +27,7 @@ sudo chown -R "$USERPROFILE":"$USERPROFILE" gnome-terminal.desktop
 mkdir -p /home/$USERPROFILE/.config/autostart
 sudo mv gnome-terminal.desktop /home/$USERPROFILE/.config/autostart/
 sudo chmod 744 /home/$USERPROFILE/.config/autostart/gnome-terminal.desktop
+sudo chmod -R 744 ~/Desktop/CobaltStrike-Defence
 
 echo '' | sudo tee ~/.bash_history
 history -c
