@@ -1,5 +1,8 @@
 #!/bin/bash
 
+USERPROFILE=$(cat /etc/passwd | grep 1000 | cut -d ":" -f 1)
+HOSTNAME=$(hostname)
+
 sleep 1
 clear
 printf "\n  -> Installing and configuring regripper...\n\n"

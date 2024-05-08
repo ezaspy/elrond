@@ -1,5 +1,8 @@
 #!/bin/bash
 
+USERPROFILE=$(cat /etc/passwd | grep 1000 | cut -d ":" -f 1)
+HOSTNAME=$(hostname)
+
 sudo mv VMwareTools-10.3.23-16594550.tar.gz /opt/elrond/elrond/tools/config/
 sudo tar -xvf /opt/elrond/elrond/tools/config/VMwareTools-10.3.23-16594550.tar.gz
 sleep 1

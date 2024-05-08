@@ -1,5 +1,8 @@
 #!/bin/bash
 
+USERPROFILE=$(cat /etc/passwd | grep 1000 | cut -d ":" -f 1)
+HOSTNAME=$(hostname)
+
 # install azure cli
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
