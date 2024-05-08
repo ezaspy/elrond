@@ -14,7 +14,7 @@ sudo rm -rf /home/$USERPROFILE/.config/autostart/gnome-terminal.desktop
 sudo rm -rf gnome-terminal.desktop
 echo "[Desktop Entry]
 Type=Application
-Exec=gnome-terminal
+Exec=gnome-terminal -- ~/elrond.sh ; bash
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
@@ -27,6 +27,7 @@ sudo chown -R "$USERPROFILE":"$USERPROFILE" gnome-terminal.desktop
 mkdir -p /home/$USERPROFILE/.config/autostart
 sudo mv gnome-terminal.desktop /home/$USERPROFILE/.config/autostart/
 sudo chmod 744 /home/$USERPROFILE/.config/autostart/gnome-terminal.desktop
+cp /opt/elrond/elrond/elrond.sh ~/elrond.sh
 
 # cleaning uneeded applications
 sudo du -sh /var/cache/apt/archives
