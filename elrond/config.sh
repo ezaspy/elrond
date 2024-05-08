@@ -6,7 +6,6 @@ printf "\n\n  +--------- \e[1;31mOPTIONAL\e[m: RDS Hash Sets Download ---------+
 sleep 20
 clear
 sudo apt update
-cd /opt/elrond/elrond
 sudo chmod -R 744 /opt/elrond/
 sudo chown -R $USER:$USER /opt/elrond
 sudo chmod +x /opt/elrond/elrond/elrond.*
