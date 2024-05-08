@@ -28,7 +28,7 @@ mkdir -p /home/$USERPROFILE/.config/autostart
 sudo mv gnome-terminal.desktop /home/$USERPROFILE/.config/autostart/
 sudo chmod 744 /home/$USERPROFILE/.config/autostart/gnome-terminal.desktop
 cp /opt/elrond/elrond/elrond.sh ~/elrond.sh
-sudo chmod 777 ~/elrond.sh
+sudo chmod 744 ~/elrond.sh
 sudo chmod +x ~/elrond.sh
 
 # cleaning uneeded applications
