@@ -68,16 +68,15 @@ python3 /opt/elrond/elrond/tools/config/mitre.py
 /opt/elrond/elrond/tools/config/scripts/./elastic.sh
 /opt/elrond/elrond/tools/config/scripts/./navigator.sh
 USER=$(whoami) && HOST=$(hostname)
-sudo chmod -R 744 /opt/elrond/
-sudo chown -R $USER:$USER /opt/elrond
+sudo chmod -R 744 /opt/elrond/ && sudo chown -R $USER:$USER /opt/elrond
 sudo chmod +x /opt/elrond/elrond/elrond.py
 sleep 2
 /opt/elrond/elrond/tools/config/scripts/./finish.sh
-sudo chown -R $USER:$USER /opt/
 sudo updatedb
 clear
 printf "\n\n  -> '$HOST' has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
 read answer
+sudo chmod -R 744 /opt/elrond/ && sudo chown -R $USER:$USER /opt/elrond
 echo '' | sudo tee ~/.bash_history
 history -c
 sudo reboot
