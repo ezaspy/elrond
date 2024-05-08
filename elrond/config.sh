@@ -1,13 +1,12 @@
 #!/bin/bash
 
-USER=$(whoami)
 clear
 printf "\n\n  +--------- \e[1;31mOPTIONAL\e[m: RDS Hash Sets Download ---------+\n\n   \e[0;36m$ /opt/elrond/elrond/tools/config/scripts/./nsrl.sh\e[m \n\n\n"
 sleep 20
 clear
 sudo apt update
 sudo chmod -R 744 /opt/elrond/
-sudo chown -R $USER:$USER /opt/elrond
+sudo chown -R $(whoami):$(whoami) /opt/elrond
 sudo chmod +x /opt/elrond/elrond/elrond.*
 
 sudo chmod 777 /etc/sysctl.conf
@@ -27,21 +26,18 @@ sudo chmod 664 /etc/fstab
 /opt/elrond/elrond/tools/config/scripts/./tools.sh
 
 # setting hostname to elrond if not SANS SIFT
-HOST=$(hostname)
-if [[ "$HOST" != *"siftworkstation"* ]]; then
+if [[ "$(hostname)" != *"siftworkstation"* ]]; then
     sudo hostnamectl set-hostname elrond
 fi
 
 # installing vmware-tools if applicable
-HYPER=$(sudo dmesg | grep -E "DMI|Hypervisor")
-if [[ "$HYPER" == *"VMware"* ]]; then
+if [[ "$(sudo dmesg | grep -E "DMI|Hypervisor")" == *"VMware"* ]]; then
     # installing vmware_tools
     /opt/elrond/elrond/tools/config/scripts/./VMware.sh
 fi
 
 # installing apfs-fuse if architecture is not ARM
-UNAME=$(uname -a)
-if [[ "$UNAME" != *"aarch"* ]]; then
+if [[ "$(uname -a)" != *"aarch"* ]]; then
     # installing apfs-fuse
     /opt/elrond/elrond/tools/config/scripts/./apfs-fuse.sh
     # installing code
@@ -65,19 +61,28 @@ fi
 /opt/elrond/elrond/tools/config/scripts/./dwarf2json.sh
 printf "\n  -> Downloading MITRE ATT&CK Framework Enterprise v15.1..."
 python3 /opt/elrond/elrond/tools/config/mitre.py
-/opt/elrond/elrond/tools/config/scripts/./elastic.sh
+
+# configuring elastic
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable elasticsearch.service
+sudo /bin/systemctl enable kibana.service
+sudo sysctl -w vm.max_map_count=262144
+echo vm.max_map_count=262144 | sudo tee -a /etc/sysctl.conf
+sleep 1
+sudo sysctl -p
+
 /opt/elrond/elrond/tools/config/scripts/./navigator.sh
-USER=$(whoami)
-HOST=$(hostname)
 /opt/elrond/elrond/tools/config/scripts/./finish.sh
+sleep 1
 sudo cp /opt/elrond/elrond/elrond.sh ~/elrond.sh
 sudo chmod -R 777 ~/elrond.sh
-sudo chown -R $USER:$USER ~/elrond.sh
+sudo chown -R $(whoami):$(whoami) ~/elrond.sh
+sleep 4
 clear
-printf "\n\n  -> '$HOST' has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
+printf "\n\n  -> '$(hostname)' has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
 read answer
 sudo chmod -R 744 /opt/elrond/
-sudo chown -R $USER:$USER /opt/elrond
+sudo chown -R $(whoami):$(whoami) /opt/elrond
 echo '' | sudo tee ~/.bash_history
 history -c
 sudo reboot

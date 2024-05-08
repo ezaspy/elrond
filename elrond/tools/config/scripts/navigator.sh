@@ -1,6 +1,5 @@
 #!/bin/bash
 
-USER=$(whoami)
 sleep 1
 clear
 printf "\n  -> Installing & configuring attack-navigator...\n\n"
@@ -21,7 +20,7 @@ sudo pm2 start --time --name="attack-navigator" ng -- serve
 sleep 1
 sudo curl https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json -o /opt/attack-navigator/nav-app/src/assets/enterprise-attack.json
 sudo chmod -R 755 /opt/attack-navigator/
-sudo chown -R $USER:$USER /opt/attack-navigator/
+sudo chown -R $(whoami):$(whoami) /opt/attack-navigator/
 # sudo pm2 stop attack-navigator
 cd /opt/elrond
 sleep 1

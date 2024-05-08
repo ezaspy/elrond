@@ -167,7 +167,7 @@ def configure_navigator(verbosity, case, splunk, elastic, usercred, pswdcred):
                 "sudo",
                 "chown",
                 "-R",
-                "$USER:$USER",
+                "$(whoami):$(whoami)",
                 "/opt/attack-navigator/nav-app/src/assets/",
             ],
             stdout=subprocess.PIPE,

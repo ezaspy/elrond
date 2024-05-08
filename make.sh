@@ -1,9 +1,8 @@
 #!/bin/bash
 
-USER=$(whoami)
 cd /opt/elrond
 sudo chmod 744 -R /opt/elrond/
-sudo chown $USER:$USER -R /opt/elrond/
+sudo chown $(whoami):$(whoami) -R /opt/elrond/
 export PATH="/opt/elrond:$PATH"
 source ~/.bashrc
 sudo chmod +x /opt/elrond/elrond/config.sh

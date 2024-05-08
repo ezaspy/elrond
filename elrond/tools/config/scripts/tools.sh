@@ -1,6 +1,5 @@
 #!/bin/bash
 
-USER=$(whoami)
 
 # purging unwanted software
 sudo apt-get remove --auto-remove --purge thunderbird rhythmbox yelp libreoffice* kdeconnect aisleriot gnome-mines gnome-sudoku gnome-mahjongg cheese ghex simple-scan wxhexeditor scite -y

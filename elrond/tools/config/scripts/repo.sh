@@ -1,6 +1,5 @@
 #!/bin/bash
 
-USER=$(whoami)
 sleep 1
 cd /tmp
 sudo apt install python3-pip -y

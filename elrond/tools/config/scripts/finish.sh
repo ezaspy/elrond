@@ -1,6 +1,5 @@
 #!/bin/bash
 
-USER=$(whoami)
 HOST=$(hostname)
 
 # configure .bashrc
@@ -23,7 +22,7 @@ Name=Terminal
 Comment[en_NG]=Start Terminal On Startup
 Comment=Start Terminal On Startup" > gnome-terminal.desktop
 sudo chmod 755 gnome-terminal.desktop
-sudo chown -R $USER:$USER gnome-terminal.desktop
+sudo chown -R $(whoami):$(whoami) gnome-terminal.desktop
 mkdir -p /home/$USER/.config/autostart
 sudo mv gnome-terminal.desktop /home/$USER/.config/autostart/
 sudo chmod 755 /home/$USER/.config/autostart/gnome-terminal.desktop
@@ -35,6 +34,6 @@ sudo apt-get clean
 sudo apt update
 sudo updatedb
 sudo chmod -R 744 /opt/elrond/
-sudo chown -R $USER:$USER /opt/elrond
+sudo chown -R $(whoami):$(whoami) /opt/elrond
 sudo chmod +x /opt/elrond/elrond/elrond.py
 sudo updatedb

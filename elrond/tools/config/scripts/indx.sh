@@ -1,6 +1,5 @@
 #!/bin/bash
 
-USER=$(whoami)
 sleep 1
 clear
 printf "\n  -> Configuring python3.9...\n\n"
@@ -13,7 +12,7 @@ sudo python3 -m pip install --upgrade pip
 python3 -m pip install requests pandas openpyxl jupyterlab notebook voila
 sudo python3 -m pip install requests pandas openpyxl jupyterlab notebook voila
 sudo chmod -R 744 /opt/elrond/
-sudo chown -R $USER:$USER /opt/elrond
+sudo chown -R $(whoami):$(whoami) /opt/elrond
 cd /opt/etl-parser
 sudo python3 -m pip install -e .
 cd /opt/elrond/elrond
