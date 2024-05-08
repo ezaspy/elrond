@@ -70,6 +70,9 @@ python3 /opt/elrond/elrond/tools/config/mitre.py
 USER=$(whoami)
 HOST=$(hostname)
 /opt/elrond/elrond/tools/config/scripts/./finish.sh
+sudo cp /opt/elrond/elrond/elrond.sh ~/elrond.sh
+sudo chmod -R 777 ~/elrond.sh
+sudo chown -R $USER:$USER ~/elrond.sh
 clear
 printf "\n\n  -> '$HOST' has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
 read answer
