@@ -1,6 +1,7 @@
 #!/bin/bash
 
 USER=$(whoami)
+HOST=$(hostname)
 
 # configure .bashrc
 echo '
@@ -29,4 +30,11 @@ sudo chmod 755 /home/$USER/.config/autostart/gnome-terminal.desktop
 
 # cleaning uneeded applications
 sudo du -sh /var/cache/apt/archives
-sudo apt update && sudo apt-get clean && sudo apt update && sudo updatedb
+sudo apt update
+sudo apt-get clean
+sudo apt update
+sudo updatedb
+sudo chmod -R 744 /opt/elrond/
+sudo chown -R $USER:$USER /opt/elrond
+sudo chmod +x /opt/elrond/elrond/elrond.py
+sudo updatedb
