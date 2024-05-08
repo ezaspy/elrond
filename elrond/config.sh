@@ -9,7 +9,7 @@ sudo apt update
 cd /opt/elrond/elrond
 sudo chmod -R 744 /opt/elrond/ && sudo chown -R $USER:$USER /opt/elrond
 sudo chmod +x /opt/elrond/elrond/elrond.py
-sudo chmod +x /opt/elrond/elrond/tools/config/./elrond.sh
+sudo chmod +x /opt/elrond/elrond/tools/config/elrond.sh
 
 sudo chmod 777 /etc/sysctl.conf
 echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf
