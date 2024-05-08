@@ -1,4 +1,3 @@
-<!-- PROJECT LOGO -->
 <p align="center">
   <a href="https://github.com/ezaspy/elrond">
     <img src="elrond/images/logo_trans_big.png" alt="Logo" width="400" height="400">
@@ -16,8 +15,6 @@
     <br><br>
   </p>
 </p>
-
-<!-- TABLE OF CONTENTS -->
 
 ## Table of Contents
 
@@ -91,8 +88,6 @@ elrond is responsible for the analysis-side of digital forensic, but what about 
 Follow instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md)
 > *You will only need to run the make.sh script once, per 'elrond VM' instance; if you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [.../elrond/elrond/tools/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/scripts/)*
 <br>
-
-<!-- USAGE EXAMPLES -->
 
 ## Usage
 
