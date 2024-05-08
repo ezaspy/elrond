@@ -10,7 +10,24 @@ sudo apt update
 cd /opt/elrond/elrond
 sudo chmod -R 755 /opt/elrond/
 chown -R $USER:$USER /opt/elrond
-/opt/elrond/elrond/tools/config/scripts/./init.sh
+
+# creating linux_swap space
+sudo swapoff /dev/sdb
+sudo umount /dev/sdb
+sudo mkswap /dev/sdb
+sudo swapon /dev/sdb
+sudo cp /etc/fstab /etc/fstab.orig
+sudo chmod 777 /etc/fstab
+echo "/dev/sdb swap swap defaults 0 0" >> /etc/fstab
+sudo chmod 664 /etc/fstab
+
+#/opt/elrond/elrond/tools/config/scripts/./cloud.sh
+/opt/elrond/elrond/tools/config/scripts/./tools.sh
+
+# configuring elrond
+sudo chmod -R 744 /opt/elrond/ && sudo chown -R $USER:$USER /opt/elrond
+sudo chmod +x /opt/elrond/elrond/elrond.py
+sleep 1
 
 # setting hostname to elrond if not SANS SIFT
 HOST=$(hostname)
@@ -44,7 +61,7 @@ if [ -d "/usr/local/src/regripper" ]; then
     sudo cp /usr/share/regripper/rip.pl /usr/share/regripper/rip.pl.old
     sudo sed -i 's/my \$VERSION/# Add: Define the variable plugindir\nmy \$plugindir = File::Spec->catfile\(\$scriptdir, "plugins"\);\n\nmy \$VERSION/' /usr/share/regripper/rip.pl
 else
-    /opt/elrond/elrond/tools/config/scripts/./regrip.sh
+    sudo /opt/elrond/elrond/tools/config/scripts/./regrip.sh
 fi
 
 /opt/elrond/elrond/tools/config/scripts/./volatility3.sh
@@ -54,14 +71,9 @@ printf "\n  -> Downloading MITRE ATT&CK Framework Enterprise v15.1...\n\n"
 python3 /opt/elrond/elrond/tools/config/mitre.py
 /opt/elrond/elrond/tools/config/scripts/./elastic.sh
 /opt/elrond/elrond/tools/config/scripts/./navigator.sh
-#/opt/elrond/elrond/tools/config/scripts/./finish.sh
-#sleep 1
-#clear
-#printf "\n\n  -> SIFT-Workstation has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
-#read answer
-#sleep 1
-#echo '' | sudo tee ~/.bash_history
-#history -c
-#sleep 1
-#clear
-#sudo reboot
+/opt/elrond/elrond/tools/config/scripts/./finish.sh
+printf "\n\n  -> SIFT-Workstation has been successfully configured for elrond; a reboot is required. Press ENTER to continue..."
+read answer
+echo '' | sudo tee ~/.bash_history
+history -c
+sudo reboot
