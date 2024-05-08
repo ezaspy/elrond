@@ -3,9 +3,6 @@
 USERPROFILE=$(cat /etc/passwd | grep 1000 | cut -d ":" -f 1)
 HOSTNAME=$(hostname)
 
-sudo chmod -R 744 /opt/elrond/
-sudo chown -R "$USERPROFILE":"$USERPROFILE" /opt/elrond
-
 # change desktop background
 gsettings set org.gnome.desktop.background picture-uri file:///opt/elrond/elrond/images/elrond_background.jpg
 
