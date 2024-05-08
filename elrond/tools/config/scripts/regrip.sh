@@ -1,6 +1,6 @@
 #!/bin/bash
 
-USER=$(echo $USERNAME)
+USER=$(whoami)
 sleep 1
 clear
 printf "\n  -> Installing and configuring regripper...\n\n"

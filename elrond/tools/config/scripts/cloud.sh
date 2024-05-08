@@ -1,6 +1,6 @@
 #!/bin/bash
 
-USER=$(echo $USERNAME)
+USER=$(whoami)
 # install azure cli
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 

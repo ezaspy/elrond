@@ -1,6 +1,6 @@
 #!/bin/bash
 
-USER=$(echo $USERNAME)
+USER=$(whoami)
 cd /opt/elrond
 sudo chmod 744 -R /opt/elrond/
 sudo chown $USER:$USER -R /opt/elrond/
