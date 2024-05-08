@@ -8,10 +8,15 @@ sleep 20
 clear
 sudo apt update
 cd /opt/elrond/elrond
-sudo chmod -R 755 /opt/elrond/
-chown -R $USER:$USER /opt/elrond
-/opt/elrond/elrond/tools/config/./elrond.sh
+sudo chmod -R 744 /opt/elrond/ && sudo chown -R $USER:$USER /opt/elrond
+sudo chmod +x /opt/elrond/elrond/elrond.py
+sudo chmod +x /opt/elrond/elrond/tools/config/./elrond.sh
+sudo -u $USER bash -c '/opt/elrond/elrond/tools/config/./elrond.sh'
+exit
 
+sudo chmod 777 /etc/sysctl.conf
+echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf
+sudo chmod 644 /etc/sysctl.conf
 # creating linux_swap space
 sudo swapoff /dev/sdb
 sudo umount /dev/sdb
@@ -24,11 +29,6 @@ sudo chmod 664 /etc/fstab
 
 #/opt/elrond/elrond/tools/config/scripts/./cloud.sh
 /opt/elrond/elrond/tools/config/scripts/./tools.sh
-
-# configuring elrond
-sudo chmod -R 744 /opt/elrond/ && sudo chown -R $USER:$USER /opt/elrond
-sudo chmod +x /opt/elrond/elrond/elrond.py
-sleep 1
 
 # setting hostname to elrond if not SANS SIFT
 HOST=$(hostname)
@@ -72,6 +72,10 @@ printf "\n  -> Downloading MITRE ATT&CK Framework Enterprise v15.1...\n\n"
 python3 /opt/elrond/elrond/tools/config/mitre.py
 /opt/elrond/elrond/tools/config/scripts/./elastic.sh
 /opt/elrond/elrond/tools/config/scripts/./navigator.sh
+sudo chmod -R 744 /opt/elrond/
+sudo chown -R $USER:$USER /opt/elrond
+sudo chmod +x /opt/elrond/elrond/elrond.py
+sleep 2
 /opt/elrond/elrond/tools/config/scripts/./finish.sh
 sudo chown -R $USER:$USER /opt/
 sudo updatedb
