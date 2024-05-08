@@ -3,11 +3,11 @@
 clear
 printf "\n\n  +--------- \e[1;31mOPTIONAL\e[m: RDS Hash Sets Download ---------+\n\n   \e[0;36m$ /opt/elrond/elrond/tools/config/scripts/./nsrl.sh\e[m \n\n\n"
 sleep 20
-clear
 sudo apt update
 sudo chmod -R 744 /opt/elrond/
 sudo chown -R $(whoami):$(whoami) /opt/elrond
-sudo chmod +x /opt/elrond/elrond/elrond.*
+sudo chmod +x /opt/elrond/elrond/elrond.py
+sudo chmod +x /opt/elrond/elrond/elrond.sh
 
 sudo chmod 777 /etc/sysctl.conf
 echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf

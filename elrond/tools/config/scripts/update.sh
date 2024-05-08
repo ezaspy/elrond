@@ -1,13 +1,9 @@
 #!/bin/bash
 
 # removing old versions
-sudo rm -rf /opt/elrond/elrond/tools/avml
-sudo rm -rf /opt/elrond/elrond/tools/avml.zip
+sudo rm -rf /opt/elrond/elrond/tools/avml*
 sudo rm -rf /opt/elrond/elrond/tools/osxpmem.app.zip
-sudo rm -rf /opt/elrond/elrond/tools/volatility.zip
-sudo rm -rf /opt/elrond/elrond/tools/volatility
-sudo rm -rf /opt/elrond/elrond/tools/volatility3.zip
-sudo rm -rf /opt/elrond/elrond/tools/volatility3
+sudo rm -rf /opt/elrond/elrond/tools/volatility*
 sudo mv /tmp/apps/*.py /opt/elrond/elrond/rivendell/post/splunk/apps/*.py
 
 # downloading latest version
@@ -22,8 +18,8 @@ sudo git clone https://github.com/ezaspy/elrond.git
 sudo chmod -R 744 /opt/elrond/
 sudo chown -R $(whoami):$(whoami) /opt/elrond
 sudo chmod +x /opt/elrond/elrond/elrond.py
-echo "export PATH=$PATH:/opt/elrond/elrond" >> /home$USER.bashrc
-printf "\n\n  -> elrond has been successfully updated; a reboot is required. Press ENTER to continue..."
+echo "export PATH=$PATH:/opt/elrond/elrond" >> /home/$USER.bashrc
+printf "\n\n  -> '$(hostname)' has been successfully updated; a reboot is required. Press ENTER to continue..."
 read answer
 sleep 1
 sudo updatedb
