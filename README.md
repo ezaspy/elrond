@@ -1,7 +1,5 @@
 <p align="center">
-  <a href="https://github.com/ezaspy/elrond">
-    <img src="elrond/images/logo_trans_big.png" alt="Logo" width="400" height="400">
-  </a>
+  <a href="https://github.com/ezaspy/elrond"><img src="elrond/images/logo_trans_big.png" alt="Logo" width="400" height="400"></a>
   <p align="center">
     Accelerating the collection, processing, analysis and outputting of digital forensic artefacts.
     <br><br>
@@ -34,8 +32,6 @@
 
 <br><br>
 
-<!-- ABOUT -->
-
 ## About
 
 elrond has been created to help fellow digitial forensicators with the identification, extraction, collection, processing, analysis and outputting of forensic artefacts from (up to 20 paritions for) Windows E01 or VMDK, macOS DMG/E01 or VMDK, Linux dd or VMDK disk images as well as raw memory images and previously collected artefacts which can all be outputted into Splunk. I have spent many an incident repeating the same processes by mounting, collecting (mainly Windows) forensic artefacts and then attempting to correlate them together with other data sources and artefacts. Thus, as mentioned above elrond has been built to consolidate those seperate processes into one single script helping to accerlate and automate these otherwise repetitive, tedious and often occasionally-referenced commands. As elrond outputs the artefact information as either CSV or JSON, they can be processed by many commonly-used log file analysis tools, consequently, elrond does have the capability to stand up a local [Splunk](https://www.splunk.com/) (with acompanying [app](https://splunkbase.splunk.com/app/6606/)) or [elastic](https://www.elastic.co/) instance, whereby the artefacts are automatically assigned and aligned with the [MITRE ATT&CK® Framework](https://attack.mitre.org/). In addition, elrond can also populate a local [ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/) instance providing a visual representation of potential attack techniques leveraged as part of said incident.<br>
@@ -54,10 +50,8 @@ I presented elrond, at [Wild West Hackin' Fest 2023](https://wildwesthackinfest.
 
 ### Related Projects
 
-elrond is responsible for the analysis-side of digital forensic, but what about acquisition? An acompanying script called [gandalf](https://github.com/ezaspy/gandalf) can be deployed (locally or remotely) on either Windows (using [PowerShell](https://learn.microsoft.com/en-us/powershell/)), Linux, or macOS (using [Python](https://www.python.org) or [bash]()) hosts to acquire forensic artefacts. 
+elrond is responsible for the analysis-side of digital forensics, but what about acquisition? An acompanying script called [gandalf](https://github.com/ezaspy/gandalf) can be deployed (locally or remotely) on either Windows (using [PowerShell](https://learn.microsoft.com/en-us/powershell/)), Linux, or macOS (using [Python](https://www.python.org) or [bash]()) hosts to acquire forensic artefacts. 
 <br><br><br>
-
-<!-- PREREQUISITES -->
 
 ## Configuration
 
@@ -140,9 +134,11 @@ See [SUPPORT.md](https://github.com/ezaspy/elrond/blob/main/elrond/SUPPORT.md) f
 <br><br>
 
 ## Artefacts
+
 Below is a list of all the artefacts collected and processed from the respective operating systems.
 
 ### Windows
+
 - C:\\$MFT
 - C:\\$LogFile
 - C:\\$ObjId
@@ -194,6 +190,7 @@ Below is a list of all the artefacts collected and processed from the respective
 <br>
 
 ### Linux
+
 - /.Trashes
 - /etc/passwd
 - /etc/shadow
@@ -240,6 +237,7 @@ Below is a list of all the artefacts collected and processed from the respective
 <br>
 
 ### macOS
+
 - /.Trashes
 - /Library/Logs
 - /Library/Preferences
