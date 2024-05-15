@@ -60,10 +60,10 @@ elrond is responsible for the analysis-side of digital forensics, but what about
 #### SIFT-elrond (recommended)
 
 > Download the respective elrond OVA; the latest version of SIFT (20.04) or Ubuntu (22.04) with all of the elrond software packages, pre-installed.
-  - For **x64**, download [SIFT-elrond (x64)](https://drive.google.com/file/d/1-dSyRSav_h7V-kFmSjv4jIuyxNJnnTKE/view?usp=sharing) OVA
-    - `sansforensics/forensics`
-  - For **ARM**, download [Ubuntu-elrond (ARM)]() OVA
-    - `elrond/elrond`
+  - For **x64**, download [SIFT-elrond (x64)](https://1drv.ms/u/s!Asg_rIbKaSxrgcTPRr4bgy8RdQhTnMk?e=xhiaaV) OVA
+    - `sansforensics:forensics`
+  - For **ARM**, download [Ubuntu-elrond (ARM)](https://1drv.ms/u/s!Asg_rIbKaSxrgcTPR-9BpDxgXWSwnzs?e=2uFz1u) archive
+    - `elrond:elrond`
 > *Neither OVA contains the NSRL dataset; execute [nsrl.sh](https://github.com/ezaspy/elrond/blob/main/elrond/tools/config/scripts/nsrl.sh) and follow instructions to download.*<br>
 >
 > It is recommended to run [/opt/elrond/update.sh](https://github.com/ezaspy/elrond/blob/main/elrond/update.sh) which will download and configure the **latest version of elrond** onto your existing system.
