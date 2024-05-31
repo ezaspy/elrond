@@ -58,8 +58,6 @@ def assess_gandalf(
 
     if not d.endswith("/"):
         d = d + "/"
-    else:
-        pass
     if not d.endswith("/acquisitions/"):
         print(
             "   Hosts, must be in the 'acquisitions' directory, produced from gandalf's output.\n    For example, '/{}/acquisitions/'\n     Please try again\n\n".format(
@@ -67,8 +65,6 @@ def assess_gandalf(
             )
         )
         sys.exit()
-    else:
-        pass
     for groot, _, gfiles in os.walk(d):
         for gfile in gfiles:
             if gfile.endswith("log.audit"):  # copying gandalf audit file
@@ -78,8 +74,6 @@ def assess_gandalf(
                 )
                 if not os.path.exists(gandalf_audit_destination):
                     os.makedirs(gandalf_audit_destination)
-                else:
-                    pass
                 try:
                     shutil.copy2(
                         gandalf_audit_source,
@@ -87,8 +81,6 @@ def assess_gandalf(
                     )
                 except:
                     pass
-            else:
-                pass
             if os.path.join(groot, gfile).endswith(".zip") or os.path.join(
                 groot, gfile
             ).endswith(".7z"):
@@ -117,8 +109,6 @@ def assess_gandalf(
                                 gfile.replace(".zip", "").replace(".7z", "")
                             )
                         )
-                    else:
-                        pass
                     with ZipFile(
                         os.path.join(groot, gfile)
                     ) as gandalf_archive:  # unencrypted zip
@@ -132,17 +122,11 @@ def assess_gandalf(
                                 artefact_directory = artefact_directory.replace(
                                     "', '", "/"
                                 )
-                            else:
-                                pass
                             artefact_path = os.path.join(
                                 source_filepath, artefact_directory[2:-2]
                             )
                             if not os.path.exists(artefact_path):
                                 os.makedirs(artefact_path)
-                            else:
-                                pass
-                        else:
-                            pass
                         if os.path.isfile(
                             os.path.join(source_filepath, each_artefact)
                         ):  # reorganising artefacts
@@ -177,8 +161,6 @@ def assess_gandalf(
                                                 ).replace("artefacts/", ""),
                                             ),
                                         )
-                                    else:
-                                        pass
                                 except:
                                     pass
                             else:  # artefacts in subdirectories
@@ -210,8 +192,6 @@ def assess_gandalf(
                                         )
                                     except:
                                         pass
-                        else:
-                            pass
                     print(
                         "   Successfully extracted artefacts for '{}'".format(
                             gfile.strip(".zip").strip(".7z")
@@ -244,8 +224,6 @@ def assess_gandalf(
                                     source_filepath, "artefacts", each_artefact
                                 ),
                             )
-                        else:
-                            pass
                     print(
                         "   Successfully extracted artefacts for '{}'".format(
                             gfile.strip(".zip").strip(".7z")
@@ -253,15 +231,11 @@ def assess_gandalf(
                     )
                     print()
                 allimgs[gandalf_host + "::" + osplatform] = d
-            else:
-                pass
     for file_root, file_dirs, _ in os.walk(output_directory):
         for file_dir in file_dirs:
             file_dir_path = os.path.join(file_root, file_dir)
             if len(os.listdir(file_dir_path)) < 1:
                 shutil.rmtree(file_dir_path)
-            else:
-                pass
     if volatility:
         for dumpit_root, _, dumpit_files in os.walk(output_directory):
             for memory_file in dumpit_files:
@@ -273,8 +247,6 @@ def assess_gandalf(
                         )
                         if not os.path.exists(memory_path_moved):
                             os.mkdir(os.path.join(output_directory, memory_file))
-                        else:
-                            pass
                         try:
                             shutil.move(memory_path, memory_path_moved)
                         except:
@@ -302,12 +274,6 @@ def assess_gandalf(
                                     memtimeline,
                                 )
                                 allimgs = {**allimgs, **ot}
-                            else:
-                                pass
-                        else:
-                            pass
-                else:
-                    pass
             for json_file in dumpit_files:
                 json_path = os.path.join(dumpit_root, json_file)
                 if json_path.endswith(".json") and "memory" in memory_path:
@@ -315,8 +281,4 @@ def assess_gandalf(
                         shutil.move(memory_path, memory_path_moved)
                     except:
                         pass
-                else:
-                    pass
-    else:
-        pass
     allimgs = {**allimgs, **ot}

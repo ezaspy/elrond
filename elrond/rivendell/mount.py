@@ -172,8 +172,7 @@ def mount_vmdk_image(
     partitions,
 ):
     try:
-        apfs = str(
-            subprocess.Popen(
+        subprocess.Popen(
                 [
                     "/usr/local/bin/apfs-fuse/build/./apfs-fuse",
                     "-o",
@@ -183,10 +182,9 @@ def mount_vmdk_image(
                 ],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-            ).communicate()[1]
-        )
+            ).communicate()
     except:
-        if (
+        """if (
             input(
                 "  apfs-fuse and associated libraries are not installed. This is required for macOS disk images.\n   Continue? Y/n [Y] "
             )
@@ -194,41 +192,37 @@ def mount_vmdk_image(
         ):
             if os.path.exists("/usr/local/bin/apfs"):
                 shutil.rmtree("/usr/local/bin/apfs")
-            sys.exit()
-        else:
-            apfs = ""
-    if apfs != "":
-        if disk_file.endswith(".vmdk"):
-            subprocess.Popen(
-                [
-                    "modprobe",
-                    "nbd",
-                ],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            ).communicate()
-            for devnbd in range(1, 15):  # check for first empty /dev/ndbX location
-                validfile = str(
-                    subprocess.Popen(
-                        ["fdisk", "-l", "/dev/nbd" + str(devnbd)],
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
-                    ).communicate()
-                )
-                if "Inappropriate ioctl for device" in validfile:
-                    intermediate_mount = "/dev/nbd" + str(devnbd)
-                    break
-            subprocess.Popen(
-                [
-                    "qemu-nbd",
-                    "-r",
-                    "-c",
-                    intermediate_mount,
-                    path,
-                ],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            ).communicate()
+            sys.exit()"""
+        subprocess.Popen(
+            [
+                "modprobe",
+                "nbd",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate()
+        for devnbd in range(1, 15):  # check for first empty /dev/ndbX location
+            validfile = str(
+                subprocess.Popen(
+                    ["fdisk", "-l", "/dev/nbd" + str(devnbd)],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                ).communicate()
+            )
+            if "Inappropriate ioctl for device" in validfile:
+                intermediate_mount = "/dev/nbd" + str(devnbd)
+                break
+        subprocess.Popen(
+            [
+                "qemu-nbd",
+                "-r",
+                "-c",
+                intermediate_mount,
+                path,
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate()
         offset_values = obtain_offset(intermediate_mount)
         if len(offset_values) > 0:
             for offset_value in offset_values:

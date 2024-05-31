@@ -68,8 +68,6 @@ def extract_i30(
                             stderr=subprocess.PIPE,
                         ).communicate()
                         shutil.rmtree("/mnt/i30_{}".format(img.split("::")[0]))
-                    else:
-                        pass
                     os.mkdir("/mnt/i30_{}".format(img.split("::")[0]))
                     os.chmod("/mnt/i30_{}".format(img.split("::")[0]), 0o0777)
                     if img.split("::")[0].endswith(".E01") or img.split("::")[
@@ -115,8 +113,6 @@ def extract_i30(
                                             eachoffset, img.split("::")[0]
                                         )
                                     )
-                                else:
-                                    pass
                                 indxripper_result = rip_i30(
                                     output_directory, img, str(eachoffset)
                                 )
@@ -152,8 +148,6 @@ def extract_i30(
                                     write_audit_log_entry(
                                         verbosity, output_directory, entry, prnt
                                     )
-                                else:
-                                    pass
                         else:
                             entry, prnt = "{},{},{},$I30 records\n".format(
                                 datetime.now().isoformat(),
@@ -167,15 +161,9 @@ def extract_i30(
                             write_audit_log_entry(
                                 verbosity, output_directory, entry, prnt
                             )
-                    else:
-                        pass
                     subprocess.Popen(
                         ["umount", "/mnt/i30_{}".format(img.split("::")[0])],
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                     ).communicate()
                     shutil.rmtree("/mnt/i30_{}".format(img.split("::")[0]))
-                else:
-                    pass
-    else:
-        pass

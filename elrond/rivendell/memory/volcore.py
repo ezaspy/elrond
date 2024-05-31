@@ -219,8 +219,6 @@ def dump_vol3_ziphex(d, profile, ziphexdump):
             vol3_symbols.extractall(
                 "/usr/local/lib/python3.8/dist-packages/volatility3/volatility3/symbols/"
             )
-    else:
-        pass
     os.remove(d + "/..profile.hex")
     os.remove(d + "/.profile.zip")
 
@@ -260,10 +258,6 @@ def dump_nix_ziphex(d, profileselect, profile, ziphexdump):
                 )
                 if os.path.exists("./__MACOSX"):
                     os.remove(d + "/.profile.zip")
-                else:
-                    pass
-            else:
-                pass
         elif (
             profile.startswith("Linux")
             or profile.startswith("linux")
@@ -307,14 +301,10 @@ def dump_nix_ziphex(d, profileselect, profile, ziphexdump):
                     + profile
                     + ".zip",
                 )
-            else:
-                pass
         if os.path.exists(d + "/..profile.hex"):
             os.remove(d + "/..profile.hex")
         if os.path.exists(d + "/.profile.zip"):
             os.remove(d + "/.profile.zip")
-    else:
-        pass
 
 
 def choose_custom_profile(volchoice):
@@ -419,6 +409,4 @@ def process_custom_profile(imported, symbolorprofile, customprofileinsert):
             customsymbolorprofile = process_custom_profile(
                 imported, symbolorprofile, ":"
             )
-    else:
-        pass
     return customsymbolorprofile

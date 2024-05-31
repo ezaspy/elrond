@@ -89,10 +89,6 @@ def collect_process_keyword_analysis_timeline(
             ):
                 if len(os.listdir(os.path.join(output_directory, eachdir))) == 0:
                     os.rmdir(os.path.join(output_directory, eachdir))
-                else:
-                    pass
-            else:
-                pass
         if process:
             select_pre_process_artefacts(
                 output_directory,
@@ -113,8 +109,6 @@ def collect_process_keyword_analysis_timeline(
             )
         if os.path.exists("/opt/elrond/elrond/tools/.profiles"):
             os.remove("/opt/elrond/elrond/tools/.profiles")
-    else:
-        pass
     if keywords:
         if not os.path.exists(keywords[0]):
             continue_with_kw = input(
@@ -124,8 +118,6 @@ def collect_process_keyword_analysis_timeline(
             )
             if continue_with_kw == "n":
                 sys.exit()
-            else:
-                pass
         else:
             print(
                 "\n\n  -> \033[1;36mCommencing Keyword Searching phase for proccessed artefacts...\033[1;m\n  ----------------------------------------"
@@ -144,15 +136,11 @@ def collect_process_keyword_analysis_timeline(
                 "  ----------------------------------------\n  -> Completed Keyword Searching phase for proccessed artefacts.\n"
             )
             time.sleep(1)
-    else:
-        pass
     if analysis or extractiocs:
         alysdirs = []
         for eachdir in os.listdir(output_directory):
             if os.path.exists(output_directory + eachdir + "/artefacts"):
                 alysdirs.append(output_directory + eachdir + "/artefacts")
-            else:
-                pass
         if len(alysdirs) > 0:
             print(
                 "\n\n  -> \033[1;36mCommencing Analysis Phase...\033[1;m\n  ----------------------------------------"
@@ -189,8 +177,6 @@ def collect_process_keyword_analysis_timeline(
             "  ----------------------------------------\n  -> Completed Analysis Phase.\n"
         )
         time.sleep(1)
-    else:
-        pass
     if timeline:
         stage, timelineimages = "timeline", []
         print(
@@ -200,8 +186,6 @@ def collect_process_keyword_analysis_timeline(
         for img in imgs:  # Identifying images for timelining
             if not img.split("::")[1].endswith("memory"):
                 timelineimages.append(img.split("::")[0])
-            else:
-                pass
         if len(timelineimages) > 0:
             for each in os.listdir(output_directory):
                 if each + "/" == output_directory or each == img.split("::")[0]:
@@ -211,10 +195,6 @@ def collect_process_keyword_analysis_timeline(
                         os.makedirs(
                             output_directory + img.split("::")[0] + "/artefacts/"
                         )
-                    else:
-                        pass
-                else:
-                    pass
             for timelineimage in timelineimages:
                 timelineexist = input(
                     "   Does a timeline already exist for '{}'? Y/n [n] ".format(
@@ -235,8 +215,6 @@ def collect_process_keyword_analysis_timeline(
                                 )
                             )
                             doTimelineFile(timelinepath)
-                        else:
-                            pass
                         return timelinepath
 
                     timelinepath = input(
@@ -245,8 +223,6 @@ def collect_process_keyword_analysis_timeline(
                     timelinefile = doTimelineFile(timelinepath)
                     if os.path.exists(".plaso"):
                         shutil.rmtree("./.plaso")
-                    else:
-                        pass
                     with open(timelinefile) as tlf:
                         firstline = tlf.readline()
                     if "Message" not in firstline and "Artefact" not in firstline:
@@ -275,5 +251,3 @@ def collect_process_keyword_analysis_timeline(
                 "  ----------------------------------------\n  -> Completed Timelining Phase.\n"
             )
             time.sleep(1)
-    else:
-        pass

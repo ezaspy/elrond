@@ -68,8 +68,6 @@ def collect_artefacts(
                                 + "/"
                                 + eachvss
                             )
-                    else:
-                        pass
             for everyshdw in volume_shadow_copies:
                 imgs[everyshdw.split("||")[1]] = (
                     everyshdw.split("||")[0]
@@ -87,10 +85,6 @@ def collect_artefacts(
                         "     If you wish to utilise the NSRL hash database, run the '.../elrond/tools/scripts/nsrl.sh' script, before running elrond and try again.\n\n"
                     )
                     sys.exit()
-                else:
-                    pass
-            else:
-                pass
         if not superquick and not quick and not metacollected:
             print(
                 "\n\n  -> \033[1;36mCommencing Metadata Phase...\033[1;m\n  ----------------------------------------"
@@ -191,8 +185,6 @@ def collect_artefacts(
                     print(
                         "     Ascertaining file timestamps for {}...".format(metaimage)
                     )
-                else:
-                    pass
                 entry, prnt = "{},{},collecting,timestamps\n".format(
                     datetime.now().isoformat(), metaimage
                 ), " -> {} -> collecting various timestamps for {}".format(
@@ -255,10 +247,6 @@ def collect_artefacts(
                                             ).lower(),
                                         )
                                     )
-                                else:
-                                    pass
-                            else:
-                                pass
 
                 entry, prnt = "{},{},{},completed\n".format(
                     datetime.now().isoformat(),
@@ -317,8 +305,6 @@ def collect_artefacts(
         if volatility and img.split("::")[1].startswith("memory"):
             if verbosity != "":
                 print("     Identifying profile for {}...".format(vssimage))
-            else:
-                pass
             if volchoice == "3":
                 process_memory(
                     output_directory,
@@ -399,12 +385,8 @@ def collect_artefacts(
                                     + "/",
                                     " from " + item.split("/")[4],
                                 )
-                            else:
-                                pass
                             if not os.path.exists(dest):
                                 os.makedirs(dest)
-                            else:
-                                pass
                             collect_windows_artefacts(
                                 artefact_directory,
                                 dest,
@@ -420,8 +402,6 @@ def collect_artefacts(
                                 vssimage,
                                 vsstext,
                             )  # Collection
-                        else:
-                            pass
                     elif (
                         img.split("::")[0] in artefact_directory
                         and img.split("::")[1] == "macOS"
@@ -431,8 +411,6 @@ def collect_artefacts(
                         if os.path.exists(item):
                             if not os.path.exists(dest):
                                 os.makedirs(dest)
-                            else:
-                                pass
                             collect_mac_artefacts(
                                 dest,
                                 img,
@@ -448,8 +426,6 @@ def collect_artefacts(
                                 vssimage,
                                 vsstext,
                             )  # Collection
-                        else:
-                            pass
                     elif (
                         img.split("::")[0] in artefact_directory
                         and img.split("::")[1] == "Linux"
@@ -459,8 +435,6 @@ def collect_artefacts(
                         if os.path.exists(item):
                             if not os.path.exists(dest):
                                 os.makedirs(dest)
-                            else:
-                                pass
                             collect_linux_artefacts(
                                 dest,
                                 img,
@@ -475,10 +449,6 @@ def collect_artefacts(
                                 vssimage,
                                 vsstext,
                             )  # Collection
-                        else:
-                            pass
-                    else:
-                        pass
                 except OSError as error:
                     manage_error(
                         output_directory,
@@ -500,16 +470,12 @@ def collect_artefacts(
                     img,
                     vssimage,
                 )
-            else:
-                pass
             if not auto:
                 do_collect = input(
                     "  Do you wish to collect files from '{}'? Y/n [Y] ".format(
                         img.split("::")[0]
                     )
                 )
-            else:
-                pass
             if auto or do_collect != "n":
                 if collectfiles:
                     select_files(
@@ -521,10 +487,6 @@ def collect_artefacts(
                         vssimage,
                         collectfiles,
                     )
-                else:
-                    pass
-            else:
-                pass
         if symlinks and verbose:
             print(
                 "     Tidying artefacts for {}...\n     Please be patient...".format(
@@ -538,8 +500,6 @@ def collect_artefacts(
                         shutil.rmtree(tyr + "/" + td)
                     except:
                         pass
-                else:
-                    pass
         print("  -> Completed Collection Phase for {}".format(vssimage))
         entry, prnt = "{},{},{},completed\n".format(
             datetime.now().isoformat(), vssimage.replace("'", ""), stage

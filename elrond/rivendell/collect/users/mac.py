@@ -47,8 +47,6 @@ def mac_users(
                             each, vssimage
                         )
                     )
-                else:
-                    pass
                 for eachbash in bashfiles:
                     try:
                         shutil.copy2(
@@ -79,16 +77,11 @@ def mac_users(
                         )
                     except:
                         pass
-
-            else:
-                pass
             if os.path.exists(item + "/" + each + "/Library/keychains/"):
                 if verbosity != "":
                     print(
                         "     Collecting '{}' keychain for {}...".format(each, vssimage)
                     )
-                else:
-                    pass
                 (
                     entry,
                     prnt,
@@ -118,26 +111,17 @@ def mac_users(
                             )
                         except:
                             pass
-                    else:
-                        pass
-
-            else:
-                pass
             if os.path.exists(
                 item + "/" + each + "/Library/Preferences/"
             ) or os.path.exists(item + "/" + each + "/Library/Safari/"):
                 if not os.path.exists(dest + "plists"):
                     os.makedirs(dest + "plists")
-                else:
-                    pass
                 if verbosity != "":
                     print(
                         "     Collecting plists for '{}' for {}...".format(
                             each, vssimage
                         )
                     )
-                else:
-                    pass
                 for eachplist in os.listdir(item + each + "/Library/Preferences/"):
                     try:
                         (
@@ -199,11 +183,6 @@ def mac_users(
                             )
                         except:
                             pass
-                    else:
-                        pass
-
-            else:
-                pass
             if os.path.exists(item + "/" + each + "/.ssh/"):
                 if verbosity != "":
                     print(
@@ -211,8 +190,6 @@ def mac_users(
                             each, vssimage
                         )
                     )
-                else:
-                    pass
                 (
                     entry,
                     prnt,
@@ -244,22 +221,15 @@ def mac_users(
                         )
                     except:
                         pass
-
-            else:
-                pass
             if os.path.exists(item + "/" + each + "/.Trash/"):
                 if not os.path.exists(dest + "/deleted/"):
                     os.makedirs(dest + "/deleted/")
-                else:
-                    pass
                 if verbosity != "":
                     print(
                         "     Collecting '{}' deleted files for {}...".format(
                             each, vssimage
                         )
                     )
-                else:
-                    pass
                 (
                     entry,
                     prnt,
@@ -291,22 +261,15 @@ def mac_users(
                         )
                     except:
                         pass
-
-            else:
-                pass
             if os.path.exists(item + "/" + each + "/Library/Mail"):
                 if not os.path.exists(dest + "/mail/"):
                     os.makedirs(dest + "/mail/")
-                else:
-                    pass
                 if verbosity != "":
                     print(
                         "     Collecting '{}' mail artefacts for {}...".format(
                             each, vssimage
                         )
                     )
-                else:
-                    pass
                 (
                     entry,
                     prnt,
@@ -349,12 +312,8 @@ def mac_users(
                             if mailfile.endswith(".emlx"):
                                 if not os.path.exists(dest + "/mail/emails/"):
                                     os.makedirs(dest + "/mail/emails/")
-                                else:
-                                    pass
                                 if not os.path.exists(dest + "/mail/emails/" + mbox):
                                     os.makedirs(dest + "/mail/emails/" + mbox)
-                                else:
-                                    pass
                                 try:
                                     (
                                         entry,
@@ -390,14 +349,10 @@ def mac_users(
                             elif "Attachment" in mailroot:
                                 if not os.path.exists(dest + "/mail/attachments/"):
                                     os.makedirs(dest + "/mail/attachments/")
-                                else:
-                                    pass
                                 if not os.path.exists(
                                     dest + "/mail/attachments/" + mbox
                                 ):
                                     os.makedirs(dest + "/mail/attachments/" + mbox)
-                                else:
-                                    pass
                                 with open(
                                     os.path.join(
                                         mailroot,
@@ -447,13 +402,6 @@ def mac_users(
                                     )
                                 except:
                                     pass
-                            else:
-                                pass
-                        else:
-                            pass
-
-            else:
-                pass
             if not each.startswith("."):
                 try:
                     os.stat(bwsrdest + each + "/safari/")
@@ -465,8 +413,6 @@ def mac_users(
                             each, vssimage
                         )
                     )
-                else:
-                    pass
                 try:
                     (
                         entry,
@@ -498,9 +444,6 @@ def mac_users(
                     )
                 except:
                     pass
-
-            else:
-                pass
             if os.path.exists(
                 item + each + "/Library/Application Support/Google/Chrome/Default/"
             ):
@@ -520,8 +463,6 @@ def mac_users(
                                 each, vssimage
                             )
                         )
-                    else:
-                        pass
                     (
                         entry,
                         prnt,
@@ -571,15 +512,8 @@ def mac_users(
                                     bwsrdest + each + "/chrome/Local Settings",
                                     symlinks=symlinkvalue,
                                 )
-                            else:
-                                pass
                         except:
                             pass
-
-                else:
-                    pass
-            else:
-                pass
             if os.path.exists(
                 item + each + "/Library/Application Support/Firefox/Profiles/"
             ):
@@ -601,8 +535,6 @@ def mac_users(
                                 each, vssimage
                             )
                         )
-                    else:
-                        pass
                     try:
                         (
                             entry,
@@ -653,15 +585,10 @@ def mac_users(
                                         + "/places.sqlite",
                                         bwsrdest + each + "/firefox/",
                                     )
-                                else:
-                                    pass
                             except:
                                 pass
                     except:
                         pass
-
-            else:
-                pass
             if userprofiles:
                 try:
                     os.stat(userdest)
@@ -674,8 +601,6 @@ def mac_users(
                                 each, vssimage
                             )
                         )
-                    else:
-                        pass
                     (
                         entry,
                         prnt,
@@ -708,8 +633,3 @@ def mac_users(
                         )
                     except:
                         pass
-
-                else:
-                    pass
-            else:
-                pass

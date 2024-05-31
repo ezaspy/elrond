@@ -33,8 +33,6 @@ def collect_linux_artefacts(
                         item.split("/")[-1], vssimage
                     )
                 )
-            else:
-                pass
             entry, prnt = "{},{},{},'{}'\n".format(
                 datetime.now().isoformat(),
                 img.split("::")[0],
@@ -55,8 +53,6 @@ def collect_linux_artefacts(
         if item == mnt + "/etc/hosts":
             if verbosity != "":
                 print("     Collecting '/etc/hosts' for {}...".format(vssimage))
-            else:
-                pass
             entry, prnt = "{},{},{},'/etc/hosts'\n".format(
                 datetime.now().isoformat(),
                 img.split("::")[0],
@@ -75,8 +71,6 @@ def collect_linux_artefacts(
         if item == mnt + "/etc/crontab":
             if verbosity != "":
                 print("     Collecting crontab for {}...".format(vssimage))
-            else:
-                pass
             entry, prnt = "{},{},{},'{}'\n".format(
                 datetime.now().isoformat(),
                 img.split("::")[0],
@@ -113,8 +107,6 @@ def collect_linux_artefacts(
                         vssimage,
                     )
                 )
-            else:
-                pass
             item_list = os.listdir(item)
             for each in item_list:
                 if each.endswith(".conf"):
@@ -149,8 +141,6 @@ def collect_linux_artefacts(
                         )
                     except:
                         pass
-                else:
-                    pass
 
         if item == mnt + "/var/log":
             try:
@@ -164,10 +154,9 @@ def collect_linux_artefacts(
                         vssimage,
                     )
                 )
-            else:
-                pass
             item_list = os.listdir(item)
-            for each in item_list:
+            # collecting logs in the /var/log directly
+            for eachlog in item_list:
                 try:
                     (
                         entry,
@@ -176,11 +165,11 @@ def collect_linux_artefacts(
                         datetime.now().isoformat(),
                         img.split("::")[0],
                         stage,
-                        each,
+                        eachlog,
                     ), " -> {} -> {} log file '{}'{} from '{}'".format(
                         datetime.now().isoformat().replace("T", " "),
                         stage,
-                        each,
+                        eachlog,
                         vsstext.replace("vss", "volume shadow copy #"),
                         img.split("::")[0],
                     )
@@ -191,11 +180,53 @@ def collect_linux_artefacts(
                         prnt,
                     )
                     shutil.copy2(
-                        item + "/" + each,
-                        dest + "logs/" + item.split("/")[-2].lower() + "+" + each,
+                        item + "/" + eachlog,
+                        dest + "logs/" + item.split("/")[-2].lower() + "+" + eachlog,
                     )
                 except:
                     pass
+
+        if item == mnt + "/var/log/journal":
+            try:
+                os.stat(dest + "journal/")
+            except:
+                os.makedirs(dest + "journal/")
+            if verbosity != "":
+                print(
+                    "     Collecting journal logs for {}...".format(
+                        vssimage,
+                    )
+                )
+            item_list = os.listdir(item)
+            for eachdir in item_list:
+                if os.path.isdir(os.path.join(item, eachdir)) and "journal" in os.path.join(item, eachdir):
+                    try:
+                        os.stat(dest + "journal/")
+                    except:
+                        os.makedirs(dest + "journal/")
+                    (
+                        entry,
+                        prnt,
+                    ) = "{},{},{},systemd journal files\n".format(
+                        datetime.now().isoformat(),
+                        img.split("::")[0],
+                        stage,
+                    ), " -> {} -> {} systemd journal files{} from '{}'".format(
+                        datetime.now().isoformat().replace("T", " "),
+                        stage,
+                        vsstext.replace("vss", "volume shadow copy #"),
+                        img.split("::")[0],
+                    )
+                    write_audit_log_entry(
+                        verbosity,
+                        output_directory,
+                        entry,
+                        prnt,
+                    )
+                    shutil.copytree(
+                        os.path.join(item, eachdir),
+                        dest + "journal/" + eachdir,
+                    )
 
         if item == mnt + "/usr/lib/systemd/user":
             try:
@@ -209,8 +240,6 @@ def collect_linux_artefacts(
                         vssimage,
                     )
                 )
-            else:
-                pass
             item_list = os.listdir(item)
             for each in item_list:
                 if (
@@ -249,8 +278,6 @@ def collect_linux_artefacts(
                         )
                     except:
                         pass
-                else:
-                    pass
 
         if item == mnt + "/var/cache/cups" or item == mnt + "/var/cups":
             try:
@@ -264,8 +291,6 @@ def collect_linux_artefacts(
                         vssimage,
                     )
                 )
-            else:
-                pass
             item_list = os.listdir(item)
             for each in item_list:
                 if each.startswith("job."):
@@ -300,8 +325,6 @@ def collect_linux_artefacts(
                         )
                     except:
                         pass
-                else:
-                    pass
 
         if item == mnt + "/tmp":
             try:
@@ -310,8 +333,6 @@ def collect_linux_artefacts(
                 os.makedirs(dest + "tmp/")
             if verbosity != "":
                 print("     Collecting content of /tmp for {}...".format(vssimage))  #
-            else:
-                pass
             item_list = os.listdir(item)
             for each in item_list:
                 if not os.path.isdir(each):
@@ -387,8 +408,6 @@ def collect_linux_artefacts(
                             item.split("/")[-1], vssimage
                         )
                     )
-                else:
-                    pass
                 (
                     entry,
                     prnt,
@@ -428,16 +447,11 @@ def collect_linux_artefacts(
                     )
                 except:
                     pass
-
-            else:
-                pass
             if os.path.exists(item + "/.local/share/keyrings/"):
                 if verbosity != "":
                     print(
                         "     Collecting keys for 'root' for {}...".format(vssimage)
                     )  #
-                else:
-                    pass
                 for keytype in os.listdir(item + "/.local/share/keyrings/"):
                     if keytype.endswith(".keyring") or keytype.endswith(".keystore"):
                         try:
@@ -471,11 +485,6 @@ def collect_linux_artefacts(
                             )
                         except:
                             pass
-                    else:
-                        pass
-
-            else:
-                pass
         if item == mnt + "/home":
             dest = linux_users(
                 dest,
@@ -494,8 +503,6 @@ def collect_linux_artefacts(
             if len(item_list) > 0:
                 if verbosity != "":
                     print("     Collecting memory files...")
-                else:
-                    pass
                 for each in item_list:
                     if (
                         item == mnt + "/var/vm/sleepimage"
@@ -527,10 +534,3 @@ def collect_linux_artefacts(
                                 prnt,
                             )
                             shutil.copy2(item + each, dest + each)
-                    else:
-                        pass
-
-            else:
-                pass
-    else:
-        pass

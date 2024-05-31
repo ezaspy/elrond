@@ -120,11 +120,7 @@ def use_plugins(
                                     kv[5],
                                     kv[2],
                                 )
-                            else:
-                                pass
                             jsonlist.append(json.dumps(jsondict))
-            else:
-                pass
         else:
             plugoutlist = (
                 str(
@@ -784,5 +780,3 @@ def use_plugins(
                 verbosity, output_directory, entry, prnt
             )  # no evidence of plugin
         jsonlist.clear()
-    else:
-        pass

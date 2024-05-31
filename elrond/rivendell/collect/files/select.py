@@ -16,8 +16,6 @@ def select_files(
 ):
     if collectfiles:
         stage = "collecting"
-    else:
-        pass
     print(
         "\n       \033[1;33m{} files from {}...\033[1;m".format(
             stage.title().replace(",", " &"), vssimage
@@ -97,12 +95,6 @@ def select_files(
                                 1,
                                 collectfiles,
                             )
-                        else:
-                            pass
-                    else:
-                        pass
-            else:
-                pass
             if os.path.exists(
                 output_directory + img.split("::")[0] + "/files/archives"
             ):  # extracting collected archives
@@ -168,10 +160,6 @@ def select_files(
                         vssimage,
                     )
                     write_audit_log_entry(verbosity, output_directory, entry, prnt)
-                else:
-                    pass
-            else:
-                pass
             if os.path.exists(
                 output_directory + img.split("::")[0] + "/files/documents"
             ):  # extracting collected documents
@@ -239,20 +227,12 @@ def select_files(
                                                             entry,
                                                             prnt,
                                                         )
-                                                    else:
-                                                        pass
-                                    else:
-                                        pass
                             except:
                                 print(
                                     "      '{}' could not be extracted, it may be invalid/corrupted or password protected".format(
                                         collected_file
                                     )
                                 )
-                        else:
-                            pass
-                    else:
-                        pass
 
                     entry, prnt = "{},{},{},completed\n".format(
                         datetime.now().isoformat(),
@@ -264,10 +244,6 @@ def select_files(
                         vssimage,
                     )
                     write_audit_log_entry(verbosity, output_directory, entry, prnt)
-                else:
-                    pass
-            else:
-                pass
             if os.path.exists(output_directory + img.split("::")[0] + "/files/scripts"):
                 if (
                     len(
@@ -319,8 +295,6 @@ def select_files(
                                             write_audit_log_entry(
                                                 verbosity, output_directory, entry, prnt
                                             )
-                                        else:
-                                            pass
                                         lineno += 1
                             except:
                                 pass
@@ -357,13 +331,9 @@ def select_files(
                                             write_audit_log_entry(
                                                 verbosity, output_directory, entry, prnt
                                             )
-                                        else:
-                                            pass
                                         lineno += 1
                             except:
                                 pass
-                    else:
-                        pass
 
                     entry, prnt = "{},{},{},completed\n".format(
                         datetime.now().isoformat(),
@@ -375,8 +345,6 @@ def select_files(
                         vssimage,
                     )
                     write_audit_log_entry(verbosity, output_directory, entry, prnt)
-            else:
-                pass
         if "U" in file_selection or "A" in file_selection:
             carve_files(
                 output_directory,
@@ -391,5 +359,3 @@ def select_files(
                 stage.replace(",", " &"), vssimage
             )
         )
-    else:
-        pass

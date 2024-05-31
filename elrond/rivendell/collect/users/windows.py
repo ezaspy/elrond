@@ -49,8 +49,6 @@ def windows_users(
                         each, vssimage
                     )
                 )
-            else:
-                pass
             (
                 entry,
                 prnt,
@@ -90,8 +88,6 @@ def windows_users(
                         each, vssimage
                     )
                 )
-            else:
-                pass
             (
                 entry,
                 prnt,
@@ -131,8 +127,6 @@ def windows_users(
                         each, vssimage
                     )
                 )
-            else:
-                pass
             (
                 entry,
                 prnt,
@@ -221,10 +215,6 @@ def windows_users(
                                         )
                                     except:
                                         pass
-                        else:
-                            pass
-            else:
-                pass
 
             try:
                 os.stat(jumpdest)
@@ -236,8 +226,6 @@ def windows_users(
                         each, vssimage
                     )
                 )
-            else:
-                pass
             (
                 entry,
                 prnt,
@@ -279,8 +267,6 @@ def windows_users(
                         )
                     except:
                         pass
-            else:
-                pass
             if os.path.exists(
                 item
                 + each
@@ -301,8 +287,6 @@ def windows_users(
                         )
                     except:
                         pass
-            else:
-                pass
 
             try:
                 os.stat(maildest)
@@ -345,16 +329,8 @@ def windows_users(
                                 + "/AppData/Local/Microsoft/Windows/Temporary Internet Files/Content.Outlook/"
                                 + every
                             )
-                        else:
-                            pass
-                else:
-                    pass
-            else:
-                pass
             if os.path.exists(item + each + "/Documents/Outlook Files/"):
                 mail_dirs.append(item + each + "/Documents/Outlook Files/")
-            else:
-                pass
             if len(mail_dirs) > 0:
                 if verbosity != "":
                     print(
@@ -362,8 +338,6 @@ def windows_users(
                             each, vssimage
                         )
                     )
-                else:
-                    pass
                 (
                     entry,
                     prnt,
@@ -406,9 +380,6 @@ def windows_users(
                             )
                         except:
                             pass
-
-            else:
-                pass
             try:
                 os.stat(bwsrdest)
             except:
@@ -435,8 +406,6 @@ def windows_users(
                                 each, vssimage
                             )
                         )
-                    else:
-                        pass
                     (
                         entry,
                         prnt,
@@ -483,10 +452,6 @@ def windows_users(
                                     )
                                 except:
                                     pass
-                            else:
-                                pass
-                        else:
-                            pass
 
                 elif os.path.exists(
                     item + each + "/AppData/Local/Microsoft/Windows/History/"
@@ -497,8 +462,6 @@ def windows_users(
                                 each, vssimage
                             )
                         )
-                    else:
-                        pass
                     (
                         entry,
                         prnt,
@@ -555,10 +518,6 @@ def windows_users(
                                     )
                                 except:
                                     pass
-                            else:
-                                pass
-                        else:
-                            pass
 
                 else:
                     if verbosity != "":
@@ -567,8 +526,6 @@ def windows_users(
                                 each, vssimage
                             )
                         )
-                    else:
-                        pass
                     (
                         entry,
                         prnt,
@@ -634,13 +591,6 @@ def windows_users(
                                     )
                                 except:
                                     pass
-                            else:
-                                pass
-                        else:
-                            pass
-
-            else:
-                pass
             if os.path.exists(
                 item + each + "/AppData/Local/Google/Chrome/User Data/Default/"
             ):
@@ -660,8 +610,6 @@ def windows_users(
                                 each, vssimage
                             )
                         )
-                    else:
-                        pass
                     (
                         entry,
                         prnt,
@@ -709,15 +657,8 @@ def windows_users(
                                     bwsrdest + each + "/chrome/Local Settings",
                                     symlinks=symlinkvalue,
                                 )
-                            else:
-                                pass
                         except:
                             pass
-
-                else:
-                    pass
-            else:
-                pass
             if os.path.exists(item + each + "/AppData/Local/Mozilla/Firefox/Profiles/"):
                 if (
                     len(
@@ -733,8 +674,6 @@ def windows_users(
                                 each, vssimage
                             )
                         )
-                    else:
-                        pass
                     (
                         entry,
                         prnt,
@@ -780,15 +719,8 @@ def windows_users(
                                     + "/places.sqlite",
                                     bwsrdest + each + "/firefox/",
                                 )
-                            else:
-                                pass
                         except:
                             pass
-
-                else:
-                    pass
-            else:
-                pass
     if userprofiles:
         for each in item_list:
             try:
@@ -802,8 +734,6 @@ def windows_users(
                             each, vssimage
                         )
                     )
-                else:
-                    pass
                 (
                     entry,
                     prnt,
@@ -836,8 +766,3 @@ def windows_users(
                     )
                 except:
                     pass
-
-            else:
-                pass
-    else:
-        pass

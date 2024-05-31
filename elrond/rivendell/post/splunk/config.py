@@ -84,8 +84,6 @@ def overwrite_splunk_index(
                 )
             elif splkindx[2:-3] == 'Index "' + case + '" added.':
                 print("    Splunk index created for '{}'...".format(case))
-            else:
-                pass
         else:
             print(
                 "    Splunk index creation failed for '{}'.\n    Please try again.".format(
@@ -180,8 +178,6 @@ def install_splunk_stack(
         overwrite_splunk_index(
             verbosity, output_directory, case, stage, allimgs, splunk_install_path
         )
-    else:
-        pass
     print("     Splunk installed successfully.")
     return requser, request_password
 
@@ -251,8 +247,6 @@ def configure_splunk_stack(verbosity, output_directory, case, stage, allimgs):
                 splunk_install_path = pathfound
                 print("     Splunk installation found, please provide")
                 splunkuser, splunkpswd = request_splunk_creds()
-            else:
-                pass
     else:
         print("    Splunk is not installed, please stand by...")
         splunkuser, splunkpswd = install_splunk_stack(
@@ -319,8 +313,6 @@ def configure_splunk_stack(verbosity, output_directory, case, stage, allimgs):
                         allimgs,
                         splunk_install_path,
                     )
-                else:
-                    pass
                 with open(
                     "/"
                     + splunk_install_path
@@ -328,8 +320,6 @@ def configure_splunk_stack(verbosity, output_directory, case, stage, allimgs):
                     "w",
                 ) as new_default_nav:
                     new_default_nav.write(insert_new_case + "\n")
-            else:
-                pass
             if not os.path.isfile(
                 "/"
                 + splunk_install_path
@@ -359,8 +349,6 @@ def configure_splunk_stack(verbosity, output_directory, case, stage, allimgs):
                             case,
                         )
                     )
-            else:
-                pass
     ingest_splunk_data(
         verbosity,
         output_directory,
@@ -391,8 +379,6 @@ def configure_splunk_stack(verbosity, output_directory, case, stage, allimgs):
                 elif appdir == "treemap_app/":
                     apphexdump = build_app_treemap()
                     tarout.write(apphexdump)
-                else:
-                    pass
                 subprocess.call(["xxd", "-plain", "-revert", "." + apptar, apptar])
                 tar = TarFile.open(apptar, "r:gz")
                 tar.extractall("/" + splunk_install_path + "splunk/etc/apps/")

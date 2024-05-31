@@ -28,12 +28,8 @@ def run_clamscan(verbosity, output_directory, loc, img, collectfiles):
     )
     if not os.path.exists(output_directory + img.split("::")[0] + "/analysis"):
         os.mkdir(output_directory + img.split("::")[0] + "/analysis")
-    else:
-        pass
     if not os.path.exists(output_directory + img.split("::")[0] + "/analysis/ClamAV"):
         os.mkdir(output_directory + img.split("::")[0] + "/analysis/ClamAV")
-    else:
-        pass
     clam_results = subprocess.Popen(
         [
             "clamscan",

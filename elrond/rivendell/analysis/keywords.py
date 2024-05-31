@@ -103,8 +103,6 @@ def search_keywords(
             keyword_matches_results_file.write(
                 "CreationTime,LastAccessTime,LastWriteTime,keyword,Filename,line_number,line_entry\n"
             )
-    else:
-        pass
     with open(keywords[0], "r") as keywords_source_file:
         for eachkeyword in keywords_source_file:
             if verbosity != "":
@@ -113,8 +111,6 @@ def search_keywords(
                         eachkeyword.strip(), insert
                     )
                 )
-            else:
-                pass
             for keywords_target_file in keywords_target_list:
                 try:
                     encoding_choice = "UTF-8"
@@ -148,8 +144,6 @@ def search_keywords(
                             encoding_choice,
                             vsstext,
                         )
-                else:
-                    pass
 
 
 def build_keyword_list(mnt):
@@ -177,8 +171,6 @@ def build_keyword_list(mnt):
                         keywords_target_list.append(
                             os.path.join(keyword_search_root, keyword_search_file)
                         )
-                else:
-                    pass
             except:
                 pass
             try:
@@ -204,8 +196,6 @@ def build_keyword_list(mnt):
                         keywords_target_list.append(
                             os.path.join(keyword_search_root, keyword_search_file)
                         )
-                else:
-                    pass
             except:
                 pass
     return keywords_target_list
@@ -301,8 +291,6 @@ def prepare_keywords(verbosity, output_directory, auto, imgs, flags, keywords, s
                     "collected/processed artefacts",
                     vsstext,
                 )
-            else:
-                pass
             if os.path.exists(
                 os.path.join(output_directory, each.split("::")[0], "files")
             ):  # for office documents and archives - extract and then build keyword search list
@@ -318,9 +306,5 @@ def prepare_keywords(verbosity, output_directory, auto, imgs, flags, keywords, s
                     "collected files",
                     vsstext,
                 )
-            else:
-                pass
     if "keyword searching" not in str(flags):
         flags.append("03keyword searching")
-    else:
-        pass

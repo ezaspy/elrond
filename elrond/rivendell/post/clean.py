@@ -37,8 +37,6 @@ def archive_artefacts(verbosity, output_directory):
                     zeach.split("/")[-1] + "/" + zeach.split("/")[-1] + ".zip"
                 ):
                     z.write(name)
-                else:
-                    pass
         print("  -> Completed Archiving Phase for '{}'".format(zeach.split("/")[-1]))
         entry, prnt = "{},{},{},completed\n".format(
             datetime.now().isoformat(), zeach.split("/")[-1], stage
@@ -78,8 +76,6 @@ def delete_artefacts(verbosity, output_directory):
                 name = droot + "/" + eachdir
                 if not name.endswith(deach):
                     shutil.rmtree(droot + "/" + eachdir)
-                else:
-                    pass
             for eachfile in dfile:
                 name = droot + "/" + eachfile
                 if not name.endswith(
@@ -88,8 +84,6 @@ def delete_artefacts(verbosity, output_directory):
                     deach.split("/")[-1] + "/" + deach.split("/")[-1] + ".zip"
                 ):
                     os.remove(droot + "/" + eachfile)
-                else:
-                    pass
         print("  -> Completed Deletion Phase for {}".format(deach.split("/")[-1]))
         entry, prnt = "{},{},{},completed\n".format(
             datetime.now().isoformat(), deach.split("/")[-1], stage

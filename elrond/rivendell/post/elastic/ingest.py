@@ -36,10 +36,6 @@ def split_large_csv_files(root_dir):
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                     ).communicate()[0]
-                else:
-                    pass
-            else:
-                pass
     time.sleep(0.2)
 
 
@@ -51,8 +47,6 @@ def prepare_csv_to_ndjson(root_dir):
                     os.path.join(atftroot, atftfile),
                     os.path.join(atftroot, atftfile + ".csv"),
                 )
-            else:
-                pass
     for atftroot, _, atftfiles in os.walk(root_dir):
         for atftfile in atftfiles:  # adding header to split csv files
             if (
@@ -72,8 +66,6 @@ def prepare_csv_to_ndjson(root_dir):
                         for eachcsvrow in read_split_file:
                             adding_header.write(eachcsvrow)
                 os.remove(os.path.join(atftroot, atftfile))
-            else:
-                pass
     for atftroot, _, atftfiles in os.walk(root_dir):
         for atftfile in atftfiles:  # renaming the split files, with headers
             if (
@@ -86,8 +78,6 @@ def prepare_csv_to_ndjson(root_dir):
                     os.path.join(atftroot, atftfile),
                     os.path.join(atftroot, atftfile.split(".adding_header_")[-1]),
                 )
-            else:
-                pass
     time.sleep(0.2)
 
 
@@ -145,8 +135,6 @@ def convert_csv_to_ndjson(output_directory, case, img, root_dir):
                                         reformed_data = reformed_data.replace(
                                             "%22, ", '", '
                                         )
-                                    else:
-                                        pass
                                     reformed_data.replace("\" ', ", '"').replace(
                                         "\\\\\\", "\\\\"
                                     )
@@ -157,8 +145,6 @@ def convert_csv_to_ndjson(output_directory, case, img, root_dir):
                                         ),
                                         malformed_indexdat_data[0][2],
                                     )
-                                else:
-                                    pass
                                 # inserting timestamp now() as no timestamp exists
                                 if (
                                     "_index" not in data
@@ -205,10 +191,6 @@ def convert_csv_to_ndjson(output_directory, case, img, root_dir):
                             case.lower(),
                             os.path.join(atftroot, atftfile)[0:-4] + ".ndjson",
                         )
-                else:
-                    pass
-            else:
-                pass
     time.sleep(0.2)
 
 
@@ -245,8 +227,6 @@ def convert_json_to_ndjson(output_directory, case, img, root_dir):
                                 data = re.sub(r'(": )(None)([,:\}])', r'\1"\2"\3', data)
                                 converted_timestamp = convert_timestamps(data)
                                 write_json.write(converted_timestamp)
-                            else:
-                                pass
                     prepare_elastic_ndjson(
                         output_directory,
                         img,
@@ -259,8 +239,6 @@ def convert_json_to_ndjson(output_directory, case, img, root_dir):
                             atftfile
                         )
                     )
-            else:
-                pass
     time.sleep(0.2)
 
 
@@ -311,8 +289,6 @@ def ingest_elastic_ndjson(case, ndjsonfile):
                 ndjsonfile.split("/")[-1]
             )
         )
-    else:
-        pass
 
 
 def prepare_elastic_ndjson(output_directory, img, case, source_location):
@@ -323,8 +299,6 @@ def prepare_elastic_ndjson(output_directory, img, case, source_location):
         os.makedirs(
             os.path.join(output_directory + img.split("::")[0] + "/elastic/documents/")
         )
-    else:
-        pass
     if "/vss" in source_location:
         vss_path_insert = "/vss{}".format(
             source_location.split("/vss")[1].split("/")[0]
@@ -464,16 +438,12 @@ def ingest_elastic_data(
                             )
                         )
                     )
-                else:
-                    pass
         for each_dir in directories_with_data:
             if os.path.exists(each_dir):
                 split_large_csv_files(each_dir)
                 prepare_csv_to_ndjson(each_dir)
                 convert_csv_to_ndjson(output_directory, case, img, each_dir)
                 convert_json_to_ndjson(output_directory, case, img, each_dir)
-            else:
-                pass
 
         print("     elasticsearch ingestion completed for {}".format(vssimage))
         entry, prnt = "{},{},{},completed\n".format(

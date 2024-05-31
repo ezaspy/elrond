@@ -32,8 +32,12 @@ sudo chmod 744 ~/elrond.sh
 sudo chmod +x ~/elrond.sh
 
 # cleaning uneeded applications
+sudo unminimize -y
 sudo du -sh /var/cache/apt/archives
 sudo apt update
 sudo apt-get clean
 sudo apt update
 sudo updatedb
+
+# sudo mkdir /mnt/shadow_mount
+# sudo mkdir /mnt/vss

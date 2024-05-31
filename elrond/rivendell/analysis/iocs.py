@@ -40,8 +40,6 @@ def compare_iocs(
                         )
                     )
                     previous_state = current_progress
-                else:
-                    pass
                 try:
                     for line in reading_for_iocs:
                         lineno = lineno + 1
@@ -53,8 +51,6 @@ def compare_iocs(
                                 line,
                             )
                             lines_iocs[str(lineno) + ":±§±:" + line] = iocs
-                        else:
-                            pass
                     lineno = 0
                 except:
                     pass
@@ -222,16 +218,12 @@ def compare_iocs(
                                                 ):
                                                     if domainorip != "":
                                                         ioctype = "domain"
-                                                    else:
-                                                        pass
                                                 for domainorip in re.findall(
                                                     r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$",
                                                     eachioc.split("@")[-1],
                                                 ):
                                                     if domainorip != "":
                                                         ioctype = "IPv4_address"
-                                                    else:
-                                                        pass
                                             elif (
                                                 len(eachioc) > 7
                                                 and ":" in eachioc
@@ -281,10 +273,6 @@ def compare_iocs(
                                                             resolve,
                                                         )
                                                     )
-                                            else:
-                                                pass
-                                        else:
-                                            pass
                                         match.clear()
                                         matches.clear()
                                     if (
@@ -318,14 +306,4 @@ def compare_iocs(
                                             prnt,
                                         )
                                         ioc_before = eachioc.split("@")[-1]
-                                    else:
-                                        pass
-                                else:
-                                    pass
-                        else:
-                            pass
-                    else:
-                        pass
-                else:
-                    pass
     print("      IOC extraction completed for {}.\n".format(vssimage))

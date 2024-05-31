@@ -108,15 +108,11 @@ def process_memory(
         ):
             if eachfile.endswith(".zip"):
                 profiledirs.append(eachfile)
-            else:
-                pass
         for eachfile in os.listdir(
             "/usr/local/lib/python2.7/dist-packages/volatility/plugins/overlays/linux/"
         ):
             if eachfile.endswith(".zip"):
                 profiledirs.append(eachfile)
-            else:
-                pass
         if len(profiledirs) > 0:
             deleteprofiles = input(
                 "\tIt is not good practice to keep too many custom profiles in volatility as it can cause volatility to run extremely slowly\n\tWould you like to remove the following custom profiles?\n\t {}\t Y/n [Y] ".format(
@@ -135,8 +131,6 @@ def process_memory(
                             "/usr/lib/python2.7/dist-packages/volatility/plugins/overlays/linux/"
                             + eachprofiledir
                         )
-            else:
-                pass
     else:
         if artefact.endswith("hiberfil.sys"):
             profile, vssmem = identify_profile(

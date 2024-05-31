@@ -25,8 +25,6 @@ def carve_files(output_directory, verbosity, d, artefact_directory, img, vssimag
     ).communicate()
     if os.path.exists(artefact_directory + "/carved/audit.txt"):
         os.remove(artefact_directory + "/carved/audit.txt")
-    else:
-        pass
     for eachdir in os.listdir(artefact_directory + "/carved"):
         for eachfile in os.listdir(artefact_directory + "/carved/" + eachdir):
             print("     Successfully carved '{}' from {}".format(eachfile, vssimage))

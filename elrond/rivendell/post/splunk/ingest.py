@@ -54,8 +54,6 @@ def ingest_splunk_data(
                 "/" + postpath + "splunk/etc/apps/elrond/default/inputs.conf"
             ):
                 inputsconf.write("\n")
-            else:
-                pass
             if not img.split("::")[-1].startswith("memory"):
                 for atftfile in os.listdir(
                     os.path.realpath(output_directory + img.split("::")[0])
@@ -70,8 +68,6 @@ def ingest_splunk_data(
                                 case,
                             )
                         )
-                    else:
-                        pass
                 for atftroot, atftdirs, atftfiles in os.walk(
                     os.path.realpath(
                         output_directory + img.split("::")[0] + "/artefacts/cooked/"
@@ -146,10 +142,6 @@ def ingest_splunk_data(
                                         case,
                                     )
                                 )
-                            else:
-                                pass
-                        else:
-                            pass
                     for atftdir in atftdirs:
                         if os.path.isdir(os.path.join(atftroot, atftdir)):
                             if str(img.split("::")[-1])[1:].startswith("indows"):
@@ -183,10 +175,6 @@ def ingest_splunk_data(
                                             case,
                                         )
                                     )
-                                else:
-                                    pass
-                            else:
-                                pass
                             if str(img.split("::")[-1])[1:].startswith("ac"):
                                 if len(
                                     os.listdir(os.path.join(atftroot, atftdir))
@@ -198,10 +186,6 @@ def ingest_splunk_data(
                                             case,
                                         )
                                     )
-                                else:
-                                    pass
-                            else:
-                                pass
                             if str(img.split("::")[-1])[1:].startswith("inux"):
                                 if len(
                                     os.listdir(os.path.join(atftroot, atftdir))
@@ -213,12 +197,6 @@ def ingest_splunk_data(
                                             case,
                                         )
                                     )
-                                else:
-                                    pass
-                            else:
-                                pass
-                        else:
-                            pass
                 if os.path.isdir(
                     os.path.realpath(output_directory + img.split("::")[0])
                     + "/artefacts/cooked/memory/"
@@ -241,8 +219,6 @@ def ingest_splunk_data(
                                 case,
                             )
                         )
-                    else:
-                        pass
                     if os.path.exists(
                         str(os.path.realpath(output_directory + img.split("::")[0]))
                         + "/artefacts/cooked/memory/iehistory"
@@ -254,8 +230,6 @@ def ingest_splunk_data(
                                 case,
                             )
                         )
-                    else:
-                        pass
                 for atftroot, atftdirs, atftfiles in os.walk(
                     os.path.realpath(
                         output_directory + img.split("::")[0] + "/analysis/"
@@ -278,10 +252,6 @@ def ingest_splunk_data(
                                         case,
                                     )
                                 )
-                            else:
-                                pass
-                        else:
-                            pass
                 for timeroot, _, timefiles in os.walk(
                     os.path.realpath(
                         output_directory + img.split("::")[0] + "/artefacts/"
@@ -299,10 +269,6 @@ def ingest_splunk_data(
                                         case,
                                     )
                                 )
-                            else:
-                                pass
-                        else:
-                            pass
             elif img.split("::")[-1].startswith("memory") and ".json" in str(
                 os.listdir(os.path.realpath(output_directory + img.split("::")[0]))
             ):
@@ -324,8 +290,6 @@ def ingest_splunk_data(
                             case,
                         )
                     )
-                else:
-                    pass
                 if os.path.exists(
                     str(os.path.realpath(output_directory + img.split("::")[0]))
                     + "/iehistory"
@@ -337,10 +301,6 @@ def ingest_splunk_data(
                             case,
                         )
                     )
-                else:
-                    pass
-            else:
-                pass
         with open(
             "/" + postpath + "splunk/etc/apps/elrond/default/tags.conf", "a"
         ) as tagsconf:
@@ -360,8 +320,6 @@ def ingest_splunk_data(
                 imgtype = imgtype + "\nmacOS = enabled\n\n"
             elif "Linux" in img.split("::")[1]:
                 imgtype = imgtype + "\nLinux = enabled\n\n"
-            else:
-                pass
             tagsconf.write("[host={}]{}".format(img.split("::")[0], imgtype))
         output_directory = os.path.dirname(output_directory) + "/"
         if os.path.exists(

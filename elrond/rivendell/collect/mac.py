@@ -34,8 +34,6 @@ def collect_mac_artefacts(
                         item.split("/")[-1], vssimage
                     )
                 )
-            else:
-                pass
             entry, prnt = "{},{},{},'{}'\n".format(
                 datetime.now().isoformat(),
                 img.split("::")[0],
@@ -56,8 +54,6 @@ def collect_mac_artefacts(
         if item == mnt + "/etc/hosts":
             if verbosity != "":
                 print("     Collecting '/etc/hosts' for {}...".format(vssimage))
-            else:
-                pass
             entry, prnt = "{},{},{},'/etc/hosts'\n".format(
                 datetime.now().isoformat(),
                 img.split("::")[0],
@@ -76,8 +72,6 @@ def collect_mac_artefacts(
         if item == mnt + "/etc/crontab":
             if verbosity != "":
                 print("     Collecting crontab for {}...".format(vssimage))
-            else:
-                pass
             entry, prnt = "{},{},{},'{}'\n".format(
                 datetime.now().isoformat(),
                 img.split("::")[0],
@@ -121,8 +115,6 @@ def collect_mac_artefacts(
                             vssimage,
                         )
                     )
-            else:
-                pass
             item_list = os.listdir(item)
             for each in item_list:
                 try:
@@ -190,8 +182,6 @@ def collect_mac_artefacts(
                             vssimage,
                         )
                     )
-            else:
-                pass
             item_list = os.listdir(item)
             for each in item_list:
                 if each.endswith(".plist"):
@@ -231,8 +221,6 @@ def collect_mac_artefacts(
                         )
                     except:
                         pass
-                else:
-                    pass
 
         if item == mnt + "/.Trashes":
             dest = dest + "trash/"
@@ -242,8 +230,6 @@ def collect_mac_artefacts(
                 os.makedirs(dest + "trash/")
             if verbosity != "":
                 print("     Collecting trash files for {}...".format(vssimage))  #
-            else:
-                pass
             item_list = os.listdir(item)
             for each in item_list:
                 try:
@@ -279,8 +265,6 @@ def collect_mac_artefacts(
                 os.makedirs(dest + "tmp/")
             if verbosity != "":
                 print("     Collecting temp files for {}...".format(vssimage))  #
-            else:
-                pass
             item_list = os.listdir(item)
             for each in item_list:
                 if not os.path.isdir(each):
@@ -367,8 +351,6 @@ def collect_mac_artefacts(
             if len(item_list) > 0:
                 if verbosity != "":
                     print("     Collecting memory files...")
-                else:
-                    pass
                 for each in item_list:
                     if (
                         item == mnt + "/var/vm/sleepimage"
@@ -400,10 +382,3 @@ def collect_mac_artefacts(
                                 prnt,
                             )
                             shutil.copy2(item + each, dest + each)
-                    else:
-                        pass
-
-            else:
-                pass
-    else:
-        pass

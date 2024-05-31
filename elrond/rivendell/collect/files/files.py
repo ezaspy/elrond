@@ -574,10 +574,6 @@ def collect_files(
                         increment,
                         collectfiles,
                     )
-                else:
-                    pass
-            else:
-                pass
             if ("B" in file_selection or "A" in file_selection) and (
                 recovered_file.lower().endswith(".exe")
                 or recovered_file.lower().endswith(".dll")
@@ -606,8 +602,6 @@ def collect_files(
                     increment,
                     collectfiles,
                 )
-            else:
-                pass
             if (
                 ("D" in file_selection or "A" in file_selection)
                 and (
@@ -652,8 +646,6 @@ def collect_files(
                     increment,
                     collectfiles,
                 )
-            else:
-                pass
             if ("R" in file_selection or "A" in file_selection) and (
                 recovered_file.lower().endswith(".zip")
                 or recovered_file.lower().endswith(".rar")
@@ -682,8 +674,6 @@ def collect_files(
                     increment,
                     collectfiles,
                 )
-            else:
-                pass
             if ("S" in file_selection or "A" in file_selection) and (
                 recovered_file.lower().endswith(".ps1")
                 or recovered_file.lower().endswith(".py")
@@ -718,8 +708,6 @@ def collect_files(
                     increment,
                     collectfiles,
                 )
-            else:
-                pass
             if ("L" in file_selection or "A" in file_selection) and (
                 recovered_file.lower().endswith(".lnk")
             ):
@@ -740,8 +728,6 @@ def collect_files(
                     increment,
                     collectfiles,
                 )
-            else:
-                pass
             if ("W" in file_selection or "A" in file_selection) and (
                 recovered_file.lower().endswith(".apsx")
                 or recovered_file.lower().endswith(".html")
@@ -766,8 +752,6 @@ def collect_files(
                     increment,
                     collectfiles,
                 )
-            else:
-                pass
             if ("M" in file_selection or "A" in file_selection) and (
                 recovered_file.lower().endswith(".ost")
                 or recovered_file.lower().endswith(".pst")
@@ -790,8 +774,6 @@ def collect_files(
                     increment,
                     collectfiles,
                 )
-            else:
-                pass
             if ("V" in file_selection or "A" in file_selection) and (
                 recovered_file.lower().endswith(".vmware")
                 or recovered_file.lower().endswith(".vmdk")
@@ -817,8 +799,6 @@ def collect_files(
                     increment,
                     collectfiles,
                 )
-            else:
-                pass
     else:
         compare_include_exclude(
             output_directory,

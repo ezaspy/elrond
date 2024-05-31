@@ -29,8 +29,6 @@ def reorganise_artefacts(
                     if not os.path.exists(dest):
                         os.mkdir(os.path.join(output_directory, img, "artefacts/"))
                         os.mkdir(dest)
-                    else:
-                        pass
                     if (
                         eachartefact.endswith("$MFT")
                         or eachartefact.endswith("$LogFile")
@@ -119,14 +117,10 @@ def reorganise_artefacts(
                         osguess = ""
                     if not os.path.exists(output_directory + "/" + img + "/artefacts/"):
                         os.makedirs(output_directory + "/" + img + "/artefacts/")
-                    else:
-                        pass
                     if not os.path.exists(
                         output_directory + "/" + img + "/artefacts/raw/"
                     ):
                         os.makedirs(output_directory + "/" + img + "/artefacts/raw/")
-                    else:
-                        pass
                     if (
                         eachartefact.endswith("$MFT")
                         or eachartefact.endswith("$LogFile")
@@ -167,8 +161,6 @@ def reorganise_artefacts(
                     ):
                         if not os.path.exists(os.path.join(dest, "registry")):
                             os.makedirs(os.path.join(dest, "registry"))
-                        else:
-                            pass
                         doCopy(
                             eachartefact,
                             os.path.join(dest, "registry", eachartefact.split("/")[-1]),
@@ -186,15 +178,11 @@ def reorganise_artefacts(
                                 ),
                                 os.path.join(dest, ".SYSTEM"),
                             )
-                        else:
-                            pass
                     elif eachartefact.endswith("NTUSER.DAT") or eachartefact.endswith(
                         "UsrClass.dat"
                     ):
                         if not os.path.exists(os.path.join(dest, "registry")):
                             os.makedirs(os.path.join(dest, "registry"))
-                        else:
-                            pass
                         doCopy(
                             eachartefact,
                             os.path.join(
@@ -208,8 +196,6 @@ def reorganise_artefacts(
                     elif eachartefact.endswith(".evtx"):
                         if not os.path.exists(os.path.join(dest, "evtx")):
                             os.makedirs(os.path.join(dest, "evtx"))
-                        else:
-                            pass
                         doCopy(
                             eachartefact,
                             os.path.join(
@@ -223,8 +209,6 @@ def reorganise_artefacts(
                     ) or eachartefact.endswith(".customDestinations-ms"):
                         if not os.path.exists(os.path.join(dest, "jumplists")):
                             os.makedirs(os.path.join(dest, "jumplists"))
-                        else:
-                            pass
                         doCopy(
                             eachartefact,
                             os.path.join(
@@ -255,8 +239,6 @@ def reorganise_artefacts(
                     elif eachartefact.endswith(".keychain-db"):
                         if not os.path.exists(os.path.join(dest, "keychain")):
                             os.makedirs(os.path.join(dest, "keychain"))
-                        else:
-                            pass
                         doCopy(
                             eachartefact,
                             dest + "/keychain/" + eachartefact,
@@ -264,8 +246,6 @@ def reorganise_artefacts(
                     elif eachartefact.endswith(".plist"):
                         if not os.path.exists(os.path.join(dest, "plists")):
                             os.makedirs(os.path.join(dest, "plists"))
-                        else:
-                            pass
                         doCopy(
                             eachartefact,
                             dest + "/plists/" + eachartefact,
@@ -273,8 +253,6 @@ def reorganise_artefacts(
                     elif eachartefact.endswith(".log"):
                         if not os.path.exists(os.path.join(dest, "logs")):
                             os.makedirs(os.path.join(dest, "logs"))
-                        else:
-                            pass
                         doCopy(
                             eachartefact,
                             dest + "/logs/" + eachartefact,
@@ -282,8 +260,6 @@ def reorganise_artefacts(
                     elif eachartefact.endswith(".conf"):
                         if not os.path.exists(os.path.join(dest, "conf")):
                             os.makedirs(os.path.join(dest, "conf"))
-                        else:
-                            pass
                         doCopy(
                             eachartefact,
                             dest + "/conf/" + eachartefact,
@@ -291,8 +267,6 @@ def reorganise_artefacts(
                     elif eachartefact.startswith("job."):
                         if not os.path.exists(os.path.join(dest, "jobs")):
                             os.makedirs(os.path.join(dest, "jobs"))
-                        else:
-                            pass
                         doCopy(
                             eachartefact,
                             dest + "/jobs/" + eachartefact,
@@ -304,8 +278,6 @@ def reorganise_artefacts(
                     ):
                         if not os.path.exists(os.path.join(dest, "services")):
                             os.makedirs(os.path.join(dest, "services"))
-                        else:
-                            pass
                         doCopy(
                             eachartefact,
                             os.path.join(dest, "services", eachartefact.split("/")[-1]),
@@ -313,8 +285,6 @@ def reorganise_artefacts(
                     elif eachartefact.endswith(".global-message-db.sqlite"):
                         if not os.path.exists(os.path.join(dest, "mail")):
                             os.makedirs(os.path.join(dest, "mail"))
-                        else:
-                            pass
                         doCopy(
                             eachartefact,
                             os.path.join(dest, "mail", eachartefact.split("/")[-1]),
@@ -328,8 +298,6 @@ def reorganise_artefacts(
                     ):
                         if not os.path.exists(os.path.join(dest, "browsers")):
                             os.makedirs(os.path.join(dest, "browsers"))
-                        else:
-                            pass
                         if not os.path.exists(
                             os.path.join(
                                 dest,
@@ -344,8 +312,6 @@ def reorganise_artefacts(
                                     eachartefact.split("/")[-2],
                                 )
                             )
-                        else:
-                            pass
                         if eachartefact.endswith("History") or eachartefact.endswith(
                             "HISTORY"
                         ):
@@ -364,8 +330,6 @@ def reorganise_artefacts(
                             bwsrdir = "firefox"
                         elif eachartefact.endswith("index.dat"):
                             bwsrdir = "ie"
-                        else:
-                            pass
                         if not os.path.exists(
                             os.path.join(
                                 dest,
@@ -382,8 +346,6 @@ def reorganise_artefacts(
                                     bwsrdir,
                                 )
                             )
-                        else:
-                            pass
                         doCopy(
                             eachartefact,
                             os.path.join(
@@ -434,14 +396,8 @@ def reorganise_artefacts(
                                 )
                             )
                             pass
-                    else:
-                        pass
                     if osguess != "" and str(img) not in str(allimgs):
                         allimgs[os.path.join(d, img)] = img + "::" + osguess
-                    else:
-                        pass
-                else:
-                    pass
         for _, eachimg in allimgs.items():
             print_identification(
                 verbosity, output_directory, eachimg.split("::")[0], osguess
@@ -482,8 +438,6 @@ def reorganise_artefacts(
             )
         )
         time.sleep(10)
-    else:
-        pass
     confirm_reorg = input("   Continue? Y/n [Y] ")
     print()
     if confirm_reorg == "n":
@@ -491,8 +445,6 @@ def reorganise_artefacts(
             "\n  OK. Ensure the directory you provide adheres to the required structure specified above. Please try again.\n\n"
         )
         sys.exit()
-    else:
-        pass
     d = str(str(d) + "/").replace("//", "/")
     if len(d.split("/")) < 3:
         print(
@@ -501,8 +453,6 @@ def reorganise_artefacts(
             )
         )
         sys.exit()
-    else:
-        pass
     if not os.path.exists(d):
         print("    '{}' does not exist. Please try again.\n\n".format(d))
         sys.exit()
@@ -526,8 +476,6 @@ def reorganise_artefacts(
                     if wtr != "n":
                         if not os.path.exists(os.path.join(output_directory, f)):
                             os.makedirs(os.path.join(output_directory, f))
-                        else:
-                            pass
                         entry, prnt = (
                             "LastWriteTime,elrond_host,elrond_stage,elrond_log_entry\n",
                             " -> {} -> created audit log file for '{}'".format(
@@ -546,8 +494,6 @@ def reorganise_artefacts(
                         organise_artefacts(verbosity, allimgs, d, output_directory, f)
                     else:
                         print("    OK. '{}' will not be processed.\n".format(f))
-                else:
-                    pass
         imgs = allimgs.copy()
     print()
     flags.append("01reorganised")

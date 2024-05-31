@@ -342,7 +342,7 @@ ewf_mount = [
     "/mnt/ewf_mount18",
     "/mnt/ewf_mount19",
 ]
-# to add new artefacts, include the directory or file in this list, and include it in select.py
+# to add new artefacts, include the directory or file in this list, and include it in process/select.py
 system_artefacts = [
     "/",
     "/$MFT",
@@ -384,6 +384,7 @@ system_artefacts = [
     "/usr/lib/systemd/user",
     "/var/cache/cups",
     "/var/log",
+    "/var/log/journal",
     "/var/vm/sleepimage",
     "/var/vm/swapfile",
 ]

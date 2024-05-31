@@ -25,8 +25,6 @@ def print_identification(verbosity, output_directory, disk_image, osplatform):
 def identify_disk_image(verbosity, output_directory, disk_image, mount_location):
     if not mount_location.endswith("/"):
         mount_location = mount_location + "/"
-    else:
-        pass
     if len(os.listdir(mount_location)) > 0:
         if (
             "MFTMirr" in str(os.listdir(mount_location))
@@ -75,10 +73,6 @@ def identify_disk_image(verbosity, output_directory, disk_image, mount_location)
             if "Applications" in str(os.listdir(mount_location + "root")):
                 print_identification(verbosity, output_directory, disk_image, "macOS")
                 disk_image = disk_image + "::macOS"
-            else:
-                pass
-    else:
-        pass
     return disk_image
 
 

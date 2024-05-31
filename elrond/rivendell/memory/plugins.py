@@ -444,12 +444,6 @@ def extract_memory_artefacts(
                                                 profile
                                             )
                                         timeliner.write(timelinerow)
-                                    else:
-                                        pass
-                                else:
-                                    pass
-                    else:
-                        pass
                 except:
                     (
                         entry,
@@ -468,8 +462,6 @@ def extract_memory_artefacts(
                     write_audit_log_entry(
                         verbosity, output_directory, entry, prnt
                     )  # failed to extract no evidence of plugin
-            else:
-                pass
             if not os.path.exists(os.path.join(output_directory, mempath, "dumpreg")):
                 os.makedirs(os.path.join(output_directory, mempath, "dumpreg"))
                 subprocess.Popen(
@@ -559,10 +551,6 @@ def extract_memory_artefacts(
                                 write_audit_log_entry(
                                     verbosity, output_directory, entry, prnt
                                 )  # evidence of plugin found
-                            else:
-                                pass
-            else:
-                pass
     vssmem = profile
     if artefact.split("/")[-1] == vssimage:
         insertvssimage = " for " + vssimage

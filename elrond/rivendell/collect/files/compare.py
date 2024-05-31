@@ -99,8 +99,6 @@ def compare_include_exclude(
                             recovered_file,
                             filetype,
                         )
-                    else:
-                        pass
         else:
             multiple_files(
                 os.path.join(recovered_file_root, recovered_file),

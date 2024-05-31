@@ -68,8 +68,6 @@ def analyse_artefacts(
                                             mftinfo[0][1].split("/")[-1]
                                         )
                                     )
-                                else:
-                                    pass
                                 (
                                     entry,
                                     prnt,
@@ -100,8 +98,6 @@ def analyse_artefacts(
                                             mftinfo[0][1].split("/")[-1]
                                         )
                                     )
-                                else:
-                                    pass
                                 (
                                     entry,
                                     prnt,
@@ -118,8 +114,6 @@ def analyse_artefacts(
                                 write_audit_log_entry(
                                     verbosity, output_directory, entry, prnt
                                 )
-                            else:
-                                pass
                             if (
                                 mftinfo[0][2].split(".")[0]
                                 != mftinfo[0][3].split(".")[0]
@@ -162,8 +156,6 @@ def analyse_artefacts(
                                                 mftinfo[0][1].split("/")[-1]
                                             )
                                         )
-                                    else:
-                                        pass
                                     (
                                         entry,
                                         prnt,
@@ -180,10 +172,6 @@ def analyse_artefacts(
                                     write_audit_log_entry(
                                         verbosity, output_directory, entry, prnt
                                     )
-                            else:
-                                pass
-                else:
-                    pass
         print(
             "     Completed analysis of Extended Attributes, Alternate Data Streams & Timestomping for {}...".format(
                 vssimage
@@ -434,8 +422,6 @@ def analyse_artefacts(
                                             f.split("/")[-1],
                                         )
                                     )
-                                else:
-                                    pass
                                 (
                                     entry,
                                     prnt,
@@ -454,12 +440,6 @@ def analyse_artefacts(
                                 write_audit_log_entry(
                                     verbosity, output_directory, entry, prnt
                                 )
-                            else:
-                                pass
-                        else:
-                            pass
-                    else:
-                        pass
                 except:
                     pass
         print(
@@ -474,18 +454,12 @@ def analyse_artefacts(
                         "MFT.csv"
                     ):
                         analyse_disk_images(stage, vssimage, ar, f, anysd)
-                    else:
-                        pass
                 elif (
                     "vss" not in atftd
                     and ar.endswith("cooked/")
                     and f.endswith("MFT.csv")
                 ):
                     analyse_disk_images(stage, vssimage, ar, f, anysd)
-                else:
-                    pass
-    else:
-        pass
     if extractiocs:
         iocfilelist, lineno, previous = [], 0, 0.0
         if verbosity != "":
@@ -509,8 +483,6 @@ def analyse_artefacts(
                         with open(os.path.join(root, f), "r") as filetest:
                             filetest.readline()
                             iocfilelist.append(os.path.join(root, f))
-                    else:
-                        pass
                 except:
                     pass
         if os.path.exists(
@@ -528,8 +500,6 @@ def analyse_artefacts(
                             with open(os.path.join(root, f), "r") as filetest:
                                 filetest.readline()
                                 iocfilelist.append(os.path.join(root, f))
-                        else:
-                            pass
                     except:
                         pass
         print("       Done.")
@@ -556,8 +526,6 @@ def analyse_artefacts(
             lineno,
             previous,
         )
-    else:
-        pass
     print(" -> Completed Analysis Phase for {}".format(vssimage))
     entry, prnt = "{},{},{},completed\n".format(
         datetime.now().isoformat(), vssimage, stage

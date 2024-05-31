@@ -51,8 +51,9 @@ def select_artefacts_to_process(img, process_list, artefacts_list, processed_art
                         or f.endswith("+bash_logout")
                         or f.endswith("+bashrc")
                         or f.endswith("crontab")
-                        or f.endswith("hosts")
                         or f.endswith("group")
+                        or f.endswith("hosts")
+                        or "/raw/journal" in f
                         or f.endswith("passwd")
                         or f.endswith("shadow")
                         or f.endswith("log")

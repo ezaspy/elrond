@@ -189,8 +189,6 @@ def collect_windows_artefacts(
                             dest = check_existence(
                                 os.path.join(item.split("/")[-1], each), dest, 1
                             )
-                        else:
-                            pass
                         shutil.copy2(item + each, dest)
                     except:
                         pass
@@ -237,8 +235,6 @@ def collect_windows_artefacts(
                             dest = check_existence(
                                 os.path.join(item.split("/")[-1], each), dest, 1
                             )
-                        else:
-                            pass
                         shutil.copy2(item + each, dest)
                     except:
                         pass
@@ -290,8 +286,6 @@ def collect_windows_artefacts(
                             dest = check_existence(
                                 os.path.join(item.split("/")[-1], each), dest, 1
                             )
-                        else:
-                            pass
                         shutil.copy2(item + each, dest)
                     except:
                         pass
@@ -340,8 +334,6 @@ def collect_windows_artefacts(
                             dest = check_existence(
                                 os.path.join(item.split("/")[-1], each), dest, 1
                             )
-                        else:
-                            pass
                         shutil.copy2(item + each, dest)
                     except:
                         pass
@@ -379,8 +371,6 @@ def collect_windows_artefacts(
                                             dest,
                                             1,
                                         )
-                                    else:
-                                        pass
                                     shutil.copy2(item + each, dest)
                                 except:
                                     pass
@@ -426,17 +416,9 @@ def collect_windows_artefacts(
                                                     dest,
                                                     1,
                                                 )
-                                            else:
-                                                pass
                                             shutil.copy2(item + each, dest)
                                         except:
                                             pass
-                                else:
-                                    pass
-                            else:
-                                pass
-                        else:
-                            pass
         if item == mnt + "/Windows/System32/LogFiles/Sum/":
             item_list, dest = (
                 os.listdir(item),
@@ -483,8 +465,6 @@ def collect_windows_artefacts(
                                 dest = check_existence(
                                     os.path.join(item.split("/")[-1], each), dest, 1
                                 )
-                            else:
-                                pass
                             shutil.copy2(item + each, dest)
                         except:
                             pass
@@ -534,8 +514,6 @@ def collect_windows_artefacts(
                                 dest = check_existence(
                                     os.path.join(item.split("/")[-1], each), dest, 1
                                 )
-                            else:
-                                pass
                             shutil.copy2(item + each, dest)
                         except:
                             pass
@@ -613,8 +591,6 @@ def collect_windows_artefacts(
                             dest = check_existence(
                                 os.path.join(item.split("/")[-1], each), dest, 1
                             )
-                        else:
-                            pass
                         shutil.copy2(item + each, dest)
                     except:
                         pass

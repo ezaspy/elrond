@@ -35,8 +35,6 @@ def select_volatility_profile(finalprofiles):
             .replace("', '", "\n\t  05)")
             .replace("\\n\\t", "\n\t")[2:-2]
         )
-    else:
-        pass
     profilekey = input("\t  {}\n\t\t\t\t\t ".format(finalprofiles))
     if profilekey + ")" in finalprofiles:
         if (
@@ -166,8 +164,6 @@ def suggest_volatility_profile(
             newprofiles.append(eachprofile[0])
             if len(eachprofile) > 0:
                 newprofiles.append(eachprofile[0])
-            else:
-                pass
         newprofilelist, counter = list(set(newprofiles)), 1
         for newprofile in sorted(newprofilelist):
             if len(str(counter)) == 1:
@@ -266,8 +262,6 @@ def convert_memory_image(
             vssimage,
             memtimeline,
         )
-    else:
-        pass
 
 
 def extract_profiles(artefact):
@@ -369,8 +363,6 @@ def process_profiles(
                 print("\tOK. Please select a supported profile e.g. 2:")
                 profileselect, profile, ziphexdump = select_profile(volchoice, artefact)
                 dump_nix_ziphex(d, profileselect, profile, ziphexdump)
-            else:
-                pass
         else:
             print(
                 "\tNo profile could be identified for '{}', please select a supported profile e.g. 2:".format(
@@ -424,8 +416,6 @@ def check_profile(
                     original_img, original_profile = img_profile.split(">>")
                     if original_img in img:
                         profile = original_profile
-                    else:
-                        pass
             else:  # hiberfil exists only in vss
                 orig_and_vss = "only_vss"
                 profiles = extract_profiles(artefact)
@@ -448,8 +438,6 @@ def check_profile(
             with open("/opt/elrond/elrond/tools/.profiles", "a") as temp_profiles:
                 if img.split("::")[0] not in temp_profiles.readlines():
                     temp_profiles.write(img.split("::")[0] + ">>" + profile + "\n")
-                else:
-                    pass
     return profile
 
 

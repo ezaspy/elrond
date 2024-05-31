@@ -46,8 +46,6 @@ def linux_users(
                             each, vssimage
                         )
                     )
-                else:
-                    pass
                 for eachused in usedfiles:
                     try:
                         shutil.copy2(
@@ -78,9 +76,6 @@ def linux_users(
                         )
                     except:
                         pass
-
-            else:
-                pass
             if (
                 os.path.exists(item + "/" + each + "/.bash_aliases")
                 or os.path.exists(item + "/" + each + "/.bash_history")
@@ -94,8 +89,6 @@ def linux_users(
                             each, vssimage
                         )
                     )
-                else:
-                    pass
                 for eachbash in bashfiles:
                     try:
                         shutil.copy2(
@@ -126,16 +119,11 @@ def linux_users(
                         )
                     except:
                         pass
-
-            else:
-                pass
             if os.path.exists(item + "/" + each + "/.local/share/keyrings/"):
                 if verbosity != "":
                     print(
                         "     Collecting keys for '{}' for {}...".format(each, vssimage)
                     )
-                else:
-                    pass
                 for keytype in os.listdir(
                     item + "/" + each + "/.local/share/keyrings/"
                 ):
@@ -169,11 +157,6 @@ def linux_users(
                             )
                         except:
                             pass
-                    else:
-                        pass
-
-            else:
-                pass
             if os.path.exists(item + "/" + each + "/.ssh/"):
                 if verbosity != "":
                     print(
@@ -181,8 +164,6 @@ def linux_users(
                             each, vssimage
                         )
                     )
-                else:
-                    pass
                 (
                     entry,
                     prnt,
@@ -214,9 +195,6 @@ def linux_users(
                         )
                     except:
                         pass
-
-            else:
-                pass
             if os.path.exists(item + "/" + each + "/.config/autostart/"):
                 if verbosity != "":
                     print(
@@ -224,8 +202,6 @@ def linux_users(
                             each, vssimage
                         )
                     )
-                else:
-                    pass
                 (
                     entry,
                     prnt,
@@ -257,24 +233,17 @@ def linux_users(
                         )
                     except:
                         pass
-
-            else:
-                pass
             if os.path.exists(
                 item + "/" + each + "/.local/share/Trash/files"
             ) or os.path.exists(item + "/" + each + "/.local/share/Trash/info"):
                 if not os.path.exists(dest + "/deleted/"):
                     os.makedirs(dest + "/deleted/")
-                else:
-                    pass
                 if verbosity != "":
                     print(
                         "     Collecting '{}' deleted files for {}...".format(
                             each, vssimage
                         )
                     )
-                else:
-                    pass
                 (
                     entry,
                     prnt,
@@ -326,22 +295,15 @@ def linux_users(
                         )
                     except:
                         pass
-
-            else:
-                pass
             if os.path.exists(item + "/" + each + "/.thunderbird"):
                 if not os.path.exists(dest + "/mail/"):
                     os.makedirs(dest + "/mail/")
-                else:
-                    pass
                 if verbosity != "":
                     print(
                         "     Collecting '{}' mail artefacts for {}...".format(
                             each, vssimage
                         )
                     )
-                else:
-                    pass
                 (
                     entry,
                     prnt,
@@ -374,8 +336,6 @@ def linux_users(
                             )
                         except:
                             pass
-                    else:
-                        pass
                     mailfiles = [
                         "global-messages-db.sqlite",
                         "places.sqlite",
@@ -405,8 +365,6 @@ def linux_users(
                                 )
                             except:
                                 pass
-                        else:
-                            pass
 
             if os.path.exists(item + "/" + each + "/.mozilla/firefox"):
                 try:
@@ -419,8 +377,6 @@ def linux_users(
                             each, vssimage
                         )
                     )
-                else:
-                    pass
                 if not each.startswith("."):
                     for defaultdir in os.listdir(
                         item + "/" + each + "/.mozilla/firefox"
@@ -471,11 +427,6 @@ def linux_users(
                                 )
                             except:
                                 pass
-                        else:
-                            pass
-
-                else:
-                    pass
                 if os.path.exists(item + "/" + each + "/.config/google-chrome"):
                     try:
                         os.stat(bwsrdest + each + "/chrome/")
@@ -487,8 +438,6 @@ def linux_users(
                                 each, vssimage
                             )
                         )
-                    else:
-                        pass
                     for defaultdir in os.listdir(
                         item + "/" + each + "/.config/google-chrome"
                     ):
@@ -538,13 +487,6 @@ def linux_users(
                                 )
                             except:
                                 pass
-                        else:
-                            pass
-
-                else:
-                    pass
-            else:
-                pass
             if userprofiles:
                 try:
                     os.stat(userdest)
@@ -556,8 +498,6 @@ def linux_users(
                             each, vssimage
                         )
                     )
-                else:
-                    pass
                 (
                     entry,
                     prnt,
@@ -590,5 +530,3 @@ def linux_users(
                     )
                 except:
                     pass
-            else:
-                pass

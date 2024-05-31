@@ -54,12 +54,8 @@ def configure_navigator(verbosity, case, splunk, elastic, usercred, pswdcred):
                 else:
                     foundtechniques.append(everytechnique[19:28])
                     foundtechniques.append(everytechnique[19:24])
-            else:
-                pass
     elif elastic:
         print()
-    else:
-        pass
     subtechniques, maintechniques, nav_list = (
         sorted(list(set(foundtechniques))),
         [],
@@ -74,8 +70,6 @@ def configure_navigator(verbosity, case, splunk, elastic, usercred, pswdcred):
         for eachsub in subtechniques:
             if "." in eachsub:
                 maintechniques.append(eachsub[:-4])
-            else:
-                pass
             maintechniques.append(eachsub)
         alltechniques = sorted(list(set(maintechniques)))
         # if case .json file exists - read it, extract the section of techniques and insert into updates file
@@ -167,7 +161,7 @@ def configure_navigator(verbosity, case, splunk, elastic, usercred, pswdcred):
                 "sudo",
                 "chown",
                 "-R",
-                ""$USERPROFILE":"$USERPROFILE"",
+                "'$USERPROFILE':'$USERPROFILE'",
                 "/opt/attack-navigator/nav-app/src/assets/",
             ],
             stdout=subprocess.PIPE,

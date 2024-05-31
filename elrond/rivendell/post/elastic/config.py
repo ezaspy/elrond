@@ -74,8 +74,6 @@ configs = [
                 )
             elif splkindx[2:-3] == 'Index "' + case + '" added.':
                 print("    elastic index created for '{}'...".format(case))
-            else:
-                pass
         else:
             print(
                 "    elastic index creation failed for '{}'.\n    Please try again.".format(
@@ -96,8 +94,6 @@ def configure_elastic_stack(verbosity, output_directory, case, stage, allimgs):
                 with open(config + ".orig", "w") as origfile:
                     for eachline in orig:
                         origfile.write(eachline)
-            else:
-                pass
 
     allimgs = OrderedDict(sorted(allimgs.items(), key=lambda x: x[1]))
     pwd = os.getcwd()
@@ -127,8 +123,6 @@ def configure_elastic_stack(verbosity, output_directory, case, stage, allimgs):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         ).communicate()
-    else:
-        pass
     if not os.path.exists("/usr/share/elasticsearch"):
         with open("/etc/kibana/kibana.yml", "w") as kibana_yml:
             kibana_yml.write(
@@ -206,8 +200,6 @@ def configure_elastic_stack(verbosity, output_directory, case, stage, allimgs):
         subprocess.Popen(
             ["sudo", "updatedb"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
         ).communicate()
-    else:
-        pass
     ingest_elastic_data(
         verbosity,
         output_directory,
