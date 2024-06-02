@@ -5,6 +5,7 @@ import re
 from rivendell.process.browser import process_browser_index
 from rivendell.process.browser import process_browser
 from rivendell.process.mac import process_plist
+from rivendell.process.linux import process_journal
 from rivendell.process.nix import process_bash_history
 from rivendell.process.nix import process_email
 from rivendell.process.nix import process_group
@@ -23,7 +24,7 @@ from rivendell.process.windows import (
 )
 from rivendell.process.windows import process_registry_profile
 from rivendell.process.windows import process_shimcache
-#from rivendell.process.windows import process_sru
+from rivendell.process.windows import process_sru
 from rivendell.process.windows import process_ual
 from rivendell.process.windows import process_usb
 from rivendell.process.windows import process_usn
@@ -50,6 +51,7 @@ def process_artefacts(
     jsondict = {}
     jsonlist = []
     if img.split("::")[0] in artefact:
+        print(artefact)
         if artefact.endswith("setupapi.dev.log"):
             process_usb(
                 verbosity,
@@ -256,6 +258,16 @@ def process_artefacts(
             )
         elif artefact.endswith("/group"):
             process_group(
+                verbosity,
+                vssimage,
+                output_directory,
+                img,
+                vss_path_insert,
+                stage,
+                artefact,
+            )
+        elif "journal" in artefact:
+            process_journal(
                 verbosity,
                 vssimage,
                 output_directory,
