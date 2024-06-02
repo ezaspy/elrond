@@ -155,7 +155,6 @@ def collect_linux_artefacts(
                     )
                 )
             item_list = os.listdir(item)
-            # collecting logs in the /var/log directly
             for eachlog in item_list:
                 try:
                     (
