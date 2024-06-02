@@ -16,7 +16,7 @@ def select_artefacts_to_process(img, process_list, artefacts_list, processed_art
             for f in files:  # identifying artefacts for processing
                 if (img.split("::")[0] in root) and (
                     root + "/" + f not in str(processed_artefacts)
-                ):
+                ): # ensure to check both the file (f) and the path (root) for specific matching strings
                     if (
                         f.endswith("MFT")
                         or f.endswith("LogFile")
@@ -53,7 +53,7 @@ def select_artefacts_to_process(img, process_list, artefacts_list, processed_art
                         or f.endswith("crontab")
                         or f.endswith("group")
                         or f.endswith("hosts")
-                        or "/raw/journal" in f
+                        or "/journal/" in root
                         or f.endswith("passwd")
                         or f.endswith("shadow")
                         or f.endswith("log")
