@@ -211,6 +211,7 @@ def main(
             stderr=subprocess.PIPE,
         ).communicate()[0]
     )
+    # check architecture - if arm do not prompt
     if not "/usr/local/bin/apfs" in apfsexists:
         if (
             input(
@@ -387,16 +388,20 @@ def main(
                         )
                         if fsize > 1073741824:  # larger than 1GB
                             if not os.path.isdir(output_directory + f):
-                                os.mkdir(output_directory + f)
-                                foundimgs.append(
-                                    os.path.join(root, f)
-                                    + "||"
-                                    + root
-                                    + "||"
-                                    + f
-                                    + "||"
-                                    + imgformat
-                                )
+                                try:
+                                    os.mkdir(os.path.join(output_directory, f))
+                                    foundimgs.append(
+                                        os.path.join(root, f)
+                                        + "||"
+                                        + root
+                                        + "||"
+                                        + f
+                                        + "||"
+                                        + imgformat
+                                    )
+                                except PermissionError:
+                                    print("\n    '{}' could not be created. Are you running as root?".format(os.path.join(output_directory, f)))
+                                    sys.exit()
                             else:
                                 print(
                                     "\n    '{}' already exists in '{}'\n     Please remove it before trying again.\n\n\n".format(
