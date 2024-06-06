@@ -1,5 +1,6 @@
 #!/usr/bin/env python3 -tt
 import os
+import pandas as pd
 import subprocess
 from datetime import datetime
 
@@ -142,7 +143,7 @@ def process_usn(
         print(
             "     Processing '{}' for {}...".format(artefact.split("/")[-1], vssimage)
         )
-    extract_usn(verbosity, vssimage, output_directory, img, vss_path_insert, stage)
+    extract_usn(verbosity, vssimage, output_directory, img, vss_path_insert, stage, artefact)
 
 
 def process_usb(
@@ -457,9 +458,9 @@ def process_prefetch(
             vssimage,
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
-        subprocess.Popen(
+        """subprocess.Popen(
             [
-                "log2timeline.py",
+                "/opt/plaso/plaso/scripts/log2timeline.py",
                 "--parsers",
                 "prefetch",
                 "{}/Windows/Prefetch/".format(mount_location),
@@ -503,7 +504,7 @@ def process_prefetch(
                 + "/artefacts/cooked"
                 + vss_path_insert
                 + "prefetch/prefetch.plaso"
-            )
+            )"""
 
 
 def process_wmi(
@@ -544,7 +545,7 @@ def process_wmi(
                     vssimage,
                 )
             )
-        extract_wmi(
+        """extract_wmi(
             verbosity,
             vssimage,
             output_directory,
@@ -555,7 +556,7 @@ def process_wmi(
             jsondict,
             jsonlist,
             wmijsonlist,
-        )
+        )"""
 
 
 def process_wbem(
@@ -593,7 +594,7 @@ def process_wbem(
                     vssimage,
                 )
             )
-        extract_wbem(
+        """extract_wbem(
             verbosity,
             vssimage,
             output_directory,
@@ -601,7 +602,63 @@ def process_wbem(
             vss_path_insert,
             stage,
             artefact,
+        )"""
+
+
+def process_sru(
+    verbosity, vssimage, output_directory, img, vss_path_insert, stage, artefact
+):
+    cooked_xlsx = output_directory + img.split("::")[0] + "/artefacts/cooked" + vss_path_insert + "sru/" + artefact.split("/")[-1] + ".xlsx"
+    if not os.path.exists(
+        cooked_xlsx
+    ):
+        try:
+            os.makedirs(
+                output_directory
+                + img.split("::")[0]
+                + "/artefacts/cooked"
+                + vss_path_insert
+                + "sru"
+            )
+        except:
+            pass
+        if verbosity != "":
+            print(
+                "     Processing System Resource Utilisation database '{}' for {}...".format(
+                    artefact.split("/")[-1].split("_")[-1],
+                    vssimage,
+                )
+            )
+        entry, prnt = "{},{},{},'{}' system resource utilisation database \n".format(
+            datetime.now().isoformat(),
+            vssimage.replace("'", ""),
+            stage,
+            artefact.split("/")[-1].split("_")[-1],
+        ), " -> {} -> {} '{}' for {}".format(
+            datetime.now().isoformat().replace("T", " "),
+            stage,
+            artefact.split("/")[-1].split("_")[-1],
+            vssimage,
         )
+        write_audit_log_entry(verbosity, output_directory, entry, prnt)
+        # creating sru.py with respective artefact input and output values
+        with open("/opt/elrond/elrond/rivendell/process/extractions/.sru.py") as srumdumpfile:
+            srumdump = srumdumpfile.read()
+        srumdump = srumdump.replace('<SRUDB.dat>', artefact).replace('<SRUDB.dat>', artefact).replace('<SRUM_DUMP_OUTPUT.xlsx>', cooked_xlsx)
+        with open("/opt/elrond/elrond/rivendell/process/extractions/sru.py", "w") as srumdumpfile:
+            srumdumpfile.write(srumdump)
+        subprocess.Popen(
+            [
+                "python3",
+                "/opt/elrond/elrond/rivendell/process/extractions/sru.py",
+                artefact,
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate()
+        # cooked_csv = output_directory + img.split("::")[0] + "/artefacts/cooked" + vss_path_insert + "sru/" + artefact.split("/")[-1] + ".csv"
+        # cooked_json = output_directory + img.split("::")[0] + "/artefacts/cooked" + vss_path_insert + "sru/" + artefact.split("/")[-1] + ".json"
+        # read from "/opt/elrond/elrond/tools/srum-dump/SRUM_TEMPLATE2.XLSX" using pandas to then convert into csv/json
 
 
 def process_ual(

@@ -295,6 +295,8 @@ If you notice 'nixCommand' or 'nixProcess' in files processed from a Windows OS,
   - [dkovar](https://github.com/dkovar)
   - [Richard Penman](https://github.com/richardpenman)
   - [harelsegev](https://github.com/harelsegev/INDXRipper)
+  - [KStrike](https://github.com/brimorlabs/KStrike)
+  - [srum-dump](https://github.com/MarkBaggett/srum-dump)
   - [mnrkbys](https://github.com/mnrkbys/macosac)
   - [The Volatility Foundation](https://github.com/volatilityfoundation)
   - [AVML](https://github.com/microsoft/avml)
