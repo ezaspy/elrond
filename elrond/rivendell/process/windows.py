@@ -458,7 +458,7 @@ def process_prefetch(
             vssimage,
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
-        """subprocess.Popen(
+        subprocess.Popen(
             [
                 "/opt/plaso/plaso/scripts/log2timeline.py",
                 "--parsers",
@@ -504,7 +504,7 @@ def process_prefetch(
                 + "/artefacts/cooked"
                 + vss_path_insert
                 + "prefetch/prefetch.plaso"
-            )"""
+            )
 
 
 def process_wmi(
@@ -545,7 +545,7 @@ def process_wmi(
                     vssimage,
                 )
             )
-        """extract_wmi(
+        extract_wmi(
             verbosity,
             vssimage,
             output_directory,
@@ -556,7 +556,7 @@ def process_wmi(
             jsondict,
             jsonlist,
             wmijsonlist,
-        )"""
+        )
 
 
 def process_wbem(
@@ -594,7 +594,7 @@ def process_wbem(
                     vssimage,
                 )
             )
-        """extract_wbem(
+        extract_wbem(
             verbosity,
             vssimage,
             output_directory,
@@ -602,7 +602,7 @@ def process_wbem(
             vss_path_insert,
             stage,
             artefact,
-        )"""
+        )
 
 
 def process_sru(
