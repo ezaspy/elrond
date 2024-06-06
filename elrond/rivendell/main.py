@@ -201,30 +201,40 @@ def main(
                 )
             )
             sys.exit()
-    apfsexists = str(
+    # check architecture - if arm do not prompt for apfs-fuse
+    if "aarch" not in str(
         subprocess.Popen(
             [
-                "locate",
-                "apfs",
+                "uname",
+                "-m",
             ],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         ).communicate()[0]
-    )
-    # check architecture - if arm do not prompt
-    if not "/usr/local/bin/apfs" in apfsexists:
-        if (
-            input(
-                "  apfs-fuse and associated libraries are not installed. This is required for macOS disk images.\n   Continue? Y/n [Y] "
-            )
-            == "n"
-        ):
-            print(
-                "\n  Please run https://github.com/ezaspy/elrond/elrond/tools/scripts/apfs-fuse.sh and try again.\n\n"
-            )
-            if os.path.exists("/usr/local/bin/apfs"):
-                shutil.rmtree("/usr/local/bin/apfs")
-            sys.exit()
+    ):
+        apfsexists = str(
+            subprocess.Popen(
+                [
+                    "locate",
+                    "apfs",
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).communicate()[0]
+        )
+        if not "/usr/local/bin/apfs" in apfsexists:
+            if (
+                input(
+                    "  apfs-fuse and associated libraries are not installed. This is required for macOS disk images.\n   Continue? Y/n [Y] "
+                )
+                == "n"
+            ):
+                print(
+                    "\n  Please run https://github.com/ezaspy/elrond/elrond/tools/scripts/apfs-fuse.sh and try again.\n\n"
+                )
+                if os.path.exists("/usr/local/bin/apfs"):
+                    shutil.rmtree("/usr/local/bin/apfs")
+                sys.exit()
     if os.path.exists("/opt/elrond/elrond/tools/.profiles"):
         os.remove("/opt/elrond/elrond/tools/.profiles")
     if len(directory) > 1:
@@ -293,7 +303,7 @@ def main(
         and ".001" not in str(os.listdir(d)).lower()
     ):
         print(
-            "\n  [directory] - '{}' does not contain any valid files (.E01/.VMDK/.dd/.raw/.img/.001)\n     for elrond to assess.\n     Please ensure you are referencing the correct directory path and try again.\n\n\n".format(
+            "\n  [directory] - '{}' does not contain any valid files (.E01/.VMDK/.dd/.raw/.img/.001)\n   for elrond to assess.\n   Please ensure you are referencing the correct directory path and try again.\n\n\n".format(
                 d
             )
         )
