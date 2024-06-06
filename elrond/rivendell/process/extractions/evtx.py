@@ -43,7 +43,7 @@ def extract_evtx(
         evtout = str(
             subprocess.Popen(
                 [
-                    "evtx_dump.py",
+                    "/usr/local/bin/evtx_dump.py",
                     output_directory
                     + img.split("::")[0]
                     + "/artefacts/raw"
