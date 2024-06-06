@@ -30,6 +30,8 @@ sudo chmod 744 /home/$USERPROFILE/.config/autostart/gnome-terminal.desktop
 cp /opt/elrond/elrond/elrond.sh ~/elrond.sh
 sudo chmod 744 ~/elrond.sh
 sudo chmod +x ~/elrond.sh
+sudo chmod 744 /opt/elrond
+sudo chown -R "$USERPROFILE":"$USERPROFILE" /opt/elrond
 
 # cleaning uneeded applications
 sudo unminimize -y
@@ -39,5 +41,6 @@ sudo apt-get clean
 sudo apt update
 sudo updatedb
 
-# sudo mkdir /mnt/shadow_mount
-# sudo mkdir /mnt/vss
+# making dirs if they do not exist
+sudo mkdir /mnt/shadow_mount
+sudo mkdir /mnt/vss
