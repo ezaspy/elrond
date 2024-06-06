@@ -67,6 +67,8 @@ sudo rm -rf /opt/USN-Journal-Parser
 sudo git clone https://github.com/PoorBillionaire/USN-Journal-Parser.git /opt/USN-Journal-Parser
 sudo rm -rf /opt/KStrike
 sudo git clone https://github.com/ezaspy/KStrike.git /opt/KStrike
+sudo rm -rf /opt/plaso
+sudo git clone https://github.com/log2timeline/plaso.git /opt/plaso
 sudo rm -rf /opt/etl-parser
 sudo git clone https://github.com/ezaspy/etl-parser /opt/etl-parser
 sudo rm -rf /opt/bruce
@@ -105,7 +107,6 @@ sudo rm -rf /opt/Sysmon/SysmonForLinux
 sudo git clone https://github.com/Sysinternals/SysmonForLinux.git /opt/Sysmon/SysmonForLinux
 sudo rm -rf /opt/httrack
 sudo git clone https://github.com/xroche/httrack.git --recurse /opt/httrack
-
 sudo rm -rf /opt/attack-navigator
 sudo git clone https://github.com/mitre-attack/attack-navigator.git /opt/attack-navigator
 
