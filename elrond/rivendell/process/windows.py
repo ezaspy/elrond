@@ -1,6 +1,7 @@
 #!/usr/bin/env python3 -tt
 import os
 import pandas as pd
+import shutil
 import subprocess
 from datetime import datetime
 
@@ -641,17 +642,16 @@ def process_sru(
             vssimage,
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
-        # creating sru.py with respective artefact input and output values
-        with open("/opt/elrond/elrond/rivendell/process/extractions/.sru.py") as srumdumpfile:
+        # creating srum_dump2.py with respective artefact input and output values
+        with open("/opt/elrond/elrond/rivendell/process/extractions/sru.py") as srumdumpfile:
             srumdump = srumdumpfile.read()
-        srumdump = srumdump.replace('<SRUDB.dat>', artefact).replace('<SRUDB.dat>', artefact).replace('<SRUM_DUMP_OUTPUT.xlsx>', cooked_xlsx)
-        with open("/opt/elrond/elrond/rivendell/process/extractions/sru.py", "w") as srumdumpfile:
+        srumdump = srumdump.replace('<SRUDB.dat>', artefact).replace('<SRUM_DUMP_OUTPUT.xlsx>', cooked_xlsx)
+        with open("/opt/elrond/elrond/rivendell/process/extractions/.sru.py", "w") as srumdumpfile:
             srumdumpfile.write(srumdump)
         subprocess.Popen(
             [
                 "python3",
-                "/opt/elrond/elrond/rivendell/process/extractions/sru.py",
-                artefact,
+                "/opt/elrond/elrond/rivendell/process/extractions/.sru.py",
             ],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
