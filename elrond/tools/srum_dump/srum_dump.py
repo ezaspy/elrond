@@ -531,7 +531,7 @@ def extract_live_file():
 parser = argparse.ArgumentParser(description="Given an SRUM database it will create an XLS spreadsheet with analysis of the data in the database.")
 parser.add_argument("--SRUM_INFILE","-i", default="<SRUDB.dat>", help="Specify the ESE (.dat) file to analyze. Provide a valid path to the file.")
 parser.add_argument("--XLSX_OUTFILE", "-o", default="<SRUM_DUMP_OUTPUT.xlsx>", help="Full path to the XLS file that will be created.")
-parser.add_argument("--XLSX_TEMPLATE" ,"-t", default="/opt/elrond/elrond/tools/srum_dump/.SRUM_TEMPLATE3.xlsx", help="The Excel Template that specifies what data to extract from the srum database. You can create template_tables with ese_template.py.")
+parser.add_argument("--XLSX_TEMPLATE" ,"-t", default="/opt/elrond/elrond/tools/srum_dump/SRUM_TEMPLATE3.xlsx", help="The Excel Template that specifies what data to extract from the srum database. You can create template_tables with ese_template.py.")
 parser.add_argument("--REG_HIVE", "-r", dest="reghive", help="If SOFTWARE registry hive is provided then the names of the network profiles will be resolved.")
 parser.add_argument("--quiet", "-q", help="Supress unneeded output messages.", action="store_true")
 options = parser.parse_args()

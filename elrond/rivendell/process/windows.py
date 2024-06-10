@@ -457,39 +457,82 @@ def process_prefetch(
             vssimage,
         )
         write_audit_log_entry(verbosity, output_directory, entry, prnt)
-        subprocess.Popen(
-            [
-                "/opt/plaso/plaso/scripts/log2timeline.py",
-                "--parsers",
-                "prefetch",
-                "{}/Windows/Prefetch/".format(mount_location),
-                "--storage_file",
-                output_directory
-                + img.split("::")[0]
-                + "/artefacts/cooked"
-                + vss_path_insert
-                + "prefetch/prefetch.plaso",
-            ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        ).communicate()
-        subprocess.Popen(
-            [
-                "psteal.py",
-                "--source",
-                output_directory
-                + img.split("::")[0]
-                + "/artefacts/cooked"
-                + vss_path_insert
-                + "prefetch/prefetch.plaso",
-                "-o",
-                "dynamic",
-                "-w",
-                "prefetch.csv",
-            ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        ).communicate()
+        try:
+            subprocess.Popen(
+                [
+                    "log2timeline.py",
+                    "--parsers",
+                    "prefetch",
+                    "{}/Windows/Prefetch/".format(mount_location),
+                    "--storage_file",
+                    output_directory
+                    + img.split("::")[0]
+                    + "/artefacts/cooked"
+                    + vss_path_insert
+                    + "prefetch/prefetch.plaso",
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).communicate()
+            subprocess.Popen(
+                [
+                    "psteal.py",
+                    "--source",
+                    output_directory
+                    + img.split("::")[0]
+                    + "/artefacts/cooked"
+                    + vss_path_insert
+                    + "prefetch/prefetch.plaso",
+                    "-o",
+                    "dynamic",
+                    "-w",
+                    output_directory
+                    + img.split("::")[0]
+                    + "/artefacts/cooked"
+                    + vss_path_insert
+                    + "prefetch/prefetch.csv",
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).communicate()
+        except:
+            subprocess.Popen(
+                [
+                    "/opt/plaso/plaso/scripts/log2timeline.py",
+                    "--parsers",
+                    "prefetch",
+                    "{}/Windows/Prefetch/".format(mount_location),
+                    "--storage_file",
+                    output_directory
+                    + img.split("::")[0]
+                    + "/artefacts/cooked"
+                    + vss_path_insert
+                    + "prefetch/prefetch.plaso",
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).communicate()
+            subprocess.Popen(
+                [
+                    "/opt/plaso/plaso/scripts/psteal.py",
+                    "--source",
+                    output_directory
+                    + img.split("::")[0]
+                    + "/artefacts/cooked"
+                    + vss_path_insert
+                    + "prefetch/prefetch.plaso",
+                    "-o",
+                    "dynamic",
+                    "-w",
+                    output_directory
+                    + img.split("::")[0]
+                    + "/artefacts/cooked"
+                    + vss_path_insert
+                    + "prefetch/prefetch.csv",
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            ).communicate()
         if os.path.exists(
             output_directory
             + img.split("::")[0]
