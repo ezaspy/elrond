@@ -44,9 +44,9 @@ sudo dpkg -i /tmp/Maltego.v4.7.0.deb
 
 # installing network-miner
 sudo unzip /tmp/networkminer.zip -d /opt/
-sudo chmod +x /opt/NetworkMiner_2-8-1/NetworkMiner.exe
-sudo chmod -R go+w /opt/NetworkMiner_2-8-1/AssembledFiles/
-sudo chmod -R go+w /opt/NetworkMiner_2-8-1/Captures/
+sudo chmod +x /opt/NetworkMiner_*/NetworkMiner.exe
+sudo chmod -R go+w /opt/NetworkMiner_*/AssembledFiles/
+sudo chmod -R go+w /opt/NetworkMiner_*/Captures/
 
 # initialising clamav
 sudo apt update --allow-insecure-repositories
