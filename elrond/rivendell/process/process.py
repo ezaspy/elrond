@@ -51,7 +51,6 @@ def process_artefacts(
     jsondict = {}
     jsonlist = []
     if img.split("::")[0] in artefact:
-        print(artefact)
         if artefact.endswith("setupapi.dev.log"):
             process_usb(
                 verbosity,
