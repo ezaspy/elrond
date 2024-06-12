@@ -10,7 +10,7 @@ import sys
 
 def append_threat_actors(related_threat_actors, csv_row):
     with open(
-        "/opt/elrond/elrond/tools/.enterprise-attack-v15.1-procedures.csv",
+        "/opt/elrond/elrond/tools/attack-navigator/.enterprise-attack-v15.1-procedures.csv",
     ) as techniquecsv:
         procedures_file_content = str(techniquecsv.readlines())
         procedures_contents = re.sub(
@@ -624,9 +624,11 @@ def main():
         engine="openpyxl",
     )
     xlsx_file.to_csv(
-        "/opt/elrond/elrond/tools/.enterprise-attack.temp", index=None, header=True
+        "/opt/elrond/elrond/tools/attack-navigator/.enterprise-attack.temp", index=None, header=True
     )
-    with open("/opt/elrond/elrond/tools/.enterprise-attack.temp") as csv_with_new_lines:
+    if not os.path.exists("/opt/elrond/elrond/tools/attack-navigator/"):
+        os.mkdir("/opt/elrond/elrond/tools/attack-navigator/")
+    with open("/opt/elrond/elrond/tools/attack-navigator/.enterprise-attack.temp") as csv_with_new_lines:
         malformed_csv = str(csv_with_new_lines.readlines())[2:-2]
         malformed_csv = re.sub(r"\    ", r"£\    £", malformed_csv)
         malformed_csv = re.sub(r"\\n', '", r"\n", malformed_csv)
@@ -638,10 +640,10 @@ def main():
         malformed_csv = re.sub(r"([\)\"])\n([^S])", r"\1.  \2", malformed_csv)
         formatted_csv = malformed_csv.replace('\\"', '"')
     with open(
-        "/opt/elrond/elrond/tools/.enterprise-attack-v15.1-techniques.csv", "w"
+        "/opt/elrond/elrond/tools/attack-navigator/.enterprise-attack-v15.1-techniques.csv", "w"
     ) as final_csv:
         final_csv.write(formatted_csv)
-    os.remove("/opt/elrond/elrond/tools/.enterprise-attack.temp")
+    os.remove("/opt/elrond/elrond/tools/attack-navigator/.enterprise-attack.temp")
     # collecting procedure examples
     with open(
         "/opt/elrond/elrond/tools/enterprise-attack-v15.1-techniques.xlsx", "wb"
@@ -653,9 +655,9 @@ def main():
         engine="openpyxl",
     )
     xlsx_file.to_csv(
-        "/opt/elrond/elrond/tools/.enterprise-attack.temp", index=None, header=True
+        "/opt/elrond/elrond/tools/attack-navigator/.enterprise-attack.temp", index=None, header=True
     )
-    with open("/opt/elrond/elrond/tools/.enterprise-attack.temp") as csv_with_new_lines:
+    with open("/opt/elrond/elrond/tools/attack-navigator/.enterprise-attack.temp") as csv_with_new_lines:
         malformed_csv = str(csv_with_new_lines.readlines())[2:-2]
         malformed_csv = re.sub(r"\    ", r"£\    £", malformed_csv)
         malformed_csv = re.sub(r"\\n', '", r"\n", malformed_csv)
@@ -667,10 +669,10 @@ def main():
         malformed_csv = re.sub(r"([\)\"])\n([^S])", r"\1.  \2", malformed_csv)
         formatted_csv = malformed_csv.replace('\\"', '"')
     with open(
-        "/opt/elrond/elrond/tools/.enterprise-attack-v15.1-procedures.csv", "w"
+        "/opt/elrond/elrond/tools/attack-navigator/.enterprise-attack-v15.1-procedures.csv", "w"
     ) as final_csv:
         final_csv.write(formatted_csv)
-    os.remove("/opt/elrond/elrond/tools/.enterprise-attack.temp")
+    os.remove("/opt/elrond/elrond/tools/attack-navigator/.enterprise-attack.temp")
     # extracting data from mitre files
     (
         csv_rows,
@@ -691,7 +693,7 @@ def main():
         )
     # cleaning the newline formatting in the csv
     with open(
-        "/opt/elrond/elrond/tools/.enterprise-attack-v15.1-techniques.csv",
+        "/opt/elrond/elrond/tools/attack-navigator/.enterprise-attack-v15.1-techniques.csv",
     ) as techniquecsv:
         techniques_file_content = str(techniquecsv.readlines())
         techniques_contents = re.sub(
