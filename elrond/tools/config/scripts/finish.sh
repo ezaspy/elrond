@@ -36,9 +36,9 @@ sudo chown -R "$USERPROFILE":"$USERPROFILE" /opt/elrond
 # cleaning uneeded applications
 sudo unminimize -y
 sudo du -sh /var/cache/apt/archives
-sudo apt update
+sudo apt update --allow-insecure-repositories
 sudo apt-get clean
-sudo apt update
+sudo apt update --allow-insecure-repositories
 sudo updatedb
 
 # making dirs if they do not exist

@@ -7,7 +7,7 @@ sleep 1
 clear
 printf "\n  -> Installing and configuring regripper...\n\n"
 # downloading regripper for elrond
-sudo apt-get install -y libparse-win32registry-perl -y
+sudo apt-get install libparse-win32registry-perl -y --fix-missing --allow-unauthenticated
 cd /usr/local/src/
 sudo rm -r /usr/local/src/regripper/ 2>/dev/null
 sudo rm -r /usr/share/regripper/plugins 2>/dev/null

@@ -49,7 +49,7 @@ sudo chmod -R go+w /opt/NetworkMiner_2-8-1/AssembledFiles/
 sudo chmod -R go+w /opt/NetworkMiner_2-8-1/Captures/
 
 # initialising clamav
-sudo apt update
+sudo apt update --allow-insecure-repositories
 sudo systemctl stop clamav-freshclam
 sudo freshclam
 sudo systemctl start clamav-freshclam
