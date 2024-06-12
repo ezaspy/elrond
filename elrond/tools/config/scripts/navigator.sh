@@ -11,6 +11,7 @@ curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /us
 echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 sudo apt-get update --allow-insecure-repositories
 sudo apt install npm nodejs yarn -y --fix-missing --allow-unauthenticated
+sleep 2
 npm cache clean -f
 sudo npm install n -g
 sudo -E env "PATH=$PATH" n 16
