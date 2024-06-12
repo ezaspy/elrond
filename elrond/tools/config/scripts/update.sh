@@ -8,6 +8,7 @@ sudo rm -rf /opt/elrond/elrond/tools/avml*
 sudo rm -rf /opt/elrond/elrond/tools/osxpmem.app.zip
 sudo rm -rf /opt/elrond/elrond/tools/volatility*
 sudo mv /tmp/apps/*.py /opt/elrond/elrond/rivendell/post/splunk/apps/
+clear
 
 # downloading latest version
 sudo git clone https://github.com/ezaspy/elrond.git
