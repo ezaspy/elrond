@@ -24,11 +24,11 @@ sudo chown "$USERPROFILE":"$USERPROFILE" -R /opt/elrond/
 sudo chmod +x /opt/elrond/elrond/config.sh
 sudo chmod +x /opt/elrond/elrond/elrond.py
 echo "export PATH=$PATH:/opt/elrond/elrond" >> /home/$USERPROFILE/.bashrc
-printf "\n\n  -> '"$(hostname)"' has been successfully updated; a reboot is required. Press ENTER to continue..."
+printf "\n\n  -> '"$(hostname)"' has been successfully updated; a reboot is advised. Press ENTER to continue..."
 read answer
 sleep 1
 sudo updatedb
-# echo '' | sudo tee ~/.bash_history
-# history -c
+echo '' | sudo tee ~/.bash_history
+history -c
 sleep 1
 clear
