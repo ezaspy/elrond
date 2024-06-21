@@ -37,6 +37,7 @@ sudo apt install libewf-dev ewf-tools mlocate net-tools build-essential libreadl
 sudo apt-get install qemu  -y --fix-missing --allow-unauthenticated
 sudo apt-get install qemu-system -y --fix-missing --allow-unauthenticated
 sudo apt-get install checkinstall libgdbm-dev libreadline-dev libnss3-dev libsqlite3-dev tk-dev liblzma-dev -y --fix-missing --allow-unauthenticated
+sudo apt install clamav clamav-daemon -y --fix-missing --allow-unauthenticated
 
 # installing additional software via snap
 sudo snap install sqlitebrowser
