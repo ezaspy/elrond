@@ -33,7 +33,9 @@ sudo wget -O /opt/elrond/elrond/tools/.splunk.deb "https://download.splunk.com/p
 # installing additional features for elrond
 sudo apt update --allow-insecure-repositories
 sudo apt-get update --allow-insecure-repositories
-sudo apt install libewf-dev ewf-tools mlocate net-tools build-essential libreadline-dev libncursesw5-dev libssl-dev libc6-dev libffi-dev zlib1g-dev qemu apt-transport-https software-properties-common systemd gnupg xz-utils sqlite3 mdbtools yara clamav clamav-daemon john gparted dos2unix sqlitebrowser python3-apt wireshark libguestfs-tools mono-devel openjdk-17-jdk openjdk-17-jre curl jq elasticsearch kibana python3.9 python3.9-venv bless flameshot cutter-re vim nodejs yarn -y --fix-missing --allow-unauthenticated
+sudo apt install libewf-dev ewf-tools mlocate net-tools build-essential libreadline-dev libncursesw5-dev libssl-dev libc6-dev libffi-dev zlib1g-dev apt-transport-https software-properties-common systemd gnupg xz-utils sqlite3 mdbtools yara clamav clamav-daemon john gparted dos2unix sqlitebrowser python3-apt wireshark libguestfs-tools mono-devel openjdk-17-jdk openjdk-17-jre curl jq elasticsearch kibana python3.9 python3.9-venv bless flameshot cutter-re vim nodejs yarn -y --fix-missing --allow-unauthenticated
+sudo apt-get install qemu  -y --fix-missing --allow-unauthenticated
+sudo apt-get install qemu-system -y --fix-missing --allow-unauthenticated
 sudo apt-get install checkinstall libgdbm-dev libreadline-dev libnss3-dev libsqlite3-dev tk-dev liblzma-dev -y --fix-missing --allow-unauthenticated
 
 # installing additional software via snap
