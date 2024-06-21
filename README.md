@@ -73,11 +73,8 @@ elrond is responsible for the analysis-side of digital forensics, but what about
 
 ##### Download Virtual Machine
 > There are several software package required for using elrond. Almost all of them are contained within the [SANS SIFT Worksation](https://www.sans.org/tools/sift-workstation/) virtual machine OVA. For the software which is not included ([make.sh](https://github.com/ezaspy/elrond/blob/main/make.sh)) installs and configures the additional software required for all potential functionality leveraged by elrond (volatility3, apfs-fuse, ClamAV etc.).
-- For **x64**
-   - [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (20.04 LTS)
-- For **ARM**
-  <!-- - [Ubuntu 24.04](https://cdimage.ubuntu.com/daily-live/20240421/) -->
-  - [Ubuntu 22.04](https://cdimage.ubuntu.com/jammy/daily-live/current/)
+- For **x64** download [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (20.04 LTS)
+- For **ARM** download [Ubuntu 22.04](https://cdimage.ubuntu.com/jammy/daily-live/current/)
 
 <br><br>
 
