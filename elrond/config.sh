@@ -11,6 +11,7 @@ sudo chmod 777 /etc/sysctl.conf
 echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf
 sudo chmod 644 /etc/sysctl.conf
 # creating linux_swap space
+sudo swapon /dev/sdb
 sudo swapoff /dev/sdb
 sudo umount /dev/sdb
 sudo mkswap /dev/sdb
@@ -56,6 +57,9 @@ fi
 
 /opt/elrond/elrond/tools/config/scripts/./volatility3.sh
 printf "\n  -> Downloading MITRE ATT&CK Framework Enterprise v15.1..."
+sudo mkdir /opt/elrond/elrond/tools/attack-navigator
+sudo chmod -R 744 /opt/elrond/elrond/tools/attack-navigator
+sudo chown -R "$USERPROFILE":"$USERPROFILE" /opt/elrond/elrond/tools/attack-navigator
 python3 /opt/elrond/elrond/tools/config/mitre.py
 
 # configuring elastic
