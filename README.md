@@ -81,7 +81,7 @@ elrond is responsible for the analysis-side of digital forensics, but what about
 
 ##### Configure
 Follow instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md)
-> *You will only need to run the make.sh script once, per 'elrond VM' instance; if you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [.../elrond/elrond/tools/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/scripts/)*
+> *You will only need to run the make.sh script once, per 'elrond VM' instance; if you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [.../elrond/elrond/tools/config/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/config/scripts/)*
 <br>
 
 ## Usage
