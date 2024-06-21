@@ -4,9 +4,9 @@ USERPROFILE=$(cat /etc/passwd | grep 1000 | cut -d ":" -f 1)
 HOSTNAME=$(hostname)
 
 # purging unwanted software
-sudo apt-get remove --auto-remove --purge thunderbird rhythmbox yelp libreoffice* kdeconnect aisleriot gnome-mines gnome-sudoku gnome-mahjongg cheese ghex simple-scan wxhexeditor scite -y
-sudo apt-get purge nodejs -y
-sudo apt-get autoremove --purge
+sudo apt-get remove thunderbird rhythmbox yelp libreoffice* kdeconnect aisleriot gnome-mines gnome-sudoku gnome-mahjongg cheese ghex simple-scan wxhexeditor scite -y --auto-remove --purge
+sudo apt-get purge nodejs -y --auto-remove --purge
+sudo apt-get autoremove -y --auto-remove --purge
 
 # downloading additional repo files
 sudo add-apt-repository -y ppa:linuxgndu/sqlitebrowser > /dev/null 2>&1 # db browser for sqlite
