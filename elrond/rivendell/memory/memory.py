@@ -100,8 +100,6 @@ def process_memory(
             memtimeline,
         )
         vssmem = profile
-        print(profile)
-        time.sleep(600)
         profiledirs = []
         for eachfile in os.listdir(
             "/usr/local/lib/python2.7/dist-packages/volatility/plugins/overlays/mac/"
