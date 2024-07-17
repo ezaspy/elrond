@@ -173,16 +173,16 @@ def mount_vmdk_image(
 ):
     try:
         subprocess.Popen(
-                [
-                    "/usr/local/bin/apfs-fuse/build/./apfs-fuse",
-                    "-o",
-                    "allow_other",
-                    intermediate_mount,
-                    destination_mount,
-                ],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            ).communicate()
+            [
+                "/usr/local/bin/apfs-fuse/build/./apfs-fuse",
+                "-o",
+                "allow_other",
+                intermediate_mount,
+                destination_mount,
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate()
     except:
         """if (
             input(
@@ -833,12 +833,18 @@ def mount_images(
             )
         ):
             if d.startswith("/"):
-                (destination_mount, intermediate_mount,) = (
+                (
+                    destination_mount,
+                    intermediate_mount,
+                ) = (
                     elrond_mount[0],
                     "/" + d.strip("/") + "/" + disk_file.strip("/"),
                 )
             else:
-                (destination_mount, intermediate_mount,) = (
+                (
+                    destination_mount,
+                    intermediate_mount,
+                ) = (
                     elrond_mount[0],
                     d.strip("/") + "/" + disk_file.strip("/"),
                 )
