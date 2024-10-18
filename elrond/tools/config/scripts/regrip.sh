@@ -14,7 +14,7 @@ sudo rm -r /usr/share/regripper/plugins 2>/dev/null
 sudo git clone https://github.com/keydet89/RegRipper3.0.git
 sudo mv RegRipper3.0 regripper
 sudo mkdir /usr/share/regripper
-ln -s  /usr/local/src/regripper/plugins /usr/share/regripper/plugins 2>/dev/nul
+ln -s  /usr/local/src/regripper/plugins /usr/share/regripper/plugins 2>/dev/null
 sudo chmod 755 regripper/*
 sudo cp regripper/File.pm /usr/share/perl5/Parse/Win32Registry/WinNT/File.pm
 sudo cp regripper/Key.pm /usr/share/perl5/Parse/Win32Registry/WinNT/Key.pm
