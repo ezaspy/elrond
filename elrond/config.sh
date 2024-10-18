@@ -46,14 +46,14 @@ fi
 # installing code
 sudo dpkg -i /tmp/vscode.deb
 
-# installing regripper if not installed
-if [ -d "/usr/local/src/regripper" ]; then
-    # updating regripper
-    sudo cp /usr/share/regripper/rip.pl /usr/share/regripper/rip.pl.old
-    sudo sed -i 's/my \$VERSION/# Add: Define the variable plugindir\nmy \$plugindir = File::Spec->catfile\(\$scriptdir, "plugins"\);\n\nmy \$VERSION/' /usr/share/regripper/rip.pl
-else
-    sudo /opt/elrond/elrond/tools/config/scripts/./regrip.sh
-fi
+## installing regripper if not installed
+#if [ -d "/usr/local/src/regripper" ]; then
+#    # updating regripper
+#    sudo cp /usr/share/regripper/rip.pl /usr/share/regripper/rip.pl.old
+#    sudo sed -i 's/my \$VERSION/# Add: Define the variable plugindir\nmy \$plugindir = File::Spec->catfile\(\$scriptdir, "plugins"\);\n\nmy \$VERSION/' /usr/share/regripper/rip.pl
+#else
+#    sudo /opt/elrond/elrond/tools/config/scripts/./regrip.sh
+#fi
 
 /opt/elrond/elrond/tools/config/scripts/./volatility3.sh
 printf "\n  -> Downloading MITRE ATT&CK Framework Enterprise v15.1..."
