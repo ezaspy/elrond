@@ -32,6 +32,7 @@ sudo chmod 744 ~/elrond.sh
 sudo chmod +x ~/elrond.sh
 sudo chmod 744 /opt/elrond
 sudo chown -R "$USERPROFILE":"$USERPROFILE" /opt/elrond
+/opt/elrond/elrond/./elrond.sh
 
 # cleaning uneeded applications
 sudo unminimize -y
