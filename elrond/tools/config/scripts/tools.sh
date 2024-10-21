@@ -13,19 +13,26 @@ sudo add-apt-repository -y ppa:linuxgndu/sqlitebrowser > /dev/null 2>&1 # db bro
 yes '' | sudo add-apt-repository ppa:deadsnakes/ppa # INDXRipper
 echo 'deb http://download.opensuse.org/repositories/home:/RizinOrg/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/home:RizinOrg.list # cutter-re
 curl -fsSL https://download.opensuse.org/repositories/home:RizinOrg/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_RizinOrg.gpg > /dev/null # cutter-re
+
+# elastic 7.x
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list
+
+# elastic 8.x
 #echo "deb https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
 #sudo /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token --scope kibana
 #sudo /usr/share/kibana/bin/kibana-verification-code
 #sudo /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
+
 # attack-navigator repos
 curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/yarnkey.gpg >/dev/null
 echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 echo 'deb http://download.opensuse.org/repositories/home:/RizinOrg/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/home:RizinOrg.list
 curl -fsSL https://download.opensuse.org/repositories/home:RizinOrg/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_RizinOrg.gpg > /dev/null
+
 /opt/elrond/elrond/tools/config/scripts/./repo.sh
+
 sudo wget https://www.netresec.com/?download=NetworkMiner -O /tmp/networkminer.zip
 sudo wget -O /tmp/Maltego.v4.7.0.deb https://downloads.maltego.com/maltego-v4/linux/Maltego.v4.7.0.deb
 sudo wget -O /opt/elrond/elrond/tools/.splunk.deb "https://download.splunk.com/products/splunk/releases/9.0.5/linux/splunk-9.0.5-e9494146ae5c-linux-2.6-amd64.deb"
