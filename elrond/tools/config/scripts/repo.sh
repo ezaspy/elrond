@@ -18,7 +18,7 @@ gdown https://drive.google.com/uc?id=1mVrkLp84jchHRrAxqXvSpDdZhIKsH9Fi
 if [ -f "elrond-archive.zip" ]; then
     unzip elrond-archive.zip 1> /dev/null
     rm -rf __MACOSX/
-    mv VMwareTools-10.3.23-16594550.tar.gz /opt/elrond/elrond/tools/config/VMwareTools-10.3.23-16594550.tar.gz
+    mv /tmp/VMwareTools-10.3.23-16594550.tar.gz /opt/elrond/elrond/tools/config/VMwareTools-10.3.23-16594550.tar.gz
 else
     printf "\n 'elrond-archive.zip' did not download successfully.\n Exiting. Please run 'sudo /opt/elrond/./make.sh' again."
     exit
