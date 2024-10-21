@@ -4,7 +4,6 @@ USERPROFILE=$(cat /etc/passwd | grep 1000 | cut -d ":" -f 1)
 HOSTNAME=$(hostname)
 
 sleep 1
-cd /tmp
 sudo apt install python3-pip -y --fix-missing --allow-unauthenticated
 sudo python3 -m pip install gdown python-evtx python-registry registry libesedb-python
 python3 -m pip install gdown python-evtx python-registry registry libesedb-python
@@ -14,11 +13,12 @@ clear
 printf "\n  -> Downloading additional elrond components...\n\n"
 
 # downloading additional tools for elrond
+cd /tmp
 gdown https://drive.google.com/uc?id=1mVrkLp84jchHRrAxqXvSpDdZhIKsH9Fi
 if [ -f "elrond-archive.zip" ]; then
     unzip elrond-archive.zip 1> /dev/null
     rm -rf __MACOSX/
-    mv elrond-archive/VMwareTools-10.3.23-16594550.tar.gz /opt/elrond/elrond/tools/config/VMwareTools-10.3.23-16594550.tar.gz
+    mv VMwareTools-10.3.23-16594550.tar.gz /opt/elrond/elrond/tools/config/VMwareTools-10.3.23-16594550.tar.gz
 else
     printf "\n 'elrond-archive.zip' did not download successfully.\n Exiting. Please run 'sudo /opt/elrond/./make.sh' again."
     exit
