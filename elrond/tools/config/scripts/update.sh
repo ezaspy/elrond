@@ -16,12 +16,12 @@ sudo git clone https://github.com/ezaspy/elrond.git
 # downloading latest version of additional repos
 /opt/elrond/elrond/tools/config/scripts/./repo.sh
 /opt/elrond/elrond/tools/config/scripts/./tools.sh
+/opt/elrond/elrond/tools/config/scripts/./volatility3.sh
 /opt/elrond/elrond/tools/config/scripts/./finish.sh
 
 # finalising update
 sudo chmod 744 -R /opt/elrond/
 sudo chown "$USERPROFILE":"$USERPROFILE" -R /opt/elrond/
-sudo chmod +x /opt/elrond/elrond/config.sh
 sudo chmod +x /opt/elrond/elrond/elrond.py
 echo "export PATH=$PATH:/opt/elrond/elrond" >> /home/$USERPROFILE/.bashrc
 printf "\n\n  -> '"$(hostname)"' has been successfully updated; a reboot is advised. Press ENTER to continue..."
