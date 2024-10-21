@@ -46,6 +46,17 @@ fi
 # installing code
 sudo dpkg -i /tmp/vscode.deb
 
+# installing ShimCacheParser if not installed
+if [ -f "/usr/local/bin/ShimCacheParser.py" ]; then
+    # skip
+else
+    wget https://raw.githubusercontent.com/mandiant/ShimCacheParser/refs/heads/master/ShimCacheParser.py
+    sudo mv ShimCacheParser.py /usr/local/bin/
+    sudo chown -R root:root /usr/local/bin/ShimCacheParser.py 
+    sudo chmod -R 755 /usr/local/bin/ShimCacheParser.py
+    sudo chmod +x /usr/local/bin/ShimCacheParser.py
+fi
+
 # installing regripper if not installed
 if [ -d "/usr/local/src/regripper" ]; then
     # updating regripper
