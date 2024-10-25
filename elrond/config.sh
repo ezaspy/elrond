@@ -61,7 +61,7 @@ fi
 if [ -d "/usr/local/src/regripper" ]; then
     # updating regripper
     sudo cp /usr/share/regripper/rip.pl /usr/share/regripper/rip.pl.old
-#    sudo sed -i 's/my \$VERSION/# Add: Define the variable plugindir\nmy \$plugindir = File::Spec->catfile\(\$scriptdir, "plugins"\);\n\nmy \$VERSION/' /usr/share/regripper/rip.pl
+    sudo sed -i 's/my \$VERSION/# Add: Define the variable plugindir\nmy \$plugindir = File::Spec->catfile\(\$scriptdir, "plugins"\);\n\nmy \$VERSION/' /usr/share/regripper/rip.pl
 else
     sudo /opt/elrond/elrond/tools/config/scripts/./regrip.sh
 fi
