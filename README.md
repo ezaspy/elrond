@@ -16,13 +16,18 @@
 
 ## Table of Contents
 
+- [Table of Contents](#table-of-contents)
 - [About](#about)
+  - [Wild West Hackin' Fest 2023](#wild-west-hackin-fest-2023)
   - [Related Projects](#related-projects)
 - [Configuration](#configuration)
-  - [SIFT-elrond (recommended)](#sift-elrond-(recommended))
-  - [Self-build](#configure)
-  - [Updating](#updating)
+  - [SIFT-elrond (recommended)](#sift-elrond-recommended)
+  - [Self-build](#self-build)
 - [Usage](#usage)
+  - [Collect (-C)](#collect--c)
+  - [Gandalf (-G)](#gandalf--g)
+  - [Reorganise (-R)](#reorganise--r)
+  - [Support](#support)
 - [Artefacts](#artefacts)
   - [Windows](#windows)
   - [Linux](#linux)
@@ -44,7 +49,7 @@ It is important to note that elrond utilises many existing tools which have been
 
 I presented elrond, at [Wild West Hackin' Fest 2023](https://wildwesthackinfest.com) as part of the Toolshed Talks.
 
-[![elrond on Vimeo](https://github.com/ezaspy/elrond/blob/main/elrond/images/wwhf.jpg)](https://vimeo.com/showcase/10830332/video/890364778 "Using elrond in DFIR - acquired artefacts to TTPs, all before elevenses.")
+[![Tool Shed Demo: ELROND | Ben Smith | WWHF 2023](https://img.youtube.com/vi/vjSHPhDPlks/0.jpg)](https://www.youtube.com/watch?v=vjSHPhDPlks "Tool Shed Demo: ELROND | Ben Smith | WWHF 2023")
 - [Slidedeck](https://github.com/ezaspy/elrond/blob/main/elrond.pdf)
 <br>
 
@@ -55,9 +60,7 @@ elrond is responsible for the analysis-side of digital forensics, but what about
 
 ## Configuration
 
-### Initial Configuration
-
-#### SIFT-elrond (recommended)
+### SIFT-elrond (recommended)
 
 > Download the respective elrond OVA; the latest version of SIFT (20.04) or Ubuntu (22.04) with all of the elrond software packages, pre-installed.
   - For **x64**, download [SIFT-elrond](https://1drv.ms/u/s!Asg_rIbKaSxrgcTPRr4bgy8RdQhTnMk?e=xhiaaV) OVA (20.04)
@@ -69,16 +72,15 @@ elrond is responsible for the analysis-side of digital forensics, but what about
 > It is recommended to run [/opt/elrond/update.sh](https://github.com/ezaspy/elrond/blob/main/elrond/update.sh) which will download and configure the **latest version of elrond** onto your existing system.
 <br>
 
-#### Self-build
+### Self-build
 
-##### Download Virtual Machine
+**Download Virtual Machine**<br>
 > There are several software package required for using elrond. Almost all of them are contained within the [SANS SIFT Worksation](https://www.sans.org/tools/sift-workstation/) virtual machine OVA. For the software which is not included ([make.sh](https://github.com/ezaspy/elrond/blob/main/make.sh)) installs and configures the additional software required for all potential functionality leveraged by elrond (volatility3, apfs-fuse, ClamAV etc.).
 - For **x64** download [SANS SIFT Workstation](https://digital-forensics.sans.org/community/downloads) (20.04 LTS)
 - For **ARM** download [Ubuntu 22.04](https://cdimage.ubuntu.com/jammy/daily-live/current/)
+<br>
 
-<br><br>
-
-##### Configure
+**Configure**<br>
 Follow instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md)
 > *You will only need to run the make.sh script once, per 'elrond VM' instance; if you encounter errors with [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/elrond/CONFIG.md), individual scripts for each of the software packages are contained in [.../elrond/elrond/tools/config/scripts/](https://github.com/ezaspy/elrond/tree/main/elrond/tools/config/scripts/)*
 <br>
@@ -89,7 +91,7 @@ Follow instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/el
 <br>
 
 ### Collect (-C)<br>
-#### Examples<br>
+**Examples**<br>
 
 - Invoking DBM (-B) flag (instead of using -acINoPQqUVv), Process (**-P**) index artefacts in Splunk (**-S**) and conduct File Collection (-F) with inclusion list<br>
 
@@ -105,7 +107,7 @@ Follow instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/el
 <br><br>
 
 ### Gandalf (-G)<br>
-#### Examples<br>
+**Examples**<br>
 
 - Automatically (**-a**) and superquietly (**-Q**) Process (**-P**), Analyse (**-A**) and index artefacts in Splunk (**-S**) (acquired using [gandalf](https://github.com/ezaspy/gandalf))<br>
 
@@ -118,7 +120,7 @@ Follow instructions in [CONFIG.md](https://github.com/ezaspy/elrond/blob/main/el
 
 
 ### Reorganise (-R)<br>
-#### Examples<br>
+**Examples**<br>
 
 - Automatically (**-a**) and quietly (**-q**) Process (**-P**), Analyse (**-A**) and index artefacts in Splunk (**-S**) (reorganise previously collected disk artefacts (**-R**))<br>
 
@@ -186,6 +188,7 @@ Below is a list of all the artefacts collected and processed from the respective
 - C:\\Users\\%USERPROFILE%\\AppData\\Local\\Mozilla\\Firefox\\Profiles\\
 - C:\\Users\\%USERPROFILE%\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\AutomaticDestinations\\
 - C:\\Users\\%USERPROFILE%\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\CustomDestinations\\
+- C:\\Users\\%USERPROFILE%\\AppData\\Roaming\\Microsoft\\Windows\\PowerShell\\PSReadline\\ConsoleHost_history.txt
 - C:\\Users\\%USERPROFILE%\\Documents\\Outlook Files\\
 - C:\\Users\\%USERPROFILE%\\*
 <br>
